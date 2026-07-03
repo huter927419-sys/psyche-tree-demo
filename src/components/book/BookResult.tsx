@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { AssessmentResult } from '../../types'
 import { buildPsychologyPromptInput } from '../../data/psychologyProfile'
-import { buildMysticalPrompt, generateMysticalReading } from '../../data/mysticalReading'
+import { generateMysticalReading } from '../../data/mysticalReading'
 import { fetchMysticalReading } from '../../services/mysticalReadingApi'
 import { BookShell, BookNav } from './BookShell'
 import { useBookFlip } from './useBookFlip'
@@ -19,7 +19,6 @@ export function BookResult({ result, onRestart }: BookResultProps) {
     useBookFlip(setPageIndex)
 
   const promptInput = buildPsychologyPromptInput(result.dimensions)
-  const llmPrompt = buildMysticalPrompt(promptInput)
 
   const [mysticalReading, setMysticalReading] = useState(result.mysticalReading)
   const [loading, setLoading] = useState(true)
@@ -153,12 +152,6 @@ export function BookResult({ result, onRestart }: BookResultProps) {
       >
         重新揭开生命之书
       </button>
-      <details className="w-full mt-4">
-        <summary className="book-meta-tag cursor-pointer text-center list-none">
-          查看 DeepSeek 提示词
-        </summary>
-        <pre className="book-prompt-block mt-3">{llmPrompt}</pre>
-      </details>
     </div>,
   ]
 

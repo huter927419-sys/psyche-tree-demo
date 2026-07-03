@@ -5,12 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:lan": "vite --host",
     "build": "npm run generate:cards && tsc -b && vite build",
     "generate:cards": "node scripts/generate-card-images.mjs && node scripts/export-cards-png.mjs",
     "export:cards:png": "node scripts/export-cards-png.mjs",
     "generate:cards:ai": "node scripts/generate-card-images-ai.mjs",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "preview:lan": "vite preview --host"
   },
   "dependencies": {
     "react": "^19.2.7",

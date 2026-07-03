@@ -1,0 +1,12 @@
+Background music in this project uses tracks from Mixkit (https://mixkit.co).
+
+License: Mixkit Free Stock Music License
+https://mixkit.co/license/#musicFree
+
+Tracks:
+- meditation-sitar.mp3 — Mixkit #344
+- deep-calm.mp3 — Mixkit #127
+- ethereal-dream.mp3 — Mixkit #292
+
+Free for use in personal and commercial projects. Attribution appreciated but not required.
+Not permitted for CD/DVD, video games, or TV/radio broadcast.

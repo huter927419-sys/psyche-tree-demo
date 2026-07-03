@@ -189,6 +189,53 @@ body {
   color: rgba(200, 200, 200, 0.35);
 }
 
+/* Ambient music control */
+.ambient-music-control {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.ambient-music-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(212, 175, 122, 0.28);
+  background: rgba(10, 10, 10, 0.55);
+  backdrop-filter: blur(8px);
+  color: rgba(245, 240, 232, 0.75);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.ambient-music-btn:hover {
+  border-color: rgba(212, 175, 122, 0.5);
+  background: rgba(20, 18, 16, 0.72);
+}
+
+.ambient-music-btn-hint {
+  border-style: dashed;
+  color: rgba(212, 175, 122, 0.65);
+}
+
+.ambient-music-icon {
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+.ambient-music-label {
+  text-transform: uppercase;
+}
+
 /* ── Book of Life ── */
 
 .book-scene {

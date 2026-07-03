@@ -9,6 +9,7 @@ import { BookQuestionFlow } from './components/book/BookQuestionFlow'
 import { BookResult } from './components/book/BookResult'
 import { TreeProgress } from './components/tree/TreeProgress'
 import { TreeAwakeningOverlay } from './components/tree/TreeAwakeningOverlay'
+import { AmbientMusicControl } from './components/AmbientMusicControl'
 import { allQuestions } from './data/questions'
 
 type AppPhase = 'welcome' | 'questions' | 'result'
@@ -20,6 +21,7 @@ function App() {
   const [coverOpening, setCoverOpening] = useState(false)
   const [awakeningStage, setAwakeningStage] = useState<number | null>(null)
   const [treeRecoilKey, setTreeRecoilKey] = useState(0)
+  const [musicBootstrap, setMusicBootstrap] = useState(0)
   const prevTreeStage = useRef(0)
 
   useEffect(() => {
@@ -39,6 +41,7 @@ function App() {
   }, [treeRevealStage, phase])
 
   const openBook = () => {
+    setMusicBootstrap((n) => n + 1)
     setCoverOpening(true)
     window.setTimeout(() => {
       setPhase('questions')
@@ -76,6 +79,11 @@ function App() {
       <TreeAwakeningOverlay
         stage={awakeningStage}
         onDone={() => setAwakeningStage(null)}
+      />
+      <AmbientMusicControl
+        phase={phase}
+        awakeningStage={awakeningStage}
+        bootstrap={musicBootstrap}
       />
       <main className="relative z-10 pb-16">
         {phase === 'welcome' && (
