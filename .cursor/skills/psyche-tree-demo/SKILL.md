@@ -16,7 +16,7 @@ The product follows a full mystical **system**, not only symbols:
 | Pillar | In app |
 |--------|--------|
 | **Worldview** 世界观 | Mist shore, light pillar, tree, sacred time |
-| **Field · Energy · Flow** 场域·能量·心流 | Sky/tree field, spirit-tide rite, one seal/page flow, treeEnergyFlow root→crown |
+| **Field · Energy · Flow** 场域·能量·心流 | Sky/tree field, spirit-tide rite, one seal/page flow, treeEnergyFlow root→crown; enhanced theory maps **Φ·A·F** to rite / attention-oracle / mist field |
 | **Meditation** 冥想 | Opening rite per book, one seal/page, tree awakening |
 | **Prayer** 祈祷 | Email seal, dialogue check, closing blessing, whole oracle |
 | **Reflection** 反思 | Portrait + oracle pages, return to shelf, review mode |
@@ -24,7 +24,8 @@ The product follows a full mystical **system**, not only symbols:
 
 Full trilingual theory: [README.md](../../../README.md#玄学理论体系--mystical-framework--玄義体系).  
 Concise state-system theory (zh/en/ja): [README.md](../../../README.md#psyche-tree--六维书--简明理论--concise-theory--簡明理論).  
-Advanced generalization layer (State · Force · Field): [README.md](../../../README.md#psyche-tree-system--进阶泛化层--advanced-generalization--進階汎化層).
+Advanced generalization layer (State · Force · Field): [README.md](../../../README.md#psyche-tree-system--进阶泛化层--advanced-generalization--進階汎化層).  
+Enhanced theory (Flow · Awareness · Field unified): [README.md](../../../README.md#psyche-tree-system--增强理论版--enhanced-theory--拡張理論).
 
 ## Six books (one facet each)
 
