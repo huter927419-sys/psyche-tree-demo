@@ -18,14 +18,12 @@ The product follows a full mystical **system**, not only symbols:
 |--------|--------|
 | **Core proposition** 核心命题 | Calibration of seeing—not hunting answers; `volumeRite.ts`, Return to Tree before holistic oracle |
 | **Volume rite cycle** 修持环 | Entry / exit overlays per book (`VolumeRiteOverlay`); six volumes → 归树 → 整象 |
-| **Worldview** 世界观 | Mist shore, light pillar, tree, sacred time |
-| **Field · Energy · Flow** 场域·能量·心流 | Sky/tree field, spirit-tide rite, one seal/page flow, treeEnergyFlow root→crown; enhanced theory maps **Φ·A·F** to rite / attention-oracle / mist field |
-| **Meditation** 冥想 | Opening rite per book, one seal/page, tree awakening |
-| **Prayer** 祈祷 | Email seal, dialogue check, closing blessing, whole oracle |
-| **Reflection** 反思 | Portrait + oracle pages, return to shelf, review mode |
-| **Symbol + revelation** | Sixfold facets → volume oracle → holistic oracle |
+| **Worldview** 世界观 | Mist shore, six volumes, tree, sacred time — [01-雾岸世界](../../../docs/theory/01-雾岸世界.md) |
+| **Mirroring & rites** 照见与修持 | Entry/exit/归树; theory ch.2–6,8,10 ↔ [volume-rite-copy](../../../docs/volume-rite-copy.md) |
+| **Meditation · Prayer · Reflection** | Opening rite, one seal/page, dialogue check, portrait + oracle |
+| **Symbol + revelation** | Six facets → volume oracle → holistic oracle (shelf only) |
 
-Docs: [README](../../../README.md) · [theory](../../../docs/theory/) · [rite copy](../../../docs/volume-rite-copy.md).
+Docs: [README](../../../README.md) · [theory 01–10](../../../docs/theory/README.md) · [appendix symbols](../../../docs/theory/appendix-现代对应.md) · [rite copy](../../../docs/volume-rite-copy.md).
 
 ## Six books (one facet each)
 

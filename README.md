@@ -10,7 +10,7 @@
 
 | | |
 |---|---|
-| [一、理论栈](#一理论栈) | 五层长文索引，建议先读 |
+| [一、理论栈](#一理论栈) | 十篇正文 + 附录，建议先读 |
 | [二、核心命题](#二核心命题) | 雾岸在说什么 |
 | [三、这是什么](#三这是什么) | Demo 概览 |
 | [四、体验路径](#四体验路径) | 从书架到整象 |
@@ -24,18 +24,16 @@
 
 ## 一、理论栈
 
-| 层 | 文档 | 讲什么 |
-|----|------|--------|
-| I | [01-mystical-framework.md](docs/theory/01-mystical-framework.md) | 世界观、场域、修持、神示——怎么**进入** |
-| II | [02-concise-theory.md](docs/theory/02-concise-theory.md) | 六维状态结构 |
-| III | [03-advanced-generalization.md](docs/theory/03-advanced-generalization.md) | State / Force / Field 泛化 |
-| IV | [04-enhanced-theory.md](docs/theory/04-enhanced-theory.md) | 心流、意识、场域 |
-| V | [05-metaphysical-extension.md](docs/theory/05-metaphysical-extension.md) | 形而上学：意识与因果 |
+按顺序读 [`docs/theory/`](docs/theory/) **01 → 10**，再读 [附录：现代对应](docs/theory/appendix-现代对应.md)。每篇只问一个问题；符号与旧五层稿在附录与 [archive/](docs/theory/archive/)。
 
-*English:* Layer I = how to enter; II–V = structure → modeling → dynamics → metaphysics.  
-*日本語:* I は入り方、II–V は構造から形而上学へ。
+| 篇 | 文档 | 问题 |
+|----|------|------|
+| 1 | [01-雾岸世界.md](docs/theory/01-雾岸世界.md) | 我来到哪里？ |
+| 2 | [02-照见论.md](docs/theory/02-照见论.md) | 为什么会照见自己？ |
+| 3 | [03-各人之雾.md](docs/theory/03-各人之雾.md) | 为何每人雾不同？ |
+| 4–10 | [目录](docs/theory/README.md) | 生长、缘、心流、万象、观、命、整象 |
 
-问印里的 theory layer（`theoryLayer.ts`）只是把 II–IV 做成题面；卡面答案仍是平常心理学说法，不是第二套世界观。
+问印 `theoryLayer.ts` 仍是题面化；**正文不以 State/Field 开头**。索引：[docs/theory/README.md](docs/theory/README.md)
 
 ---
 
@@ -203,8 +201,8 @@ Key 只在 Vite 中间件用，不进前端包。`npm run build` 出 `dist/` + N
 ```
 psyche-tree-demo/
 ├── README.md
-├── docs/theory/              # 五层理论
-├── docs/volume-rite-copy.md  # 修持三语文案
+├── docs/theory/              # 01–10 + appendix + archive
+├── docs/volume-rite-copy.md  # 修持文案
 ├── docs/screenshots/
 ├── .cursor/skills/…/SKILL.md
 └── src/i18n/volumeRite.ts

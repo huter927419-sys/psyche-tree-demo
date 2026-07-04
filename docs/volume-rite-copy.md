@@ -1,6 +1,6 @@
 # 修持引导语三语全文 · Volume Rite Copy · 修持導き三語全文
 
-源文件 [`src/i18n/volumeRite.ts`](../src/i18n/volumeRite.ts)
+源文件 [`src/i18n/volumeRite.ts`](../src/i18n/volumeRite.ts)。理论↔修持对照见 [appendix-现代对应.md](./appendix-现代对应.md)。
 
 ---
 

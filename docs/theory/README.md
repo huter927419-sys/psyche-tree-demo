@@ -1,13 +1,22 @@
 # 理论栈
 
-五层长文，从「怎么进入照见」写到「意识与因果」。建议配合 [README §一](../../README.md#一理论栈) 一起看。
+雾岸**第一语言**是叙事与象；[附录：现代对应](./appendix-现代对应.md) 是第二语言。  
+按顺序读 **01 → 10**；旧版五层长文在 [archive/](./archive/)。
 
-| 层 | 文件 | 一句话 |
-|----|------|--------|
-| I | [01-mystical-framework.md](./01-mystical-framework.md) | 世界观、修持、神示 |
-| II | [02-concise-theory.md](./02-concise-theory.md) | 六维状态结构 |
-| III | [03-advanced-generalization.md](./03-advanced-generalization.md) | 泛化建模 |
-| IV | [04-enhanced-theory.md](./04-enhanced-theory.md) | 心流 / 意识 / 场域 |
-| V | [05-metaphysical-extension.md](./05-metaphysical-extension.md) | 形而上学扩展 |
+| 篇 | 文档 | 只问一件事 |
+|----|------|------------|
+| 1 | [01-雾岸世界.md](./01-雾岸世界.md) | 我来到哪里？ |
+| 2 | [02-照见论.md](./02-照见论.md) | 我为什么会照见自己？ |
+| 3 | [03-各人之雾.md](./03-各人之雾.md) | 为什么每人雾不同？ |
+| 4 | [04-生长论.md](./04-生长论.md) | 为什么人会改变？ |
+| 5 | [05-缘论.md](./05-缘论.md) | 为什么人与人相互影响？ |
+| 6 | [06-心流论.md](./06-心流论.md) | 为什么有时非常自然？ |
+| 7 | [07-万象论.md](./07-万象论.md) | 为什么能照见万象？ |
+| 8 | [08-观论.md](./08-观论.md) | 为什么能知道自己正在变？ |
+| 9 | [09-命论.md](./09-命论.md) | 为什么人生形成轨迹？ |
+| 10 | [10-整象论.md](./10-整象论.md) | 为什么整象只能最后出现？ |
+| — | [appendix-现代对应.md](./appendix-现代对应.md) | State / U / Φ / A / F 等 |
 
-各层正文里 zh / en / ja 分节写。问印 `theoryLayer.ts` 对应 II–IV 的题面；修持文案在 `volumeRite.ts`。
+修持文案：[volume-rite-copy.md](../volume-rite-copy.md) · 产品概览：[README §一](../../README.md#一理论栈)
+
+改写说明：[00-论纲与改写计划.md](./00-论纲与改写计划.md)

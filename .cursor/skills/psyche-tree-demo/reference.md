@@ -44,7 +44,7 @@ Built by `buildBookQuestionFlow()` in `books/shared/questionFlow.ts`.
 |-----|------|---------|--------|
 | [README.md](../../../README.md) | 产品与运维 | Product + ops | 製品+運用 |
 | [docs/volume-rite-copy.md](../../../docs/volume-rite-copy.md) | 修持三语全文 | Full rite zh/en/ja | 導き三語全文 |
-| [docs/theory/](../../../docs/theory/) | 五层理论 | Five theory layers | 五層理論 |
+| [docs/theory/](../../../docs/theory/) | 理论 01–10 + 附录 | Theory stack | 理論十篇 |
 | [SKILL.md](../SKILL.md) | Agent 约定 | Agent conventions | Agent 規約 |
 | [reference.md](./reference.md) | 路径与数据流 | Paths & data flow | パスとデータ流 |
 
