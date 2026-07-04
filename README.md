@@ -51,18 +51,40 @@ A web-based self-exploration demo: six mystical volumes (Mindscape, Heart Mirror
 
 ## 界面预览 · UI Preview · 画面プレビュー
 
-雾岸书架首页；右上角 **阅读语言 / Language / 読む言語** 切换三语。
+雾岸书架首页；右上角 **阅读语言 / Language / 読む言語** 切换三语。完整截图见 [`docs/screenshots/homepage/`](docs/screenshots/homepage/)。
 
-| 中文 | English | 日本語 |
-|:----:|:-------:|:------:|
-| ![书架首页 · 中文](docs/screenshots/homepage/homepage-zh.png) | ![Mist Shelf · English](docs/screenshots/homepage/homepage-en.png) | ![霧岸の書架 · 日本語](docs/screenshots/homepage/homepage-ja.png) |
+### 中文 · 雾岸书架
 
-| 元素 Element | 中文 | English | 日本語 |
-|--------------|------|---------|--------|
-| 副标题 | 雾中 · 记忆之岸 | Mist · Shore of Memory | 霧中 · 記憶の岸 |
-| 主标题 | 雾岸书架 | Mist Shelf | 霧岸の書架 |
-| 引导 | 你从光中降落 | Through the pillar of light, you descend. | 光の柱から、あなたは降り立つ |
-| 底部 | 6 卷 · 悬浮于雾 | 6 volumes · held in mist | 6 巻 · 霧に浮かぶ |
+![书架首页 · 中文](docs/screenshots/homepage/homepage-zh.png)
+
+| 元素 | 文案 |
+|------|------|
+| 副标题 | 雾中 · 记忆之岸 |
+| 主标题 | 雾岸书架 |
+| 引导 | 你从光中降落 / 雾霭散去之处，六卷记忆悬浮于岸 / 六向一体，共成整象 |
+| 底部 | 6 卷 · 悬浮于雾 |
+
+### English · Mist Shelf
+
+![Mist Shelf · English](docs/screenshots/homepage/homepage-en.png)
+
+| Element | Copy |
+|---------|------|
+| Subtitle | Mist · Shore of Memory |
+| Title | Mist Shelf |
+| Lead | Through the pillar of light, you descend. / Where mist recedes, six memories hold upon the shore. / Six facets breathe as one whole image. |
+| Footer | 6 volumes · held in mist |
+
+### 日本語 · 霧岸の書架
+
+![霧岸の書架 · 日本語](docs/screenshots/homepage/homepage-ja.png)
+
+| 要素 | 文言 |
+|------|------|
+| 副題 | 霧中 · 記憶の岸 |
+| 主題 | 霧岸の書架 |
+| 導入 | 光の柱から、あなたは降り立つ / 霧が退くところに、六巻の記憶が岸に浮かぶ / 六向一体、整象を成す |
+| フッター | 6 巻 · 霧に浮かぶ |
 
 ---
 
