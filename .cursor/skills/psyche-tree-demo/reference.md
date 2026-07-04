@@ -38,6 +38,20 @@ Migration: `server/db/migrations/007_locale_zh_tw.sql`
 
 Built by `buildBookQuestionFlow()` in `books/shared/questionFlow.ts`.
 
+## Entry rite copy (入卷修持)
+
+Full simplified-Chinese guidance per volume: [README §入卷修持引导语](../../../README.md#入卷修持引导语--entry-rite-guidance--入巻の導き).  
+Editable source: `src/i18n/volumeRite.ts` → `entryRites` (en/ja in same file).
+
+| BookId | Facet | Sections |
+|--------|-------|----------|
+| `psyche-tree` | 照见自我 | 静坐三分钟 · 允许沉默 · 无风湖面 |
+| `emotional-flow` | 照见情感 | 只流动不控制 · 落叶顺河 |
+| `mind-light` | 照见思维 | 减噪 · 夜空北极星 |
+| `bond-thread` | 照见关系 | 靠近时的心 · 丝线仪式 |
+| `flow-balance` | 照见节奏 | 力量流向 · 船心在中流 |
+| `direction-light` | 照见方向 | 今天一小步 · 远方微光 |
+
 ## Dimension titles by book
 
 ### 心象 `psyche-tree`

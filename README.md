@@ -48,6 +48,149 @@ A web-based self-exploration demo: six mystical volumes (Mindscape, Heart Mirror
 | 流衡 | 节奏 | 力量流向；船心在中流 | 感船心仍在中流 |
 | 向光 | 方向 | 今天一小步；远方微光 | 确认今天的一步已迈出 |
 
+### 入卷修持引导语 · Entry Rite Guidance · 入巻の導き
+
+以下为产品内 **入卷仪式**（`VolumeRiteOverlay` · `getVolumeEntryRite`）的完整引导文案。**简体**为源文本；**繁體**界面由 OpenCC 自简体转换；**English / 日本語** 全文见 [`src/i18n/volumeRite.ts`](src/i18n/volumeRite.ts) 中各卷的 `entryRites` 字段。
+
+---
+
+#### 第一卷 · 心象 · 照见自我
+
+**入卷仪式**
+
+阅读前，请安静坐三分钟。  
+不要回忆今天发生了什么。  
+不要计划接下来要做什么。  
+只需要观察：此刻，我在哪里？  
+不是身体在哪里。  
+而是：我的心，此刻停留在哪里？
+
+**观照方式**
+
+阅读时，不要急着回答。  
+如果一个问题让你沉默，请允许沉默。  
+因为：沉默，本身就是一种回答。
+
+**冥想方式**
+
+闭上眼睛。  
+想像自己站在一片湖边。  
+湖面没有风。  
+不要刻意寻找倒影。  
+只是等待。  
+直到湖面慢慢出现你的影子。  
+如果影子模糊，不用调整。  
+因为：湖不会骗人。  
+真正需要安静的，不是湖，而是观看的人。
+
+| English (summary) | 日本語（要約） |
+|-------------------|----------------|
+| Three minutes of stillness; where has the heart paused? Allow silence as answer. Lake meditation—wait for the shadow without adjusting the water. | 三分の静座；心の留まりを見る。沈黙を許す。無風の湖で影を待つ——整えるのは見る者。 |
+
+---
+
+#### 第二卷 · 映心 · 照见情感
+
+**不控制，只流动**
+
+这里不建议「控制情绪」。  
+而是：让情绪拥有流动的权利。
+
+**冥想**
+
+想像自己站在一条河边。  
+每一种情绪，都是一片叶子。  
+不要捡起来。不要追赶。  
+让它顺流而去。  
+直到河面重新平静。  
+然后问自己：还有什么，没有流走？
+
+| English (summary) | 日本語（要約） |
+|-------------------|----------------|
+| Let feeling flow; do not control. River-leaf meditation—each emotion drifts; ask what has not yet flowed away. | 制御せず流れを許す。川辺で感情を葉と見做し、流したあと「まだ残るもの」を問う。 |
+
+---
+
+#### 第三卷 · 明思 · 照见思维
+
+**观照**
+
+思考，不是不断增加答案。  
+而是不断减少噪音。
+
+**冥想**
+
+想像夜空。  
+每一个念头，都是一颗星。  
+不要数。不要命名。  
+直到：整片天空，开始出现真正的北极星。
+
+| English (summary) | 日本語（要約） |
+|-------------------|----------------|
+| Thinking strips noise, not piles answers. Night-sky meditation—stars as thoughts until the North Star appears. | 思考は雑音を減らす。夜空の星として念を見る——北極星が現れるまで。 |
+
+---
+
+#### 第四卷 · 缘书 · 照见关系
+
+**观照**
+
+不要想：别人怎么看你。  
+而是：当别人靠近时，你的心，发生了什么？
+
+**仪式**
+
+想像自己手中有一根丝线。  
+另一端，连接着重要的人。  
+不要拉近。也不要剪断。  
+只是观察：它现在是什么颜色？有没有重量？有没有温度？
+
+| English (summary) | 日本語（要約） |
+|-------------------|----------------|
+| When someone draws near, what happens in the heart? Thread rite—observe color, weight, warmth without pulling or cutting. | 近づくとき心に何が起きるか。糸の儀——色・重さ・温かさを見るだけ。 |
+
+---
+
+#### 第五卷 · 流衡 · 照见节奏
+
+**观照**
+
+人生真正的问题，不是努力。  
+而是：力量流向哪里。
+
+**冥想**
+
+想像自己是一条船。  
+不是暴风雨。也不是大海。  
+而是船。  
+风不会停止。浪不会停止。  
+真正需要稳定的，只有船心。
+
+| English (summary) | 日本語（要約） |
+|-------------------|----------------|
+| Where does force flow—not how hard you try. Boat meditation—only the boat-heart must hold steady. | 力の向きを見る。舟の瞑想——風浪は止まらず、舟の心だけを安定させる。 |
+
+---
+
+#### 第六卷 · 向光 · 照见方向
+
+**观照**
+
+不要问：未来在哪里。  
+而是：今天这一小步，是不是朝向真正重要的地方。
+
+**冥想**
+
+想像远方有一点微光。  
+不用走过去。  
+只需要：今天，朝它走一步。就够了。
+
+| English (summary) | 日本語（要約） |
+|-------------------|----------------|
+| Is today’s step toward what matters—not where the future is. One step toward distant light is enough. | 未来の場所ではなく、今日の一歩の向き。遠い光へ一歩で足りる。 |
+
+---
+
 **归树（Return to the Tree）**  
 六卷完成后：树未变，观看者变了——树是镜，不是答案。随后呈现整象神谕。
 
@@ -67,6 +210,7 @@ A web-based self-exploration demo: six mystical volumes (Mindscape, Heart Mirror
 |--------------|------|---------|--------|
 | [核心命题](#核心命题--core-proposition--核心命題) | 校准看见方式，非寻答案 | Calibration, not answers | 校准する命題 |
 | [六卷修持环](#六卷修持环--volume-rite-cycle--六巻の修持環) | 入卷 / 离卷 / 归树 | Entry & closing rites, Return to Tree | 入巻・離巻・帰樹 |
+| [入卷修持引导语](#入卷修持引导语--entry-rite-guidance--入巻の導き) | 六卷完整入卷文案 | Full entry rite copy per volume | 六巻の入巻導き全文 |
 | [体验概览](#体验概览--experience--体験の流れ) | 书架 → 问答 → 神谕 → 整象 | Shelf → Q&A → oracle → Whole Image | 書棚 → 問答 → 神託 → 整象 |
 | [功能要点](#功能要点--features--主な機能) | 持久化、四语缓存、整象 | SQLite, quadrilingual cache, holistic | 永続化・四語キャッシュ・整象 |
 | [快速开始](#快速开始--quick-start--クイックスタート) | 安装与 `.env.local` | Install & env | セットアップと環境変数 |

@@ -75,6 +75,17 @@ Dim 1–3 → attention check → Dim 4–6 → integration (dimensionIndex 7)
 
 Copy lives in `src/i18n/volumeRite.ts` (zh / en / ja; zhTw via OpenCC). Styles: `.volume-rite-overlay`, `.return-tree-overlay` in `index.css`.
 
+**Full entry rite copy (简体)** is documented in [README §入卷修持引导语](../../../README.md#入卷修持引导语--entry-rite-guidance--入巻の導き). Source of truth remains `volumeRite.ts` → `entryRites`.
+
+| BookId | 卷 | Entry rite sections (zh) |
+|--------|-----|---------------------------|
+| `psyche-tree` | 心象 | 入卷仪式 → 观照方式 → 冥想方式（湖影） |
+| `emotional-flow` | 映心 | 不控制只流动 → 冥想（落叶顺流） |
+| `mind-light` | 明思 | 减噪观照 → 冥想（夜空北极星） |
+| `bond-thread` | 缘书 | 靠近时的心 → 仪式（丝线） |
+| `flow-balance` | 流衡 | 力量流向 → 冥想（船心） |
+| `direction-light` | 向光 | 今天一小步 → 冥想（远方微光） |
+
 **Do not** reintroduce `BookOpeningGuide` flash for entry—the entry rite overlay replaces it.
 
 ## Reading test fallback (QA only)
