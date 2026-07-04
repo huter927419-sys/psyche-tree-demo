@@ -22,7 +22,8 @@ The product follows a full mystical **system**, not only symbols:
 | **Reflection** 反思 | Portrait + oracle pages, return to shelf, review mode |
 | **Symbol + revelation** | Sixfold facets → volume oracle → holistic oracle |
 
-Full trilingual theory: [README.md](../../../README.md#玄学理论体系--mystical-framework--玄義体系).
+Full trilingual theory: [README.md](../../../README.md#玄学理论体系--mystical-framework--玄義体系).  
+Concise state-system theory (zh/en/ja): [README.md](../../../README.md#psyche-tree--六维书--简明理论--concise-theory--簡明理論).
 
 ## Six books (one facet each)
 
