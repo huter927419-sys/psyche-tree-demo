@@ -79,6 +79,16 @@ six books complete → journey.status = completed
 
 `countCompletedDimensions()` counts only `dimensionIndex <= 6`. Integration does not advance tree stage. `treeProgressMax: 6` on all books.
 
+## Field, energy, flow (玄义)
+
+| Term | Meaning | Code / UX |
+|------|---------|-----------|
+| **场域** field | Mist-shore + per-volume sub-field; density peaks during seals/oracle | shelf, `SkyAtmosphere`, book open |
+| **能量** energy | Spirit-tide (灵息), not score; root→crown on tree | openingGuide “能量之波”, `treeEnergyFlow.tsx` |
+| **心流** flow state | Immersive one-seal/page rite; ≠ `flow-balance` book facet | auto flip, no scores, dialogue check restores presence |
+
+Do not conflate **心流** (consciousness flow) with **流衡** `flow-balance` (balance facet).
+
 ## Scoring
 
 `computeResults()` in `scoring.ts`. Attention decoys via `getAttentionCheckCards(q, book)` scoped to current book.

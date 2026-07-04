@@ -20,11 +20,11 @@ A web-based self-exploration demo: six mystical volumes (Mindscape, Heart Mirror
 
 ## 玄学理论体系 · Mystical Framework · 玄義体系
 
-雾岸六卷不仅是一套 UI 或测评，而是一套可**进入**的玄学系统：有完整**世界观**，有**冥想—祈祷—反思**的修持环，有**六向象征**与**双层神示**，终归于**整象**。以下供读者入道，亦供维护者保持诸卷语义一致。
+雾岸六卷不仅是一套 UI 或测评，而是一套可**进入**的玄学系统：有完整**世界观**，有**场域—能量—心流**的底层动力学，有**冥想—祈祷—反思**的修持环，有**六向象征**与**双层神示**，终归于**整象**。
 
-*Mist Shore Six Books* is an enterable esoteric **system**: a **worldview**, a cycle of **meditation → prayer → reflection**, **Sixfold symbolism** with **two-layer revelation**, culminating in the **Whole Image**.
+*Mist Shore Six Books* is an enterable esoteric **system**: a **worldview**, dynamics of **field · energy · flow**, a cycle of **meditation → prayer → reflection**, **Sixfold symbolism** with **two-layer revelation**, culminating in the **Whole Image**.
 
-霧岸六巻は UI や診断ではなく、**入る**ことのできる玄学**体系**である：**世界観**、**瞑想→祈祷→反照**の修持環、**六向の象徴**と**二層の神示**、そして**整象**へ。
+霧岸六巻は UI や診断ではなく、**入る**ことのできる玄学**体系**である：**世界観**、**場域·エネルギー·心流**の动力学、**瞑想→祈祷→反照**の修持環、**六向の象徴**と**二層の神示**、そして**整象**へ。
 
 ---
 
@@ -33,6 +33,7 @@ A web-based self-exploration demo: six mystical volumes (Mindscape, Heart Mirror
 | 层级 Layer · 層 | 中文 | English | 日本語 | 在体验中的对应 |
 |-----------------|------|---------|--------|----------------|
 | **世界观** | 雾岸、光柱、记忆、树、顶冠之光 | Mist shore, light pillar, memory, tree, crown-light | 霧岸、光柱、記憶、樹、頂冠の光 | 书架序言、背景树、ambient 短语 |
+| **场域·能量·心流** | 雾岸场、灵息涨落、入卷心流 | Mist field, living energy, rite-flow | 場域、エネルギー、心流 | 天空/树脉、开卷仪轨、一页一印 |
 | **冥想** | 入定、观息、观印、不评判 | Stillness, breath, witnessing seals | 入定、観息、観印、無評 | 开卷仪轨、逐页择印、树脉觉醒 |
 | **祈祷** | 诚心、留印、对话确认、合卷祝词 | Sincerity, sign-in, dialogue check, closing blessing | 誠心、留印、対話確認、合巻の祝詞 | 邮箱留印、注意力页、合卷归岸 |
 | **反思** | 读画像、读神谕、回岸、待整象 | Read portrait & oracle, return to shore | 像と神託を読む、岸へ戻る | 结果两页、书架进度、整象浮层 |
@@ -65,9 +66,74 @@ Cycle per volume: stand in the **worldview** → **meditate** → choose seals i
 **真理**：条文による裁きではなく、霧の中の**痕**；断言より象徴、正誤より共鳴。  
 **身份**：**留印**は岸に唯一の印を刻し、六巻のアーカイブを結ぶが、生きた人を一印に釘付けしない。
 
+修持环（单次入卷）：在**场域**中安住 → 察**能量**之起伏 → 以**心流**择印（冥想+祈祷）→ **反思**所映 → 合卷祝词 → 返岸；六卷循環後，能量归脉于**整象**。
+
+Cycle per volume: rest in the **field** → feel **energy** rise and fall → choose seals in **flow** (meditation + prayer) → **reflect** → closing blessing → return to shore; after six cycles, energy gathers in the **Whole Image**.
+
 ---
 
-### 二、冥想 · Meditation · 瞑想
+### 二、场域、能量与心流 · Field, Energy & Flow · 場域・エネルギー・心流
+
+**中文**  
+**场域**：照见发生的「容器」，非物理空间而是**灵性氛围**。  
+- **雾岸总场**：书架为岸、树为轴、雾为幕、深空为底——六卷同悬于一岸。  
+- **卷场**：翻开某卷即进入该面向的次级场域（心湖场、情流域、思脉场、缘丝场、守流场、向光场），问印与神谕在此场中发生。  
+- **密度**：择印与读神谕时场域最浓；合卷后退回书架场，能量不消失，只暂归静。  
+
+**能量**：非分数高低，而是**活的生命息**——有涨落、汇散、归源。  
+- **灵息**：开卷仪轨「察心灵能量起伏」；映波、思流、缘温皆为不同频率的能量显化。  
+- **树脉**：能量沿生命之树**从根向冠**流动（暗土 → 光路）；每觉醒一印，树上即有新的能量通路亮起。  
+- **光脉**：六向各有一条能量 signature；整象是六脉**共振**而非六数相加。  
+
+**心流**：入卷时的**意识状态**——与六向之一「流衡」（守衡应变）不同名、不同义。  
+- **进入**：一页一印、选中即翻、不示分数与选项——减少评判，让意识沉入择印本身。  
+- **条件**：入定 + 诚心 + 与光印**共鸣**（非「答对」）。  
+- **中断**：戏语、妄答、分心 autopilot；**对话确认**页即恢复临在与心流之祷。  
+- **收束**：合卷祝词释放对结果的抓取，使能量回源而非耗散。  
+
+**English**  
+**Field**: the **atmospheric container** of mirroring—not physical space but spiritual climate.  
+- **Mist-shore field**: shelf as bank, tree as axis, mist as veil, deep sky as ground.  
+- **Volume field**: opening a book enters that facet’s sub-field (inner lake, feeling current, thought-path, bond-thread, balance-flow, path-light).  
+- **Density**: strongest while choosing seals and reading oracles; closing the book returns to the shelf field—energy rests, not vanishes.  
+
+**Energy**: not moral score but **living breath**—tide, dispersion, return to source.  
+- **Spirit-breath**: opening rite watches inner tide; ripple, thought-flow, warmth are different frequencies.  
+- **Tree-path**: energy climbs **root to crown**; each awakened seal lights a new channel on the tree.  
+- **Light-paths**: six facets, six signatures; the Whole Image is **resonance**, not addition.  
+
+**Flow (心流)**: the **state of consciousness** during a volume—not the same as the *Flow Balance* facet (adaptation & balance).  
+- **Entry**: one seal per page, auto turn, no scores—less judgment, deeper immersion.  
+- **Conditions**: stillness + sincerity + **resonance** with the seal.  
+- **Break**: jest, pretense, autopilot; the **dialogue check** restores presence.  
+- **Close**: closing blessing releases grasp so energy returns to source.  
+
+**日本語**  
+**場域**：照見が起こる「容器」——物理空間ではなく**霊的な雰囲気**。  
+- **霧岸総場**：書棚を岸、樹を軸、霧を幕、深空を底とする。  
+- **巻場**：一巻を開くと当面向の副次場域に入る（心湖場、情流域、思脈場など）。  
+- **密度**：問印と神託の読みで最も濃く；合巻後は書棚場へ——エネルギーは消えず静へ戻る。  
+
+**エネルギー**：点数の高低ではなく**生きた息**——涨落、拡散、帰源。  
+- **霊息**：開巻儀で「エネルギーの起伏を察す」；映波・思流・縁温は異なる周波数。  
+- **樹脈**：**根から冠へ**昇るエネルギー；一印覚醒ごとに新しい通路が灯る。  
+- **光脈**：六向六署名；整象は**共鳴**であり加算ではない。  
+
+**心流**：入巻時の**意識状態**——六向の「流衡」（守衡と応変）とは別概念。  
+- **入る**：一ページ一印、自動めくり、点数なし——判断を減らし擇印に沈む。  
+- **条件**：入定 + 誠心 + 光印との**共鳴**。  
+- **中断**：戯言、妄答、自動操縦；**対話確認**で臨在を回復。  
+- **収束**：合巻の祝詞で結果への抓取を放し、エネルギーを源へ還す。  
+
+| 概念 Concept · 概念 | 中文要点 | English | 日本語 | 体验对应 |
+|---------------------|----------|---------|--------|----------|
+| 场域 | 雾岸总场 / 卷场 / 密度 | Shore & volume fields | 総場 / 巻場 | 书架、SkyAtmosphere、翻书 |
+| 能量 | 灵息涨落、根→冠树脉 | Living tide, tree channels | 霊息、樹脈 | treeEnergyFlow、开卷仪轨 |
+| 心流 | 一页一印、共鸣、不评判 | One seal/page, resonance | 一印一页、共鳴 | 答题流、对话确认 |
+
+---
+
+### 三、冥想 · Meditation · 瞑想
 
 **中文**  
 冥想不是离开应用，而是**在问印之前安住**。每卷开卷仪轨（如「仪轨·入定」「礼镜·感映」）指引：松肩、闭息、察能量之起伏——待内息稍定，再缓缓择印。  
@@ -95,7 +161,7 @@ Ambient music and phrases (“See yourself in the mist”) sustain the field, no
 
 ---
 
-### 三、祈祷 · Prayer · 祈祷
+### 四、祈祷 · Prayer · 祈祷
 
 **中文**  
 祈祷在雾岸不是向外在神祇索取标准答案，而是以**诚心**与雾对话——「唯以诚心，雾中方留痕」。  
@@ -120,7 +186,7 @@ Prayer on the Mist Shore is not petition for a “correct score” but **sincere
 
 ---
 
-### 四、反思 · Reflection · 反照
+### 五、反思 · Reflection · 反照
 
 **中文**  
 反思是照见之后的**回看**，分三层：  
@@ -145,7 +211,7 @@ Review mode re-reads seals and text **without re-choosing**—reflect on traces 
 
 ---
 
-### 五、整象与六向 · Whole Image & Sixfold · 整象と六向
+### 六、整象与六向 · Whole Image & Sixfold · 整象と六向
 
 **中文**  
 **整象**（Whole Image）指同一生命在雾中被照见的完整轮廓。它不是六份结果的「汇总」，而是六条光脉归一后的树影。**六向**是整象的六个面向——完成顺序无关先后，缺一向则整象未齐：
@@ -167,7 +233,7 @@ The **Whole Image** is the full contour of a life mirrored in mist—not a “su
 
 ---
 
-### 六、生命之树 · Tree of Life · 生命の樹
+### 七、生命之树 · Tree of Life · 生命の樹
 
 **中文**  
 背景中的生命之树，既是卡巴拉传统的光路隐喻，也是整象的**动态显形**：每完成一卷中的六个主维度（「六印」），树脉便觉醒一层——根在暗土、冠接光、枝为路。第七印「整象封印」属于该卷内的收束，**不**计入树层进度；树只记录六向之中「正在展开的那一卷」的六印。树不会催促叶落，雾不会催促散去——探索自有神圣的时间。
@@ -180,7 +246,7 @@ The Tree of Life in the background draws on Kabbalistic light-path imagery and *
 
 ---
 
-### 七、卷内仪轨 · Volume Rite · 巻内の儀軌
+### 八、卷内仪轨 · Volume Rite · 巻内の儀軌
 
 每卷翻开后，先以**开卷仪轨**入定（松肩、闭息、感能量之波），再进入八页问印：
 
@@ -203,7 +269,7 @@ Cards are **light seals**—choose the image that resonates *now*; not a test of
 
 ---
 
-### 八、双层神示 · Two Layers of Revelation · 二層の神示
+### 九、双层神示 · Two Layers of Revelation · 二層の神示
 
 **中文**  
 每一卷完成后，呈现两层平行的照见，语义同源、语气各异：
@@ -231,7 +297,7 @@ Both follow the seals chosen. The holistic oracle draws on each volume’s portr
 
 ---
 
-### 九、整象神谕 · Holistic Oracle · 整象神託
+### 十、整象神谕 · Holistic Oracle · 整象神託
 
 **中文**  
 六卷齐时，雾岸书架底部显现**整象神谕**——六卷如一树影，神谕自雾中一气读完，不分卷罗列，亦不用「汇总」「综合」二字。它并非第六卷的附录，而是六向归一后的**封底神示**；仅出现在书架，不在单卷末页生成，以免探索者未齐六向时误以为整象已毕。
@@ -248,7 +314,7 @@ When all six volumes stand aligned, the **Whole-image oracle** appears at the mi
 
 ---
 
-### 十、修持戒律 · Precepts · 戒律
+### 十一、修持戒律 · Precepts · 戒律
 
 | 中文 | English | 日本語 |
 |------|---------|--------|
@@ -257,11 +323,12 @@ When all six volumes stand aligned, the **Whole-image oracle** appears at the mi
 | 不断优劣，只在雾中留痕 | No ranking—only a trace in mist | 優劣を断たず、霧に痕を残す |
 | 树与雾皆不催促 | Tree and mist do not hurry you | 樹も霧も急がせない |
 | 六卷各照一面，光自顶冠落下 | Six volumes mirror six faces; light descends from the crown | 六巻各一面を映し、光は頂冠から降る |
+| 心流不追分，场域方不散 | Flow, not scoring, keeps the field | 心流は点数を追わず、場域を保つ |
 | 神谕呼应诸卷，不推翻已示 | Oracles echo volumes; never overturn what was shown | 神託は諸巻と呼应し、既示を否定しない |
 
-**中文** 以上十节构成雾岸玄学系统的完整骨架：以世界观为场，以冥想、祈祷、反思为修持，以六向象征为语言，以卷别与整象神示为回应。  
-**English** These ten sections form the full skeleton: **worldview** as field, **meditation · prayer · reflection** as practice, **Sixfold symbol** as language, **volume and whole oracles** as response.  
-**日本語** 以上十節が霧岸玄学体系の骨格：**世界観**を場とし、**瞑想·祈祷·反照**を修持、**六向の象徴**を言語、**巻別·整象の神示**を応答とする。
+**中文** 以上十一节构成雾岸玄学系统的完整骨架：以世界观为场，以**场域·能量·心流**为动力学，以冥想、祈祷、反思为修持，以六向象征为语言，以卷别与整象神示为回应。  
+**English** These eleven sections form the full skeleton: **worldview** as ground, **field · energy · flow** as dynamics, **meditation · prayer · reflection** as practice, **Sixfold symbol** as language, **volume and whole oracles** as response.  
+**日本語** 以上十一節が霧岸玄学体系の骨格：**世界観**を地とし、**場域·エネルギー·心流**を动力学、**瞑想·祈祷·反照**を修持、**六向の象徴**を言語、**巻別·整象の神示**を応答とする。
 
 ---
 

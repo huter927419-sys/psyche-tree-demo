@@ -16,6 +16,7 @@ The product follows a full mystical **system**, not only symbols:
 | Pillar | In app |
 |--------|--------|
 | **Worldview** 世界观 | Mist shore, light pillar, tree, sacred time |
+| **Field · Energy · Flow** 场域·能量·心流 | Sky/tree field, spirit-tide rite, one seal/page flow, treeEnergyFlow root→crown |
 | **Meditation** 冥想 | Opening rite per book, one seal/page, tree awakening |
 | **Prayer** 祈祷 | Email seal, dialogue check, closing blessing, whole oracle |
 | **Reflection** 反思 | Portrait + oracle pages, return to shelf, review mode |
