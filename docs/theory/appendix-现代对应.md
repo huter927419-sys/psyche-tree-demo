@@ -68,3 +68,19 @@
 | 整象 | 整象 | 六面齐、树前 | 六面揃い、樹前 | 书架整象神谕 | 架の整象神託 |
 
 文案源 · 源：[volume-rite-copy.md](../volume-rite-copy.md) · `src/i18n/volumeRite.ts`
+
+---
+
+## 读不懂附录时 · 附録が読みにくいとき
+
+> **简体**
+> 附录是**对照表**，不是夜读。若 U、形而上学、心流、场域等仍觉抽象，请读 [解读篇](./interpretation/README.md)——四篇短文，用雾岸口吻把符号与第二语言词讲透。
+> 顺序建议：先 [01-符号六事](./interpretation/01-符号六事.md)，再按需翻 [02 形而上学](./interpretation/02-形而上学.md)、[03 心流与入定](./interpretation/03-心流与入定.md)、[04 场域与观](./interpretation/04-场域与观.md)。
+>
+> **英文**
+> The appendix is a **lookup table**, not bedside reading. If U, metaphysics, flow, field still feel abstract, read the [Interpretation essays](./interpretation/README.md)—four short pieces in the shore’s own voice.
+> Suggested order: [01 Symbols](./interpretation/01-符号六事.md) first, then [02 Metaphysics](./interpretation/02-形而上学.md), [03 Flow & Entry](./interpretation/03-心流与入定.md), [04 Field & Seeing](./interpretation/04-场域与观.md) as needed.
+>
+> **日本語**
+> 附録は**対照表**であり、夜読みではない。U、形而上学、心流、場域がまだ抽象なら [解読篇](./interpretation/README.md) へ——霧岸の口調で記号と第二言語を解く四篇。
+> 順序：[01-符号六事](./interpretation/01-符号六事.md) を先に、必要に応じて 02–04。

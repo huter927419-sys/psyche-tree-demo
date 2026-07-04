@@ -55,6 +55,7 @@ Built by `buildBookQuestionFlow()` in `books/shared/questionFlow.ts`.
 | [09-命论.md](../../../docs/theory/09-命论.md) | 命 / 形而上学 |
 | [10-整象论.md](../../../docs/theory/10-整象论.md) | 整象 |
 | [appendix-现代对应.md](../../../docs/theory/appendix-现代对应.md) | 现代符号与概念 |
+| [interpretation/](../../../docs/theory/interpretation/README.md) | 附录符号与术语解读（四篇） |
 | [volume-rite-copy.md](../../../docs/volume-rite-copy.md) | 修持三语文案 |
 | [SKILL.md](./SKILL.md) | Agent 约定 |
 | [reference.md](./reference.md) | 本文件：路径与数据流 |

@@ -24,7 +24,7 @@
 
 ## 一、理论栈
 
-按顺序读 [`docs/theory/`](docs/theory/) **01 → 10**，再读 [附录：现代对应](docs/theory/appendix-现代对应.md)。每篇只问一个问题；**各章正文为简体 · 英文 · 日本語 并列**（玄学口吻，现代术语见附录）。
+按顺序读 [`docs/theory/`](docs/theory/) **01 → 10**，再读 [附录：现代对应](docs/theory/appendix-现代对应.md)。附录里的符号与现代词若仍抽象，读 [解读篇](docs/theory/interpretation/README.md)（四篇）。各章正文为 **简体 · 英文 · 日本語** 并列。
 
 | 篇 | 文档 | 问题 |
 |----|------|------|
@@ -39,6 +39,7 @@
 | 9 | [09-命论.md](docs/theory/09-命论.md) | 人生为何形成轨迹？ |
 | 10 | [10-整象论.md](docs/theory/10-整象论.md) | 整象为何只能最后出现？ |
 | — | [appendix-现代对应.md](docs/theory/appendix-现代对应.md) | 状态 / 场域 等（第二语言） |
+| 解读 | [interpretation/](docs/theory/interpretation/README.md) | 符号、形而上学、心流、场域 |
 
 完整索引：[docs/theory/README.md](docs/theory/README.md)
 
@@ -210,7 +211,7 @@ Key 只在 Vite 中间件用，不进前端包。`npm run build` 出 `dist/` + N
 ```
 psyche-tree-demo/
 ├── README.md
-├── docs/theory/              # 01–10 + appendix
+├── docs/theory/              # 01–10 + appendix + interpretation
 ├── docs/volume-rite-copy.md  # 修持文案
 ├── docs/screenshots/
 ├── .cursor/skills/…/SKILL.md
