@@ -18,17 +18,60 @@ A web-based self-exploration demo: six mystical volumes (Mindscape, Heart Mirror
 
 ---
 
+## 核心命题 · Core Proposition · 核心命題
+
+**主命题**  
+人的一生，不是在寻找答案，而是在不断**校准**自己看见世界、感受世界、与世界相处的方式。
+
+**副命题**  
+世界未必因你而改变，但你**如何看见**，会不断改变你自己。
+
+| English | 日本語 |
+|---------|--------|
+| A life is not a search for answers, but a continual **calibration** of how you see, feel, and meet the world. | 人生は答えを探す旅ではなく、世界との向き合い方を**校准**し続ける旅。 |
+| The world may not change because of you—but **how you see** keeps changing you. | 世界は変わらなくても、**見方**はあなたを変え続ける。 |
+
+此命题统领六卷修持与归树终卷，下文「形而上扩展」等层为机制语言，而非第二套世界观。
+
+---
+
+## 六卷修持环 · Volume Rite Cycle · 六巻の修持環
+
+每卷除问印外，另有**入卷 → 问印 → 离卷**修持；六卷齐后先**归树**，再开整象神谕（不叫「总结」）。
+
+| 卷 | 照见 | 入卷要点 | 离卷 |
+|----|------|----------|------|
+| 心象 | 自我 | 静坐三分钟；湖面无风之冥想 | 写一句：「今天，我第一次真正看见了什么？」 |
+| 映心 | 情感 | 不控制，让情绪流动；河边落叶冥想 | 静息，不必命名流过的一切 |
+| 明思 | 思维 | 减噪；夜空寻北极星 | 让最后一念自行熄灭 |
+| 缘书 | 关系 | 观靠近时心的变化；丝线仪式 | 再看一眼丝线，不断不拉 |
+| 流衡 | 节奏 | 力量流向；船心在中流 | 感船心仍在中流 |
+| 向光 | 方向 | 今天一小步；远方微光 | 确认今天的一步已迈出 |
+
+**归树（Return to the Tree）**  
+六卷完成后：树未变，观看者变了——树是镜，不是答案。随后呈现整象神谕。
+
+文案与交互：`src/i18n/volumeRite.ts` · `VolumeRiteOverlay` · `ReturnToTreeOverlay`。
+
+| English | 日本語 |
+|---------|--------|
+| Each volume: **entry rite → seals → closing rite**; after all six: **Return to the Tree**, then the whole oracle. | 各巻：**入巻 → 問印 → 離巻**；六巻後：**帰樹**、その後整象神託。 |
+
+---
+
 ## 目录 · Contents · 目次
 
 ### 产品与使用 · Product & Setup · 製品と利用
 
 | 章节 Section | 中文 | English | 日本語 |
 |--------------|------|---------|--------|
-| [界面预览](#界面预览--ui-preview--画面プレビュー) | 书架首页四语截图 | Homepage screenshots (zh/zhTw/en/ja) | 書棚トップ四語スクリーンショット |
+| [核心命题](#核心命题--core-proposition--核心命題) | 校准看见方式，非寻答案 | Calibration, not answers | 校准する命題 |
+| [六卷修持环](#六卷修持环--volume-rite-cycle--六巻の修持環) | 入卷 / 离卷 / 归树 | Entry & closing rites, Return to Tree | 入巻・離巻・帰樹 |
 | [体验概览](#体验概览--experience--体験の流れ) | 书架 → 问答 → 神谕 → 整象 | Shelf → Q&A → oracle → Whole Image | 書棚 → 問答 → 神託 → 整象 |
 | [功能要点](#功能要点--features--主な機能) | 持久化、四语缓存、整象 | SQLite, quadrilingual cache, holistic | 永続化・四語キャッシュ・整象 |
 | [快速开始](#快速开始--quick-start--クイックスタート) | 安装与 `.env.local` | Install & env | セットアップと環境変数 |
 | [脚本](#脚本--scripts--スクリプト) | 验证与运维命令 | Dev & verify scripts | 検証・運用スクリプト |
+| [测试与 QA](#测试与-qa--testing--テスト) | fallback、verify 脚本 | Test fallback & verify scripts | テスト fallback・検証 |
 | [项目结构](#项目结构--project-structure--プロジェクト構成) | 目录说明 | Repo layout | ディレクトリ構成 |
 | [交互约定](#交互约定--ux-conventions--インタラクション規約) | UX 规则 | UX conventions | UX 規約 |
 | [部署](#部署--deployment--デプロイ) | 生产注意事项 | Production notes | 本番デプロイ |
@@ -1619,8 +1662,10 @@ Visual: deep black `#0a0a0a`, monochrome symbolic cards, soft gold accents; loca
 | 中文 | English | 日本語 |
 |------|---------|--------|
 | 六卷独立测向，完成顺序不影响 journey | Six independent facets; completion order does not matter | 六巻独立、完了順は journey に影響しない |
+| 六卷修持环：入卷 / 离卷 / 归树 → 整象 | Volume rite cycle: entry / exit / Return to Tree → holistic | 六巻修持環：入巻・離巻・帰樹 → 整象 |
 | SQLite 持久化；邮箱登录；四语神谕缓存 | SQLite persistence; email login; quadrilingual reading cache | SQLite 永続化；メールログイン；四語神託キャッシュ |
 | DeepSeek 单卷与整象解读；失败时本地 fallback | DeepSeek per-volume and holistic readings; local fallback on failure | DeepSeek 巻別・整象；失敗時ローカル fallback |
+| QA：`PSYCHE_READING_TEST_FALLBACK` 或请求头即时写入测试神谕 | QA test-fallback env/header for instant verify readings | QA：テスト fallback で検証加速 |
 | 整象 prompt 含六卷底层画像 + 已示神谕 | Holistic prompt uses portraits + prior volume oracles | 整象 prompt に六巻の底层像 + 既示神託 |
 | Mixkit 空灵背景音乐（三场景淡入切换） | Mixkit ambient BGM (cross-faded by scene) | Mixkit 空霊 BGM（場面でクロスフェード） |
 
@@ -1644,6 +1689,7 @@ DEEPSEEK_MODEL=deepseek-v4-pro
 
 # Optional / 可选 / 任意
 SQLITE_PATH=./data/psyche-tree.sqlite
+PSYCHE_READING_TEST_FALLBACK=0   # 1 = skip DeepSeek, instant QA readings / 検証用
 OPENAI_API_KEY=...           # AI card images / AI 生图 / AI カード画像
 ```
 
@@ -1662,9 +1708,24 @@ OPENAI_API_KEY=...           # AI card images / AI 生图 / AI カード画像
 | `npm run build` | 卡图 + 类型检查 + 构建 | Cards + typecheck + build | カード + 型チェック + ビルド |
 | `npm run generate:cards` | 生成题目卡 PNG | Generate card PNGs | カード PNG 生成 |
 | `node scripts/reset-db.mjs` | 清空 SQLite | Reset SQLite DB | SQLite リセット |
-| `node scripts/verify-full-flow.mjs` | API 全流程验证 | Full API flow test | API 一連テスト |
+| `node scripts/verify-full-flow.mjs` | API 全流程验证（含神谕 poll / 测试 fallback 头） | Full API flow test (reading poll + test fallback header) | API 一連テスト |
+| `node scripts/verify-rite-flow.mjs` | 浏览器：修持环 + 归树 UI | Browser: volume rites + Return to Tree | ブラウザ：修持環 + 帰樹 |
 | `node scripts/test-locale-switch.mjs` | 四语神谕缓存验证 | Quadrilingual reading cache test | 四語神託キャッシュ検証 |
 | `node scripts/complete-user-journey.mjs [email]` | 为邮箱补全六卷 | Complete six books for email | 指定メールで六巻完了 |
+
+### 测试与 QA · Testing · テスト
+
+**中文**  
+1. 启动 dev：`npm run dev`（可选在 `.env.local` 设 `PSYCHE_READING_TEST_FALLBACK=1`，全局跳过 DeepSeek）。  
+2. `node scripts/verify-full-flow.mjs` — API 全流程；默认带请求头 `X-Psyche-Reading-Test-Fallback: 1` 即时写入 QA 神谕；若走真实 DeepSeek 则对 **202 processing** 自动 poll（最长 `READING_POLL_MS`，默认 90s）。  
+3. `node scripts/verify-rite-flow.mjs` — Playwright 验证入卷 / 离卷 / 归树 UI（需系统 Chrome）。  
+4. `node scripts/complete-user-journey.mjs [email]` — 补全六卷 + 多用户隔离。
+
+| English | 日本語 |
+|---------|--------|
+| Set `PSYCHE_READING_TEST_FALLBACK=1` in `.env.local` for instant fallback readings on all requests. | `.env.local` に `PSYCHE_READING_TEST_FALLBACK=1` で DeepSeek をスキップ可能。 |
+| `verify-full-flow` sends test-fallback header by default; polls 202 until readings complete. | `verify-full-flow` はデフォルトでテスト fallback ヘッダー付き；202 は poll。 |
+| `verify-rite-flow` needs `npm run dev` + Playwright (`channel: 'chrome'`). | `verify-rite-flow` は dev 起動 + Playwright が必要。 |
 
 ---
 
@@ -1673,15 +1734,23 @@ OPENAI_API_KEY=...           # AI card images / AI 生图 / AI カード画像
 ```
 psyche-tree-demo/
 ├── .cursor/skills/psyche-tree-demo/   # Cursor Agent skill / 技能 / スキル
-│   ├── SKILL.md                       # Architecture & conventions
+│   ├── SKILL.md                       # Architecture, rites, QA fallback, verify
 │   └── reference.md                   # Paths, data flow, scripts
 ├── data/psyche-tree.sqlite            # Local DB (gitignored)
 ├── docs/screenshots/homepage/         # Shelf UI screenshots (zh/zhTw/en/ja)
 ├── public/audio/                      # Mixkit BGM
 ├── public/cards/                      # Question card PNGs
-├── scripts/                           # Verify, reset, image gen
-├── server/                            # API, SQLite, DeepSeek services
-└── src/                               # React app, books, i18n, UI
+├── scripts/
+│   ├── verify-full-flow.mjs           # API smoke (39 checks, test-fallback header)
+│   └── verify-rite-flow.mjs           # Playwright: volume rites + 归树 UI
+├── server/
+│   ├── readingTestFallback.ts         # QA instant mystical/holistic readings
+│   └── services/                      # mystical + holistic reading services
+└── src/
+    ├── i18n/volumeRite.ts             # Entry / exit / 归树 / core proposition copy
+    └── components/
+        ├── book/VolumeRiteOverlay.tsx
+        └── bookshelf/ReturnToTreeOverlay.tsx
 ```
 
 ---
@@ -1691,8 +1760,8 @@ psyche-tree-demo/
 | 文件 File | 中文 | English | 日本語 |
 |-----------|------|---------|--------|
 | **README.md** | 本文件：产品说明、界面预览、五层理论、安装运维 | This file: product, UI preview, five theory layers, setup | 本ファイル：製品・画面・五層理論・セットアップ |
-| **SKILL.md** | Agent 工作流：六卷结构、theory layer、整象规则 | Agent workflow: six books, theory layer, holistic rules | Agent：六巻・theory layer・整象規則 |
-| **reference.md** | 路径索引、数据流、验证脚本 | File index, data flow, test scripts | パス索引、データフロー、検証脚本 |
+| **SKILL.md** | Agent 工作流：六卷结构、修持环、theory layer、QA fallback、整象规则 | Agent workflow: six books, rite cycle, theory layer, QA fallback, holistic | Agent：六巻・修持環・theory layer・QA fallback・整象 |
+| **reference.md** | 路径索引、数据流、验证脚本与预期结果 | File index, data flow, verify scripts & expected pass counts | パス索引、データフロー、検証脚本 |
 | **docs/screenshots/** | 书架首页四语截图 | Homepage screenshots (zh/zhTw/en/ja) | 書棚トップ四語スクリーンショット |
 
 **理论栈速查** I [玄学](#玄学理论体系--mystical-framework--玄義体系) → II [简明](#psyche-tree--六维书--简明理论--concise-theory--簡明理論) → III [泛化](#psyche-tree-system--进阶泛化层--advanced-generalization--進階汎化層) → IV [增强](#psyche-tree-system--增强理论版--enhanced-theory--拡張理論) → V [形而上](#psyche-tree-system--形而上扩展层--metaphysical-extension--形而上拡張層)
@@ -1710,6 +1779,7 @@ For development details, see [SKILL.md](.cursor/skills/psyche-tree-demo/SKILL.md
 3. **中文** 整象神谕仅在书架展示 · **English** Holistic oracle only on bookshelf · **日本語** 整象神託は書棚のみ
 4. **中文** 树进度仅计维度 1–6 · **English** Tree progress counts dims 1–6 only · **日本語** 樹の進行は次元 1–6 のみ
 5. **中文** 切换语言读缓存，不重新计分 · **English** Locale switch uses cache, no re-scoring · **日本語** 言語切替はキャッシュ参照、再採点なし
+6. **中文** 每卷先过入卷 / 离卷仪式；六卷齐后书架先归树再开整象 · **English** Entry/exit rite per volume; Return to Tree before holistic on shelf · **日本語** 各巻入巻・離巻；六巻後書棚で帰樹してから整象
 
 ---
 

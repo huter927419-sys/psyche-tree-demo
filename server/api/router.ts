@@ -34,10 +34,21 @@ import {
   statusForError,
 } from './http.js'
 import { saveHolisticFallback } from '../db/repositories/journeys.js'
+import { isReadingTestFallbackEnabled } from '../readingTestFallback.js'
 
 interface ApiContext {
   apiKey: string
   model: string
+  testReadingFallback?: boolean
+}
+
+function readingOptions(
+  req: IncomingMessage,
+  ctx: ApiContext,
+) {
+  return {
+    testFallback: isReadingTestFallbackEnabled(req, ctx.testReadingFallback),
+  }
 }
 
 export function createApiMiddleware(ctx: ApiContext) {
@@ -289,6 +300,7 @@ async function handleSaveAssessment(
       ctx.apiKey,
       ctx.model,
       locale,
+      readingOptions(req, ctx),
     ).catch((error) => {
       console.warn(
         '[psyche-api] auto holistic reading failed journey=%s',
@@ -342,6 +354,7 @@ async function handleMysticalReading(
     ctx.apiKey,
     ctx.model,
     requestedLocale,
+    readingOptions(req, ctx),
   )
 
   if (result.status === 'processing') {
@@ -416,6 +429,7 @@ async function handleHolisticReading(
     ctx.apiKey,
     ctx.model,
     requestedLocale,
+    readingOptions(req, ctx),
   )
 
   if (result.status === 'processing') {

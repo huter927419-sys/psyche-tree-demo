@@ -4903,6 +4903,296 @@ html[lang="ja"] .app-user-email-value {
   letter-spacing: 0.04em;
 }
 
+/* ── Volume rite overlays (entry / exit) ── */
+
+.volume-rite-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  background: rgba(4, 5, 8, 0.88);
+  backdrop-filter: blur(6px);
+}
+
+.volume-rite-panel {
+  width: min(96vw, 480px);
+  max-height: min(88vh, 680px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 1.35rem 1.4rem 1.15rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 14px;
+  background: rgba(10, 12, 16, 0.97);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 24px 64px rgba(0, 0, 0, 0.55);
+  animation: volume-rite-rise 0.5s cubic-bezier(0.33, 1, 0.68, 1) both;
+}
+
+.volume-rite-header {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.volume-rite-volume {
+  margin: 0;
+  font-size: 0.68rem;
+  letter-spacing: 0.28em;
+  color: rgba(210, 210, 210, 0.55);
+}
+
+.volume-rite-facet {
+  margin: 0.45rem 0 0;
+  font-size: 1.05rem;
+  letter-spacing: 0.12em;
+  color: rgba(240, 240, 240, 0.92);
+  font-family: var(--font-mystic-zh);
+}
+
+.volume-rite-body {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.volume-rite-section {
+  margin: 0 0 0.85rem;
+  font-size: 0.62rem;
+  letter-spacing: 0.32em;
+  color: rgba(200, 200, 200, 0.5);
+}
+
+.volume-rite-step-title {
+  margin: 0 0 0.65rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  color: rgba(240, 240, 240, 0.88);
+}
+
+.volume-rite-line {
+  margin: 0 0 0.65rem;
+  font-size: 0.92rem;
+  line-height: 1.85;
+  letter-spacing: 0.04em;
+  color: rgba(235, 235, 235, 0.82);
+  font-family: var(--font-prose-zh);
+}
+
+.volume-rite-line:last-child {
+  margin-bottom: 0;
+}
+
+.volume-rite-journal {
+  display: block;
+  margin-top: 1.1rem;
+}
+
+.volume-rite-journal-prompt {
+  display: block;
+  margin-bottom: 0.55rem;
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: rgba(240, 240, 240, 0.88);
+}
+
+.volume-rite-journal-input {
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(240, 240, 240, 0.9);
+  font: inherit;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  resize: vertical;
+}
+
+.volume-rite-journal-input:focus {
+  outline: 1px solid rgba(255, 255, 255, 0.28);
+  outline-offset: 2px;
+}
+
+.volume-rite-progress {
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+  margin: 1rem 0 0.85rem;
+}
+
+.volume-rite-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.volume-rite-dot--active {
+  background: rgba(255, 255, 255, 0.72);
+  transform: scale(1.25);
+}
+
+.volume-rite-dot--done {
+  background: rgba(255, 255, 255, 0.38);
+}
+
+.volume-rite-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.volume-rite-overlay--en .volume-rite-line,
+.volume-rite-overlay--en .volume-rite-facet {
+  font-family: var(--font-serif-en);
+  letter-spacing: 0.02em;
+}
+
+.volume-rite-overlay--ja .volume-rite-line,
+.volume-rite-overlay--ja .volume-rite-facet {
+  font-family: var(--font-prose-ja);
+}
+
+@keyframes volume-rite-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Return to the Tree (post-six volumes) ── */
+
+.return-tree-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 75;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  background: rgba(0, 0, 0, 0.62);
+  backdrop-filter: blur(8px);
+}
+
+.return-tree-panel {
+  width: min(96vw, 520px);
+  max-height: min(88vh, 640px);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1.45rem 1.2rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 16px;
+  background: rgba(8, 10, 14, 0.97);
+  box-shadow: 0 24px 72px rgba(0, 0, 0, 0.6);
+  animation: volume-rite-rise 0.55s cubic-bezier(0.33, 1, 0.68, 1) both;
+}
+
+.return-tree-header {
+  text-align: center;
+  margin-bottom: 1.1rem;
+}
+
+.return-tree-tag {
+  margin: 0;
+  font-size: 0.62rem;
+  letter-spacing: 0.28em;
+  color: rgba(200, 200, 200, 0.52);
+}
+
+.return-tree-title {
+  margin: 0.5rem 0 0.25rem;
+  font-size: 1.35rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  color: rgba(245, 245, 245, 0.94);
+  font-family: var(--font-mystic-zh);
+}
+
+.return-tree-subtitle {
+  margin: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  color: rgba(200, 200, 200, 0.45);
+}
+
+.return-tree-body {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.return-tree-section {
+  margin: 0 0 0.85rem;
+  font-size: 0.62rem;
+  letter-spacing: 0.32em;
+  color: rgba(200, 200, 200, 0.5);
+}
+
+.return-tree-line {
+  margin: 0 0 0.65rem;
+  font-size: 0.94rem;
+  line-height: 1.85;
+  letter-spacing: 0.045em;
+  color: rgba(235, 235, 235, 0.84);
+}
+
+.return-tree-closing {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.9;
+  letter-spacing: 0.05em;
+  color: rgba(240, 240, 240, 0.88);
+}
+
+.return-tree-proposition-label {
+  margin: 0 0 0.75rem;
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
+  color: rgba(200, 200, 200, 0.5);
+}
+
+.return-tree-proposition-main {
+  margin: 0 0 0.85rem;
+  font-size: 1rem;
+  line-height: 1.85;
+  letter-spacing: 0.05em;
+  color: rgba(245, 245, 245, 0.92);
+}
+
+.return-tree-proposition-sub {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.8;
+  letter-spacing: 0.04em;
+  color: rgba(220, 220, 220, 0.72);
+}
+
+.return-tree-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.return-tree-overlay--en .return-tree-line,
+.return-tree-overlay--en .return-tree-title,
+.return-tree-overlay--en .return-tree-proposition-main {
+  font-family: var(--font-serif-en);
+  letter-spacing: 0.02em;
+}
+
+.return-tree-overlay--ja .return-tree-line,
+.return-tree-overlay--ja .return-tree-title {
+  font-family: var(--font-prose-ja);
+}
+
 html[lang="ja"] .app-user-email-logout {
   font-weight: 600;
   letter-spacing: 0.32em;

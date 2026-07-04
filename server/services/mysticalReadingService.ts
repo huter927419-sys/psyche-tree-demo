@@ -1,5 +1,9 @@
 import { callDeepSeekMysticalReading } from '../deepseek.js'
 import {
+  applyTestMysticalFallback,
+  type ReadingResolveOptions,
+} from '../readingTestFallback.js'
+import {
   completeMysticalReadingForLocale,
   failReading,
   findAssessmentById,
@@ -80,10 +84,22 @@ export async function resolveMysticalReading(
   apiKey: string,
   model: string,
   requestedLocale: Locale,
+  options: ReadingResolveOptions = {},
 ): Promise<MysticalReadingResult> {
   const current = findAssessmentById(assessmentId)
   if (!current) {
     throw new Error('ASSESSMENT_NOT_FOUND')
+  }
+
+  if (options.testFallback && !hasMysticalReadingForLocale(current, requestedLocale)) {
+    const row = applyTestMysticalFallback(assessmentId, current.book_id)
+    return {
+      reading: getMysticalReadingForLocale(row, requestedLocale)!,
+      source: 'fallback',
+      model: null,
+      status: 'completed',
+      locale: requestedLocale,
+    }
   }
 
   if (hasMysticalReadingForLocale(current, requestedLocale)) {

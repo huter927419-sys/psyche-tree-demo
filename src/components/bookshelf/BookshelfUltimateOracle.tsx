@@ -8,10 +8,15 @@ import {
   type JourneyDto,
 } from '../../services/journeyApi'
 import { HolisticOracleOverlay } from './HolisticOracleOverlay'
+import { ReturnToTreeOverlay } from './ReturnToTreeOverlay'
 import { ORACLE_FACET_ICONS, OracleFacetIcon } from './oracleFacetIcons'
 import { pickHolisticReadingForLocale } from './holisticReadingUtils'
 
 const TOTAL_BOOKS = 6
+
+function returnTreeStorageKey(journeyId: string | undefined): string | null {
+  return journeyId ? `psyche-return-tree-${journeyId}` : null
+}
 
 interface BookshelfUltimateOracleProps {
   locale: Locale
@@ -28,6 +33,7 @@ export function BookshelfUltimateOracle({
 }: BookshelfUltimateOracleProps) {
   const ui = getUi(locale)
   const [overlayOpen, setOverlayOpen] = useState(false)
+  const [returnTreeOpen, setReturnTreeOpen] = useState(false)
   const [readingText, setReadingText] = useState('')
   const [loading, setLoading] = useState(false)
   const lastFlashSignal = useRef(0)
@@ -66,12 +72,34 @@ export function BookshelfUltimateOracle({
     }
   }, [loading, overlayOpen, resolveReading])
 
+  const shouldShowReturnTree = useCallback(() => {
+    const key = returnTreeStorageKey(journeySnapshot?.journeyId)
+    if (!key) return true
+    return !sessionStorage.getItem(key)
+  }, [journeySnapshot?.journeyId])
+
+  const beginHolisticFlow = useCallback(() => {
+    if (returnTreeOpen || overlayOpen || loading) return
+    if (shouldShowReturnTree()) {
+      setReturnTreeOpen(true)
+      return
+    }
+    void revealOracle()
+  }, [loading, overlayOpen, returnTreeOpen, revealOracle, shouldShowReturnTree])
+
+  const handleReturnTreeComplete = useCallback(() => {
+    const key = returnTreeStorageKey(journeySnapshot?.journeyId)
+    if (key) sessionStorage.setItem(key, '1')
+    setReturnTreeOpen(false)
+    void revealOracle()
+  }, [journeySnapshot?.journeyId, revealOracle])
+
   useEffect(() => {
     if (!isComplete || !journeySnapshot) return
     if (flashSignal <= lastFlashSignal.current) return
     lastFlashSignal.current = flashSignal
-    void revealOracle()
-  }, [flashSignal, isComplete, journeySnapshot, revealOracle])
+    beginHolisticFlow()
+  }, [flashSignal, isComplete, journeySnapshot, beginHolisticFlow])
 
   useEffect(() => {
     if (!overlayOpen) return
@@ -99,8 +127,8 @@ export function BookshelfUltimateOracle({
         <button
           type="button"
           className="bookshelf-ultimate-oracle-trigger"
-          onClick={() => void revealOracle()}
-          disabled={loading || overlayOpen}
+          onClick={beginHolisticFlow}
+          disabled={loading || overlayOpen || returnTreeOpen}
           aria-label={ui.ultimateOracleAria}
         >
           <span className="bookshelf-ultimate-oracle-trigger-icons" aria-hidden>
@@ -115,6 +143,12 @@ export function BookshelfUltimateOracle({
         </button>
         <p className="bookshelf-ultimate-oracle-footnote">{ui.shelfFooter(TOTAL_BOOKS)}</p>
       </div>
+
+      <ReturnToTreeOverlay
+        open={returnTreeOpen}
+        locale={locale}
+        onComplete={handleReturnTreeComplete}
+      />
 
       <HolisticOracleOverlay
         open={overlayOpen}

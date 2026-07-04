@@ -1,5 +1,13 @@
 import { callDeepSeekHolisticReading } from '../deepseek.js'
 import {
+  applyTestHolisticFallback,
+  applyTestMysticalFallback,
+  type ReadingResolveOptions,
+} from '../readingTestFallback.js'
+import {
+  hasMysticalReadingForLocale,
+} from '../db/repositories/assessments.js'
+import {
   buildHolisticPromptInput,
   completeHolisticReadingForLocale,
   failHolisticReading,
@@ -92,6 +100,7 @@ export async function resolveHolisticReading(
   apiKey: string,
   model: string,
   requestedLocale: Locale,
+  options: ReadingResolveOptions = {},
 ): Promise<HolisticReadingResult> {
   const journey = findJourneyById(journeyId)
   if (!journey) {
@@ -100,6 +109,25 @@ export async function resolveHolisticReading(
 
   if (journey.status !== 'completed') {
     throw new Error('JOURNEY_INCOMPLETE')
+  }
+
+  if (options.testFallback && !hasHolisticReadingForLocale(journey, requestedLocale)) {
+    const data = getJourneyWithAssessments(journeyId)
+    if (data) {
+      for (const row of data.assessments) {
+        if (!hasMysticalReadingForLocale(row, requestedLocale)) {
+          applyTestMysticalFallback(row.id, row.book_id)
+        }
+      }
+    }
+    const row = applyTestHolisticFallback(journeyId)
+    return {
+      reading: getHolisticReadingForLocale(row, requestedLocale)!,
+      source: 'fallback',
+      model: null,
+      status: 'completed',
+      locale: requestedLocale,
+    }
   }
 
   if (hasHolisticReadingForLocale(journey, requestedLocale)) {

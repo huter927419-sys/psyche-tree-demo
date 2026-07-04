@@ -7,6 +7,9 @@ import { execSync } from 'node:child_process'
 
 const BASE = process.env.BASE_URL ?? 'http://localhost:5173'
 const DB = process.env.SQLITE_PATH ?? '/Users/wanglei/Projects/psyche-tree-demo/data/psyche-tree.sqlite'
+/** Send X-Psyche-Reading-Test-Fallback unless explicitly disabled */
+const USE_TEST_READING_FALLBACK = process.env.PSYCHE_READING_TEST_FALLBACK !== '0'
+const READING_POLL_MS = Number(process.env.READING_POLL_MS ?? 90_000)
 const TS = Date.now()
 const EMAIL_ZH = `qa-flow-zh-${TS}@example.com`
 const EMAIL_EN = `qa-flow-en-${TS}@example.com`
@@ -40,9 +43,10 @@ function record(id, name, ok, detail) {
   console.log(`  ${mark} [${id}] ${name}${detail ? ` — ${detail}` : ''}`)
 }
 
-async function req(method, path, { body, journeyId } = {}) {
+async function req(method, path, { body, journeyId, testFallback = USE_TEST_READING_FALLBACK } = {}) {
   const headers = { 'Content-Type': 'application/json' }
   if (journeyId) headers['X-Journey-Id'] = journeyId
+  if (testFallback) headers['X-Psyche-Reading-Test-Fallback'] = '1'
   const res = await fetch(`${BASE}${path}`, {
     method,
     headers,
@@ -56,6 +60,36 @@ async function req(method, path, { body, journeyId } = {}) {
     data = text
   }
   return { status: res.status, data }
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+async function pollMysticalReading(assessmentId, journeyId, maxMs = READING_POLL_MS) {
+  const start = Date.now()
+  let last = null
+  while (Date.now() - start < maxMs) {
+    last = await req('POST', `/api/assessments/${assessmentId}/mystical-reading`, {
+      journeyId,
+    })
+    if (last.status === 200 && last.data?.reading?.length > 0) return last
+    if (last.status !== 202 && last.status !== 200) return last
+    await sleep(500)
+  }
+  return last ?? { status: 408, data: { error: 'poll timeout' } }
+}
+
+async function pollHolisticReading(journeyId, maxMs = READING_POLL_MS) {
+  const start = Date.now()
+  let last = null
+  while (Date.now() - start < maxMs) {
+    last = await req('POST', `/api/journeys/${journeyId}/holistic-reading`, { journeyId })
+    if (last.status === 200 && last.data?.reading?.length > 0) return last
+    if (last.status !== 202 && last.status !== 200) return last
+    await sleep(500)
+  }
+  return last ?? { status: 408, data: { error: 'poll timeout' } }
 }
 
 function sql(query) {
@@ -134,9 +168,7 @@ async function scenarioA() {
   )
   record('A-DB', 'SQLite 1 条 assessment', row === '1', `count=${row}`)
 
-  const mystical = await req('POST', `/api/assessments/${save.data.assessment.id}/mystical-reading`, {
-    journeyId,
-  })
+  const mystical = await pollMysticalReading(save.data.assessment.id, journeyId)
   record(
     'A6b',
     '单卷神谕生成',
@@ -213,7 +245,7 @@ async function scenarioC(journeyId) {
   const status = sql(`SELECT status FROM journeys WHERE id='${journeyId}'`)
   record('C2', 'journey.status=completed', status === 'completed', status)
 
-  const holEarly = await req('POST', `/api/journeys/${journeyId}/holistic-reading`, { journeyId })
+  const holEarly = await pollHolisticReading(journeyId)
   record(
     'C3',
     '整象 POST 成功',
@@ -355,6 +387,10 @@ async function main() {
   console.log('DB:', DB)
   console.log('ZH email:', EMAIL_ZH)
   console.log('EN email:', EMAIL_EN)
+  console.log(
+    'Reading test fallback header:',
+    USE_TEST_READING_FALLBACK ? 'on (instant QA readings)' : 'off',
+  )
 
   let journeyId
   try {

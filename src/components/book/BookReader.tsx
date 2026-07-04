@@ -20,11 +20,15 @@ import { buildAssessmentFromStored } from '../../services/storedAssessment'
 import type { Locale } from '../../i18n/locale'
 import { getUi } from '../../i18n/ui'
 import { getQuestionGuide } from '../../i18n/questionGuide'
+import {
+  getVolumeEntryRite,
+  getVolumeExitRite,
+} from '../../i18n/volumeRite'
 import { LanguageToggle } from '../i18n/LanguageToggle'
 import { QuestionCard } from '../QuestionCard'
 import { TreeProgress } from '../tree/TreeProgress'
 import { BookShell, BookNav } from './BookShell'
-import { BookOpeningGuide } from './BookOpeningGuide'
+import { VolumeRiteOverlay } from './VolumeRiteOverlay'
 import { QuestionSealReveal } from './QuestionSealReveal'
 import { formatPageLabel } from './bookUtils'
 import { useBookFlip } from './useBookFlip'
@@ -125,6 +129,8 @@ export function BookReader({
   const [journeyComplete, setJourneyComplete] = useState(false)
   const [assessmentsCompleted, setAssessmentsCompleted] = useState(0)
   const [saveError, setSaveError] = useState<string | null>(null)
+  const [entryRiteComplete, setEntryRiteComplete] = useState(readOnly)
+  const [exitRiteOpen, setExitRiteOpen] = useState(false)
   const [mysticalCache, setMysticalCache] = useState<
     Partial<Record<Locale, { reading: string; fallback: boolean }>>
   >({})
@@ -362,7 +368,7 @@ export function BookReader({
         const { journeyId } = getJourneySession()
         if (!journeyId) {
           setSaveError(ui.saveFailNoSession)
-          scheduleFlip('next', questionCount)
+          setExitRiteOpen(true)
           return
         }
 
@@ -395,7 +401,7 @@ export function BookReader({
           }
           setSaveError(message)
         }
-        scheduleFlip('next', questionCount)
+        setExitRiteOpen(true)
       })()
     },
     [
@@ -414,6 +420,11 @@ export function BookReader({
       scheduleFlip,
     ],
   )
+
+  const handleExitRiteComplete = useCallback(() => {
+    setExitRiteOpen(false)
+    scheduleFlip('next', questionCount)
+  }, [questionCount, scheduleFlip])
 
   const buildQuestionLeft = useCallback(
     (index: number) => {
@@ -708,7 +719,20 @@ export function BookReader({
           compact
         />
       </header>
-      <BookOpeningGuide bookId={book.meta.id} locale={locale} />
+      <VolumeRiteOverlay
+        open={!readOnly && !entryRiteComplete}
+        locale={locale}
+        mode="entry"
+        entryRite={getVolumeEntryRite(book.meta.id, locale)}
+        onComplete={() => setEntryRiteComplete(true)}
+      />
+      <VolumeRiteOverlay
+        open={exitRiteOpen}
+        locale={locale}
+        mode="exit"
+        exitSteps={getVolumeExitRite(book.meta.id, locale)}
+        onComplete={handleExitRiteComplete}
+      />
       <TreeProgress revealStage={treeStage} bookId={book.meta.id} locale={locale} />
       <BookShell
         left={buildLeft(pageIndex)}

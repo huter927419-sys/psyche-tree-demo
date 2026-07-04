@@ -2,9 +2,10 @@
 name: psyche-tree-demo
 description: >-
   Develop the 雾岸六卷 demo (React 19 / Vite 8 / SQLite): six mystical books,
-  quad-lingual UI (zh / zhTw / en / ja), bookshelf + flip-book flow, Tree progress,
-  DeepSeek per-book and holistic readings. Use when editing psyche-tree-demo,
-  books, i18n, server API, assessments, or card art.
+  quad-lingual UI (zh / zhTw / en / ja), bookshelf + flip-book flow, volume rite
+  cycle (entry / exit / Return to Tree), Tree progress, DeepSeek per-book and
+  holistic readings, QA test-fallback for verify scripts. Use when editing
+  psyche-tree-demo, books, i18n, volumeRite, server API, assessments, or card art.
 ---
 
 # 雾岸六卷 · psyche-tree-demo
@@ -15,6 +16,8 @@ The product follows a full mystical **system**, not only symbols:
 
 | Pillar | In app |
 |--------|--------|
+| **Core proposition** 核心命题 | Calibration of seeing—not hunting answers; `volumeRite.ts`, Return to Tree before holistic oracle |
+| **Volume rite cycle** 修持环 | Entry / exit overlays per book (`VolumeRiteOverlay`); six volumes → 归树 → 整象 |
 | **Worldview** 世界观 | Mist shore, light pillar, tree, sacred time |
 | **Field · Energy · Flow** 场域·能量·心流 | Sky/tree field, spirit-tide rite, one seal/page flow, treeEnergyFlow root→crown; enhanced theory maps **Φ·A·F** to rite / attention-oracle / mist field |
 | **Meditation** 冥想 | Opening rite per book, one seal/page, tree awakening |
@@ -57,8 +60,33 @@ Dim 1–3 → attention check → Dim 4–6 → integration (dimensionIndex 7)
 - User email → one `journey` row; six `book_assessments` (one per book, any order)
 - Journey `completed` when all six `BOOK_IDS` present (order-independent)
 - **整象神谕** only on **bookshelf** (`BookshelfUltimateOracle` / `HolisticOracleOverlay`), not on book result last page
+- **归树 (Return to Tree)** before first holistic open per journey: `ReturnToTreeOverlay` → core proposition → closing → holistic; once per journey via `sessionStorage` key `psyche-return-tree-${journeyId}`
 - Holistic prompt = six sections × (底层画像 `psychology_prompt_input` + **已示神谕** `mystical_reading_{locale}`)
 - Before holistic generation, server ensures all six volume mystical readings exist
+
+## Volume rite cycle (修持环)
+
+| Phase | Component | Copy |
+|-------|-----------|------|
+| Entry | `VolumeRiteOverlay` mode=`entry` in `BookReader` | `getVolumeEntryRite(bookId, locale)` |
+| Questions | existing flip-book flow | — |
+| Exit | `VolumeRiteOverlay` mode=`exit` after last seal saved | `getVolumeExitRite(bookId, locale)`; 心象 exit has optional journal textarea |
+| Return to Tree | `ReturnToTreeOverlay` in `BookshelfUltimateOracle` | `getReturnToTreeRite` + `getCoreProposition` |
+
+Copy lives in `src/i18n/volumeRite.ts` (zh / en / ja; zhTw via OpenCC). Styles: `.volume-rite-overlay`, `.return-tree-overlay` in `index.css`.
+
+**Do not** reintroduce `BookOpeningGuide` flash for entry—the entry rite overlay replaces it.
+
+## Reading test fallback (QA only)
+
+Instant mystical/holistic readings for verify scripts—**never enable in production**.
+
+| Switch | Effect |
+|--------|--------|
+| `PSYCHE_READING_TEST_FALLBACK=1` in `.env.local` | All reading requests skip DeepSeek |
+| Header `X-Psyche-Reading-Test-Fallback: 1` | Same, per request (used by `verify-full-flow.mjs`) |
+
+Implementation: `server/readingTestFallback.ts` → early return in `mysticalReadingService` / `holisticReadingService`; `router.ts` passes `readingOptions(req, ctx)`; `vite.config.ts` sets ctx default from env.
 
 ## Adding a book
 
@@ -78,6 +106,7 @@ Shared: `books/shared/createBook.ts`, `questionFlow.ts`, `card.ts`, `profileHelp
 server/api/router.ts          # REST: journeys, assessments, readings, holistic
 server/db/                    # SQLite schema + migrations + repositories
 server/services/              # mysticalReadingService, holisticReadingService
+server/readingTestFallback.ts # QA instant readings (env / header)
 server/bookPrompts.ts         # prompt templates zh / zhTw / en / ja
 server/deepseek.ts            # DeepSeek chat calls
 ```
@@ -95,12 +124,15 @@ DB path: `data/psyche-tree.sqlite` (or `SQLITE_PATH`). Reset: `node scripts/rese
 ## Verify
 
 ```bash
-npm run dev                    # needs .env.local DEEPSEEK_API_KEY
+npm run dev                    # needs .env.local DEEPSEEK_API_KEY (optional PSYCHE_READING_TEST_FALLBACK=1)
 npm run build
-node scripts/verify-full-flow.mjs
+node scripts/verify-full-flow.mjs      # 39 checks; default test-fallback header; polls 202
+node scripts/verify-rite-flow.mjs      # Playwright: entry/exit rites + 归树 + holistic (needs Chrome)
 node scripts/test-locale-switch.mjs
 node scripts/complete-user-journey.mjs [email]
 node scripts/capture-homepage-screenshots.mjs   # docs/screenshots/homepage/*.png
 ```
+
+Optional env for scripts: `READING_POLL_MS=90000`, `BASE_URL`, `SQLITE_PATH`.
 
 See [reference.md](reference.md) for file index and data flow.

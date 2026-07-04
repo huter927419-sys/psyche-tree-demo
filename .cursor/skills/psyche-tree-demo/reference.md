@@ -65,12 +65,14 @@ src/App.tsx                         # phase: shelf | cover | questions | result
 src/books/registry.ts
 src/books/{id}/content.ts
 src/books/shared/createBook.ts
-src/components/bookshelf/           # Bookshelf, HolisticOracleOverlay, UltimateOracle
-src/components/book/BookReader.tsx  # save assessment, fetch mystical reading
+src/components/bookshelf/           # Bookshelf, HolisticOracleOverlay, UltimateOracle, ReturnToTreeOverlay
+src/components/book/BookReader.tsx  # save assessment, fetch mystical reading, volume rites
+src/components/book/VolumeRiteOverlay.tsx
 src/i18n/ui.ts                      # UI strings zh (+ zhTw via OpenCC), en, ja
 src/i18n/traditionalChinese.ts      # OpenCC + convertStringsDeep (incl. functions)
 src/i18n/questionGuide.ts           # + questionGuide.ja.ts
-src/i18n/openingGuide.ts
+src/i18n/openingGuide.ts           # brief field tags (legacy flash; rites in volumeRite.ts)
+src/i18n/volumeRite.ts              # entry / exit / return-to-tree / core proposition
 src/i18n/treeLabels.ts
 src/services/assessmentApi.ts
 src/services/journeyApi.ts
@@ -81,12 +83,32 @@ src/audio/backgroundMusic.ts        # welcome / questions / result tracks
 
 ```
 server/api/router.ts
+server/readingTestFallback.ts       # PSYCHE_READING_TEST_FALLBACK + X-Psyche-Reading-Test-Fallback
 server/db/schema.sql
 server/db/repositories/journeys.ts    # BOOK_IDS, buildHolisticPromptInput, completion
 server/db/repositories/assessments.ts # save, mystical reading cache columns
 server/services/mysticalReadingService.ts
 server/services/holisticReadingService.ts
 server/bookPrompts.ts
+```
+
+## QA reading test fallback
+
+| Trigger | Where |
+|---------|--------|
+| `PSYCHE_READING_TEST_FALLBACK=1` | `.env.local`; wired in `vite.config.ts` middleware ctx |
+| `X-Psyche-Reading-Test-Fallback: 1` | Per-request; default in `verify-full-flow.mjs` |
+
+Writes four-locale fallback text with `source=fallback`, skips DeepSeek. Use for CI/local smoke only.
+
+## Holistic UI flow (bookshelf)
+
+```
+journey.status === completed && 6 unique bookIds
+  → BookshelfUltimateOracle renders trigger
+  → click (or holisticFlashSignal after 6th book close)
+  → ReturnToTreeOverlay if sessionStorage psyche-return-tree-{id} unset
+  → HolisticOracleOverlay with cached or fetched reading
 ```
 
 ## Reading data flow
@@ -97,10 +119,13 @@ answers → computeResults() → dimensions + psychology_prompt_input
   → resolveMysticalReading (zh / zhTw / en / ja parallel, cached)
 
 six books complete → journey.status = completed
+  → user opens whole oracle on shelf
+  → Return to Tree overlay (once per journey, sessionStorage)
   → resolveHolisticReading
   → ensureVolumeOraclesForHolistic (all 6 mystical readings)
   → buildHolisticPromptInput (portrait + 已示神谕 per book)
   → DeepSeek holistic template → holistic_reading_{zh,zh_tw,en,ja}
+  (or test fallback when PSYCHE_READING_TEST_FALLBACK / header set)
 ```
 
 ## Tree progress
@@ -134,12 +159,15 @@ Do not conflate **心流** (consciousness flow) with **流衡** `flow-balance` (
 | Script | Purpose |
 |--------|---------|
 | `scripts/reset-db.mjs` | Wipe SQLite |
-| `scripts/verify-full-flow.mjs` | API + save + readings smoke test |
+| `scripts/verify-full-flow.mjs` | API + reading poll + test fallback header |
+| `scripts/verify-rite-flow.mjs` | Playwright UI: entry/exit rites + Return to Tree |
 | `scripts/verify-e2e.mjs` | Browser-oriented checks |
 | `scripts/test-locale-switch.mjs` | zh / zhTw / en / ja reading cache |
 | `scripts/capture-homepage-screenshots.mjs` | Four homepage PNGs for README |
 | `scripts/complete-user-journey.mjs` | Fill 6 books for an email |
 | `scripts/test-multi-user-concurrent.mjs` | Isolation |
+
+**Expected green runs (dev up):** `verify-full-flow` 39/39 with test-fallback header; `verify-rite-flow` 14/14 with Playwright + Chrome.
 
 ## Card images
 
