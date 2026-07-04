@@ -40,13 +40,36 @@ Built by `buildBookQuestionFlow()` in `books/shared/questionFlow.ts`.
 
 ## Documentation map · 文档索引
 
-| Doc | 简体 | English | 日本語 |
-|-----|------|---------|--------|
-| [README.md](../../../README.md) | 产品与运维 | Product + ops | 製品+運用 |
-| [docs/volume-rite-copy.md](../../../docs/volume-rite-copy.md) | 修持三语全文 | Full rite zh/en/ja | 導き三語全文 |
-| [docs/theory/](../../../docs/theory/) | 理论 01–10 + 附录 | Theory stack | 理論十篇 |
-| [SKILL.md](../SKILL.md) | Agent 约定 | Agent conventions | Agent 規約 |
-| [reference.md](./reference.md) | 路径与数据流 | Paths & data flow | パスとデータ流 |
+| Doc | 说明 |
+|-----|------|
+| [README.md](../../../README.md) | 产品概览、体验路径、开发 |
+| [docs/theory/README.md](../../../docs/theory/README.md) | 理论 01–10 索引 |
+| [01-雾岸世界.md](../../../docs/theory/01-雾岸世界.md) | 世界 |
+| [02-照见论.md](../../../docs/theory/02-照见论.md) | 照见 |
+| [03-各人之雾.md](../../../docs/theory/03-各人之雾.md) | 差异 |
+| [04-生长论.md](../../../docs/theory/04-生长论.md) | 生长 |
+| [05-缘论.md](../../../docs/theory/05-缘论.md) | 缘 |
+| [06-心流论.md](../../../docs/theory/06-心流论.md) | 心流 |
+| [07-万象论.md](../../../docs/theory/07-万象论.md) | 万象 |
+| [08-观论.md](../../../docs/theory/08-观论.md) | 观 |
+| [09-命论.md](../../../docs/theory/09-命论.md) | 命 / 形而上学 |
+| [10-整象论.md](../../../docs/theory/10-整象论.md) | 整象 |
+| [appendix-现代对应.md](../../../docs/theory/appendix-现代对应.md) | 符号与旧稿对照 |
+| [volume-rite-copy.md](../../../docs/volume-rite-copy.md) | 修持三语文案 |
+| [SKILL.md](../SKILL.md) | Agent 约定 |
+| [reference.md](./reference.md) | 本文件：路径与数据流 |
+
+## Volume rite ↔ theory
+
+| BookId | 理论 | 修持 MD |
+|--------|------|---------|
+| `psyche-tree` | [02 照见论](../../../docs/theory/02-照见论.md) | [§心象](../../../docs/volume-rite-copy.md#第一卷--心象) |
+| `emotional-flow` | [02](../../../docs/theory/02-照见论.md) · [03](../../../docs/theory/03-各人之雾.md) | [§映心](../../../docs/volume-rite-copy.md#第二卷--映心) |
+| `mind-light` | [02 照见论](../../../docs/theory/02-照见论.md) | [§明思](../../../docs/volume-rite-copy.md#第三卷--明思) |
+| `bond-thread` | [05 缘论](../../../docs/theory/05-缘论.md) | [§缘书](../../../docs/volume-rite-copy.md#第四卷--缘书) |
+| `flow-balance` | [06 心流论](../../../docs/theory/06-心流论.md) | [§流衡](../../../docs/volume-rite-copy.md#第五卷--流衡) |
+| `direction-light` | [04 生长论](../../../docs/theory/04-生长论.md) | [§向光](../../../docs/volume-rite-copy.md#第六卷--向光) |
+| 归树 / 整象 | [08 观论](../../../docs/theory/08-观论.md) · [10 整象论](../../../docs/theory/10-整象论.md) | [§归树](../../../docs/volume-rite-copy.md#归树--return-to-the-tree--帰樹) |
 
 ## Volume rite sections
 
@@ -153,15 +176,18 @@ six books complete → journey.status = completed
 
 `countCompletedDimensions()` counts only `dimensionIndex <= 6`. Integration does not advance tree stage. `treeProgressMax: 6` on all books.
 
-## Field, energy, flow (玄义)
+## 场域 · 心流 · 观（文档用语）
 
-| Term | Meaning | Code / UX |
-|------|---------|-----------|
-| **场域** field | Mist-shore + per-volume sub-field; density peaks during seals/oracle | shelf, `SkyAtmosphere`, book open |
-| **能量** energy | Spirit-tide (灵息), not score; root→crown on tree | openingGuide “能量之波”, `treeEnergyFlow.tsx` |
-| **心流** flow state | Immersive one-seal/page rite; ≠ `flow-balance` book facet | auto flip, no scores, dialogue check restores presence |
+产品代码里仍可见 openingGuide「能量之波」、`treeEnergyFlow` 等命名；**读者向文档**请用新理论栈，勿从第一章推导：
 
-Do not conflate **心流** (consciousness flow) with **流衡** `flow-balance` (balance facet).
+| 体验 | 读 |
+|------|-----|
+| 入卷慢、一页一印、不示分 | [06 心流论](../../../docs/theory/06-心流论.md) |
+| 湖 / 河 / 星空等卷场 | [01 雾岸世界](../../../docs/theory/01-雾岸世界.md) · [07 万象论](../../../docs/theory/07-万象论.md) |
+| 对话确认、归树 | [08 观论](../../../docs/theory/08-观论.md) |
+| U / Φ / A / F、State Object | [appendix-现代对应.md](../../../docs/theory/appendix-现代对应.md) · [archive/](../../../docs/theory/archive/) |
+
+勿混淆 **心流**（consciousness flow，06）与 **`flow-balance` 卷**（守衡面向，06 文中已分）。
 
 ## Scoring
 

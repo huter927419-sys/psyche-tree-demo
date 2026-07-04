@@ -31,9 +31,16 @@
 | 1 | [01-雾岸世界.md](docs/theory/01-雾岸世界.md) | 我来到哪里？ |
 | 2 | [02-照见论.md](docs/theory/02-照见论.md) | 为什么会照见自己？ |
 | 3 | [03-各人之雾.md](docs/theory/03-各人之雾.md) | 为何每人雾不同？ |
-| 4–10 | [目录](docs/theory/README.md) | 生长、缘、心流、万象、观、命、整象 |
+| 4 | [04-生长论.md](docs/theory/04-生长论.md) | 人为何改变？ |
+| 5 | [05-缘论.md](docs/theory/05-缘论.md) | 人与人如何相互影响？ |
+| 6 | [06-心流论.md](docs/theory/06-心流论.md) | 为何有时非常自然？ |
+| 7 | [07-万象论.md](docs/theory/07-万象论.md) | 为何能照见万象？ |
+| 8 | [08-观论.md](docs/theory/08-观论.md) | 为何能知道自己正在变？ |
+| 9 | [09-命论.md](docs/theory/09-命论.md) | 人生为何形成轨迹？ |
+| 10 | [10-整象论.md](docs/theory/10-整象论.md) | 整象为何只能最后出现？ |
+| — | [appendix-现代对应.md](docs/theory/appendix-现代对应.md) | U / State / Field 等（第二语言） |
 
-问印 `theoryLayer.ts` 仍是题面化；**正文不以 State/Field 开头**。索引：[docs/theory/README.md](docs/theory/README.md)
+完整索引：[docs/theory/README.md](docs/theory/README.md) · 旧稿：[archive/](docs/theory/archive/) · 改写说明：[00-论纲与改写计划.md](docs/theory/00-论纲与改写计划.md)
 
 ---
 
@@ -53,7 +60,7 @@
 
 ---
 
-大多数测评默认「答完 → 打分 → 给结论」。雾岸把顺序倒过来：先校准「看见」，再谈映像。六卷像六面镜，整象是六卷都走过、归树之后的一次开口——不是标准答案库。上面五层理论是机制怎么写；这两句是为什么做。
+大多数测评默认「答完 → 打分 → 给结论」。雾岸把顺序倒过来：先校准「看见」，再谈映像。六卷像六面镜，整象是六卷都走过、归树之后的一次开口——不是标准答案库。[十篇理论](docs/theory/README.md)讲机制；这两句是价值起点（也在 [09-命论](docs/theory/09-命论.md) 归树段与产品内呈现）。
 
 ---
 
@@ -83,15 +90,15 @@ flowchart LR
   H --> I[Holistic oracle]
 ```
 
-| 节点 | 做什么 |
-|------|--------|
-| 书架 | 选卷、留邮箱、看树；六卷齐后出现整象入口 |
-| 入卷 | 全屏引导，见 [五、修持环](#五修持环) |
-| 问印 | 8 页：6 维 + 注意力 + 整象封印；一页一卡，约 420ms 翻页，无分数 |
-| 离卷 | 合卷前短仪式；心象卷可写一句 |
-| 单卷结果 | 画像 → 神谕 → 合书 → 回书架（**整象不在单卷里**） |
-| 归树 | 首次开整象前必过；树没变，看树的人变了 |
-| 整象 | 书架 overlay，不是六份报告的拼接 |
+| 节点 | 做什么 | 理论 |
+|------|--------|------|
+| 书架 | 选卷、留邮箱、看树；六卷齐后出现整象入口 | [01 雾岸世界](docs/theory/01-雾岸世界.md) |
+| 入卷 | 全屏引导，见 [五、修持环](#五修持环) | [02 照见论](docs/theory/02-照见论.md) · [06 心流论](docs/theory/06-心流论.md) |
+| 问印 | 8 页：6 维 + 注意力 + 整象封印；一页一卡，约 420ms 翻页，无分数 | [03 各人之雾](docs/theory/03-各人之雾.md) |
+| 离卷 | 合卷前短仪式；心象卷可写一句 | [08 观论](docs/theory/08-观论.md) |
+| 单卷结果 | 画像 → 神谕 → 合书 → 回书架（**整象不在单卷里**） | [04 生长论](docs/theory/04-生长论.md) |
+| 归树 | 首次开整象前必过；树没变，看树的人变了 | [08 观论](docs/theory/08-观论.md) · [09 命论](docs/theory/09-命论.md) |
+| 整象 | 书架 overlay，不是六份报告的拼接 | [10 整象论](docs/theory/10-整象论.md) |
 
 视觉：深黑底、黑白意象卡、淡金点缀；各语言用各自的 mystic 字体。
 
@@ -107,20 +114,22 @@ flowchart LR
 - **离卷**：结果出来前留一点空；心象卷可以写一句。
 - **归树**：六卷容易变成六块「结论」；归树把散开的视线收回到同一棵树，再开整象。
 
-| 卷 | 意象 | 测什么 |
-|----|------|--------|
-| 心象 | 湖 | 自我；可写「今天看见了什么」 |
-| 映心 | 落叶顺河 | 情感；不必全命名 |
-| 明思 | 夜空、北极星 | 思维；最后一念自熄 |
-| 缘书 | 丝线 | 关系；不断、不拉 |
-| 流衡 | 船心 | 节奏、守衡 |
-| 向光 | 远方微光 | 方向；今天一小步 |
+| 卷 | 意象 | 测什么 | 理论 | 修持文案 |
+|----|------|--------|------|----------|
+| 心象 | 湖 | 自我；可写「今天看见了什么」 | [02 照见论](docs/theory/02-照见论.md) | [volume-rite §心象](docs/volume-rite-copy.md#第一卷--心象) |
+| 映心 | 落叶顺河 | 情感；不必全命名 | [02](docs/theory/02-照见论.md) · [03](docs/theory/03-各人之雾.md) | [§映心](docs/volume-rite-copy.md#第二卷--映心) |
+| 明思 | 夜空、北极星 | 思维；最后一念自熄 | [02 照见论](docs/theory/02-照见论.md) | [§明思](docs/volume-rite-copy.md#第三卷--明思) |
+| 缘书 | 丝线 | 关系；不断、不拉 | [05 缘论](docs/theory/05-缘论.md) | [§缘书](docs/volume-rite-copy.md#第四卷--缘书) |
+| 流衡 | 船心 | 节奏、守衡 | [06 心流论](docs/theory/06-心流论.md) | [§流衡](docs/volume-rite-copy.md#第五卷--流衡) |
+| 向光 | 远方微光 | 方向；今天一小步 | [04 生长论](docs/theory/04-生长论.md) | [§向光](docs/volume-rite-copy.md#第六卷--向光) |
+
+归树与整象：[08 观论](docs/theory/08-观论.md) · [10 整象论](docs/theory/10-整象论.md) · [归树全文](docs/volume-rite-copy.md#归树--return-to-the-tree--帰樹)
 
 代码：`VolumeRiteOverlay`、`ReturnToTreeOverlay`，文案 [`volumeRite.ts`](src/i18n/volumeRite.ts)。
 
 ### 引导语全文
 
-[`docs/volume-rite-copy.md`](docs/volume-rite-copy.md)（简体 / English / 日本語，与产品同源）
+[`docs/volume-rite-copy.md`](docs/volume-rite-copy.md)（简体 / English / 日本語，与产品同源；理论对照见 [附录](docs/theory/appendix-现代对应.md#修持--理论--产品)）
 
 心象 · 入卷开头示例：
 

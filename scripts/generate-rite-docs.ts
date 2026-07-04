@@ -56,7 +56,7 @@ function stepsBlock(zhSteps: RiteStep[], enSteps: RiteStep[], jaSteps: RiteStep[
 
 let md = `# 修持引导语三语全文 · Volume Rite Copy · 修持導き三語全文
 
-源文件 [\`src/i18n/volumeRite.ts\`](../src/i18n/volumeRite.ts)
+源文件 [\`src/i18n/volumeRite.ts\`](../src/i18n/volumeRite.ts) · 理论 [01–10](./theory/README.md) · 对照 [appendix-现代对应.md](./theory/appendix-现代对应.md)
 
 ---
 
