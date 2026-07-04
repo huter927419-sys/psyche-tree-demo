@@ -56,7 +56,7 @@ Built by `buildBookQuestionFlow()` in `books/shared/questionFlow.ts`.
 | [10-整象论.md](../../../docs/theory/10-整象论.md) | 整象 |
 | [appendix-现代对应.md](../../../docs/theory/appendix-现代对应.md) | 现代符号与概念 |
 | [volume-rite-copy.md](../../../docs/volume-rite-copy.md) | 修持三语文案 |
-| [SKILL.md](../SKILL.md) | Agent 约定 |
+| [SKILL.md](./SKILL.md) | Agent 约定 |
 | [reference.md](./reference.md) | 本文件：路径与数据流 |
 
 ## Volume rite ↔ theory

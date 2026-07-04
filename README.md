@@ -2,7 +2,7 @@
 
 心象生命之树探索 · *Mist Shore · Six Books* · 霧岸六巻
 
-文档以**简体、English、日本語**并列写就；下面各节按需出现，不必每段都三语重复。
+文档以**简体、英文、日本語**并列写就；下面各节按需出现，不必每段都三语重复。
 
 ---
 
@@ -24,7 +24,7 @@
 
 ## 一、理论栈
 
-按顺序读 [`docs/theory/`](docs/theory/) **01 → 10**，再读 [附录：现代对应](docs/theory/appendix-现代对应.md)。每篇只问一个问题。
+按顺序读 [`docs/theory/`](docs/theory/) **01 → 10**，再读 [附录：现代对应](docs/theory/appendix-现代对应.md)。每篇只问一个问题；**各章正文为简体 · 英文 · 日本語 并列**（玄学口吻，现代术语见附录）。
 
 | 篇 | 文档 | 问题 |
 |----|------|------|
@@ -38,7 +38,7 @@
 | 8 | [08-观论.md](docs/theory/08-观论.md) | 为何能知道自己正在变？ |
 | 9 | [09-命论.md](docs/theory/09-命论.md) | 人生为何形成轨迹？ |
 | 10 | [10-整象论.md](docs/theory/10-整象论.md) | 整象为何只能最后出现？ |
-| — | [appendix-现代对应.md](docs/theory/appendix-现代对应.md) | U / State / Field 等（第二语言） |
+| — | [appendix-现代对应.md](docs/theory/appendix-现代对应.md) | 状态 / 场域 等（第二语言） |
 
 完整索引：[docs/theory/README.md](docs/theory/README.md)
 
@@ -129,7 +129,7 @@ flowchart LR
 
 ### 引导语全文
 
-[`docs/volume-rite-copy.md`](docs/volume-rite-copy.md)（简体 / English / 日本語，与产品同源；理论对照见 [附录](docs/theory/appendix-现代对应.md#修持--理论--产品)）
+[`docs/volume-rite-copy.md`](docs/volume-rite-copy.md)（简体 / 英文 / 日本語，与产品同源；理论对照见 [附录](docs/theory/appendix-现代对应.md#修持--理论--产品)）
 
 心象 · 入卷开头示例：
 
@@ -184,7 +184,7 @@ Key 只在 Vite 中间件用，不进前端包。`npm run build` 出 `dist/` + N
 | `node scripts/verify-full-flow.mjs` | API 冒烟（39 项） |
 | `node scripts/verify-rite-flow.mjs` | Playwright 修持环 |
 | `npm run generate:rite-docs` | 从 volumeRite.ts 生成修持 MD |
-| `node scripts/complete-user-journey.mjs` | 补全六卷 |
+| `node scripts/complete-user-此旅.mjs` | 补全六卷 |
 | `node scripts/test-locale-switch.mjs` | 四语神谕缓存 |
 | `node scripts/reset-db.mjs` | 清空 SQLite |
 
