@@ -9,6 +9,20 @@ description: >-
 
 # 雾岸六卷 · psyche-tree-demo
 
+## Esoteric system (see README)
+
+The product follows a full mystical **system**, not only symbols:
+
+| Pillar | In app |
+|--------|--------|
+| **Worldview** 世界观 | Mist shore, light pillar, tree, sacred time |
+| **Meditation** 冥想 | Opening rite per book, one seal/page, tree awakening |
+| **Prayer** 祈祷 | Email seal, dialogue check, closing blessing, whole oracle |
+| **Reflection** 反思 | Portrait + oracle pages, return to shelf, review mode |
+| **Symbol + revelation** | Sixfold facets → volume oracle → holistic oracle |
+
+Full trilingual theory: [README.md](../../../README.md#玄学理论体系--mystical-framework--玄義体系).
+
 ## Six books (one facet each)
 
 | BookId | 卷 | 测向 |
