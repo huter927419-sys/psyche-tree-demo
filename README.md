@@ -11,13 +11,13 @@
 | 层级 Layer | 文件 File | 给谁 For whom | 内容 Content |
 |------------|-----------|---------------|--------------|
 | **理论栈** Theory stack | [`docs/theory/`](docs/theory/) | 世界观与机制 · worldview & mechanism | 五层长文 I→V · five layers |
-| **产品与修持** Product & rites | 本 README · this file | 产品、文案、体验 · product & experience | 命题 → 体验路径 → [修持三语全文](docs/volume-rite-copy.md) → 预览 → 开发 |
+| **产品与修持** Product & rites | 本 README · this file | 产品、文案、体验 · product & experience | 命题 → 体验路径 → 修持环 → 预览 → 开发 |
 | **开发约定** Dev conventions | [SKILL.md](.cursor/skills/psyche-tree-demo/SKILL.md) | Agent / 工程师 · engineers | 六卷结构、API、verify、UX 红线 |
 
 ### 建议阅读顺序 · Reading order · 推奨順
 
 1. **[理论栈导引](#一理论栈导引--theory-index--理論索引)** → 按需深入 [`docs/theory/`](docs/theory/)  
-2. [核心命题](#二核心命题--core-proposition--核心命題) → [这是什么](#三这是什么--what-is-this--これは何か) → [体验路径](#四体验路径--experience-path--体験の流れ) → [修持环](#五修持环--volume-rite-cycle--修持環) → [修持三语全文](docs/volume-rite-copy.md)  
+2. [核心命题](#二核心命题--core-proposition--核心命題) → [这是什么](#三这是什么--what-is-this--これは何か) → [体验路径](#四体验路径--experience-path--体験の流れ) → [修持环](#五修持环--volume-rite-cycle--修持環)  
 3. 要跑起来 Run locally：[快速开始](#快速开始--quick-start--クイックスタート) → [脚本与 QA](#脚本与-qa--scripts--スクリプト)  
 
 ### 文案源文件 · Copy source · 文案ソース
@@ -38,8 +38,7 @@
 | 二 | [核心命题](#二核心命题--core-proposition--核心命題) | 哲学锚点 | Core proposition | 核心命題 |
 | 三 | [这是什么](#三这是什么--what-is-this--これは何か) | 产品概览 | Overview | 概要 |
 | 四 | [体验路径](#四体验路径--experience-path--体験の流れ) | 书架→整象 | Shelf → holistic | 体験の流れ |
-| 五 | [修持环](#五修持环--volume-rite-cycle--修持環) | 流程与缘由 | Rite cycle | 修持環 |
-| — | [修持三语全文](docs/volume-rite-copy.md) | 入卷/离卷/归树 | Full rite copy | 導き三語全文 |
+| 五 | [修持环](#五修持环--volume-rite-cycle--修持環)（含 [三语全文](docs/volume-rite-copy.md)） | 流程·引导语 | Rite cycle & copy | 修持環・導き |
 | 六 | [界面预览](#六界面预览--ui-preview--画面プレビュー) | 四语截图 | UI preview | 画面 |
 | 七 | [开发与运维](#七开发与运维--dev--ops--開発運用) | 安装/脚本 | Dev & ops | 開発・運用 |
 
