@@ -38,7 +38,7 @@ const coreProposition: LocalePack = {
   },
 }
 
-type ReturnTreePack = {
+export type ReturnTreePack = {
   tag: string
   title: string
   subtitle: string
@@ -50,7 +50,7 @@ const returnToTree: Record<'zh' | 'en' | 'ja', ReturnTreePack> = {
   zh: {
     tag: '终卷 · 归树',
     title: '归树',
-    subtitle: 'Return to the Tree',
+    subtitle: '树一直在那里',
     steps: [
       {
         sectionLabel: '归树仪式',
@@ -105,7 +105,7 @@ const returnToTree: Record<'zh' | 'en' | 'ja', ReturnTreePack> = {
   ja: {
     tag: '終巻 · 帰樹',
     title: '帰樹',
-    subtitle: 'Return to the Tree',
+    subtitle: '樹はいつもそこにあった',
     steps: [
       {
         sectionLabel: '儀',

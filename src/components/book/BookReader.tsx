@@ -20,10 +20,6 @@ import { buildAssessmentFromStored } from '../../services/storedAssessment'
 import type { Locale } from '../../i18n/locale'
 import { getUi } from '../../i18n/ui'
 import { getQuestionGuide } from '../../i18n/questionGuide'
-import {
-  getVolumeEntryRite,
-  getVolumeExitRite,
-} from '../../i18n/volumeRite'
 import { LanguageToggle } from '../i18n/LanguageToggle'
 import { QuestionCard } from '../QuestionCard'
 import { TreeProgress } from '../tree/TreeProgress'
@@ -722,15 +718,15 @@ export function BookReader({
       <VolumeRiteOverlay
         open={!readOnly && !entryRiteComplete}
         locale={locale}
+        bookId={book.meta.id}
         mode="entry"
-        entryRite={getVolumeEntryRite(book.meta.id, locale)}
         onComplete={() => setEntryRiteComplete(true)}
       />
       <VolumeRiteOverlay
         open={exitRiteOpen}
         locale={locale}
+        bookId={book.meta.id}
         mode="exit"
-        exitSteps={getVolumeExitRite(book.meta.id, locale)}
         onComplete={handleExitRiteComplete}
       />
       <TreeProgress revealStage={treeStage} bookId={book.meta.id} locale={locale} />

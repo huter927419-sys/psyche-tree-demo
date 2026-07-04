@@ -38,19 +38,19 @@ Migration: `server/db/migrations/007_locale_zh_tw.sql`
 
 Built by `buildBookQuestionFlow()` in `books/shared/questionFlow.ts`.
 
-## Documentation map
+## Documentation map · 文档索引
 
-| Doc | Role |
-|-----|------|
-| [README.md](../../../README.md) | Product, proposition, experience path, **full rite copy + rationale**, dev/QA |
-| [docs/theory/](../../../docs/theory/) | Five-layer theory (long form, split from README) |
-| [SKILL.md](../SKILL.md) | Agent dev conventions |
-| [reference.md](./reference.md) | Paths, data flow, scripts |
+| Doc | 简体 | English | 日本語 |
+|-----|------|---------|--------|
+| [README.md](../../../README.md) | 产品+运维（三语） | Product + ops (trilingual) | 製品+運用 |
+| [docs/volume-rite-copy.md](../../../docs/volume-rite-copy.md) | 修持三语全文 | Full rite zh/en/ja | 導き三語全文 |
+| [docs/theory/](../../../docs/theory/) | 五层理论 | Five theory layers | 五層理論 |
+| [SKILL.md](../SKILL.md) | Agent 约定 | Agent conventions | Agent 規約 |
+| [reference.md](./reference.md) | 路径与数据流 | Paths & data flow | パスとデータ流 |
 
 ## Entry rite copy (入卷修持)
 
-Full simplified-Chinese guidance (entry + exit + 归树): [README §四 修持环](../../../README.md#四修持环).  
-Editable source: `src/i18n/volumeRite.ts`.
+Full trilingual guidance: [docs/volume-rite-copy.md](../../../docs/volume-rite-copy.md). Source: `src/i18n/volumeRite.ts`.
 
 | BookId | Facet | Sections |
 |--------|-------|----------|

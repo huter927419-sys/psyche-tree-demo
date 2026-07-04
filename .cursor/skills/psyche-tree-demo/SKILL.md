@@ -10,6 +10,8 @@ description: >-
 
 # 雾岸六卷 · psyche-tree-demo
 
+> **Docs · 文档** — Product docs use **简体 · English · 日本語** together. Rite copy: [docs/volume-rite-copy.md](../../../docs/volume-rite-copy.md) (`npx tsx scripts/generate-rite-docs.ts`). Theory: [docs/theory/](../../../docs/theory/).
+
 ## Esoteric system (see README)
 
 The product follows a full mystical **system**, not only symbols:
@@ -25,21 +27,20 @@ The product follows a full mystical **system**, not only symbols:
 | **Reflection** 反思 | Portrait + oracle pages, return to shelf, review mode |
 | **Symbol + revelation** | Sixfold facets → volume oracle → holistic oracle |
 
-Full trilingual theory (long form): [`docs/theory/`](../../../docs/theory/).  
-Product + rite copy: [README §四 修持环](../../../README.md#四修持环).  
-Concise state-system: [docs/theory/02-concise-theory.md](../../../docs/theory/02-concise-theory.md).  
-Locales & SQLite: [README §语言与数据库](../../../README.md#语言与数据库).
+Full trilingual theory: [`docs/theory/`](../../../docs/theory/).  
+Rite copy (zh/en/ja): [docs/volume-rite-copy.md](../../../docs/volume-rite-copy.md).  
+Product overview: [README.md](../../../README.md).
 
 ## Six books (one facet each)
 
-| BookId | 卷 | 测向 |
-|--------|-----|------|
-| `psyche-tree` | 心象 | 自我内在 |
-| `emotional-flow` | 映心 | 情感流动 |
-| `mind-light` | 明思 | 思维脉动 |
-| `bond-thread` | 缘书 | 联结之丝 |
-| `flow-balance` | 流衡 | 守衡应变 |
-| `direction-light` | 向光 | 方向步履 |
+| BookId | 卷 · Vol. | 简体 | English | 日本語 |
+|--------|-----------|------|---------|--------|
+| `psyche-tree` | 心象 | 自我内在 | Inner self | 自我の内在 |
+| `emotional-flow` | 映心 | 情感流动 | Emotional flow | 感情の流れ |
+| `mind-light` | 明思 | 思维脉动 | Mind patterns | 思考の脈 |
+| `bond-thread` | 缘书 | 联结之丝 | Connection | 縁の糸 |
+| `flow-balance` | 流衡 | 守衡应变 | Balance & adapt | 流れの均衡 |
+| `direction-light` | 向光 | 方向步履 | Direction & steps | 方向と歩み |
 
 ## Per-book structure (8 pages)
 
@@ -73,7 +74,7 @@ Dim 1–3 → attention check → Dim 4–6 → integration (dimensionIndex 7)
 
 Copy lives in `src/i18n/volumeRite.ts` (zh / en / ja; zhTw via OpenCC). Styles: `.volume-rite-overlay`, `.return-tree-overlay` in `index.css`.
 
-**Full entry / exit / 归树 copy (简体)** — [README §四 修持环](../../../README.md#四修持环). Source: `volumeRite.ts`.
+**Full rite copy (zh / en / ja)** — [docs/volume-rite-copy.md](../../../docs/volume-rite-copy.md). Regenerate: `npx tsx scripts/generate-rite-docs.ts`. Source: `volumeRite.ts`.
 
 | BookId | 卷 | Entry rite sections (zh) |
 |--------|-----|---------------------------|

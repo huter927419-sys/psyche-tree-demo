@@ -1,7 +1,14 @@
 import { useEffect, useState } from 'react'
 import type { Locale } from '../../i18n/locale'
-import { getCoreProposition, getReturnToTreeRite } from '../../i18n/volumeRite'
 import { getUi } from '../../i18n/ui'
+import {
+  getTrilingualCoreProposition,
+  getTrilingualReturnToTree,
+} from '../../i18n/volumeRiteTrilingual'
+import {
+  RiteTrilingualStepBody,
+  RiteTrilingualText,
+} from '../rite/RiteTrilingualText'
 
 interface ReturnToTreeOverlayProps {
   open: boolean
@@ -17,8 +24,8 @@ export function ReturnToTreeOverlay({
   onComplete,
 }: ReturnToTreeOverlayProps) {
   const ui = getUi(locale)
-  const rite = getReturnToTreeRite(locale)
-  const proposition = getCoreProposition(locale)
+  const rite = getTrilingualReturnToTree()
+  const proposition = getTrilingualCoreProposition()
   const [phase, setPhase] = useState<Phase>('rite')
   const [stepIndex, setStepIndex] = useState(0)
 
@@ -65,38 +72,37 @@ export function ReturnToTreeOverlay({
 
   const prevDisabled = phase === 'rite' && stepIndex === 0
 
+  const localeClass =
+    locale === 'en' ? 'en' : locale === 'ja' ? 'ja' : locale === 'zhTw' ? 'zh-tw' : 'zh'
+
   return (
     <div
-      className={`return-tree-overlay return-tree-overlay--${locale}`}
+      className={`return-tree-overlay return-tree-overlay--${localeClass}`}
       role="dialog"
       aria-modal="true"
       aria-label={ui.returnToTreeAria}
     >
       <div className="return-tree-panel">
         <header className="return-tree-header">
-          <p className="return-tree-tag">{rite.tag}</p>
-          <h2 className="return-tree-title">{rite.title}</h2>
-          <p className="return-tree-subtitle">{rite.subtitle}</p>
+          <RiteTrilingualText locale={locale} value={rite.tag} variant="label" />
+          <RiteTrilingualText locale={locale} value={rite.title} variant="title" />
+          <RiteTrilingualText locale={locale} value={rite.subtitle} variant="label" />
         </header>
 
         <div className="return-tree-body">
           {phase === 'closing' ? (
-            <p className="return-tree-closing">{rite.closing}</p>
+            <RiteTrilingualText locale={locale} value={rite.closing} />
           ) : phase === 'proposition' ? (
             <div className="return-tree-proposition">
               <p className="return-tree-proposition-label">{ui.corePropositionLabel}</p>
-              <p className="return-tree-proposition-main">{proposition.main}</p>
-              <p className="return-tree-proposition-sub">{proposition.sub}</p>
+              <RiteTrilingualText locale={locale} value={proposition.main} variant="title" />
+              <RiteTrilingualText locale={locale} value={proposition.sub} />
             </div>
           ) : (
             currentStep && (
               <>
-                <p className="return-tree-section">{currentStep.sectionLabel}</p>
-                {currentStep.paragraphs.map((line, i) => (
-                  <p key={i} className="return-tree-line">
-                    {line}
-                  </p>
-                ))}
+                <RiteTrilingualText locale={locale} value={currentStep.sectionLabel} variant="label" />
+                <RiteTrilingualStepBody locale={locale} step={currentStep} />
               </>
             )
           )}

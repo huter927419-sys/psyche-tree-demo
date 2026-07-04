@@ -8,6 +8,7 @@
     "dev:lan": "vite --host",
     "build": "npm run generate:cards && tsc -b && vite build",
     "generate:cards": "node scripts/generate-card-images.mjs",
+    "generate:rite-docs": "npx tsx scripts/generate-rite-docs.ts",
     "generate:cards:ai": "node scripts/generate-card-images-ai.mjs",
     "lint": "oxlint",
     "preview": "vite preview",

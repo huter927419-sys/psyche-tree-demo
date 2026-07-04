@@ -4959,6 +4959,68 @@ html[lang="ja"] .app-user-email-value {
   padding-right: 0.25rem;
 }
 
+.rite-trilingual {
+  margin: 0 0 0.65rem;
+}
+
+.rite-trilingual:last-child {
+  margin-bottom: 0;
+}
+
+.rite-trilingual-primary {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.85;
+  letter-spacing: 0.04em;
+  color: rgba(235, 235, 235, 0.88);
+  font-family: var(--font-prose-zh);
+}
+
+.rite-trilingual--label .rite-trilingual-primary {
+  font-size: 0.62rem;
+  letter-spacing: 0.32em;
+  color: rgba(200, 200, 200, 0.55);
+}
+
+.rite-trilingual--title .rite-trilingual-primary {
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  color: rgba(240, 240, 240, 0.92);
+  font-family: var(--font-mystic-zh);
+}
+
+.rite-trilingual-gloss {
+  margin: 0.35rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.65;
+  letter-spacing: 0.03em;
+  color: rgba(180, 185, 195, 0.62);
+}
+
+.rite-trilingual-gloss--en {
+  font-family: var(--font-prose-en);
+}
+
+.rite-trilingual-gloss--ja {
+  font-family: var(--font-prose-ja);
+}
+
+.volume-rite-overlay--en .rite-trilingual-primary {
+  font-family: var(--font-prose-en);
+}
+
+.volume-rite-overlay--ja .rite-trilingual-primary {
+  font-family: var(--font-prose-ja);
+}
+
+.return-tree-overlay--en .rite-trilingual-primary {
+  font-family: var(--font-prose-en);
+}
+
+.return-tree-overlay--ja .rite-trilingual-primary {
+  font-family: var(--font-prose-ja);
+}
+
 .volume-rite-section {
   margin: 0 0 0.85rem;
   font-size: 0.62rem;

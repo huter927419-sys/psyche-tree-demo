@@ -1,41 +1,37 @@
 import { useEffect, useState } from 'react'
+import type { BookId } from '../../books/types'
 import type { Locale } from '../../i18n/locale'
 import { getUi } from '../../i18n/ui'
-import type { RiteStep, VolumeEntryRite } from '../../i18n/volumeRite'
+import {
+  getTrilingualEntryRite,
+  getTrilingualExitRite,
+  type TrilingualStep,
+} from '../../i18n/volumeRiteTrilingual'
+import {
+  RiteTrilingualStepBody,
+  RiteTrilingualText,
+} from '../rite/RiteTrilingualText'
 
 interface VolumeRiteOverlayProps {
   open: boolean
   locale: Locale
+  bookId: BookId
   mode: 'entry' | 'exit'
-  entryRite?: VolumeEntryRite
-  exitSteps?: RiteStep[]
   onComplete: () => void
-}
-
-function renderStepBody(step: RiteStep) {
-  return (
-    <>
-      {step.title && <p className="volume-rite-step-title">{step.title}</p>}
-      {step.paragraphs.map((line, i) => (
-        <p key={i} className="volume-rite-line">
-          {line}
-        </p>
-      ))}
-    </>
-  )
 }
 
 export function VolumeRiteOverlay({
   open,
   locale,
+  bookId,
   mode,
-  entryRite,
-  exitSteps = [],
   onComplete,
 }: VolumeRiteOverlayProps) {
   const ui = getUi(locale)
-  const steps =
-    mode === 'entry' ? (entryRite?.steps ?? []) : exitSteps
+  const entryRite = mode === 'entry' ? getTrilingualEntryRite(bookId) : null
+  const exitSteps: TrilingualStep[] =
+    mode === 'exit' ? getTrilingualExitRite(bookId) : []
+  const steps = mode === 'entry' ? (entryRite?.steps ?? []) : exitSteps
   const [stepIndex, setStepIndex] = useState(0)
   const [journal, setJournal] = useState('')
 
@@ -44,7 +40,7 @@ export function VolumeRiteOverlay({
       setStepIndex(0)
       setJournal('')
     }
-  }, [open, mode])
+  }, [open, mode, bookId])
 
   if (!open || steps.length === 0) return null
 
@@ -66,9 +62,12 @@ export function VolumeRiteOverlay({
     if (stepIndex > 0) setStepIndex((i) => i - 1)
   }
 
+  const localeClass =
+    locale === 'en' ? 'en' : locale === 'ja' ? 'ja' : locale === 'zhTw' ? 'zh-tw' : 'zh'
+
   return (
     <div
-      className={`volume-rite-overlay volume-rite-overlay--${mode} volume-rite-overlay--${locale}`}
+      className={`volume-rite-overlay volume-rite-overlay--${mode} volume-rite-overlay--${localeClass}`}
       role="dialog"
       aria-modal="true"
       aria-label={mode === 'entry' ? ui.volumeRiteEntryAria : ui.volumeRiteExitAria}
@@ -77,8 +76,16 @@ export function VolumeRiteOverlay({
         <header className="volume-rite-header">
           {mode === 'entry' && entryRite && (
             <>
-              <p className="volume-rite-volume">{entryRite.volumeTitle}</p>
-              <p className="volume-rite-facet">{entryRite.facetLabel}</p>
+              <RiteTrilingualText
+                locale={locale}
+                value={entryRite.volumeTitle}
+                variant="label"
+              />
+              <RiteTrilingualText
+                locale={locale}
+                value={entryRite.facetLabel}
+                variant="title"
+              />
             </>
           )}
           {mode === 'exit' && (
@@ -87,11 +94,11 @@ export function VolumeRiteOverlay({
         </header>
 
         <div className="volume-rite-body">
-          <p className="volume-rite-section">{step.sectionLabel}</p>
-          {renderStepBody(step)}
-          {showJournal && (
+          <RiteTrilingualText locale={locale} value={step.sectionLabel} variant="label" />
+          <RiteTrilingualStepBody locale={locale} step={step} />
+          {showJournal && step.journalPrompt && (
             <label className="volume-rite-journal">
-              <span className="volume-rite-journal-prompt">{step.journalPrompt}</span>
+              <RiteTrilingualText locale={locale} value={step.journalPrompt} />
               <textarea
                 className="volume-rite-journal-input"
                 rows={3}
