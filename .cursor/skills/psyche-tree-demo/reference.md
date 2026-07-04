@@ -1,22 +1,58 @@
 # psyche-tree-demo — Reference
 
-## Question flow (9 pages)
+## Books
+
+| ID | Title (zh/en) | Questions source |
+|----|---------------|------------------|
+| `psyche-tree` | 心象 / Mindscape | `src/data/questions.ts` |
+| `emotional-flow` | 映心 / Heart Mirror | `src/books/emotional-flow/` + EN bundle |
+
+Registry: `src/books/registry.ts` → `getBook(id, locale)`.
+
+## App phases
+
+| Phase | Component | Notes |
+|-------|-----------|-------|
+| `shelf` | `Bookshelf` | Two volumes, music, lang toggle |
+| `cover` | `BookCover`, `BookJourneyStage` | Pickup animation, `BookClosedVisual` |
+| `reading` | `BookReader` | Opening guide → quiz spreads |
+| `result` | `BookResult` | 3 pages, then close to shelf |
+
+## Question flow (9 pages per book)
 
 | Index | Type | Notes |
 |-------|------|-------|
-| 0 | Dim 1 自主流动之感 | |
-| 1 | Dim 2 生命方向之光 | |
-| 2 | Attention | Must pick 星光探索者 |
-| 3 | Dim 3 亲密联结之径 | |
-| 4 | Dim 4 资源平衡之律 | |
-| 5 | Dim 5 情绪安住之湖 | |
-| 6 | Attention | Must pick 稳固之山 |
-| 7 | Dim 6 变化适应之风 | |
-| 8 | Dim 7 行动共振之步 | Auto-complete → results |
+| 0 | Dim 1 | |
+| 1 | Dim 2 | |
+| 2 | Attention | Must pick 星光探索者 / star-explorer |
+| 3 | Dim 3 | |
+| 4 | Dim 4 | |
+| 5 | Dim 5 | |
+| 6 | Attention | Must pick 稳固之山 / stable-mountain |
+| 7 | Dim 6 | |
+| 8 | Dim 7 | Auto-complete → results |
 
 Built by `buildQuestionFlow()` in `questions.ts`.
 
-## Score → level → copy
+## Left page content stack
+
+1. `book-chapter-tag` — dimension title or「对话确认」
+2. `book-question-mystical` — rite / guide / note from `questionGuide.ts`
+3. `book-question-divider`
+4. `QuestionSealReveal` — tap seal → scenario label + `q.prompt` → auto-hide
+5. `book-page-hint--action` — right-page instruction
+
+## Question seal strings (ui.ts)
+
+| Key | zh | en |
+|-----|----|----|
+| `scenarioLabel` | 问印 | Question Seal |
+| `sealMark` | 问 | Q |
+| `sealRevealHint` | 点以观问 | Tap to reveal |
+
+Default `autoHideMs`: 4200.
+
+## Score → level
 
 `scoring.ts` `scoreLevel()`:
 
@@ -28,23 +64,57 @@ Built by `buildQuestionFlow()` in `questions.ts`.
 | ≥ -1.5 | mid-low |
 | else | low |
 
-With single-card selection, average equals that card's score.
+Single-card selection: average = that card's score.
 
-## Tree stages (STAGE_LABELS)
+## Tree stages
 
-1 根 · 2 基 · 3 脉 · 4 干 · 5 枝 · 6 冠 · 7 光 — mapped to sephirot reveal bottom→top.
+1 根 · 2 基 · 3 脉 · 4 干 · 5 枝 · 6 冠 · 7 光 — `Sephira.revealStage` bottom→top.
 
-## DeepSeek request
+## Visual tier
 
-Client POST `/api/mystical-reading` with psychology prompt input (dimension interpretations only, no user-facing scores). Server uses `DEEPSEEK_API_KEY`, model from env, `thinking: { type: 'disabled' }`.
+| Surface | Tier | Effects reduced |
+|---------|------|-----------------|
+| Shelf | `full` | All ambient effects |
+| Cover | `balanced` | Some blur/ghost trimmed |
+| Quiz | `minimal` | No card backdrop-blur, minimal SVG blur |
 
-## Card pattern list
+Hook: `src/hooks/useVisualTier.ts`.
 
-All patterns in `scripts/generate-card-images.mjs` `PATTERNS` array — must match question card `pattern` fields.
+## DeepSeek
+
+POST `/api/mystical-reading` — psychology prompt (interpretations only). Server: `server/deepseek.ts`, per-book prompts in `server/bookPrompts.ts`. Thinking disabled.
+
+## Card pipeline
+
+```bash
+npm run generate:cards       # PNG via card-art-renderer.mjs
+npm run generate:cards:ai    # DALL-E 3, needs OPENAI_API_KEY
+```
+
+Patterns in `scripts/generate-card-images.mjs` `PATTERNS` — must match question `pattern` fields. SVG fallbacks removed; PNG only.
+
+## Key new files (2025–2026 refactor)
+
+```
+src/components/book/BookReader.tsx
+src/components/book/BookOpeningGuide.tsx
+src/components/book/QuestionSealReveal.tsx
+src/components/book/BookClosedVisual.tsx
+src/components/book/BookJourneyStage.tsx
+src/components/bookshelf/Bookshelf.tsx
+src/components/i18n/LanguageToggle.tsx
+src/components/i18n/AmbientPhraseLayer.tsx
+src/components/SkyAtmosphere.tsx
+src/hooks/useVisualTier.ts
+src/i18n/
+src/books/
+scripts/card-art-renderer.mjs
+server/bookPrompts.ts
+```
 
 ## Mac demo recording (optional)
 
-⇧⌘5 → 录制 → saves `.mov` to Desktop. Convert:
+⇧⌘5 → record → Desktop `.mov`. Convert:
 
 ```bash
 ffmpeg -i ~/Desktop/录屏.mov -c:v libx264 -c:a aac ~/Desktop/录屏.mp4

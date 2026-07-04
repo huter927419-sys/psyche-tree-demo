@@ -1,4 +1,6 @@
 import type { ReactNode } from 'react'
+import type { Locale } from '../../i18n/locale'
+import { getUi } from '../../i18n/ui'
 import { formatPageLabel } from './bookUtils'
 
 interface BookShellProps {
@@ -12,6 +14,10 @@ interface BookShellProps {
   flipping?: boolean
   flipDirection?: 'next' | 'prev'
   chapterLabel?: string
+  onFlipComplete?: () => void
+  enterAnimation?: boolean
+  flipSerial?: number
+  locale?: Locale
 }
 
 export function BookShell({
@@ -25,41 +31,63 @@ export function BookShell({
   flipping = false,
   flipDirection = 'next',
   chapterLabel,
+  onFlipComplete,
+  enterAnimation = false,
+  flipSerial = 0,
+  locale = 'zh',
 }: BookShellProps) {
+  const ui = getUi(locale)
   const isFlipping =
     flipping && incomingLeft !== undefined && incomingRight !== undefined
 
+  const handleTurnAnimationEnd = (e: React.AnimationEvent<HTMLDivElement>) => {
+    if (e.target !== e.currentTarget) return
+    const name = e.animationName
+    if (
+      name === 'page-turn-next' ||
+      name === 'page-turn-prev'
+    ) {
+      onFlipComplete?.()
+    }
+  }
+
   return (
-    <div className="book-scene animate-fade-in px-3 py-6 md:py-10">
+    <div
+      className={`book-scene px-3 py-6 md:py-10${enterAnimation ? ' book-scene-enter' : ''}`}
+    >
       {chapterLabel && (
-        <p className="text-center text-[10px] tracking-[0.35em] uppercase text-[rgba(212,175,122,0.45)] mb-4">
+        <p className="text-center text-[10px] tracking-[0.35em] uppercase text-[rgba(255,255,255,0.45)] mb-4">
           {chapterLabel}
         </p>
       )}
 
       <div className="book-perspective mx-auto max-w-[920px]">
-        <div className="book-open book-flip-stage">
-          {/* Base spread — incoming while flipping, current when idle */}
+        <div
+          className={`book-open book-flip-stage${isFlipping ? ' book-flip-stage--active' : ''}`}
+        >
           <div className="book-spread-layer book-spread-base">
             {isFlipping ? (
-              <SpreadPages left={incomingLeft!} right={incomingRight!} />
+              <SpreadPages left={incomingLeft!} right={incomingRight!} ghostLabel={ui.ghostMemory} />
             ) : (
-              <SpreadPages left={left} right={right} />
+              <SpreadPages left={left} right={right} ghostLabel={ui.ghostMemory} />
             )}
           </div>
 
-          {/* 3D turning page overlay */}
           {isFlipping && flipDirection === 'next' && (
             <>
               <div className="book-turn-overlay book-turn-overlay-left">
                 <BookPage side="left">{left}</BookPage>
               </div>
-              <div className="book-page-turner book-page-turner-next">
+              <div
+                key={`turn-next-${flipSerial}`}
+                className="book-page-turner book-page-turner-next"
+                onAnimationEnd={handleTurnAnimationEnd}
+              >
                 <div className="book-turn-face book-turn-front">
                   <BookPage side="right">{right}</BookPage>
                 </div>
                 <div className="book-turn-face book-turn-back">
-                  <BookPage side="left" back>{null}</BookPage>
+                  <BookPage side="left">{incomingLeft}</BookPage>
                 </div>
                 <div className="book-turn-edge" aria-hidden />
               </div>
@@ -71,12 +99,16 @@ export function BookShell({
               <div className="book-turn-overlay book-turn-overlay-right">
                 <BookPage side="right">{right}</BookPage>
               </div>
-              <div className="book-page-turner book-page-turner-prev">
+              <div
+                key={`turn-prev-${flipSerial}`}
+                className="book-page-turner book-page-turner-prev"
+                onAnimationEnd={handleTurnAnimationEnd}
+              >
                 <div className="book-turn-face book-turn-front">
                   <BookPage side="left">{left}</BookPage>
                 </div>
                 <div className="book-turn-face book-turn-back">
-                  <BookPage side="right" back>{null}</BookPage>
+                  <BookPage side="right">{incomingRight}</BookPage>
                 </div>
                 <div className="book-turn-edge book-turn-edge-left" aria-hidden />
               </div>
@@ -86,9 +118,9 @@ export function BookShell({
         <div className="book-shadow-plate" aria-hidden />
       </div>
 
-      <div className="flex items-center justify-center gap-6 mt-5 text-[11px] tracking-[0.2em] text-[rgba(212,175,122,0.45)]">
+      <div className="flex items-center justify-center gap-6 mt-5 text-[11px] tracking-[0.2em] text-[rgba(255,255,255,0.45)]">
         <span className="font-serif" style={{ fontFamily: 'var(--font-serif)' }}>
-          {formatPageLabel(pageNumber, totalPages)}
+          {formatPageLabel(pageNumber, totalPages, locale)}
         </span>
       </div>
 
@@ -97,12 +129,20 @@ export function BookShell({
   )
 }
 
-function SpreadPages({ left, right }: { left: ReactNode; right: ReactNode }) {
+function SpreadPages({
+  left,
+  right,
+  ghostLabel,
+}: {
+  left: ReactNode
+  right: ReactNode
+  ghostLabel: string
+}) {
   return (
     <>
-      <BookPage side="left">{left}</BookPage>
+      <BookPage side="left" ghostLabel={ghostLabel}>{left}</BookPage>
       <div className="book-spine" aria-hidden />
-      <BookPage side="right">{right}</BookPage>
+      <BookPage side="right" ghostLabel={ghostLabel}>{right}</BookPage>
     </>
   )
 }
@@ -111,10 +151,12 @@ function BookPage({
   side,
   children,
   back = false,
+  ghostLabel = '',
 }: {
   side: 'left' | 'right'
   children: ReactNode
   back?: boolean
+  ghostLabel?: string
 }) {
   return (
     <div
@@ -124,7 +166,7 @@ function BookPage({
       {back ? (
         <div className="book-page-back-content" aria-hidden>
           <div className="book-back-lines" />
-          <p className="book-back-ghost">生命之书</p>
+          <p className="book-back-ghost">{ghostLabel}</p>
         </div>
       ) : (
         <div className="book-page-inner">{children}</div>
@@ -142,6 +184,7 @@ interface BookNavProps {
   backDisabled?: boolean
   nextDisabled?: boolean
   showNext?: boolean
+  selectOneHint?: string
 }
 
 export function BookNav({
@@ -152,6 +195,7 @@ export function BookNav({
   backDisabled,
   nextDisabled,
   showNext = true,
+  selectOneHint = '择一即翻页',
 }: BookNavProps) {
   return (
     <div className="flex justify-between items-center gap-4">
@@ -173,8 +217,8 @@ export function BookNav({
           {nextLabel} →
         </button>
       ) : (
-        <span className="text-[10px] tracking-[0.2em] text-[rgba(42,37,32,0.35)]">
-          择一即翻页
+        <span className="text-[10px] tracking-[0.2em] text-[rgba(200,200,200,0.35)]">
+          {selectOneHint}
         </span>
       )}
     </div>

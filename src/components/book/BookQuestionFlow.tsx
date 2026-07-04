@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { AssessmentResult, CardOption } from '../../types'
-import { allQuestions } from '../../data/questions'
+import type { BookDefinition } from '../../books/types'
 import { computeResults, getAttentionCheckCards } from '../../data/scoring'
 import { QuestionCard } from '../QuestionCard'
 import { BookShell, BookNav } from './BookShell'
@@ -11,29 +11,34 @@ import { TreeProgress } from '../tree/TreeProgress'
 const AUTO_FLIP_MS = 420
 
 interface BookQuestionFlowProps {
+  book: BookDefinition
   onComplete: (result: AssessmentResult) => void
   onProgressChange?: (
     currentIndex: number,
     answers: Record<string, string[]>,
   ) => void
   treeRevealStage?: number
+  enterFromCover?: boolean
 }
 
 export function BookQuestionFlow({
+  book,
   onComplete,
   onProgressChange,
   treeRevealStage = 0,
+  enterFromCover = false,
 }: BookQuestionFlowProps) {
+  const { questions } = book
   const [currentIndex, setCurrentIndex] = useState(0)
   const [answers, setAnswers] = useState<Record<string, string[]>>({})
   const [isAdvancing, setIsAdvancing] = useState(false)
   const advanceTimer = useRef<number | null>(null)
 
-  const { flipping, flipDirection, pendingIndex, runFlip } =
+  const { flipping, flipDirection, pendingIndex, runFlip, completeFlip } =
     useBookFlip(setCurrentIndex)
 
-  const question = allQuestions[currentIndex]
-  const totalPages = allQuestions.length
+  const question = questions[currentIndex]
+  const totalPages = questions.length
 
   useEffect(() => {
     onProgressChange?.(currentIndex, answers)
@@ -57,15 +62,15 @@ export function BookQuestionFlow({
       setIsAdvancing(true)
       advanceTimer.current = window.setTimeout(() => {
         advanceTimer.current = null
-        if (fromIndex < allQuestions.length - 1) {
+        if (fromIndex < questions.length - 1) {
           const flipped = runFlip('next', fromIndex + 1)
           if (!flipped) setIsAdvancing(false)
         } else {
-          onComplete(computeResults(nextAnswers, allQuestions))
+          onComplete(computeResults(nextAnswers, questions, book))
         }
       }, AUTO_FLIP_MS)
     },
-    [onComplete, runFlip],
+    [book, onComplete, questions, runFlip],
   )
 
   useEffect(() => {
@@ -87,7 +92,7 @@ export function BookQuestionFlow({
 
   const buildLeft = useCallback(
     (index: number) => {
-      const q = allQuestions[index]
+      const q = questions[index]
       const subtitle = q.type === 'dimension' ? q.title : '对话确认'
       return (
         <>
@@ -100,8 +105,8 @@ export function BookQuestionFlow({
           </h2>
           <p className="book-page-hint mt-6">
             {q.type === 'attention'
-              ? '请在右页选择一张卡片，以确认您正与自己对话。'
-              : '请在右页选择一张与此刻感受最共鸣的意象——择定后书页将自行翻过。'}
+              ? '请在右页择一光印，确认你仍与自己同在。'
+              : '请在右页择一与你此刻感受共鸣的意象——选定后，记忆将自行翻过。'}
           </p>
           <div className="book-page-footer-note">
             <span>{formatPageLabel(index + 1, totalPages)}</span>
@@ -109,12 +114,12 @@ export function BookQuestionFlow({
         </>
       )
     },
-    [totalPages],
+    [questions, totalPages],
   )
 
   const buildRight = useCallback(
     (index: number, interactive: boolean) => {
-      const q = allQuestions[index]
+      const q = questions[index]
       const ids = answers[q.id] ?? []
       const pageCards: CardOption[] =
         q.type === 'dimension' ? q.cards : getAttentionCheckCards(q)
@@ -126,7 +131,7 @@ export function BookQuestionFlow({
             <QuestionCard
               key={card.id}
               card={card}
-              variant="paper"
+              variant="dark"
               compact
               selected={ids.includes(card.id)}
               disabled={locked}
@@ -136,7 +141,7 @@ export function BookQuestionFlow({
         </div>
       )
     },
-    [answers, flipping, isAdvancing, selectCard],
+    [answers, flipping, isAdvancing, questions, selectCard],
   )
 
   const handleBack = () => {
@@ -149,7 +154,7 @@ export function BookQuestionFlow({
     runFlip('prev', currentIndex - 1)
   }
 
-  const completedDimensions = allQuestions
+  const completedDimensions = questions
     .slice(0, currentIndex + 1)
     .filter(
       (q) => q.type === 'dimension' && (answers[q.id]?.length ?? 0) > 0,
@@ -157,7 +162,7 @@ export function BookQuestionFlow({
 
   const chapterLabel =
     question.type === 'dimension'
-      ? `生命之树展开 · ${Math.min(completedDimensions, 7)}/7`
+      ? `记忆展开 · ${Math.min(completedDimensions, book.meta.dimensionCount)}/${book.meta.dimensionCount}`
       : undefined
 
   const displayPageNumber =
@@ -173,7 +178,7 @@ export function BookQuestionFlow({
 
   return (
     <>
-      <TreeProgress revealStage={treeRevealStage} />
+      <TreeProgress revealStage={treeRevealStage} bookId={book.meta.id} locale="zh" />
       <BookShell
         left={buildLeft(currentIndex)}
         right={buildRight(currentIndex, !flipping && !isAdvancing)}
@@ -184,6 +189,8 @@ export function BookQuestionFlow({
         chapterLabel={chapterLabel}
         flipping={flipping}
         flipDirection={flipDirection}
+        enterAnimation={enterFromCover}
+        onFlipComplete={completeFlip}
         footer={
           <BookNav
             onBack={handleBack}

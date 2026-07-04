@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import type { BookId } from '../../books/types'
 import { sephirot } from './treeData'
 import {
   isOrganicRevealed,
@@ -7,10 +8,14 @@ import {
   organicRoots,
   trunkPath,
 } from './treeOrganic'
-import { STAGE_LABELS } from './treeLabels'
+import type { Locale } from '../../i18n/locale'
+import { getProgressLabels } from '../../i18n/treeLabels'
+import { BilingualCrossfadeText } from '../i18n/BilingualCrossfadeText'
 
 interface TreeAwakeningOverlayProps {
   stage: number | null
+  bookId?: BookId | null
+  locale?: Locale
   onDone?: () => void
 }
 
@@ -18,6 +23,8 @@ const DURATION_MS = 2400
 
 export function TreeAwakeningOverlay({
   stage,
+  bookId = 'psyche-tree',
+  locale = 'zh',
   onDone,
 }: TreeAwakeningOverlayProps) {
   const [visible, setVisible] = useState(false)
@@ -43,7 +50,11 @@ export function TreeAwakeningOverlay({
 
   if (!visible || stage === null) return null
 
-  const label = STAGE_LABELS[stage] ?? '生命之树展开'
+  const { awakeningTag } = getProgressLabels(bookId ?? 'psyche-tree', locale)
+  const enLabels = getProgressLabels(bookId ?? 'psyche-tree', 'en')
+  const zhLabels = getProgressLabels(bookId ?? 'psyche-tree', 'zh')
+  const labelEn = enLabels.stageLabels[stage] ?? enLabels.fallbackLabel
+  const labelZh = zhLabels.stageLabels[stage] ?? zhLabels.fallbackLabel
   const litNodes = sephirot.filter((s) => s.revealStage <= stage)
   const variant = 'explore' as const
 
@@ -64,12 +75,12 @@ export function TreeAwakeningOverlay({
       >
         <defs>
           <linearGradient id="awake-trunk" x1="0" y1="1" x2="0" y2="0">
-            <stop offset="0%" stopColor="rgba(55,50,45,0.95)" />
-            <stop offset="100%" stopColor="rgba(30,28,26,0.8)" />
+            <stop offset="0%" stopColor="rgba(80,80,80,0.95)" />
+            <stop offset="100%" stopColor="rgba(40,40,40,0.8)" />
           </linearGradient>
           <radialGradient id="awake-canopy" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="rgba(212,175,122,0.18)" />
-            <stop offset="100%" stopColor="rgba(212,175,122,0)" />
+            <stop offset="0%" stopColor="rgba(255,255,255,0.18)" />
+            <stop offset="100%" stopColor="rgba(255,255,255,0)" />
           </radialGradient>
         </defs>
 
@@ -77,7 +88,7 @@ export function TreeAwakeningOverlay({
           <path
             d={trunkPath}
             fill="url(#awake-trunk)"
-            stroke="rgba(245,240,232,0.35)"
+            stroke="rgba(240,240,240,0.35)"
             strokeWidth="0.8"
             className="tree-awakening-node"
           />
@@ -89,7 +100,7 @@ export function TreeAwakeningOverlay({
               <path
                 key={r.id}
                 d={r.d}
-                stroke="rgba(200,185,155,0.55)"
+                stroke="rgba(180,180,180,0.5)"
                 strokeWidth={r.strokeWidth}
                 strokeLinecap="round"
                 className="tree-awakening-node"
@@ -103,7 +114,7 @@ export function TreeAwakeningOverlay({
               <path
                 key={b.id}
                 d={b.d}
-                stroke="rgba(212,175,122,0.5)"
+                stroke="rgba(255,255,255,0.5)"
                 strokeWidth={b.strokeWidth}
                 strokeLinecap="round"
                 className="tree-awakening-node"
@@ -121,7 +132,7 @@ export function TreeAwakeningOverlay({
                 rx={c.rx}
                 ry={c.ry}
                 fill="url(#awake-canopy)"
-                stroke="rgba(212,175,122,0.25)"
+                stroke="rgba(255,255,255,0.25)"
                 strokeWidth="0.6"
                 transform={c.rotate ? `rotate(${c.rotate} ${c.cx} ${c.cy})` : undefined}
                 className="tree-awakening-node"
@@ -131,22 +142,28 @@ export function TreeAwakeningOverlay({
 
         {litNodes.map((s) => (
           <g key={s.id} className="tree-awakening-node">
-            <circle cx={s.cx} cy={s.cy} r={s.r * 2.8} fill="rgba(212,175,122,0.2)" />
+            <circle cx={s.cx} cy={s.cy} r={s.r * 2.8} fill="rgba(255,255,255,0.2)" />
             <circle
               cx={s.cx}
               cy={s.cy}
               r={s.r}
-              stroke="rgba(245,240,232,0.95)"
+              stroke="rgba(240,240,240,0.95)"
               strokeWidth="1.2"
-              fill="rgba(245,240,232,0.1)"
+              fill="rgba(240,240,240,0.1)"
             />
           </g>
         ))}
       </svg>
 
       <div className="tree-awakening-text">
-        <p className="tree-awakening-tag">树脉觉醒</p>
-        <p className="tree-awakening-label">{label}</p>
+        <p className="tree-awakening-tag">{awakeningTag}</p>
+        <p className="tree-awakening-label">
+          <BilingualCrossfadeText
+            zh={labelZh}
+            en={labelEn}
+            activeLocale={locale}
+          />
+        </p>
       </div>
     </div>
   )

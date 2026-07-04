@@ -1,4 +1,11 @@
 import type { DimensionResult } from '../types'
+import type { Locale } from '../i18n/locale'
+import {
+  closingsEn,
+  mysticalPromptTemplateEn,
+  mysticalSymbolsEn,
+  openingsEn,
+} from './mysticalReading.en'
 
 const mysticalSymbols: Record<number, Record<DimensionResult['level'], string>> =
   {
@@ -69,14 +76,19 @@ const closings = [
 export function generateMysticalReading(
   dimensions: DimensionResult[],
   psychologyProfile: string,
+  locale: Locale = 'zh',
 ): string {
   void psychologyProfile
 
-  const opening = openings[Math.floor(Math.random() * openings.length)]
-  const closing = closings[Math.floor(Math.random() * closings.length)]
+  const openingPool = locale === 'en' ? openingsEn : openings
+  const closingPool = locale === 'en' ? closingsEn : closings
+  const symbolTable = locale === 'en' ? mysticalSymbolsEn : mysticalSymbols
+
+  const opening = openingPool[Math.floor(Math.random() * openingPool.length)]
+  const closing = closingPool[Math.floor(Math.random() * closingPool.length)]
 
   const body = dimensions
-    .map((d) => mysticalSymbols[d.dimensionIndex]?.[d.level] ?? '')
+    .map((d) => symbolTable[d.dimensionIndex]?.[d.level] ?? '')
     .filter(Boolean)
     .join('\n\n')
 
@@ -93,7 +105,13 @@ export const mysticalPromptTemplate = `你是一位深谙生命象征与内在�
 [在此插入7个维度的得分与描述]
 请生成一段连贯的玄学解读。`
 
-export function buildMysticalPrompt(psychologyInput: string): string {
+export function buildMysticalPrompt(
+  psychologyInput: string,
+  locale: Locale = 'zh',
+): string {
+  if (locale === 'en') {
+    return mysticalPromptTemplateEn.replace('[PSYCHOLOGY]', psychologyInput)
+  }
   return mysticalPromptTemplate.replace(
     '[在此插入7个维度的得分与描述]',
     psychologyInput,

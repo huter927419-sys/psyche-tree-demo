@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { shouldRunEnergySupply, type VisualTier } from '../hooks/useVisualTier'
 import {
   areRootsRevealed,
   getOpacityForElement,
@@ -16,21 +17,34 @@ import {
   organicRoots,
   trunkPath,
 } from './tree/treeOrganic'
+import {
+  EnergizedNode,
+  EnergyFlowLine,
+  EnergyFlowPath,
+  getEnergyDirection,
+  isPathNewlyEnergized,
+  isNodeNewlyEnergized,
+} from './tree/treeEnergyFlow'
 
 interface TreeOfLifeBackgroundProps {
   revealStage?: number
   variant?: TreeVariant
   recoilKey?: number
+  visualTier?: VisualTier
+  readingFocus?: boolean
 }
 
 export function TreeOfLifeBackground({
   revealStage = 0,
   variant = 'explore',
   recoilKey = 0,
+  visualTier = 'balanced',
+  readingFocus = false,
 }: TreeOfLifeBackgroundProps) {
   const isWelcome = variant === 'welcome'
   const isComplete = variant === 'complete'
   const isExplore = variant === 'explore'
+  const showEnergyFlow = isWelcome || isComplete || (isExplore && revealStage > 0)
   const svgRef = useRef<SVGSVGElement>(null)
 
   useEffect(() => {
@@ -42,18 +56,45 @@ export function TreeOfLifeBackground({
     el.classList.add('tree-organic-recoil')
   }, [recoilKey])
 
+  const focusDim = readingFocus ? 0.42 : 1
+
   return (
-    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-      <div className="absolute inset-0 bg-[#0a0a0a]" />
+    <div className={`fixed inset-0 overflow-hidden pointer-events-none z-0 tree-bg-root tree-bg-root--${visualTier}${readingFocus ? ' tree-bg-root--reading-focus' : ''}`}>
+      <div className="tree-bg-base" />
+      <div
+        className="tree-bg-depth"
+        style={{
+          opacity: (isWelcome ? 0.95 : isComplete ? 1 : 0.82 + revealStage * 0.025) * focusDim,
+        }}
+      />
+
+      <div
+        className={`tree-crown-radiance${showEnergyFlow ? ' tree-crown-radiance--flowing' : ''}`}
+        style={{
+          opacity:
+            (isWelcome
+              ? 0.35
+              : isComplete
+                ? 0.85
+                : 0.18 + (revealStage / 7) * 0.55) * focusDim,
+        }}
+      />
+
+      {showEnergyFlow && isExplore && visualTier === 'full' && !readingFocus && (
+        <div
+          className="tree-sacred-illumination"
+          style={{ opacity: 0.22 + (revealStage / 7) * 0.48 }}
+        />
+      )}
 
       <div
         className="absolute inset-0 transition-opacity duration-1000"
         style={{
           background: isComplete
-            ? 'radial-gradient(ellipse 85% 75% at 50% 38%, rgba(212,175,122,0.22) 0%, transparent 68%)'
+            ? 'radial-gradient(ellipse 78% 68% at 50% 22%, rgba(255,255,255,0.16) 0%, transparent 58%)'
             : isWelcome
-              ? 'radial-gradient(ellipse 75% 65% at 50% 40%, rgba(212,175,122,0.15) 0%, transparent 62%)'
-              : 'radial-gradient(ellipse 70% 60% at 50% 42%, rgba(212,175,122,0.1) 0%, transparent 58%)',
+              ? 'radial-gradient(ellipse 72% 62% at 50% 24%, rgba(255,255,255,0.11) 0%, transparent 55%)'
+              : `radial-gradient(ellipse 68% 58% at 50% ${26 - revealStage * 0.8}%, rgba(255,255,255,${0.05 + revealStage * 0.012}) 0%, transparent 54%)`,
         }}
       />
 
@@ -61,7 +102,7 @@ export function TreeOfLifeBackground({
         ref={svgRef}
         className={`absolute inset-0 w-full h-full tree-bg-svg ${
           isWelcome ? 'opacity-95 scale-[1.08]' : isComplete ? 'opacity-90' : 'opacity-85'
-        } ${isWelcome || isComplete ? 'animate-breathe' : ''}`}
+        } ${isWelcome || isComplete ? 'animate-breathe' : ''}${showEnergyFlow ? ' tree-bg-svg--flowing' : ''}`}
         viewBox="0 0 800 900"
         preserveAspectRatio="xMidYMid slice"
         fill="none"
@@ -70,12 +111,14 @@ export function TreeOfLifeBackground({
       >
         <defs>
           <radialGradient id="sephiraGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="rgba(245,240,232,0.45)" />
-            <stop offset="100%" stopColor="rgba(245,240,232,0)" />
+            <stop offset="0%" stopColor="rgba(255,255,255,0.55)" />
+            <stop offset="45%" stopColor="rgba(240,240,240,0.2)" />
+            <stop offset="100%" stopColor="rgba(240,240,240,0)" />
           </radialGradient>
           <radialGradient id="sephiraGlowGold" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="rgba(212,175,122,0.5)" />
-            <stop offset="100%" stopColor="rgba(212,175,122,0)" />
+            <stop offset="0%" stopColor="rgba(255,255,255,0.75)" />
+            <stop offset="50%" stopColor="rgba(255,255,255,0.22)" />
+            <stop offset="100%" stopColor="rgba(255,255,255,0)" />
           </radialGradient>
           <filter id="softGlow" x="-80%" y="-80%" width="260%" height="260%">
             <feGaussianBlur stdDeviation="4" result="blur" />
@@ -84,6 +127,11 @@ export function TreeOfLifeBackground({
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
+          <radialGradient id="nodeAura" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="rgba(255,255,255,0.65)" />
+            <stop offset="50%" stopColor="rgba(255,255,255,0.14)" />
+            <stop offset="100%" stopColor="rgba(255,255,255,0)" />
+          </radialGradient>
           <filter id="treeGhostBlur">
             <feGaussianBlur stdDeviation="0.6" />
           </filter>
@@ -94,7 +142,7 @@ export function TreeOfLifeBackground({
           </linearGradient>
           <linearGradient id="trunkEdge" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0%" stopColor="rgba(200,195,185,0.15)" />
-            <stop offset="50%" stopColor="rgba(245,240,232,0.28)" />
+            <stop offset="50%" stopColor="rgba(240,240,240,0.28)" />
             <stop offset="100%" stopColor="rgba(200,195,185,0.15)" />
           </linearGradient>
           <radialGradient id="canopyFill" cx="50%" cy="50%" r="50%">
@@ -143,7 +191,7 @@ export function TreeOfLifeBackground({
                 key={r.id}
                 d={r.d}
                 fill="none"
-                stroke={revealed ? 'rgba(180,165,140,0.55)' : 'rgba(200,200,200,0.12)'}
+                stroke={revealed ? 'rgba(200,200,200,0.45)' : 'rgba(200,200,200,0.12)'}
                 strokeWidth={r.strokeWidth}
                 strokeLinecap="round"
                 style={{ transition: 'all 1.2s ease' }}
@@ -197,7 +245,11 @@ export function TreeOfLifeBackground({
 
         {/* Ghost kabbalah — subtle inner geometry */}
         {isExplore && (
-          <g className="tree-ghost-layer" opacity="0.08" filter="url(#treeGhostBlur)">
+          <g
+            className="tree-ghost-layer"
+            opacity="0.08"
+            {...(visualTier === 'full' ? { filter: 'url(#treeGhostBlur)' } : {})}
+          >
             {rootPaths.map((d, i) => (
               <path key={`ghost-root-${i}`} d={d} stroke="rgba(200,200,200,0.5)" strokeWidth="0.5" />
             ))}
@@ -240,7 +292,7 @@ export function TreeOfLifeBackground({
                 d={d}
                 stroke={
                   revealed
-                    ? `rgba(212,175,122,${op.stroke * 0.5})`
+                    ? `rgba(255,255,255,${op.stroke * 0.5})`
                     : `rgba(200,200,200,${op.stroke * 0.4})`
                 }
                 strokeWidth={revealed ? 0.9 : 0.5}
@@ -272,7 +324,7 @@ export function TreeOfLifeBackground({
                 y2={b.cy}
                 stroke={
                   revealed
-                    ? `rgba(212,175,122,${Math.max(op.stroke * 0.55, 0.35)})`
+                    ? `rgba(255,255,255,${Math.max(op.stroke * 0.55, 0.35)})`
                     : `rgba(200,200,200,${op.stroke})`
                 }
                 strokeWidth={revealed ? 1.1 : 0.4}
@@ -283,53 +335,24 @@ export function TreeOfLifeBackground({
           })}
         </g>
 
-        {/* Sephirot */}
+        {/* Sephirot — circular nodes energize as light arrives */}
         {sephirot.map((s, i) => {
           const revealed = isSephiraRevealed(s, revealStage, variant)
           const op = getOpacityForElement(revealed, variant)
-          const isNew = isExplore && s.revealStage === revealStage && revealed
+          const newlyEnergized =
+            isExplore && isNodeNewlyEnergized(s, revealStage)
 
           return (
-            <g
+            <EnergizedNode
               key={s.id}
-              className={isNew ? 'tree-node-bloom' : ''}
-              style={{ transition: 'opacity 1.2s ease' }}
-            >
-              {revealed && (
-                <circle
-                  cx={s.cx}
-                  cy={s.cy}
-                  r={s.r * 2.8}
-                  fill={isComplete ? 'url(#sephiraGlowGold)' : 'url(#sephiraGlow)'}
-                  opacity={op.glow}
-                  filter="url(#softGlow)"
-                />
-              )}
-              <circle
-                cx={s.cx}
-                cy={s.cy}
-                r={s.r}
-                stroke={`rgba(245,240,232,${revealed ? Math.max(op.stroke, 0.65) : op.stroke})`}
-                strokeWidth={i === 0 ? 1.4 : 1}
-                fill={`rgba(245,240,232,${op.fill})`}
-              />
-              <circle
-                cx={s.cx}
-                cy={s.cy}
-                r={s.r}
-                stroke={`rgba(212,175,122,${revealed ? op.stroke * 0.55 : op.stroke * 0.3})`}
-                strokeWidth={0.5}
-              />
-              {revealed && i === 0 && (
-                <circle
-                  cx={s.cx}
-                  cy={s.cy}
-                  r={5}
-                  fill="rgba(212,175,122,0.7)"
-                  className="animate-pulse-soft"
-                />
-              )}
-            </g>
+              sephira={s}
+              index={i}
+              revealed={revealed}
+              newlyEnergized={newlyEnergized}
+              isComplete={isComplete}
+              visualTier={visualTier}
+              op={op}
+            />
           )
         })}
 
@@ -339,24 +362,121 @@ export function TreeOfLifeBackground({
             cy="440"
             rx="320"
             ry="380"
-            stroke="rgba(212,175,122,0.12)"
+            stroke="rgba(255,255,255,0.12)"
             strokeWidth="0.6"
             strokeDasharray="4 10"
           />
         )}
+
+        {showEnergyFlow && (
+          <g className="tree-energy-layer">
+            {(isWelcome || isComplete || isOrganicRevealed(revealStage, 1, variant)) && (
+              <EnergyFlowPath
+                d={trunkPath}
+                strokeWidth={1.2}
+                delay={0}
+                newlyEnergized={isExplore && revealStage === 1}
+                supplyEnabled={shouldRunEnergySupply(1, revealStage, variant, visualTier)}
+                reverse
+              />
+            )}
+            {organicRoots.map((r, i) => {
+              const revealed =
+                isWelcome || isComplete || isOrganicRevealed(revealStage, r.revealStage, variant)
+              return (
+                <EnergyFlowPath
+                  key={`energy-root-${r.id}`}
+                  d={r.d}
+                  strokeWidth={Math.max(r.strokeWidth * 0.65, 0.75)}
+                  delay={0.12 + i * 0.2}
+                  newlyEnergized={isExplore && revealStage === r.revealStage}
+                  supplyEnabled={shouldRunEnergySupply(
+                    r.revealStage,
+                    revealStage,
+                    variant,
+                    visualTier,
+                  )}
+                  active={revealed}
+                />
+              )
+            })}
+            {organicBranches.map((b, i) => {
+              const revealed =
+                isWelcome || isComplete || isOrganicRevealed(revealStage, b.revealStage, variant)
+              return (
+                <EnergyFlowPath
+                  key={`energy-branch-${b.id}`}
+                  d={b.d}
+                  strokeWidth={Math.max(b.strokeWidth * 0.5, 0.65)}
+                  delay={0.3 + i * 0.14}
+                  newlyEnergized={isExplore && revealStage === b.revealStage}
+                  supplyEnabled={shouldRunEnergySupply(
+                    b.revealStage,
+                    revealStage,
+                    variant,
+                    visualTier,
+                  )}
+                  active={revealed}
+                />
+              )
+            })}
+            {rootPaths.map((d, i) => {
+              const revealed = isWelcome || isComplete || areRootsRevealed(revealStage, variant)
+              return (
+                <EnergyFlowPath
+                  key={`energy-kroot-${i}`}
+                  d={d}
+                  strokeWidth={0.85}
+                  delay={0.45 + i * 0.16}
+                  newlyEnergized={isExplore && revealStage === 1}
+                  supplyEnabled={shouldRunEnergySupply(1, revealStage, variant, visualTier)}
+                  active={revealed}
+                />
+              )
+            })}
+            {treePaths.map((path, i) => {
+              const a = sephirot[path.from]
+              const b = sephirot[path.to]
+              const revealed =
+                isWelcome || isComplete || isPathRevealed(path, revealStage, variant)
+              const pathStage = Math.max(a.revealStage, b.revealStage)
+              const { from, to } = getEnergyDirection(a, b)
+              return (
+                <EnergyFlowLine
+                  key={`energy-path-${i}`}
+                  from={from}
+                  to={to}
+                  strokeWidth={1.25}
+                  delay={0.2 + i * 0.08}
+                  newlyEnergized={
+                    isExplore && isPathNewlyEnergized(path, sephirot, revealStage)
+                  }
+                  supplyEnabled={shouldRunEnergySupply(
+                    pathStage,
+                    revealStage,
+                    variant,
+                    visualTier,
+                  )}
+                  active={revealed}
+                />
+              )
+            })}
+          </g>
+        )}
       </svg>
 
-      {/* Lighter vignette — organic tree stays visible behind book */}
+      {/* Soft vignette — keeps tree readable behind the book */}
       <div
         className="absolute inset-0 transition-opacity duration-700 tree-vignette"
         style={{
           background: isWelcome
-            ? 'radial-gradient(ellipse 88% 78% at 50% 48%, transparent 30%, rgba(10,10,10,0.38) 100%)'
+            ? 'radial-gradient(ellipse 88% 78% at 50% 48%, transparent 32%, rgba(5,6,8,0.42) 100%)'
             : isComplete
-              ? 'radial-gradient(ellipse 92% 82% at 50% 45%, transparent 36%, rgba(10,10,10,0.32) 100%)'
-              : 'radial-gradient(ellipse 94% 86% at 50% 46%, transparent 40%, rgba(10,10,10,0.28) 100%)',
+              ? 'radial-gradient(ellipse 90% 80% at 50% 42%, transparent 38%, rgba(5,6,8,0.36) 100%)'
+              : 'radial-gradient(ellipse 94% 86% at 50% 46%, transparent 42%, rgba(5,6,8,0.34) 100%)',
         }}
       />
+      <div className="tree-bg-grain" />
     </div>
   )
 }
@@ -365,6 +485,7 @@ export function countCompletedDimensions(
   currentIndex: number,
   answers: Record<string, string[]>,
   questions: Array<{ type: string; id: string }>,
+  maxStage = 7,
 ): number {
   let completed = 0
   for (let i = 0; i < currentIndex; i += 1) {
@@ -382,5 +503,5 @@ export function countCompletedDimensions(
     completed += 1
   }
 
-  return Math.min(completed, 7)
+  return Math.min(completed, maxStage)
 }

@@ -3,18 +3,23 @@ import {
   BackgroundMusicPlayer,
   type MusicPhase,
 } from '../audio/backgroundMusic'
+import type { Locale } from '../i18n/locale'
+import { getUi } from '../i18n/ui'
 
 interface AmbientMusicControlProps {
   phase: MusicPhase
   awakeningStage: number | null
   bootstrap?: number
+  locale?: Locale
 }
 
 export function AmbientMusicControl({
   phase,
   awakeningStage,
   bootstrap = 0,
+  locale = 'zh',
 }: AmbientMusicControlProps) {
+  const ui = getUi(locale)
   const player = useRef<BackgroundMusicPlayer | null>(null)
   const [enabled, setEnabled] = useState(() => {
     if (typeof window === 'undefined') return true
@@ -81,21 +86,21 @@ export function AmbientMusicControl({
           className="ambient-music-btn ambient-music-btn-hint"
           onClick={() => void ensureStarted().then(() => setEnabled(true))}
         >
-          开启音乐
+          {ui.musicEnable}
         </button>
       )}
       <button
         type="button"
         className="ambient-music-btn"
         onClick={() => void toggle()}
-        aria-label={enabled && active ? '关闭背景音乐' : '开启背景音乐'}
+        aria-label={enabled && active ? ui.musicAriaOn : ui.musicAriaOff}
         aria-pressed={enabled && active}
       >
         <span className="ambient-music-icon" aria-hidden>
           {enabled && active ? '♪' : '♪̸'}
         </span>
         <span className="ambient-music-label">
-          {enabled && active ? '树脉之音' : '静音'}
+          {enabled && active ? ui.musicOn : ui.musicOff}
         </span>
       </button>
     </div>

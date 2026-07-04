@@ -1,10 +1,12 @@
 export async function fetchMysticalReading(
   psychologyInput: string,
+  bookId = 'psyche-tree',
+  locale: 'zh' | 'en' = 'zh',
 ): Promise<{ reading: string; model?: string }> {
   const response = await fetch('/api/mystical-reading', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ psychologyInput }),
+    body: JSON.stringify({ psychologyInput, bookId, locale }),
   })
 
   const data = (await response.json()) as {

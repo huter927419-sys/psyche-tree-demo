@@ -1,16 +1,28 @@
-import { STAGE_LABELS, STAGE_SHORT } from './treeLabels'
+import type { BookId } from '../../books/types'
+import type { Locale } from '../../i18n/locale'
+import { getProgressLabels } from '../../i18n/treeLabels'
+import { BilingualCrossfadeText } from '../i18n/BilingualCrossfadeText'
 
 interface TreeProgressProps {
   revealStage: number
+  bookId: BookId
+  locale: Locale
 }
 
-export function TreeProgress({ revealStage }: TreeProgressProps) {
-  const label = STAGE_LABELS[revealStage]
+export function TreeProgress({ revealStage, bookId, locale }: TreeProgressProps) {
+  const zhLabels = getProgressLabels(bookId, 'zh')
+  const enLabels = getProgressLabels(bookId, 'en')
+  const label =
+    locale === 'en'
+      ? enLabels.stageLabels[revealStage]
+      : zhLabels.stageLabels[revealStage]
+  const idleZh = zhLabels.idleLabel
+  const idleEn = enLabels.idleLabel
 
   return (
     <div className="tree-progress-hud">
       <div className="tree-progress-dots">
-        {STAGE_SHORT.map((short, i) => {
+        {zhLabels.stageShort.map((short, i) => {
           const stage = i + 1
           const lit = revealStage >= stage
           const active = revealStage === stage
@@ -18,7 +30,7 @@ export function TreeProgress({ revealStage }: TreeProgressProps) {
             <div
               key={short}
               className={`tree-progress-dot ${lit ? 'lit' : ''} ${active ? 'active' : ''}`}
-              title={STAGE_LABELS[stage]}
+              title={zhLabels.stageLabels[stage]}
             >
               <span>{short}</span>
             </div>
@@ -26,10 +38,23 @@ export function TreeProgress({ revealStage }: TreeProgressProps) {
         })}
       </div>
       {label && revealStage > 0 && (
-        <p className="tree-progress-label">{label}</p>
+        <p className="tree-progress-label">
+          <BilingualCrossfadeText
+            zh={zhLabels.stageLabels[revealStage]}
+            en={enLabels.stageLabels[revealStage]}
+            activeLocale={locale}
+          />
+        </p>
       )}
       {revealStage === 0 && (
-        <p className="tree-progress-label dim">生命之树等待你的第一页落印</p>
+        <p className="tree-progress-label dim">
+          <BilingualCrossfadeText
+            zh={idleZh}
+            en={idleEn}
+            activeLocale={locale}
+            intervalMs={4800}
+          />
+        </p>
       )}
     </div>
   )

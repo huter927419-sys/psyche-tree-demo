@@ -1,87 +1,119 @@
 ---
 name: psyche-tree-demo
 description: >-
-  Develop and extend the 心象生命之树探索 demo (React/Vite psychological card
-  quiz with Kabbalah tree, book UX, DeepSeek mystical reading). Use when working
-  in psyche-tree-demo, editing questions/cards/scoring, tree animations, book
-  flow, card image scripts, or DeepSeek API integration.
+  Develop the 雾岸书架 demo (React/Vite): two mystical books (心象 psyche-tree,
+  映心 emotional-flow), bilingual zh/en, bookshelf→cover→quiz→results, Tree of
+  Life background, question seal reveal, DeepSeek reading. Use when editing
+  psyche-tree-demo, books/i18n, BookReader, cards, scoring, tree visuals, or
+  performance tiers.
 ---
 
-# 心象生命之树探索 Demo
+# 雾岸书架 · psyche-tree-demo
 
 ## Product intent
 
-Interactive self-exploration: 7 psychology dimensions via monochrome card choices, progressive **organic Tree of Life** background, book-style Q&A, layered results (psychology prose + DeepSeek mystical reading). Sacred aesthetic: black `#0a0a0a`, white/silver lines, subtle gold.
+Two floating memory volumes on a mist shelf. Each book: **shelf → cover → opening guide → quiz → 3 result pages → close**. Sacred monochrome aesthetic (`#0a0a0a`, silver lines, subtle gold). Psychology prose + optional DeepSeek mystical layer. **Never expose scores or selected card names** in results.
+
+| Book ID | 中文 | English |
+|---------|------|---------|
+| `psyche-tree` | 心象 | Mindscape |
+| `emotional-flow` | 映心 | Heart Mirror |
+
+## Flow (App.tsx)
+
+```
+shelf → cover → reading (BookReader) → result → shelf
+```
+
+- **Shelf**: `Bookshelf.tsx` — pick book, language toggle, ambient phrases
+- **Cover**: `BookCover.tsx` + `BookJourneyStage.tsx` — closed book scales to open
+- **Quiz**: `BookReader.tsx` — replaces old `BookQuestionFlow` as main reader
+- **Results**: `BookResult.tsx` — 心象画像 → 神谕 → 合书
 
 ## Non-negotiable UX rules
 
-1. **One card per page** — selecting replaces any prior choice on that page.
-2. **Auto page flip** ~420ms after selection; last page auto-completes. Footer: back only (`showNext={false}`), hint「择一即翻页」.
-3. **Results show interpretation only** — no selected card names, no scores, no dimension tables. Pages: 心象画像 → 神谕之页 → 合书.
-4. **Psychology copy format**: `【维度名】解读句` via `generatePsychologyProfile()` — never expose 均分 to users.
-5. **Card art**: smooth B&W gradients — **no** `feTurbulence` / film grain. PNG preferred (`CardImage` falls back to SVG).
-6. **Tree background** must read as a **real tree** (trunk/branches/canopy in `treeOrganic.ts`), not only Kabbalah circles. Sephirot = glowing nodes on branches.
-7. **Tree sync**: `countCompletedDimensions(index, answers, allQuestions)` drives `treeRevealStage`. Stage **up** → `TreeAwakeningOverlay`; stage **down** (上一页) → `treeRecoilKey` dim animation on `TreeOfLifeBackground`.
+1. **One card per page** — select replaces prior choice; auto flip ~420ms; footer back only.
+2. **Results**: interpretation only — no card names, scores, dimension tables.
+3. **Psychology copy**: `【维度名】…` via `generatePsychologyProfile()` — never show averages.
+4. **Card art**: smooth B&W gradients, **no** `feTurbulence` / grain. **PNG only** in `public/cards/` (`CardImage` uses `.png`).
+5. **Tree**: organic trunk/branches/canopy (`treeOrganic.ts`); sephirot = glowing nodes. `treeRevealStage` from `countCompletedDimensions()`. Stage up → `TreeAwakeningOverlay`; stage down → recoil on `TreeOfLifeBackground`.
+6. **Question left page order**: chapter tag → mystical guide → divider → **QuestionSealReveal** → action hint. Scenario prompt hidden until user taps seal.
+7. **Reading focus**: dim sky/tree/cards during quiz only (`readingFocus` in App), not on results.
 
-## Attention checks
+## Question seal (问印)
 
-Two interleaved checks (after dims 2 & 5) require specific cards (`star-explorer`, `stable-mountain`). Failure sets `attentionPassed: false` and shows「部分对话确认未能匹配…」on results — does not block generation. Scoring in `scoring.ts`; decoys via `getAttentionCheckCards()`.
+`QuestionSealReveal.tsx` — default hidden scenario; tap **问** (zh) / **Q** (en) stamp to reveal label + prompt; auto-hide ~4.2s. Styles: `.book-question-seal-*` in `index.css`. Reset per question via `key={q.id}`.
+
+Mystical copy per dimension: `src/i18n/questionGuide.ts`. Opening ritual copy: `src/i18n/openingGuide.ts` → `BookOpeningGuide.tsx` (~2.8s overlay, Strict Mode safe).
+
+## i18n
+
+| Path | Role |
+|------|------|
+| `src/i18n/locale.ts` | `Locale`, persistence |
+| `src/i18n/ui.ts` | UI strings (seal, hints, shelf) |
+| `src/i18n/treeLabels.ts` | Tree stage labels |
+| `src/i18n/questionGuide.ts` | Per-question mystical guides |
+| `src/i18n/openingGuide.ts` | Book opening overlay |
+| `src/data/*.en.ts` | EN question/profile/mystical data |
+| `src/books/` | Book registry + per-book bundles |
+
+`getBook(id, locale)` drives content. `LanguageToggle` on shelf, cover, reader. `AmbientPhraseLayer` crossfades background phrases (shelf/cover only).
+
+## Performance (`useVisualTier`)
+
+Tier ladder: shelf `full` → cover `balanced` → quiz `minimal`. Controls blur, ghost SVG blur, sacred illumination. **Bug to avoid**: `preferred: 'minimal'` must resolve to `'minimal'`, not fall through to `'balanced'`.
 
 ## Architecture map
 
 | Area | Path |
 |------|------|
-| App phases | `src/App.tsx` — welcome → questions → result |
-| Book Q&A | `src/components/book/BookQuestionFlow.tsx` |
-| Book results | `src/components/book/BookResult.tsx` |
-| 3D flip | `src/components/book/useBookFlip.ts`, `BookShell.tsx` |
-| Organic + Kabbalah tree | `src/components/TreeOfLifeBackground.tsx`, `src/components/tree/treeOrganic.ts`, `treeData.ts` |
-| Tree HUD / awakening | `TreeProgress.tsx`, `TreeAwakeningOverlay.tsx` |
-| Questions | `src/data/questions.ts` — `buildQuestionFlow()` interleaves attention |
+| App state | `src/App.tsx` |
+| Books | `src/books/registry.ts`, `psyche-tree/book.ts`, `emotional-flow/book.ts` |
+| Reader | `src/components/book/BookReader.tsx` |
+| Opening guide | `BookOpeningGuide.tsx` |
+| Question seal | `QuestionSealReveal.tsx` |
+| 3D flip | `useBookFlip.ts`, `BookShell.tsx` |
+| Tree | `TreeOfLifeBackground.tsx`, `tree/treeOrganic.ts`, `treeData.ts` |
+| Sky | `SkyAtmosphere.tsx` |
+| Questions | `src/data/questions.ts` + `questions.en.ts` |
 | Scoring | `src/data/scoring.ts` |
-| Psychology text | `src/data/psychologyProfile.ts` |
-| Mystical (local fallback) | `src/data/mysticalReading.ts` |
-| DeepSeek API | `server/deepseek.ts`, `src/services/mysticalReadingApi.ts`, Vite middleware in `vite.config.ts` |
-| Card images | `scripts/generate-card-images.mjs`, `export-cards-png.mjs`, `generate-card-images-ai.mjs`, `card-prompts.mjs` |
-| Static cards | `public/cards/{pattern}.png` |
+| DeepSeek | `server/deepseek.ts`, `server/bookPrompts.ts`, `mysticalReadingApi.ts` |
+| Cards | `scripts/generate-card-images.mjs`, `card-art-renderer.mjs`, `card-prompts.mjs` |
+
+## Attention checks
+
+Two interleaved checks (after dims 2 & 5): `star-explorer`, `stable-mountain`. Failure → `attentionPassed: false` + disclaimer on results; does not block generation.
 
 ## Common tasks
 
-### Add / edit a dimension question
+### Add dimension question
 
-Edit `src/data/questions.ts` → `dimensions` array. Each card needs `id`, `label`, `description`, `score` (-2..2), `pattern` matching `public/cards/`. Regenerate cards if new pattern: `npm run generate:cards`.
+Edit `questions.ts` (+ `questions.en.ts`). Card `pattern` must exist in `public/cards/{pattern}.png`. Regenerate: `npm run generate:cards`.
 
-### Change tree reveal timing
+### Edit mystical question guide
 
-`treeData.ts`: each `Sephira.revealStage` (1–7 bottom→top). Organic parts in `treeOrganic.ts` use matching `revealStage` on roots/branches/canopy.
+`src/i18n/questionGuide.ts` — `rite`, `guide`, `note` per book/dimension/locale. Reference 「下方问印」 not plain 「读情境」.
+
+### Edit seal UX
+
+`QuestionSealReveal.tsx` + `ui.ts` (`sealMark`, `sealRevealHint`) + `.book-question-seal-*` CSS.
 
 ### DeepSeek
 
-`.env.local`: `DEEPSEEK_API_KEY`, `DEEPSEEK_MODEL=deepseek-v4-pro`. Thinking mode disabled in server. Never commit keys.
-
-### Card pipeline
-
-```bash
-npm run generate:cards      # SVG + PNG (runs on build)
-npm run export:cards:png    # PNG only
-npm run generate:cards:ai   # DALL-E 3, needs OPENAI_API_KEY
-```
+`.env.local`: `DEEPSEEK_API_KEY`, `DEEPSEEK_MODEL=deepseek-v4-pro`. Never commit keys. Production needs backend proxy.
 
 ### Verify
 
 ```bash
-npm run dev    # http://localhost:5173
+npm run dev
 npm run build
 ```
 
 ## Styling
 
-Book/paper: `src/index.css` (`.book-*`, page flip ~1050ms). Tree: `.tree-*`, `.tree-organic-recoil`. Book pages semi-transparent so tree shows through.
-
-## Deployment note
-
-DeepSeek middleware lives in Vite dev/preview server — production needs equivalent backend or the mystical page falls back to local template.
+Book/paper: `src/index.css` (`.book-*`, flip ~1050ms). Left page mystical block: `.book-question-mystical`. Pages semi-transparent so tree shows through.
 
 ## Additional detail
 
-See [reference.md](reference.md) for question flow order, score levels, and API shape.
+See [reference.md](reference.md) for question flow, API shape, and file index.

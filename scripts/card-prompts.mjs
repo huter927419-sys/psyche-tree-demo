@@ -1,156 +1,202 @@
 /** Shared card metadata + AI image prompts for generation scripts */
 
-export const CARD_STYLE_PREFIX = `Sacred monochrome mystical illustration for a psychology meditation card.
-Strictly black and white with subtle silver line art on deep black background (#0a0a0a).
-A faint sacred tree silhouette visible in the background behind the main subject.
-Minimal gold accent points only. Fine ink or charcoal drawing style, elegant, serene, photorealistic lighting.
-Smooth clean gradients, soft natural glow — absolutely NO film grain, NO noise, NO texture overlay, NO halftone dots.
-No text, no letters, no watermark, no border frame. Centered composition, high contrast, crisp edges.
-Aspect ratio landscape 2:1.`
+export const CARD_STYLE_PREFIX = `Cinematic black-and-white photograph, inspired by Sky: Children of the Light old intro —
+a lone figure descending through volumetric god-rays into a misty shore at dawn.
+Photorealistic 3D render quality: deep atmospheric perspective, soft fog layers, wet sand reflections,
+subtle film-like contrast, rich environmental detail (NOT minimalist line art, NOT flat icons).
+Strictly monochrome: deep blacks, silver midtones, bright white highlights only — no color, no gold tint.
+Each image must feel like a unique still frame from a sacred mythic journey.
+No text, no letters, no watermark, no border, no UI. Landscape 16:9 composition, subject clearly readable.`
 
 export const CARDS = [
   {
     pattern: 'steady-river',
     label: '稳流之河',
-    description: '安静而清晰的河流，柔和光点，从左下向右上流动',
+    description:
+      'Wide slow river cutting through foggy valley; smooth water surface with long exposure silk-like flow; distant mountains barely visible; single soft light reflection on water',
   },
   {
     pattern: 'wind-leaf',
     label: '随风之叶',
-    description: '一片叶子在风中轻轻旋转，周围柔和风纹',
+    description:
+      'Close-up of one autumn leaf suspended mid-air in windy mist; motion blur on surrounding particles; dramatic side lighting; shallow depth of field',
   },
   {
     pattern: 'mountain-guard',
     label: '山中守者',
-    description: '简洁山峰轮廓，基座稳固，山顶微光',
+    description:
+      'Massive mountain peak emerging from sea of clouds; tiny robed silhouette standing on rocky outcrop; epic scale contrast; rays breaking through cloud gaps',
   },
   {
     pattern: 'star-explorer',
     label: '星光探索者',
-    description: '几颗小星星连成路径，下面有小路延伸',
+    description:
+      'Night shore under dense star field; Milky Way arc above; small glowing figure walking along wet beach leaving faint footprints; horizon glow',
   },
   {
     pattern: 'deep-root-tree',
     label: '根深之树',
-    description: '树根系深入地下，枝叶向上伸展',
+    description:
+      'Ancient twisted tree on cliff edge; exposed roots gripping stone; fog rolling below; branches reaching into light beam from above; dramatic texture on bark',
   },
   {
     pattern: 'fog-path',
     label: '雾中之径',
-    description: '小路在雾气中延伸，远处有微光',
+    description:
+      'Narrow stone path disappearing into thick coastal fog; wet cobblestones; distant warm-white glow at path end; tall grass on sides swaying',
   },
   {
     pattern: 'star-guide',
     label: '星河指引',
-    description: '星光连成指引的线条',
+    description:
+      'Overhead view of reflective tidal pool mirroring stars; constellation pattern visible; mist curling at edges; figure kneeling at pool edge',
   },
   {
     pattern: 'drift-boat',
     label: '随缘之舟',
-    description: '小舟在水面上漂流',
+    description:
+      'Empty wooden boat drifting on calm misty lake; perfect mirror reflection; reeds in foreground; soft ripples trailing behind boat',
   },
   {
     pattern: 'warm-hands',
     label: '温暖之手',
-    description: '两只手轻轻相触，带柔和光晕',
+    description:
+      'Two human hands gently meeting in mid-air, palms almost touching; strong backlight creating rim light on fingers; foggy void background; intimate macro detail',
   },
   {
     pattern: 'shield',
     label: '守护之盾',
-    description: '简洁盾牌轮廓，中间有保护空间',
+    description:
+      'Weathered stone shield half-buried in sand on misty beach; water droplets on surface; waves approaching; protective solemn mood',
   },
   {
     pattern: 'silk-bridge',
     label: '柔丝之桥',
-    description: '细丝或轻桥连接两侧',
+    description:
+      'Fragile rope bridge spanning deep foggy canyon; planks worn with age; light at far side; vertigo-inducing depth with layered clouds below',
   },
   {
     pattern: 'stars-gaze',
     label: '星河相望',
-    description: '两颗星星之间有柔和光线连接',
+    description:
+      'Two distant glowing figures on opposite hilltops across fog-filled valley; thin bridge of starlight connecting them; emotional wide landscape',
   },
   {
     pattern: 'balance-boat',
     label: '平衡之舟',
-    description: '小舟在水面上保持平衡',
+    description:
+      'Small boat perfectly centered on glass-still water; horizon line bisecting frame; feather on water surface; zen symmetry; morning mist',
   },
   {
     pattern: 'cautious-mountain',
     label: '谨慎之山',
-    description: '稳固山峰，基座宽厚',
+    description:
+      'Steep fortified mountain with wide stone base; figure paused at trail switchback looking up; heavy clouds pressing down; sense of careful ascent',
   },
   {
     pattern: 'flexible-wind',
     label: '灵活之风',
-    description: '风吹动叶子或云朵',
+    description:
+      'Tall grass and wildflowers bent by strong wind on coastal dune; long exposure motion streaks; dynamic sky with fast-moving clouds',
   },
   {
     pattern: 'sensing-river',
     label: '感知之河',
-    description: '河流自然流动，带感知光晕',
+    description:
+      'Shallow stream over smooth stones; figure barefoot wading, ripples around ankles; close-medium shot; tactile water texture highly detailed',
   },
   {
     pattern: 'still-lake',
     label: '静湖之镜',
-    description: '平静湖面倒映星空',
+    description:
+      'Perfectly still alpine lake at dawn; mirror reflection of jagged peaks and clouds; single stone cairn on shore; absolute tranquility',
   },
   {
     pattern: 'soft-candle',
     label: '柔光之烛',
-    description: '一支蜡烛点亮微光',
+    description:
+      'Single candle flame in dark cavern opening to foggy exterior; wax texture detailed; flame halo illuminating nearby rock; chiaroscuro',
   },
   {
     pattern: 'guardian-tree',
     label: '守护之树',
-    description: '树木守护核心，环形光晕',
+    description:
+      'Enormous hollow tree forming natural arch; figure sheltered inside trunk; roots like cathedral pillars; light streaming through canopy hole',
   },
   {
     pattern: 'wind-leaf-emotion',
     label: '风中之叶',
-    description: '叶子在风中摇曳，多片叶影',
+    description:
+      'Swarm of leaves spiraling in wind tunnel between cliff walls; chaotic yet beautiful motion; figure small at center reaching upward',
   },
   {
     pattern: 'bloom-tree',
     label: '绽放之树',
-    description: '树木在变化中伸展枝叶，带花环光点',
+    description:
+      'Cherry-like tree in full blossom (rendered in white tones); petals falling through light beam; grass meadow with depth; renewal symbolism',
   },
   {
     pattern: 'stable-mountain',
     label: '稳固之山',
-    description: '山峰稳固，地平线清晰',
+    description:
+      'Broad triangular mountain with solid base filling lower third of frame; clear horizon; figure sitting meditating on flat rock; unshakeable composition',
   },
   {
     pattern: 'wind-cloud',
     label: '风中之云',
-    description: '云朵随风流动',
+    description:
+      'Low fast clouds scraping mountain ridge; timelapse-like motion blur on cloud edges; lone watcher on ridge; wind-swept atmosphere',
   },
   {
     pattern: 'seed-awakening',
     label: '种子觉醒者',
-    description: '种子破土而出发芽',
+    description:
+      'Macro shot of seed cracking open in wet soil; tiny sprout emerging; morning dew drops; soil texture hyper-detailed; hope and birth',
   },
   {
     pattern: 'resonance-light',
     label: '共振之光',
-    description: '光点与路径共振连接',
+    description:
+      'Two floating orbs of light facing each other in fog; visible sound-wave-like ripples in mist between them; abstract yet physical atmosphere',
   },
   {
     pattern: 'seeking-lamp',
     label: '寻找之灯',
-    description: '一盏灯在暗夜中发光',
+    description:
+      'Old lantern held by outstretched hand in pitch fog; light cone revealing floating dust particles; path stones visible only in beam',
   },
   {
     pattern: 'steady-path',
     label: '稳行之径',
-    description: '稳固小路延伸向前，带光点',
+    description:
+      'Long straight forest path with evenly spaced ancient trees; light at vanishing point; fallen leaves on ground; reassuring depth perspective',
   },
   {
     pattern: 'fog-walk',
     label: '雾中之行',
-    description: '人在雾中行走，远处有光',
+    description:
+      'Back view of robed figure walking into dense white fog on shoreline; footprints in wet sand; world fading to white ahead; iconic Sky intro mood',
+  },
+  {
+    pattern: 'gushing-spring',
+    label: '涌动之泉',
+    description:
+      'Natural spring bursting from rock crevice; water splashing in high-speed freeze detail; mist from impact; moss on stones; energetic flow',
+  },
+  {
+    pattern: 'wind-ripple',
+    label: '风中涟漪',
+    description:
+      'Lake surface with concentric ripples from single drop; wind ruffling one corner; contrast between calm and disturbance; abstract water patterns',
+  },
+  {
+    pattern: 'torrent-river',
+    label: '激流之河',
+    description:
+      'Raging whitewater rapids through narrow gorge; spray and foam; dramatic angle from above; raw power of water; high contrast textures',
   },
 ]
 
 export function buildCardPrompt(card) {
-  return `${CARD_STYLE_PREFIX}\n\nSubject: 「${card.label}」— ${card.description}.`
+  return `${CARD_STYLE_PREFIX}\n\nUnique scene for card 「${card.label}」:\n${card.description}\n\nMake this image distinctly different from generic tarot or icon art — rich, realistic, emotionally evocative.`
 }

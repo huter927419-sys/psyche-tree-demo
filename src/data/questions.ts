@@ -1,4 +1,5 @@
 import type { CardOption, QuestionItem } from '../types'
+import { buildQuestionFlowEn } from './questions.en'
 
 const dimensions = [
   {
@@ -289,6 +290,10 @@ export function buildQuestionFlow(): QuestionItem[] {
 }
 
 export const allQuestions = buildQuestionFlow()
+
+export function getPsycheTreeQuestions(locale: 'zh' | 'en'): QuestionItem[] {
+  return locale === 'en' ? buildQuestionFlowEn() : allQuestions
+}
 
 export function findCardById(cardId: string) {
   for (const q of dimensionQuestions) {

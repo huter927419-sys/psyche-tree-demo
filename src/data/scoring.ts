@@ -1,12 +1,14 @@
 import type {
   AssessmentResult,
   CardOption,
+  DimensionQuestion,
   DimensionResult,
   QuestionItem,
 } from '../types'
-import { dimensionQuestions, findCardById } from './questions'
+import { findCardById } from './questions'
 import { generatePsychologyProfile } from './psychologyProfile'
 import { generateMysticalReading } from './mysticalReading'
+import type { BookDefinition } from '../books/types'
 
 function scoreLevel(
   average: number,
@@ -21,6 +23,10 @@ function scoreLevel(
 export function computeResults(
   answers: Record<string, string[]>,
   questions: QuestionItem[],
+  book?: Pick<
+    BookDefinition,
+    'generatePsychologyProfile' | 'generateMysticalReading'
+  >,
 ): AssessmentResult {
   const dimensionAnswers: Record<number, CardOption[]> = {}
   const attentionFailures: string[] = []
@@ -45,27 +51,33 @@ export function computeResults(
     }
   }
 
-  const dimensions: DimensionResult[] = dimensionQuestions
-    .filter((q) => q.type === 'dimension')
-    .map((q) => {
-      const selectedCards = dimensionAnswers[q.dimensionIndex] ?? []
-      const averageScore =
-        selectedCards.length > 0
-          ? selectedCards.reduce((sum, c) => sum + c.score, 0) /
-            selectedCards.length
-          : 0
+  const dimensionQs = questions.filter(
+    (q): q is DimensionQuestion => q.type === 'dimension',
+  )
 
-      return {
-        dimensionIndex: q.dimensionIndex,
-        title: q.title,
-        averageScore,
-        selectedCards,
-        level: scoreLevel(averageScore),
-      }
-    })
+  const dimensions: DimensionResult[] = dimensionQs.map((q) => {
+    const selectedCards = dimensionAnswers[q.dimensionIndex] ?? []
+    const averageScore =
+      selectedCards.length > 0
+        ? selectedCards.reduce((sum, c) => sum + c.score, 0) /
+          selectedCards.length
+        : 0
 
-  const psychologyProfile = generatePsychologyProfile(dimensions)
-  const mysticalReading = generateMysticalReading(dimensions, psychologyProfile)
+    return {
+      dimensionIndex: q.dimensionIndex,
+      title: q.title,
+      averageScore,
+      selectedCards,
+      level: scoreLevel(averageScore),
+    }
+  })
+
+  const psychologyProfile = book
+    ? book.generatePsychologyProfile(dimensions)
+    : generatePsychologyProfile(dimensions)
+  const mysticalReading = book
+    ? book.generateMysticalReading(dimensions, psychologyProfile)
+    : generateMysticalReading(dimensions, psychologyProfile)
 
   return {
     dimensions,

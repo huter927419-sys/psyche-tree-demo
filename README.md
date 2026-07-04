@@ -58,8 +58,7 @@ API Key 仅由 Vite 开发服务器中间件使用，不会打进前端包。
 | `npm run dev` | 本地开发 |
 | `npm run build` | 生成卡图 + 类型检查 + 生产构建 |
 | `npm run preview` | 预览构建结果 |
-| `npm run generate:cards` | SVG 生成并导出 PNG |
-| `npm run export:cards:png` | 仅 SVG → PNG |
+| `npm run generate:cards` | 生成题目卡 PNG |
 | `npm run generate:cards:ai` | DALL·E 3 按 `card-prompts.mjs` 生图；`--force` / `--only=pattern1,pattern2` |
 
 ---
@@ -69,7 +68,7 @@ API Key 仅由 Vite 开发服务器中间件使用，不会打进前端包。
 ```
 psyche-tree-demo/
 ├── .cursor/skills/psyche-tree-demo/   # Cursor Agent 技能（架构与约定）
-├── public/cards/                      # 题目卡图 pattern.png / .svg
+├── public/cards/                      # 题目卡图 pattern.png
 ├── scripts/
 │   ├── generate-card-images.mjs       # 程序化 SVG（无噪点）
 │   ├── export-cards-png.mjs           # sharp 导出 PNG

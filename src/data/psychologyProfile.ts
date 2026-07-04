@@ -1,4 +1,9 @@
 import type { DimensionResult } from '../types'
+import type { Locale } from '../i18n/locale'
+import {
+  dimensionDescriptionsEn,
+  incompleteDimensionEn,
+} from './psychologyProfile.en'
 
 const dimensionDescriptions: Record<
   number,
@@ -57,23 +62,33 @@ const dimensionDescriptions: Record<
   },
 }
 
-export function generatePsychologyProfile(dimensions: DimensionResult[]): string {
+export function generatePsychologyProfile(
+  dimensions: DimensionResult[],
+  locale: Locale = 'zh',
+): string {
+  const table = locale === 'en' ? dimensionDescriptionsEn : dimensionDescriptions
+  const fallback = locale === 'en' ? incompleteDimensionEn : '该维度的信息尚不完整。'
   const lines = dimensions.map((d) => {
-    const desc =
-      dimensionDescriptions[d.dimensionIndex]?.[d.level] ??
-      '该维度的信息尚不完整。'
-    return `【${d.title}】${desc}`
+    const desc = table[d.dimensionIndex]?.[d.level] ?? fallback
+    return locale === 'en'
+      ? `[${d.title}] ${desc}`
+      : `【${d.title}】${desc}`
   })
 
   return lines.join('\n\n')
 }
 
-export function buildPsychologyPromptInput(dimensions: DimensionResult[]): string {
+export function buildPsychologyPromptInput(
+  dimensions: DimensionResult[],
+  locale: Locale = 'zh',
+): string {
+  const table = locale === 'en' ? dimensionDescriptionsEn : dimensionDescriptions
   return dimensions
     .map((d) => {
-      const desc =
-        dimensionDescriptions[d.dimensionIndex]?.[d.level] ?? ''
-      return `【${d.title}】${desc}`
+      const desc = table[d.dimensionIndex]?.[d.level] ?? ''
+      return locale === 'en'
+        ? `[${d.title}] ${desc}`
+        : `【${d.title}】${desc}`
     })
     .join('\n\n')
 }
