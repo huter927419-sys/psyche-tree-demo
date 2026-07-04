@@ -1,5 +1,3 @@
-> 理论栈 Layer · 完整索引见 [docs/theory/README.md](./README.md) · 产品与修持见 [README](../../README.md)
->
 ## Psyche Tree System · 形而上扩展层 · Metaphysical Extension · 形而上拡張層
 
 **意识流、宇宙本源与因果结构的统一解释模型** — 在增强理论之上，回答「意识如何生成可体验的现实结构」。

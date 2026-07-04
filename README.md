@@ -2,11 +2,6 @@
 
 **Mist Shore · Six Books · Tree of Life** · **霧岸六巻 · 心象生命の樹**
 
-> **文档语言约定 · Documentation languages · ドキュメント言語**  
-> 本项目说明文档默认 **简体 · English · 日本語** 并列呈现，不省略（流程图等 ASCII 受限处除外，见各节说明）。  
-> Product docs present **Simplified Chinese, English, and Japanese** side by side unless noted.  
-> 製品ドキュメントは原則として**簡体字·英語·日本語**を併記する。
-
 ---
 
 ## 文档导读 · How to Read This Repo · ドキュメントの読み方
@@ -15,22 +10,22 @@
 
 | 层级 Layer | 文件 File | 给谁 For whom | 内容 Content |
 |------------|-----------|---------------|--------------|
-| **产品与修持** Product & rites | 本 README · this file | 产品、文案、新成员 · PM, copy, newcomers | 命题 → 体验路径 → [修持三语全文](docs/volume-rite-copy.md) → 预览 → 开发 |
-| **理论栈** Theory stack | [`docs/theory/`](docs/theory/) | 深入玄学架构者 · deep theory readers | 五层长文 I→V · five layers |
+| **理论栈** Theory stack | [`docs/theory/`](docs/theory/) | 世界观与机制 · worldview & mechanism | 五层长文 I→V · five layers |
+| **产品与修持** Product & rites | 本 README · this file | 产品、文案、体验 · product & experience | 命题 → 体验路径 → [修持三语全文](docs/volume-rite-copy.md) → 预览 → 开发 |
 | **开发约定** Dev conventions | [SKILL.md](.cursor/skills/psyche-tree-demo/SKILL.md) | Agent / 工程师 · engineers | 六卷结构、API、verify、UX 红线 |
 
 ### 建议阅读顺序 · Reading order · 推奨順
 
-1. [核心命题](#二核心命题--core-proposition--核心命題) → [体验路径](#三体验路径--experience-path--体験の流れ) → [修持环](#四修持环--volume-rite-cycle--修持環) → [修持三语全文](docs/volume-rite-copy.md)  
-2. 要跑起来 Run locally：[快速开始](#快速开始--quick-start--クイックスタート) → [脚本与 QA](#脚本与-qa--scripts--スクリプト)  
-3. 改理论 / prompt：先对齐命题，再查 [`docs/theory/`](docs/theory/)  
+1. **[理论栈导引](#一理论栈导引--theory-index--理論索引)** → 按需深入 [`docs/theory/`](docs/theory/)  
+2. [核心命题](#二核心命题--core-proposition--核心命題) → [这是什么](#三这是什么--what-is-this--これは何か) → [体验路径](#四体验路径--experience-path--体験の流れ) → [修持环](#五修持环--volume-rite-cycle--修持環) → [修持三语全文](docs/volume-rite-copy.md)  
+3. 要跑起来 Run locally：[快速开始](#快速开始--quick-start--クイックスタート) → [脚本与 QA](#脚本与-qa--scripts--スクリプト)  
 
 ### 文案源文件 · Copy source · 文案ソース
 
 | 简体 zh | English | 日本語 |
 |---------|---------|--------|
 | 产品内修持与归树文案源：`src/i18n/volumeRite.ts` | Same source for in-app rites | 製品内儀式文案のソースも同ファイル |
-| 文档三语全文：`docs/volume-rite-copy.md`（`npx tsx scripts/generate-rite-docs.ts` 可重生） | Regenerate with `generate-rite-docs.ts` | ドキュメント三語全文は同 MD |
+| 文档三语全文：`docs/volume-rite-copy.md`（`npm run generate:rite-docs`） | `npm run generate:rite-docs` | `npm run generate:rite-docs` |
 | 繁體 UI：OpenCC 自简体；神谕：DeepSeek 分 locale 缓存 | zhTw UI via OpenCC; oracles cached per locale | 繁體 UI は OpenCC、神託は locale 別キャッシュ |
 
 ---
@@ -39,27 +34,31 @@
 
 | # | 章节 Section | 简体 | English | 日本語 |
 |---|--------------|------|---------|--------|
-| 一 | [这是什么](#一这是什么--what-is-this--これは何か) | 产品概览 | Overview | 概要 |
+| 一 | [理论栈导引](#一理论栈导引--theory-index--理論索引) | 五层索引 | Theory index | 理論索引 |
 | 二 | [核心命题](#二核心命题--core-proposition--核心命題) | 哲学锚点 | Core proposition | 核心命題 |
-| 三 | [体验路径](#三体验路径--experience-path--体験の流れ) | 书架→整象 | Shelf → holistic | 体験の流れ |
-| 四 | [修持环](#四修持环--volume-rite-cycle--修持環) | 流程与缘由 | Rite cycle | 修持環 |
+| 三 | [这是什么](#三这是什么--what-is-this--これは何か) | 产品概览 | Overview | 概要 |
+| 四 | [体验路径](#四体验路径--experience-path--体験の流れ) | 书架→整象 | Shelf → holistic | 体験の流れ |
+| 五 | [修持环](#五修持环--volume-rite-cycle--修持環) | 流程与缘由 | Rite cycle | 修持環 |
 | — | [修持三语全文](docs/volume-rite-copy.md) | 入卷/离卷/归树 | Full rite copy | 導き三語全文 |
-| 五 | [界面预览](#五界面预览--ui-preview--画面プレビュー) | 四语截图 | UI preview | 画面 |
-| 六 | [开发与运维](#六开发与运维--dev--ops--開発運用) | 安装/脚本 | Dev & ops | 開発・運用 |
-| 七 | [理论栈导引](#七理论栈导引--theory-index--理論索引) | 五层索引 | Theory index | 理論索引 |
+| 六 | [界面预览](#六界面预览--ui-preview--画面プレビュー) | 四语截图 | UI preview | 画面 |
+| 七 | [开发与运维](#七开发与运维--dev--ops--開発運用) | 安装/脚本 | Dev & ops | 開発・運用 |
 
 ---
 
-## 一、这是什么 · What is this · これは何か
+## 一、理论栈导引 · Theory index · 理論索引
 
-**中文**  
-网页自我探索 Demo：六卷书（心象 / 映心 / 明思 / 缘书 / 流衡 / 向光）以翻书问答收集六个心理维度与整象封印；背景生命之树随进度展开。每卷产出心象画像与单卷神谕；六卷完成后，书架经**归树**呈现整象神谕。四语：**简体 / 繁體 / English / 日本語**。
+| 层 | 文档 | 简体 | English | 日本語 |
+|----|------|------|---------|--------|
+| I | [01-mystical-framework.md](docs/theory/01-mystical-framework.md) | 如何进入照见 | How to enter mirroring | どう入るか |
+| II | [02-concise-theory.md](docs/theory/02-concise-theory.md) | 六维状态结构 | Six-dimension state | 六次元構造 |
+| III | [03-advanced-generalization.md](docs/theory/03-advanced-generalization.md) | State·Force·Field | General modeling | 汎化層 |
+| IV | [04-enhanced-theory.md](docs/theory/04-enhanced-theory.md) | Flow·Awareness·Field | Enhanced dynamics | 拡張理論 |
+| V | [05-metaphysical-extension.md](docs/theory/05-metaphysical-extension.md) | 意识与因果 | Consciousness & causality | 形而上拡張 |
 
-**English**  
-A flip-book self-exploration demo across six facets, with a Tree of Life background, per-volume portraits and oracles, and a holistic oracle on the shelf after **Return to the Tree**. Four locales.
-
-**日本語**  
-六巻のめくる問答と生命の樹、巻別神託、**帰樹**後の整象神託。四言語対応。
+| 简体 | English | 日本語 |
+|------|---------|--------|
+| 问印 theory layer（`theoryLayer.ts`）为 II–IV 题面化；答案卡仍为心理学表述 | Question theory layer instantiates layers II–IV | 問印 theory layer は II–IV の題面化 |
+| 各层长文：[`docs/theory/`](docs/theory/) · 开发：[SKILL.md](.cursor/skills/psyche-tree-demo/SKILL.md) · [reference.md](.cursor/skills/psyche-tree-demo/reference.md) | Layers in `docs/theory/` · Dev: SKILL + reference | 各層：`docs/theory/` · 開発：SKILL |
 
 ---
 
@@ -73,14 +72,24 @@ A flip-book self-exploration demo across six facets, with a Tree of Life backgro
 | 简体 | English | 日本語 |
 |------|---------|--------|
 | 测评默认暗示「作答→得分→结论」；雾岸把**校准看见**置于一切之前。六卷是六面镜，整象是归树后的开口，不是标准答案库。 | Assessments imply scores and verdicts; Mist Shore anchors on **calibrating sight**—six mirrors, then the oracle after Return to the Tree. | 診断は点数と結論を暗示しがち；霧岸は**見方の校准**を先に置く。六巻は鏡、整象は帰樹後の開口。 |
-| 下文五层理论为**机制语言**；本命题为**价值锚点**。 | Five theory layers are **mechanism language**; this proposition is the **value anchor**. | 下記五層理論は**机制**、本命題は**価値の錨**。 |
+| 五层理论为**机制语言**；本命题为**价值锚点**。 | Five theory layers are **mechanism language**; this proposition is the **value anchor**. | 五層理論は**机制**、本命題は**価値の錨**。 |
 
 ---
 
-## 三、体验路径 · Experience path · 体験の流れ
+## 三、这是什么 · What is this · これは何か
 
-> **关于流程图文字**  
-> Mermaid 在多数 Markdown 预览（含 Cursor / GitHub）中对**中文节点**支持差，会显示为乱码方框。下图节点因此使用 **English** 以保证可读；逐步对照见下表 **简体 · English · 日本語**，不省略。
+**中文**  
+网页自我探索 Demo：六卷书（心象 / 映心 / 明思 / 缘书 / 流衡 / 向光）以翻书问答收集六个心理维度与整象封印；背景生命之树随进度展开。每卷产出心象画像与单卷神谕；六卷完成后，书架经**归树**呈现整象神谕。四语：**简体 / 繁體 / English / 日本語**。
+
+**English**  
+A flip-book self-exploration demo across six facets, with a Tree of Life background, per-volume portraits and oracles, and a holistic oracle on the shelf after **Return to the Tree**. Four locales.
+
+**日本語**  
+六巻のめくる問答と生命の樹、巻別神託、**帰樹**後の整象神託。四言語対応。
+
+---
+
+## 四、体验路径 · Experience path · 体験の流れ
 
 ```mermaid
 flowchart LR
@@ -98,7 +107,7 @@ flowchart LR
 | 阶段 · Stage · 段階 | 简体 | English | 日本語 | 说明 |
 |---------------------|------|---------|--------|------|
 | A 书架 | 雾岸书架 | Mist Shelf | 霧岸の書棚 | 六卷、四语切换；邮箱留印；六卷完成后出现整象入口 |
-| B 入卷 | 入卷仪式 | Entry rite | 入巻の儀 | 全屏修持 overlay；本卷引导语见 [§四](#四修持环--volume-rite-cycle--修持環) |
+| B 入卷 | 入卷仪式 | Entry rite | 入巻の儀 | 全屏修持 overlay；引导语见 [修持环](#五修持环--volume-rite-cycle--修持環) |
 | C 问印 | 问印 8 页 | 8 seals (Q&A) | 問印 8 ページ | 6 维度 + 注意力 + 整象封印；一页一卡，~420ms 自动翻页；无分数 |
 | D 离卷 | 离卷仪式 | Exit rite | 離巻の儀 | 合卷前短仪式；心象卷可写一句反思 |
 | E 单卷结果 | 心象画像 + 单卷神谕 | Portrait + volume oracle | 心象 + 巻別神託 | 画像 → 神谕 → 合书 → 回书架；**整象不在此出现** |
@@ -113,9 +122,9 @@ flowchart LR
 
 ---
 
-## 四、修持环 · Volume rite cycle · 修持環
+## 五、修持环 · Volume rite cycle · 修持環
 
-### 4.1 流程与设计缘由 · Flow & rationale · 流程と意図
+### 5.1 流程与设计缘由 · Flow & rationale · 流程と意図
 
 | 简体 | English | 日本語 |
 |------|---------|--------|
@@ -145,9 +154,9 @@ flowchart LR
 
 ---
 
-### 4.2 引导语三语全文 · Full rite copy (zh / en / ja) · 導き三語全文
+### 5.2 引导语三语全文 · Full rite copy (zh / en / ja) · 導き三語全文
 
-**简体 · English · 日本語** 并列全文见 **[`docs/volume-rite-copy.md`](docs/volume-rite-copy.md)**（与产品同源；更新后运行 `npx tsx scripts/generate-rite-docs.ts` 重生）。
+**[`docs/volume-rite-copy.md`](docs/volume-rite-copy.md)** — 源文件 [`volumeRite.ts`](src/i18n/volumeRite.ts)
 
 示例（心象 · 入卷首段）：
 
@@ -163,12 +172,12 @@ flowchart LR
 
 ---
 
-## 五、界面预览 · UI Preview · 画面プレビュー
+## 六、界面预览 · UI Preview · 画面プレビュー
 
 | 简体 | English | 日本語 |
 |------|---------|--------|
-| 书架四语截图见 [`docs/screenshots/homepage/`](docs/screenshots/homepage/) | Homepage shots for zh / zhTw / en / ja | 書棚四言語スクリーンショット |
-| 重生：`node scripts/capture-homepage-screenshots.mjs`（需 dev） | Regenerate while dev server runs | dev 起動中に再生成 |
+| 书架四语截图：[`docs/screenshots/homepage/`](docs/screenshots/homepage/) | Homepage shots for zh / zhTw / en / ja | 書棚四言語スクリーンショット |
+| 截图脚本：`node scripts/capture-homepage-screenshots.mjs`（需 dev） | Capture while dev server runs | dev 起動中に取得 |
 
 | Locale | 截图 Shot | 主标题 Title |
 |--------|-----------|--------------|
@@ -183,7 +192,7 @@ flowchart LR
 
 ---
 
-## 六、开发与运维 · Dev & Ops · 開発・運用
+## 七、开发与运维 · Dev & Ops · 開発・運用
 
 ### 功能要点 · Features · 主な機能
 
@@ -199,8 +208,8 @@ flowchart LR
 
 ```
 psyche-tree-demo/
-├── README.md                    # 产品说明（三语并列）· product docs (trilingual)
-├── docs/volume-rite-copy.md     # 修持三语全文 · full rite copy zh/en/ja
+├── README.md                    # 产品说明 · product docs
+├── docs/volume-rite-copy.md     # 修持三语全文 · rite copy zh/en/ja
 ├── docs/theory/                 # 五层理论 · five theory layers
 ├── docs/screenshots/homepage/   # 书架截图 · shelf screenshots
 ├── .cursor/skills/…/SKILL.md    # Agent 开发约定 · dev skill
@@ -234,7 +243,7 @@ PSYCHE_READING_TEST_FALLBACK=0   # 1 = QA 即时神谕，勿用于生产
 |------|------|---------|--------|
 | `verify-full-flow.mjs` | API 39 项 + test-fallback | Full API smoke test | API 一連テスト |
 | `verify-rite-flow.mjs` | Playwright 修持环 UI | Rite cycle UI (Chrome) | 修持環 UI |
-| `generate:rite-docs` / `generate-rite-docs.ts` | 重生三语修持 MD | Regenerate rite doc | 三語 MD 再生成 |
+| `generate:rite-docs` | 生成修持三语文档 | Generate rite copy doc | 修持三語 MD 生成 |
 | `complete-user-journey.mjs` | 补全六卷 | Fill six books | 六巻完了 |
 | `test-locale-switch.mjs` | 四语神谕缓存 | Oracle cache test | キャッシュ検証 |
 | `reset-db.mjs` | 清空 SQLite | Reset DB | DB リセット |
@@ -267,23 +276,6 @@ PSYCHE_READING_TEST_FALLBACK=0   # 1 = QA 即时神谕，勿用于生产
 ### 技术栈 · Stack · 技術スタック
 
 React 19 · Vite 8 · TypeScript · Tailwind CSS 4 · SQLite · DeepSeek · Playwright
-
----
-
-## 七、理论栈导引 · Theory index · 理論索引
-
-| 层 | 文档 | 简体 | English | 日本語 |
-|----|------|------|---------|--------|
-| I | [01-mystical-framework.md](docs/theory/01-mystical-framework.md) | 如何进入照见 | How to enter mirroring | どう入るか |
-| II | [02-concise-theory.md](docs/theory/02-concise-theory.md) | 六维状态结构 | Six-dimension state | 六次元構造 |
-| III | [03-advanced-generalization.md](docs/theory/03-advanced-generalization.md) | State·Force·Field | General modeling | 汎化層 |
-| IV | [04-enhanced-theory.md](docs/theory/04-enhanced-theory.md) | Flow·Awareness·Field | Enhanced dynamics | 拡張理論 |
-| V | [05-metaphysical-extension.md](docs/theory/05-metaphysical-extension.md) | 意识与因果 | Consciousness & causality | 形而上拡張 |
-
-| 简体 | English | 日本語 |
-|------|---------|--------|
-| 问印 theory layer（`theoryLayer.ts`）为 II–IV 题面化；答案卡仍为心理学表述 | Question theory layer instantiates layers II–IV | 問印 theory layer は II–IV の題面化 |
-| 开发细节：[SKILL.md](.cursor/skills/psyche-tree-demo/SKILL.md) · [reference.md](.cursor/skills/psyche-tree-demo/reference.md) | Dev: SKILL + reference | 開発：SKILL + reference |
 
 ---
 

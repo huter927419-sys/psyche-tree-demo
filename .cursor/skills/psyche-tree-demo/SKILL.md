@@ -10,8 +10,6 @@ description: >-
 
 # 雾岸六卷 · psyche-tree-demo
 
-> **Docs · 文档** — Product docs use **简体 · English · 日本語** together. Rite copy: [docs/volume-rite-copy.md](../../../docs/volume-rite-copy.md) (`npx tsx scripts/generate-rite-docs.ts`). Theory: [docs/theory/](../../../docs/theory/).
-
 ## Esoteric system (see README)
 
 The product follows a full mystical **system**, not only symbols:
@@ -27,9 +25,7 @@ The product follows a full mystical **system**, not only symbols:
 | **Reflection** 反思 | Portrait + oracle pages, return to shelf, review mode |
 | **Symbol + revelation** | Sixfold facets → volume oracle → holistic oracle |
 
-Full trilingual theory: [`docs/theory/`](../../../docs/theory/).  
-Rite copy (zh/en/ja): [docs/volume-rite-copy.md](../../../docs/volume-rite-copy.md).  
-Product overview: [README.md](../../../README.md).
+Docs: [README](../../../README.md) · [theory](../../../docs/theory/) · [rite copy](../../../docs/volume-rite-copy.md).
 
 ## Six books (one facet each)
 

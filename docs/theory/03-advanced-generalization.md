@@ -1,5 +1,3 @@
-> 理论栈 Layer · 完整索引见 [docs/theory/README.md](./README.md) · 产品与修持见 [README](../../README.md)
->
 ## Psyche Tree System · 进阶泛化层 · Advanced Generalization · 進階汎化層
 
 **从「心理理论」升级为「通用状态建模语言」** — 在简明理论之上，将同一骨架推广至人、群体、AI、社会等任意复杂系统。

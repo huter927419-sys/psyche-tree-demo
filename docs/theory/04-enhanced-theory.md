@@ -1,5 +1,3 @@
-> 理论栈 Layer · 完整索引见 [docs/theory/README.md](./README.md) · 产品与修持见 [README](../../README.md)
->
 ## Psyche Tree System · 增强理论版 · Enhanced Theory · 拡張理論
 
 **心流 / 意识 / 场域 的统一模型** — 在简明理论与进阶泛化之上，将 **U · Φ · A · F** 合为同一动力学骨架。

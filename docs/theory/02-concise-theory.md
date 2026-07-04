@@ -1,5 +1,3 @@
-> 理论栈 Layer · 完整索引见 [docs/theory/README.md](./README.md) · 产品与修持见 [README](../../README.md)
->
 ## Psyche Tree × 六维书 · 简明理论 · Concise Theory · 簡明理論
 
 与上文**玄学体系**并列：玄学讲如何**进入与照见**；本节讲照见的**状态结构**——用动力学语言描述同一体验。

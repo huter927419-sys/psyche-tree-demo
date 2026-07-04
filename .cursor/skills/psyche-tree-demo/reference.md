@@ -42,15 +42,13 @@ Built by `buildBookQuestionFlow()` in `books/shared/questionFlow.ts`.
 
 | Doc | 简体 | English | 日本語 |
 |-----|------|---------|--------|
-| [README.md](../../../README.md) | 产品+运维（三语） | Product + ops (trilingual) | 製品+運用 |
+| [README.md](../../../README.md) | 产品与运维 | Product + ops | 製品+運用 |
 | [docs/volume-rite-copy.md](../../../docs/volume-rite-copy.md) | 修持三语全文 | Full rite zh/en/ja | 導き三語全文 |
 | [docs/theory/](../../../docs/theory/) | 五层理论 | Five theory layers | 五層理論 |
 | [SKILL.md](../SKILL.md) | Agent 约定 | Agent conventions | Agent 規約 |
 | [reference.md](./reference.md) | 路径与数据流 | Paths & data flow | パスとデータ流 |
 
-## Entry rite copy (入卷修持)
-
-Full trilingual guidance: [docs/volume-rite-copy.md](../../../docs/volume-rite-copy.md). Source: `src/i18n/volumeRite.ts`.
+## Volume rite sections
 
 | BookId | Facet | Sections |
 |--------|-------|----------|
