@@ -25,7 +25,8 @@ The product follows a full mystical **system**, not only symbols:
 Full trilingual theory: [README.md](../../../README.md#玄学理论体系--mystical-framework--玄義体系).  
 Concise state-system theory (zh/en/ja): [README.md](../../../README.md#psyche-tree--六维书--简明理论--concise-theory--簡明理論).  
 Advanced generalization layer (State · Force · Field): [README.md](../../../README.md#psyche-tree-system--进阶泛化层--advanced-generalization--進階汎化層).  
-Enhanced theory (Flow · Awareness · Field unified): [README.md](../../../README.md#psyche-tree-system--增强理论版--enhanced-theory--拡張理論).
+Enhanced theory (Flow · Awareness · Field unified): [README.md](../../../README.md#psyche-tree-system--增强理论版--enhanced-theory--拡張理論).  
+Metaphysical extension (Stream · Origin · Causality): [README.md](../../../README.md#psyche-tree-system--形而上扩展层--metaphysical-extension--形而上拡張層).
 
 ## Six books (one facet each)
 
