@@ -25,12 +25,10 @@ The product follows a full mystical **system**, not only symbols:
 | **Reflection** 反思 | Portrait + oracle pages, return to shelf, review mode |
 | **Symbol + revelation** | Sixfold facets → volume oracle → holistic oracle |
 
-Full trilingual theory: [README.md](../../../README.md#玄学理论体系--mystical-framework--玄義体系).  
-Concise state-system theory (zh/en/ja): [README.md](../../../README.md#psyche-tree--六维书--简明理论--concise-theory--簡明理論).  
-Advanced generalization layer (State · Force · Field): [README.md](../../../README.md#psyche-tree-system--进阶泛化层--advanced-generalization--進階汎化層).  
-Enhanced theory (Flow · Awareness · Field unified): [README.md](../../../README.md#psyche-tree-system--增强理论版--enhanced-theory--拡張理論).  
-Metaphysical extension (Stream · Origin · Causality): [README.md](../../../README.md#psyche-tree-system--形而上扩展层--metaphysical-extension--形而上拡張層).  
-Locales & SQLite (zh / zhTw / en / ja): [README.md](../../../README.md#语言与数据库--locales--sqlite--言語と-db).
+Full trilingual theory (long form): [`docs/theory/`](../../../docs/theory/).  
+Product + rite copy: [README §四 修持环](../../../README.md#四修持环).  
+Concise state-system: [docs/theory/02-concise-theory.md](../../../docs/theory/02-concise-theory.md).  
+Locales & SQLite: [README §语言与数据库](../../../README.md#语言与数据库).
 
 ## Six books (one facet each)
 
@@ -75,7 +73,7 @@ Dim 1–3 → attention check → Dim 4–6 → integration (dimensionIndex 7)
 
 Copy lives in `src/i18n/volumeRite.ts` (zh / en / ja; zhTw via OpenCC). Styles: `.volume-rite-overlay`, `.return-tree-overlay` in `index.css`.
 
-**Full entry rite copy (简体)** is documented in [README §入卷修持引导语](../../../README.md#入卷修持引导语--entry-rite-guidance--入巻の導き). Source of truth remains `volumeRite.ts` → `entryRites`.
+**Full entry / exit / 归树 copy (简体)** — [README §四 修持环](../../../README.md#四修持环). Source: `volumeRite.ts`.
 
 | BookId | 卷 | Entry rite sections (zh) |
 |--------|-----|---------------------------|

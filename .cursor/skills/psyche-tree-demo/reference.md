@@ -38,10 +38,19 @@ Migration: `server/db/migrations/007_locale_zh_tw.sql`
 
 Built by `buildBookQuestionFlow()` in `books/shared/questionFlow.ts`.
 
+## Documentation map
+
+| Doc | Role |
+|-----|------|
+| [README.md](../../../README.md) | Product, proposition, experience path, **full rite copy + rationale**, dev/QA |
+| [docs/theory/](../../../docs/theory/) | Five-layer theory (long form, split from README) |
+| [SKILL.md](../SKILL.md) | Agent dev conventions |
+| [reference.md](./reference.md) | Paths, data flow, scripts |
+
 ## Entry rite copy (入卷修持)
 
-Full simplified-Chinese guidance per volume: [README §入卷修持引导语](../../../README.md#入卷修持引导语--entry-rite-guidance--入巻の導き).  
-Editable source: `src/i18n/volumeRite.ts` → `entryRites` (en/ja in same file).
+Full simplified-Chinese guidance (entry + exit + 归树): [README §四 修持环](../../../README.md#四修持环).  
+Editable source: `src/i18n/volumeRite.ts`.
 
 | BookId | Facet | Sections |
 |--------|-------|----------|

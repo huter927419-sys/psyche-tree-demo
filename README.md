@@ -1,24 +1,63 @@
 # 雾岸六卷 · 心象生命之树探索
 
-**Mist Shore · Six Books · Tree of Life**  
-**霧岸六巻 · 心象生命の樹**
+**Mist Shore · Six Books · Tree of Life** · **霧岸六巻 · 心象生命の樹**
 
 ---
 
-## 简介 · Overview · 概要
+## 文档导读 · How to Read This Repo
+
+### 现状与问题
+
+原先 README 约 **2000 行**：核心命题、修持全文、界面截图、开发说明与 **五层理论** 混在同一文件；目录出现在第 200 行之后，**产品说明**反而排在 **1500 行理论**之后。读起来像「先读论文，再找怎么跑项目」——逻辑倒置，也不紧凑。
+
+### 重新设计后的三层文档
+
+| 层级 | 文件 | 给谁读 | 内容 |
+|------|------|--------|------|
+| **产品与修持** | 本 README | 产品、文案、新成员 | 命题 → 体验路径 → **修持引导语全文 + 设计缘由** → 预览 → 开发运维 |
+| **理论栈** | [`docs/theory/`](docs/theory/) | 想深入玄学架构者 | 五层长文（I 玄学 → V 形而上），按需打开 |
+| **开发约定** | [`.cursor/skills/psyche-tree-demo/SKILL.md`](.cursor/skills/psyche-tree-demo/SKILL.md) | Agent / 工程师 | 六卷结构、API、verify、不可破坏的 UX |
+
+### 建议阅读顺序
+
+1. [核心命题](#二核心命题) → [体验路径](#三体验路径) → [修持环](#四修持环)（含引导语全文）  
+2. 要跑起来：[快速开始](#快速开始) → [脚本与 QA](#脚本与-qa)  
+3. 要改理论或 prompt：先确认与命题一致，再查 [`docs/theory/`](docs/theory/) 对应层  
+
+### 文案源文件
+
+产品内修持与归树文案的**唯一源文本**（含 en/ja）：[`src/i18n/volumeRite.ts`](src/i18n/volumeRite.ts)。本 README 收录**简体全文**供审阅与对外说明；繁體 UI 由 OpenCC 自简体转换；神谕为 DeepSeek 独立生成并分 locale 缓存。
+
+---
+
+## 目录 · Contents
+
+| # | 章节 | 说明 |
+|---|------|------|
+| 一 | [这是什么](#一这是什么) | 产品一句话 |
+| 二 | [核心命题](#二核心命题) | 统领全体验的哲学锚点 |
+| 三 | [体验路径](#三体验路径) | 从书架到整象的阶段 |
+| 四 | [修持环](#四修持环) | 流程、缘由、**入卷/离卷/归树引导语全文** |
+| 五 | [界面预览](#五界面预览) | 书架四语截图 |
+| 六 | [开发与运维](#六开发与运维) | 功能、安装、脚本、结构、UX、语言、部署 |
+| 七 | [理论栈导引](#七理论栈导引) | 五层理论索引（长文外置） |
+
+---
+
+## 一、这是什么
 
 **中文**  
-网页版自我探索 Demo：六卷 mystical books（心象 / 映心 / 明思 / 缘书 / 流衡 / 向光），以翻书式问答收集六个心理学维度与整象封印；背景是一棵随进度逐层展开的生命之树。每卷给出心象画像与 DeepSeek 单卷神谕；六卷完成后，在雾岸书架呈现整象神谕。界面与神谕均支持**简体中文 / 繁體中文 / English / 日本語**。
+网页自我探索 Demo：六卷书（心象 / 映心 / 明思 / 缘书 / 流衡 / 向光）以翻书问答收集六个心理维度与整象封印；背景生命之树随进度展开。每卷产出心象画像与单卷神谕；六卷完成后，书架经**归树**呈现整象神谕。四语：**简体 / 繁體 / English / 日本語**。
 
 **English**  
-A web-based self-exploration demo: six mystical volumes (Mindscape, Heart Mirror, Mind Light, Bond Book, Flow Balance, Path Light) presented as a flip-book questionnaire across six psychological dimensions plus an integration seal, with a Tree of Life that unfolds in the background. Each volume yields a psychological portrait and a DeepSeek mystical reading; after all six are complete, a holistic oracle appears on the mist-shore bookshelf. UI and readings are available in **Simplified Chinese, Traditional Chinese, English, and Japanese**.
+A flip-book self-exploration demo across six facets, with a Tree of Life background, per-volume portraits and oracles, and a holistic oracle on the shelf after **Return to the Tree**. Four locales.
 
 **日本語**  
-ウェブ版の自己探索デモ：六巻（心象・映心・明思・縁書・流衡・向光）をめくる問答で、六つの心理次元と整象の封印を集めます。背景には進行に応じて展開する生命の樹。各巻で心象プロフィールと DeepSeek による巻別神託を示し、六巻完了後は霧岸の書棚で整象神託を表示します。UI と神託は**簡体字中国語・繁体字中国語・英語・日本語**に対応しています。
+六巻のめくる問答と生命の樹、巻別神託、**帰樹**後の整象神託。四言語対応。
 
 ---
 
-## 核心命题 · Core Proposition · 核心命題
+## 二、核心命题
 
 **主命题**  
 人的一生，不是在寻找答案，而是在不断**校准**自己看见世界、感受世界、与世界相处的方式。
@@ -28,36 +67,80 @@ A web-based self-exploration demo: six mystical volumes (Mindscape, Heart Mirror
 
 | English | 日本語 |
 |---------|--------|
-| A life is not a search for answers, but a continual **calibration** of how you see, feel, and meet the world. | 人生は答えを探す旅ではなく、世界との向き合い方を**校准**し続ける旅。 |
-| The world may not change because of you—but **how you see** keeps changing you. | 世界は変わらなくても、**見方**はあなたを変え続ける。 |
+| Life calibrates how you see, feel, and meet the world—not a hunt for fixed answers. | 人生は答え探しではなく、見方・感じ方・向き合い方の**校准**の旅。 |
+| How you see keeps changing you, even if the world does not change for you. | 世界は変わらなくても、**見方**はあなたを変え続ける。 |
 
-此命题统领六卷修持与归树终卷，下文「形而上扩展」等层为机制语言，而非第二套世界观。
+**为何放在最前**  
+测评产品默认暗示「作答 → 得分 → 结论」。雾岸刻意把**校准看见方式**写在一切之前：六卷是六面镜子，整象是归树后的开口，不是标准答案库。下文五层理论是**机制语言**；命题才是**价值锚点**。
+
+---
+
+## 三、体验路径
+
+```mermaid
+flowchart LR
+  A[雾岸书架] --> B[入卷仪式]
+  B --> C[问印 8 页]
+  C --> D[离卷仪式]
+  D --> E[心象画像 + 单卷神谕]
+  E --> A
+  A --> F{六卷齐?}
+  F -->|是| G[归树]
+  G --> H[核心命题]
+  H --> I[整象神谕]
+```
+
+| 阶段 | 用户所见 | 说明 |
+|------|----------|------|
+| 书架 | 六卷、语言切换 | 邮箱留印；完成后出现整象入口 |
+| 入卷 | 全屏修持 overlay | 本卷专属引导，见 [§四](#四修持环) |
+| 问印 | 6 维度 + 注意力 + 整象封印 | 一页一卡，~420ms 自动翻页；无分数 |
+| 离卷 | 合卷前的短仪式 | 心象卷可写一句反思 |
+| 单卷结果 | 画像 → 神谕 → 合书 | 提示回书架；**整象不在此出现** |
+| 归树 → 整象 | 书架 overlay | 每 journey 首次开整象前必过；非「总结报告」 |
+
+视觉：深黑 `#0a0a0a`、黑白意象卡、淡金点缀；各语言独立 mystic 字体。
 
 ---
 
-## 六卷修持环 · Volume Rite Cycle · 六巻の修持環
+## 四、修持环
 
-每卷除问印外，另有**入卷 → 问印 → 离卷**修持；六卷齐后先**归树**，再开整象神谕（不叫「总结」）。
+### 4.1 流程与设计缘由
 
-| 卷 | 照见 | 入卷要点 | 离卷 |
-|----|------|----------|------|
-| 心象 | 自我 | 静坐三分钟；湖面无风之冥想 | 写一句：「今天，我第一次真正看见了什么？」 |
-| 映心 | 情感 | 不控制，让情绪流动；河边落叶冥想 | 静息，不必命名流过的一切 |
-| 明思 | 思维 | 减噪；夜空寻北极星 | 让最后一念自行熄灭 |
-| 缘书 | 关系 | 观靠近时心的变化；丝线仪式 | 再看一眼丝线，不断不拉 |
-| 流衡 | 节奏 | 力量流向；船心在中流 | 感船心仍在中流 |
-| 向光 | 方向 | 今天一小步；远方微光 | 确认今天的一步已迈出 |
+**流程**  
+每卷：**入卷 → 问印 → 离卷**；六卷任意顺序完成；齐后 **归树 → 核心命题 → 整象神谕**。
 
-### 入卷修持引导语 · Entry Rite Guidance · 入巻の導き
+**为何要有修持环，而不直接答题**
 
-以下为产品内 **入卷仪式**（`VolumeRiteOverlay` · `getVolumeEntryRite`）的完整引导文案。**简体**为源文本；**繁體**界面由 OpenCC 自简体转换；**English / 日本語** 全文见 [`src/i18n/volumeRite.ts`](src/i18n/volumeRite.ts) 中各卷的 `entryRites` 字段。
+| 问题 | 若不设仪式 | 入卷/离卷/归树的作用 |
+|------|------------|----------------------|
+| 测评心态 | 用户带「做完题看结果」的焦虑进入 | 入卷先**降速、定场**，把「看见」置于「作答」之前 |
+| 六卷同质感 | 六本书像六份问卷 | 每卷入卷用**不同意象**（湖/河/夜空/丝线/船/光）锚定该卷测向 |
+| 结果冲击 | 答完立刻看分析 | 离卷**缓冲**，心象卷另设一句反思，避免「被判定」感 |
+| 整象像总结 | 六份报告拼接 | 归树强调**树未变、观者变**——整象是镜面的开口，不是 PPT 汇总 |
+
+**六卷一览**
+
+| 卷 | 测向 | 入卷意象 | 离卷要点 | 设计缘由（一句） |
+|----|------|----------|----------|------------------|
+| 心象 | 自我 | 三分钟静坐 · 无风湖面 | 写一句「今天第一次看见了什么」 | 自我卷最易「分析自己」；先入定再允许沉默 |
+| 映心 | 情感 | 不控制，只流动 · 落叶顺河 | 不必命名流过的一切 | 对抗「管理情绪」惯性，先赋流动权 |
+| 明思 | 思维 | 减噪 · 夜空北极星 | 让最后一念自行熄灭 | 思维卷易答题成瘾；先减噪再问印 |
+| 缘书 | 关系 | 靠近时心的变化 · 丝线 | 再看丝线，不断不拉 | 关系题易滑向「别人怎么看我」 |
+| 流衡 | 节奏 | 力量流向 · 船心 | 感船心仍在中流 | 区分「更努力」与「流向哪里」 |
+| 向光 | 方向 | 今天一小步 · 远方微光 | 确认今天的一步已迈出 | 把方向从「遥远未来」收到「今日一步」 |
+
+实现：`VolumeRiteOverlay` · `ReturnToTreeOverlay` · [`volumeRite.ts`](src/i18n/volumeRite.ts)。
 
 ---
+
+### 4.2 引导语全文（简体）
+
+以下为产品内与用户所见一致的文案。**English / 日本語** 见 `volumeRite.ts`。
 
 #### 第一卷 · 心象 · 照见自我
 
-**入卷仪式**
-
+**入卷仪式**  
 阅读前，请安静坐三分钟。  
 不要回忆今天发生了什么。  
 不要计划接下来要做什么。  
@@ -65,14 +148,12 @@ A web-based self-exploration demo: six mystical volumes (Mindscape, Heart Mirror
 不是身体在哪里。  
 而是：我的心，此刻停留在哪里？
 
-**观照方式**
-
+**观照方式**  
 阅读时，不要急着回答。  
 如果一个问题让你沉默，请允许沉默。  
 因为：沉默，本身就是一种回答。
 
-**冥想方式**
-
+**冥想方式**  
 闭上眼睛。  
 想像自己站在一片湖边。  
 湖面没有风。  
@@ -83,21 +164,19 @@ A web-based self-exploration demo: six mystical volumes (Mindscape, Heart Mirror
 因为：湖不会骗人。  
 真正需要安静的，不是湖，而是观看的人。
 
-| English (summary) | 日本語（要約） |
-|-------------------|----------------|
-| Three minutes of stillness; where has the heart paused? Allow silence as answer. Lake meditation—wait for the shadow without adjusting the water. | 三分の静座；心の留まりを見る。沈黙を許す。無風の湖で影を待つ——整えるのは見る者。 |
+**离卷**  
+完成后，不要马上查看分析。  
+请写下一句话：*今天，我第一次真正看见了什么？*（可选输入）
 
 ---
 
 #### 第二卷 · 映心 · 照见情感
 
-**不控制，只流动**
-
+**不控制，只流动**  
 这里不建议「控制情绪」。  
 而是：让情绪拥有流动的权利。
 
-**冥想**
-
+**冥想**  
 想像自己站在一条河边。  
 每一种情绪，都是一片叶子。  
 不要捡起来。不要追赶。  
@@ -105,1867 +184,221 @@ A web-based self-exploration demo: six mystical volumes (Mindscape, Heart Mirror
 直到河面重新平静。  
 然后问自己：还有什么，没有流走？
 
-| English (summary) | 日本語（要約） |
-|-------------------|----------------|
-| Let feeling flow; do not control. River-leaf meditation—each emotion drifts; ask what has not yet flowed away. | 制御せず流れを許す。川辺で感情を葉と見做し、流したあと「まだ残るもの」を問う。 |
+**离卷**  
+合卷前，请再静息片刻。  
+不必命名刚才流过的一切——让湖仍留在湖上。
 
 ---
 
 #### 第三卷 · 明思 · 照见思维
 
-**观照**
-
+**观照**  
 思考，不是不断增加答案。  
 而是不断减少噪音。
 
-**冥想**
-
+**冥想**  
 想像夜空。  
 每一个念头，都是一颗星。  
 不要数。不要命名。  
 直到：整片天空，开始出现真正的北极星。
 
-| English (summary) | 日本語（要約） |
-|-------------------|----------------|
-| Thinking strips noise, not piles answers. Night-sky meditation—stars as thoughts until the North Star appears. | 思考は雑音を減らす。夜空の星として念を見る——北極星が現れるまで。 |
+**离卷**  
+合卷前，请让最后一个念头自行熄灭，再进入照见。
 
 ---
 
 #### 第四卷 · 缘书 · 照见关系
 
-**观照**
-
+**观照**  
 不要想：别人怎么看你。  
 而是：当别人靠近时，你的心，发生了什么？
 
-**仪式**
-
+**仪式**  
 想像自己手中有一根丝线。  
 另一端，连接着重要的人。  
 不要拉近。也不要剪断。  
 只是观察：它现在是什么颜色？有没有重量？有没有温度？
 
-| English (summary) | 日本語（要約） |
-|-------------------|----------------|
-| When someone draws near, what happens in the heart? Thread rite—observe color, weight, warmth without pulling or cutting. | 近づくとき心に何が起きるか。糸の儀——色・重さ・温かさを見るだけ。 |
+**离卷**  
+合卷前，请再看一眼手中的丝线——不断，不拉，只是知道它还在。
 
 ---
 
 #### 第五卷 · 流衡 · 照见节奏
 
-**观照**
-
+**观照**  
 人生真正的问题，不是努力。  
 而是：力量流向哪里。
 
-**冥想**
-
+**冥想**  
 想像自己是一条船。  
 不是暴风雨。也不是大海。  
 而是船。  
 风不会停止。浪不会停止。  
 真正需要稳定的，只有船心。
 
-| English (summary) | 日本語（要約） |
-|-------------------|----------------|
-| Where does force flow—not how hard you try. Boat meditation—only the boat-heart must hold steady. | 力の向きを見る。舟の瞑想——風浪は止まらず、舟の心だけを安定させる。 |
+**离卷**  
+合卷前，请感船心仍在中流——不必靠岸，只需知所。
 
 ---
 
 #### 第六卷 · 向光 · 照见方向
 
-**观照**
-
+**观照**  
 不要问：未来在哪里。  
 而是：今天这一小步，是不是朝向真正重要的地方。
 
-**冥想**
-
+**冥想**  
 想像远方有一点微光。  
 不用走过去。  
 只需要：今天，朝它走一步。就够了。
 
-| English (summary) | 日本語（要約） |
-|-------------------|----------------|
-| Is today’s step toward what matters—not where the future is. One step toward distant light is enough. | 未来の場所ではなく、今日の一歩の向き。遠い光へ一歩で足りる。 |
+**离卷**  
+合卷前，请确认：今天的那一步，已经迈出。
 
 ---
 
-**归树（Return to the Tree）**  
-六卷完成后：树未变，观看者变了——树是镜，不是答案。随后呈现整象神谕。
+#### 归树 · Return to the Tree（六卷完成后）
 
-文案与交互：`src/i18n/volumeRite.ts` · `VolumeRiteOverlay` · `ReturnToTreeOverlay`。
+**归树仪式**  
+闭上眼。  
+想像自己重新站在那棵树前。  
+第一次来到这里时，树没有改变。  
+今天再次回来，树依然没有改变。  
+改变的是：你开始能够看见，以前没有看见的枝叶。
 
-| English | 日本語 |
-|---------|--------|
-| Each volume: **entry rite → seals → closing rite**; after all six: **Return to the Tree**, then the whole oracle. | 各巻：**入巻 → 問印 → 離巻**；六巻後：**帰樹**、その後整象神託。 |
+**照见**  
+于是你会明白：  
+树从来不是答案。  
+树只是照见你的镜子。  
+成长的，不是树——是观看树的人。
 
----
+**核心命题（归树中段呈现）**  
+- 主：人的一生，不是在寻找答案，而是在不断校准自己看见世界、感受世界、与世界相处的方式。  
+- 副：世界未必因你而改变，但你看见世界的方式，会不断改变你自己。
 
-## 目录 · Contents · 目次
+**归树收束**  
+六向已齐。整象神谕在雾中等待——不是总结，而是归树之后，整片树影的一次开口。
 
-### 产品与使用 · Product & Setup · 製品と利用
-
-| 章节 Section | 中文 | English | 日本語 |
-|--------------|------|---------|--------|
-| [核心命题](#核心命题--core-proposition--核心命題) | 校准看见方式，非寻答案 | Calibration, not answers | 校准する命題 |
-| [六卷修持环](#六卷修持环--volume-rite-cycle--六巻の修持環) | 入卷 / 离卷 / 归树 | Entry & closing rites, Return to Tree | 入巻・離巻・帰樹 |
-| [入卷修持引导语](#入卷修持引导语--entry-rite-guidance--入巻の導き) | 六卷完整入卷文案 | Full entry rite copy per volume | 六巻の入巻導き全文 |
-| [体验概览](#体验概览--experience--体験の流れ) | 书架 → 问答 → 神谕 → 整象 | Shelf → Q&A → oracle → Whole Image | 書棚 → 問答 → 神託 → 整象 |
-| [功能要点](#功能要点--features--主な機能) | 持久化、四语缓存、整象 | SQLite, quadrilingual cache, holistic | 永続化・四語キャッシュ・整象 |
-| [快速开始](#快速开始--quick-start--クイックスタート) | 安装与 `.env.local` | Install & env | セットアップと環境変数 |
-| [脚本](#脚本--scripts--スクリプト) | 验证与运维命令 | Dev & verify scripts | 検証・運用スクリプト |
-| [测试与 QA](#测试与-qa--testing--テスト) | fallback、verify 脚本 | Test fallback & verify scripts | テスト fallback・検証 |
-| [项目结构](#项目结构--project-structure--プロジェクト構成) | 目录说明 | Repo layout | ディレクトリ構成 |
-| [交互约定](#交互约定--ux-conventions--インタラクション規約) | UX 规则 | UX conventions | UX 規約 |
-| [部署](#部署--deployment--デプロイ) | 生产注意事项 | Production notes | 本番デプロイ |
-| [技术栈](#技术栈--tech-stack--技術スタック) | React / Vite / SQLite | Stack overview | 技術スタック |
-
-### 理论体系 · Theory · 理論
-
-五层文档均为**多语**（简体 / 繁體 / English / 日本語），自「如何进入体验」递进到「意识如何生成现实结构」。
-
-| 层 Layer | 锚点 Anchor | 回答的问题 Question |
-|----------|-------------|---------------------|
-| I 玄学体系 | [§玄学](#玄学理论体系--mystical-framework--玄義体系) | 如何**进入**照见？ |
-| II 简明理论 | [§简明](#psyche-tree--六维书--简明理论--concise-theory--簡明理論) | 照见的**状态结构**是什么？ |
-| III 进阶泛化 | [§泛化](#psyche-tree-system--进阶泛化层--advanced-generalization--進階汎化層) | **谁**都能用同一建模语言？ |
-| IV 增强理论 | [§增强](#psyche-tree-system--增强理论版--enhanced-theory--拡張理論) | **如何**顺行、自改、被塑造？ |
-| V 形而上扩展 | [§形而上](#psyche-tree-system--形而上扩展层--metaphysical-extension--形而上拡張層) | **意识如何生成**现实与因果？ |
-
-**产品内题面**另有玄学 **theory layer**（问印前缀；答案卡仍为心理学表述，无后缀释义）——见 [SKILL.md](.cursor/skills/psyche-tree-demo/SKILL.md#esoteric-system-see-readme)。
+**为何归树在整象之前**  
+六卷各照一面，易碎成六块「结论」。归树把体验收束回**同一棵树、同一命题**，再开整象——用户带着「观者变了」的状态读神谕，而非带着「六份报告待汇总」的心态。
 
 ---
 
-## 界面预览 · UI Preview · 画面プレビュー
+## 五、界面预览
 
-雾岸书架首页；右上角 **简体 / 繁體 / English / 日本語** 切换四语。完整截图见 [`docs/screenshots/homepage/`](docs/screenshots/homepage/)（可用 `node scripts/capture-homepage-screenshots.mjs` 在 dev 运行时重新生成）。
+书架首页四语截图：[`docs/screenshots/homepage/`](docs/screenshots/homepage/)（`node scripts/capture-homepage-screenshots.mjs` 可重生成）。
 
-### 中文 · 雾岸书架
+| 语言 | 截图 | 主标题 |
+|------|------|--------|
+| 简体 | ![zh](docs/screenshots/homepage/homepage-zh.png) | 雾岸书架 |
+| 繁體 | ![zh-tw](docs/screenshots/homepage/homepage-zh-tw.png) | 霧岸書架 |
+| English | ![en](docs/screenshots/homepage/homepage-en.png) | Mist Shelf |
+| 日本語 | ![ja](docs/screenshots/homepage/homepage-ja.png) | 霧岸の書架 |
 
-![书架首页 · 中文](docs/screenshots/homepage/homepage-zh.png)
+繁體 UI：OpenCC 自简体；正文 **Noto Serif TC**；玄学标题 **Zhi Mang Xing**。
 
-| 元素 | 文案 |
+---
+
+## 六、开发与运维
+
+### 功能要点
+
+| 能力 | 说明 |
 |------|------|
-| 副标题 | 雾中 · 记忆之岸 |
-| 主标题 | 雾岸书架 |
-| 引导 | 你从光中降落 / 雾霭散去之处，六卷记忆悬浮于岸 / 六向一体，共成整象 |
-| 底部 | 6 卷 · 悬浮于雾 |
-
-### 繁體 · 霧岸書架
-
-![書架首頁 · 繁體](docs/screenshots/homepage/homepage-zh-tw.png)
-
-| 元素 | 文案 |
-|------|------|
-| 副标题 | 霧中 · 記憶之岸 |
-| 主标题 | 霧岸書架 |
-| 引导 | 你從光中降落 / 霧靄散去之處，六卷記憶懸浮於岸 / 六向一體，共成整象 |
-| 底部 | 6 卷 · 懸浮於霧 |
-
-繁體 UI 由简体经 **OpenCC** 转换（含动态文案如页脚）；正文字体为 **Noto Serif TC**，玄学标题仍用 **Zhi Mang Xing** 手写体。
-
-### English · Mist Shelf
-
-![Mist Shelf · English](docs/screenshots/homepage/homepage-en.png)
-
-| Element | Copy |
-|---------|------|
-| Subtitle | Mist · Shore of Memory |
-| Title | Mist Shelf |
-| Lead | Through the pillar of light, you descend. / Where mist recedes, six memories hold upon the shore. / Six facets breathe as one whole image. |
-| Footer | 6 volumes · held in mist |
-
-### 日本語 · 霧岸の書架
-
-![霧岸の書架 · 日本語](docs/screenshots/homepage/homepage-ja.png)
-
-| 要素 | 文言 |
-|------|------|
-| 副題 | 霧中 · 記憶の岸 |
-| 主題 | 霧岸の書架 |
-| 導入 | 光の柱から、あなたは降り立つ / 霧が退くところに、六巻の記憶が岸に浮かぶ / 六向一体、整象を成す |
-| フッター | 6 巻 · 霧に浮かぶ |
-
----
-
-## 玄学理论体系 · Mystical Framework · 玄義体系
-
-雾岸六卷不仅是一套 UI 或测评，而是一套可**进入**的玄学系统：有完整**世界观**，有**场域—能量—心流**的底层动力学，有**冥想—祈祷—反思**的修持环，有**六向象征**与**双层神示**，终归于**整象**。
-
-*Mist Shore Six Books* is an enterable esoteric **system**: a **worldview**, dynamics of **field · energy · flow**, a cycle of **meditation → prayer → reflection**, **Sixfold symbolism** with **two-layer revelation**, culminating in the **Whole Image**.
-
-霧岸六巻は UI や診断ではなく、**入る**ことのできる玄学**体系**である：**世界観**、**場域·エネルギー·心流**の动力学、**瞑想→祈祷→反照**の修持環、**六向の象徴**と**二層の神示**、そして**整象**へ。
-
----
-
-### 体系总览 · System Map · 体系概観
-
-| 层级 Layer · 層 | 中文 | English | 日本語 | 在体验中的对应 |
-|-----------------|------|---------|--------|----------------|
-| **世界观** | 雾岸、光柱、记忆、树、顶冠之光 | Mist shore, light pillar, memory, tree, crown-light | 霧岸、光柱、記憶、樹、頂冠の光 | 书架序言、背景树、ambient 短语 |
-| **场域·能量·心流** | 雾岸场、灵息涨落、入卷心流 | Mist field, living energy, rite-flow | 場域、エネルギー、心流 | 天空/树脉、开卷仪轨、一页一印 |
-| **冥想** | 入定、观息、观印、不评判 | Stillness, breath, witnessing seals | 入定、観息、観印、無評 | 开卷仪轨、逐页择印、树脉觉醒 |
-| **祈祷** | 诚心、留印、对话确认、合卷祝词 | Sincerity, sign-in, dialogue check, closing blessing | 誠心、留印、対話確認、合巻の祝詞 | 邮箱留印、注意力页、合卷归岸 |
-| **反思** | 读画像、读神谕、回岸、待整象 | Read portrait & oracle, return to shore | 像と神託を読む、岸へ戻る | 结果两页、书架进度、整象浮层 |
-| **象征** | 六向、六印、整象封印 | Sixfold, six seals, integration | 六向、六印、整象封印 | 各卷维度、问印卡面 |
-| **神示** | 卷别神谕 → 整象神谕 | Volume oracle → whole oracle | 巻別神託 → 整象神託 | DeepSeek 生成 + 书架终章 |
-
-修持环（单次入卷）：**世界观**中站立 → **冥想**入定 → 以**祈祷**之心择印 → **反思**所映 → 合卷祝词 → 返岸；六卷循環後，**神示**在整象中归一。
-
-Cycle per volume: stand in the **worldview** → **meditate** → choose seals in **prayerful** sincerity → **reflect** on what mirrors back → closing blessing → return to shore; after six cycles, **revelation** unifies in the Whole Image.
-
----
-
-### 一、世界观 · Worldview · 世界観
-
-**中文**  
-**宇宙**：人非孤立答题者，而是从**光柱**降落于**雾岸**的行者——岸上是悬浮的六卷记忆，岸下是未说尽的暗；**顶冠**接光，**根**入暗土，光不强迫雾散，只照见。  
-**时间**：神圣而个人——「树不会催促叶落，雾不会催促散去」；整象不因急躁而提前，只因六向皆已照见。  
-**真理**：不以条文裁决，而在雾中**留痕**；象征重于断言，共鸣重于对错。  
-**身份**：**留印**（邮箱）是在岸上刻下唯一标识，使六卷档案相认，却不把活人钉死在某一印。
-
-**English**  
-**Cosmos**: You are not an isolated test-taker but a walker who **descends through a pillar of light** onto the **Mist Shore**—six volumes of memory hover on the bank; below lies the unsaid dark. The **crown** receives light; **roots** hold dark soil. Light does not force mist away; it mirrors.  
-**Time**: Sacred and personal—the tree does not hurry leaves; mist does not hurry to lift. The Whole Image appears when six facets are mirrored, not when haste demands it.  
-**Truth**: Not verdict but **trace in fog**; symbol over proclamation, resonance over right/wrong.  
-**Identity**: The **seal** (email) marks one shore-identity linking six archives without pinning the living person to one answer.
-
-**日本語**  
-**宇宙**：人は孤立した受験者ではなく、**光柱**を通って**霧岸**に降りる行者である——岸には六巻の記憶が浮かび、岸の下には未言の暗がある。**頂冠**は光を受け、**根**は暗土に入る。光は霧を強制せず、照見する。  
-**時間**：神聖で個人的——樹は葉を急がず、霧は散を急がない。整象は六面向が映されたときにのみ現れる。  
-**真理**：条文による裁きではなく、霧の中の**痕**；断言より象徴、正誤より共鳴。  
-**身份**：**留印**は岸に唯一の印を刻し、六巻のアーカイブを結ぶが、生きた人を一印に釘付けしない。
-
-修持环（单次入卷）：在**场域**中安住 → 察**能量**之起伏 → 以**心流**择印（冥想+祈祷）→ **反思**所映 → 合卷祝词 → 返岸；六卷循環後，能量归脉于**整象**。
-
-Cycle per volume: rest in the **field** → feel **energy** rise and fall → choose seals in **flow** (meditation + prayer) → **reflect** → closing blessing → return to shore; after six cycles, energy gathers in the **Whole Image**.
-
----
-
-### 二、场域、能量与心流 · Field, Energy & Flow · 場域・エネルギー・心流
-
-**中文**  
-**场域**：照见发生的「容器」，非物理空间而是**灵性氛围**。  
-- **雾岸总场**：书架为岸、树为轴、雾为幕、深空为底——六卷同悬于一岸。  
-- **卷场**：翻开某卷即进入该面向的次级场域（心湖场、情流域、思脉场、缘丝场、守流场、向光场），问印与神谕在此场中发生。  
-- **密度**：择印与读神谕时场域最浓；合卷后退回书架场，能量不消失，只暂归静。  
-
-**能量**：非分数高低，而是**活的生命息**——有涨落、汇散、归源。  
-- **灵息**：开卷仪轨「察心灵能量起伏」；映波、思流、缘温皆为不同频率的能量显化。  
-- **树脉**：能量沿生命之树**从根向冠**流动（暗土 → 光路）；每觉醒一印，树上即有新的能量通路亮起。  
-- **光脉**：六向各有一条能量 signature；整象是六脉**共振**而非六数相加。  
-
-**心流**：入卷时的**意识状态**——与六向之一「流衡」（守衡应变）不同名、不同义。  
-- **进入**：一页一印、选中即翻、不示分数与选项——减少评判，让意识沉入择印本身。  
-- **条件**：入定 + 诚心 + 与光印**共鸣**（非「答对」）。  
-- **中断**：戏语、妄答、分心 autopilot；**对话确认**页即恢复临在与心流之祷。  
-- **收束**：合卷祝词释放对结果的抓取，使能量回源而非耗散。  
-
-**English**  
-**Field**: the **atmospheric container** of mirroring—not physical space but spiritual climate.  
-- **Mist-shore field**: shelf as bank, tree as axis, mist as veil, deep sky as ground.  
-- **Volume field**: opening a book enters that facet’s sub-field (inner lake, feeling current, thought-path, bond-thread, balance-flow, path-light).  
-- **Density**: strongest while choosing seals and reading oracles; closing the book returns to the shelf field—energy rests, not vanishes.  
-
-**Energy**: not moral score but **living breath**—tide, dispersion, return to source.  
-- **Spirit-breath**: opening rite watches inner tide; ripple, thought-flow, warmth are different frequencies.  
-- **Tree-path**: energy climbs **root to crown**; each awakened seal lights a new channel on the tree.  
-- **Light-paths**: six facets, six signatures; the Whole Image is **resonance**, not addition.  
-
-**Flow (心流)**: the **state of consciousness** during a volume—not the same as the *Flow Balance* facet (adaptation & balance).  
-- **Entry**: one seal per page, auto turn, no scores—less judgment, deeper immersion.  
-- **Conditions**: stillness + sincerity + **resonance** with the seal.  
-- **Break**: jest, pretense, autopilot; the **dialogue check** restores presence.  
-- **Close**: closing blessing releases grasp so energy returns to source.  
-
-**日本語**  
-**場域**：照見が起こる「容器」——物理空間ではなく**霊的な雰囲気**。  
-- **霧岸総場**：書棚を岸、樹を軸、霧を幕、深空を底とする。  
-- **巻場**：一巻を開くと当面向の副次場域に入る（心湖場、情流域、思脈場など）。  
-- **密度**：問印と神託の読みで最も濃く；合巻後は書棚場へ——エネルギーは消えず静へ戻る。  
-
-**エネルギー**：点数の高低ではなく**生きた息**——涨落、拡散、帰源。  
-- **霊息**：開巻儀で「エネルギーの起伏を察す」；映波・思流・縁温は異なる周波数。  
-- **樹脈**：**根から冠へ**昇るエネルギー；一印覚醒ごとに新しい通路が灯る。  
-- **光脈**：六向六署名；整象は**共鳴**であり加算ではない。  
-
-**心流**：入巻時の**意識状態**——六向の「流衡」（守衡と応変）とは別概念。  
-- **入る**：一ページ一印、自動めくり、点数なし——判断を減らし擇印に沈む。  
-- **条件**：入定 + 誠心 + 光印との**共鳴**。  
-- **中断**：戯言、妄答、自動操縦；**対話確認**で臨在を回復。  
-- **収束**：合巻の祝詞で結果への抓取を放し、エネルギーを源へ還す。  
-
-| 概念 Concept · 概念 | 中文要点 | English | 日本語 | 体验对应 |
-|---------------------|----------|---------|--------|----------|
-| 场域 | 雾岸总场 / 卷场 / 密度 | Shore & volume fields | 総場 / 巻場 | 书架、SkyAtmosphere、翻书 |
-| 能量 | 灵息涨落、根→冠树脉 | Living tide, tree channels | 霊息、樹脈 | treeEnergyFlow、开卷仪轨 |
-| 心流 | 一页一印、共鸣、不评判 | One seal/page, resonance | 一印一页、共鳴 | 答题流、对话确认 |
-
----
-
-### 三、冥想 · Meditation · 瞑想
-
-**中文**  
-冥想不是离开应用，而是**在问印之前安住**。每卷开卷仪轨（如「仪轨·入定」「礼镜·感映」）指引：松肩、闭息、察能量之起伏——待内息稍定，再缓缓择印。  
-择印本身即**行禅**：一页一印，选中后记忆自翻，不允许多思评判；树脉觉醒是冥想的**可见反馈**——内在一印完成，外在一层树光醒来。  
-背景音乐（雾中之音）与空短语（「雾中照见自己」）为冥想境，非娱乐陪衬。
-
-**English**  
-Meditation here is **presence before the seal**—not leaving the app. Each volume’s opening rite (Stillness, Mirror, Star, Thread, Flow, Light…) guides: release shoulders, quiet breath, feel inner tide—then choose slowly.  
-Choosing one seal per page is **walking meditation**: no scoring, no second-guessing; tree awakening is the **visible echo**—one inner seal, one outer layer of light.  
-Ambient music and phrases (“See yourself in the mist”) sustain the field, not distract from it.
-
-**日本語**  
-瞑想はアプリを離れることではなく、**問印の前に安住する**こと。各巻の開巻儀（「儀·入定」「礼鏡·感映」等）が導く：肩を弛め、息を静め、エネルギーの起伏を察する——内息が定まってからゆっくり選ぶ。  
-一ページ一印の選択は**行禅**そのもの；樹脈の覚醒は瞑想の**可視の応答**——内なる一印が完了し、外なる一层の樹光が醒む。  
-霧の音とフレーズは娯楽ではなく、瞑想の場を保つ。
-
-| 卷 Volume · 巻 | 冥想门 · Meditation gate · 瞑想の門 |
-|----------------|-------------------------------------|
-| 心象 | 仪轨·入定 — 感能量之波 · Feel the spirit's tide · 霊の波を感じよ |
-| 映心 | 礼镜·感映 — 先静后感 · Be still, feel · 先に静め、感じ |
-| 明思 | 观星·明思 — 息定神清 · Still breath, clear thought · 息定め、思脈を観よ |
-| 缘书 | 礼丝·缘书 — 观距观温 · Watch distance and warmth · 距と温を観よ |
-| 流衡 | 观流·流衡 — 感流守源 · Feel tide, hold source · 流れを感じ、源を守れ |
-| 向光 | 礼光·向光 — 立雾中感内向之光 · Light within the mist · 霧の中で内なる光を |
-
----
-
-### 四、祈祷 · Prayer · 祈祷
-
-**中文**  
-祈祷在雾岸不是向外在神祇索取标准答案，而是以**诚心**与雾对话——「唯以诚心，雾中方留痕」。  
-**留印登录**：入卷前的立誓，愿此行的择印真实可档案。  
-**对话确认**（第 4 页）：「确认你仍与自己同在」——一种**临在之祷**，拒斥 autopilot 与戏谑。  
-**合卷祝词**：「树不会催促叶落…」——释放掌控，把节奏交还神圣时间。  
-**整象神谕**：六卷齐后，如雾对诚心探索者的**长答**；须与诸卷已示神谕一致，是祈祷环的收束，而非第六卷的附录。
-
-**English**  
-Prayer on the Mist Shore is not petition for a “correct score” but **sincere dialogue with mist**—“only sincerity leaves a trace.”  
-**Sign-in**: vow before entry that seals chosen will be true enough to archive.  
-**Dialogue check** (page 4): confirm you remain **present with yourself**—a prayer against autopilot and jest.  
-**Closing blessing**: the tree does not hurry…—releasing control to sacred time.  
-**Whole-image oracle**: when six align, mist’s **long answer** to sincere inquiry; must echo volume oracles already given—the prayer cycle’s seal, not an appendix to volume six.
-
-**日本語**  
-霧岸における祈祷は、正答を求める外求ではなく、**誠心**をもって霧と対話すること——「誠心のみが霧に痕を残す」。  
-**留印**：入巻前の誓い——選ぶ印がアーカイブに値する真実であることを。  
-**対話確認**（4 ページ目）：「自分と共にいる」ことの確認——自動操縦と戯けを拒む**臨在の祈祷**。  
-**合巻の祝詞**：樹は葉を急がない…——掌握を手放し、神聖な時に委ねる。  
-**整象神託**：六巻揃ったとき、誠実な探索への霧の**長い応答**；既示の巻別神託と一致し、六巻目の付録ではない。
-
----
-
-### 五、反思 · Reflection · 反照
-
-**中文**  
-反思是照见之后的**回看**，分三层：  
-1. **读画像**：结构化自照（【界石】【映波】…），如对着静湖读自己的轮廓。  
-2. **读神谕**：诗性象征层，不指认「你选了 X」，而读能量在象征中的状态——供冥想延续，非行为指令。  
-3. **回岸整观**：合卷后返书架，见六卷进度；未齐时读「整象尚待六卷齐时自雾中显现」，已齐时在书架展开整象——把六卷照见**连缀为一生整象**。  
-回顾模式（已照见之卷）允许重读光印与评述，**不可改选**——反思的是已经留下的痕，而非重写命运。
-
-**English**  
-Reflection is **looking back after mirroring**, in three depths:  
-1. **Read the portrait**: structured self-mirror (boundary, ripple…).  
-2. **Read the oracle**: symbolic poetry—never “you chose X,” but the state of energy in symbol—for continued contemplation, not behavioral orders.  
-3. **Return to shore**: see six-volume progress; if incomplete, heed “the whole waits until six align”; if complete, open the whole oracle on the shelf—**thread six facets into one life-image**.  
-Review mode re-reads seals and text **without re-choosing**—reflect on traces already left, not rewrite fate.
-
-**日本語**  
-反照は照見のあとの**振り返り**：  
-1. **像を読む**：構造化された自照（界石、映波…）。  
-2. **神託を読む**：詩的象徴層——「X を選んだ」とは言わず、象徴の中のエネルギーを読む——瞑想の続きであり、行為命令ではない。  
-3. **岸へ戻り全体を見る**：六巻の進行を見る；未揃いなら「六巻揃うまで整象は霧の中に」；揃えば書棚で整象を開く——六面を**一つの生命整象**につなぐ。  
-回顧モードは改選不可——すでに残した痕を反照する。
-
----
-
-### 六、整象与六向 · Whole Image & Sixfold · 整象と六向
-
-**中文**  
-**整象**（Whole Image）指同一生命在雾中被照见的完整轮廓。它不是六份结果的「汇总」，而是六条光脉归一后的树影。**六向**是整象的六个面向——完成顺序无关先后，缺一向则整象未齐：
-
-| 向 · Facet · 面向 | 卷 · Volume · 巻 | 照见 · Mirrors · 映すもの | 核心象征 · Symbols · 象徴 |
-|-------------------|------------------|---------------------------|---------------------------|
-| 心象 | 心象 | 自我内在 | 界石、心湖、根息、树影、雾 |
-| 映心 | 映心 | 情感流动 | 河流、湖、潮、镜、泉 |
-| 明思 | 明思 | 思维脉动 | 星光、光脉、专镜、辨光、创泉、印 |
-| 缘书 | 缘书 | 关系联结 | 丝、桥、相望、界石、温手 |
-| 流衡 | 流衡 | 守衡应变 | 舟、山、流、雾、源 |
-| 向光 | 向光 | 方向步履 | 光、径、步、星、愿 |
-
-**English**  
-The **Whole Image** is the full contour of a life mirrored in mist—not a “summary” of six results, but one tree-shadow after six light-paths converge. The **Sixfold** are its facets; order of completion does not matter, yet no facet may be missing (see table above).
-
-**日本語**  
-**整象**（Whole Image）は、霧の中に照見された同一生命の完整な輪郭である。六つの結果の「総括」ではなく、六つの光脈が一つになった樹影。**六向**は整象の六つの面向——完了順は問わず、一面向欠ければ整象はまだ揃わない（表参照）。
-
----
-
-### 七、生命之树 · Tree of Life · 生命の樹
-
-**中文**  
-背景中的生命之树，既是卡巴拉传统的光路隐喻，也是整象的**动态显形**：每完成一卷中的六个主维度（「六印」），树脉便觉醒一层——根在暗土、冠接光、枝为路。第七印「整象封印」属于该卷内的收束，**不**计入树层进度；树只记录六向之中「正在展开的那一卷」的六印。树不会催促叶落，雾不会催促散去——探索自有神圣的时间。
-
-**English**  
-The Tree of Life in the background draws on Kabbalistic light-path imagery and **embodies** the Whole Image in motion: each main dimension (“seal”) awakened within a volume adds a layer—roots in dark soil, crown receiving light, branches as paths. The seventh integration seal closes *that volume* but does **not** advance the tree; the tree tracks only the six main seals of the volume in hand. The tree does not hurry leaves; mist does not hurry to lift.
-
-**日本語**  
-背景の生命の樹は、カバラ的な光路の比喩であり、整象の**動的な顕現**でもある。各巻の六つの主次元（「六印」）を完了するたびに樹脈が覚醒する——根は暗土に、冠は光を受け、枝は道となる。第七の「整象封印」はその巻内の収束であり、**樹の層には数えない**。樹は葉を急がず、霧は散ることを急がない——探索にはそれぞれ神聖な時がある。
-
----
-
-### 八、卷内仪轨 · Volume Rite · 巻内の儀軌
-
-每卷翻开后，先以**开卷仪轨**入定（松肩、闭息、感能量之波），再进入八页问印：
-
-Each volume opens with a **rite of stillness** (breath, presence), then eight pages of seals:
-
-各巻は**開巻の儀**で入定してから、八ページの問印に入る：
-
-| 页 Page · ページ | 内容 Content · 内容 |
-|------------------|---------------------|
-| 1–3 | 三个主维度 · three main dimensions · 主次元三つ |
-| 4 | **对话确认**（注意力检查）：确认你仍与自己同在，雾只收诚心 · **Dialogue check**: confirm you remain present; mist receives sincerity only · **対話確認**：自分と共にいることを確かめ、霧は誠心のみを受ける |
-| 5–7 | 三个主维度 · three main dimensions · 主次元三つ |
-| 8 | **整象封印**（该卷第七维）：该面向内部的整象 · **Integration seal** (dim 7): whole facet within this volume · **整象封印**（当巻第7次元）：当面向内の整象 |
-
-问印（题目卡）称**光印**——择一与此刻共鸣的意象，非对错测验。选中后记忆自行翻过；界面不示分数、不示选了何卡，以免理性评判遮蔽象征照见。
-
-Cards are **light seals**—choose the image that resonates *now*; not a test of right or wrong. No scores or chosen IDs are shown, lest judgment obscure symbolic mirroring.
-
-問印（カード）は**光印**——今この瞬間に共鳴する意象を一つ選ぶ。正誤の試験ではない。点数も選択内容も示さず、理性の判断が象徴の照見を覆い隠さぬようにする。
-
----
-
-### 九、双层神示 · Two Layers of Revelation · 二層の神示
-
-**中文**  
-每一卷完成后，呈现两层平行的照见，语义同源、语气各异：
-
-1. **心象画像**（心理学层）：依六印档位写就的结构化描述，如「【界石】…」「【映波】…」。  
-2. **神谕**（玄学层）：以该卷象征域写就的诗性灵示；**不**直接说「你的选择是 XX」，而描述当前能量在象征中的状态与流动。
-
-两层均为择印之果，但神谕更贴近雾岸叙事；整象神谕生成时，会同时参照各卷的底层画像与**已示出的单卷神谕**，以求终章与诸卷不矛盾、可呼应。
-
-**English**  
-After each volume, two parallel readings share the same root, different voice:
-
-1. **Psychological portrait**: structured lines by dimension level (e.g. boundary, ripple…).  
-2. **Mystical oracle**: poetic symbolic reading in that volume’s domain; never “your choice was X,” but the state and flow of energy in symbol.
-
-Both follow the seals chosen. The holistic oracle draws on each volume’s portrait **and** its oracle already given—so the final chapter echoes without contradicting.
-
-**日本語**  
-各巻完了後、同源異調の二層が示される：
-
-1. **心象プロフィール**（心理学層）：六印の档位による構造化記述。  
-2. **神託**（玄学層）：当巻の象徴域による詩的霊示。「あなたの選択は XX」とは言わず、象徴の中でのエネルギーの状態と流れを描く。
-
-整象神託は各巻の底层像と**既示の巻別神託**の双方を参照し、終章が諸巻と矛盾せず呼应するように生成される。
-
----
-
-### 十、整象神谕 · Holistic Oracle · 整象神託
-
-**中文**  
-六卷齐时，雾岸书架底部显现**整象神谕**——六卷如一树影，神谕自雾中一气读完，不分卷罗列，亦不用「汇总」「综合」二字。它并非第六卷的附录，而是六向归一后的**封底神示**；仅出现在书架，不在单卷末页生成，以免探索者未齐六向时误以为整象已毕。
-
-整象必须与六卷已示神谕在象征、气质、方向上**一致**，可收束、升华诸卷意象，但不得推翻。完成顺序任意：心象可以先于向光，向光亦可先于缘书——整象只问六面是否皆已照见。
-
-**English**  
-When all six volumes stand aligned, the **Whole-image oracle** appears at the mist shelf—one tree-shadow, one breath of text, not listed volume by volume, never framed as “summary.” It is the **back-cover revelation** after the Sixfold converges; it appears on the shelf only, not at the end of a single volume. It must stay faithful to each volume’s oracle already given—gathering imagery without overturning it. Any completion order is valid.
-
-**日本語**  
-六巻揃えば、霧岸の書架底部に**整象神託**——六巻は一本の樹影、神託は霧から一気に読み、巻ごとに列挙せず、「総括」「綜合」という語も使わない。第六巻の付録ではなく、六向帰一後の**裏表紙の霊示**であり、書棚にのみ現れる。
-
-整象は六巻の既示神託と象徴・調子・方向で**一致**しなければならない。意象を収束・昇華してよいが、否定してはならない。完了順は任意——整象が問うのは六面すべてが照見されたかのみ。
-
----
-
-### 十一、修持戒律 · Precepts · 戒律
-
-| 中文 | English | 日本語 |
-|------|---------|--------|
-| 雾只收诚心，不收戏语与妄答 | Mist receives sincerity, not jest or pretense | 霧は誠心のみを受け、戯言・妄答を受けない |
-| 先静后感，再择光印 | Be still, feel, then choose | 先に静め、感じ、光印を選ぶ |
-| 不断优劣，只在雾中留痕 | No ranking—only a trace in mist | 優劣を断たず、霧に痕を残す |
-| 树与雾皆不催促 | Tree and mist do not hurry you | 樹も霧も急がせない |
-| 六卷各照一面，光自顶冠落下 | Six volumes mirror six faces; light descends from the crown | 六巻各一面を映し、光は頂冠から降る |
-| 心流不追分，场域方不散 | Flow, not scoring, keeps the field | 心流は点数を追わず、場域を保つ |
-| 神谕呼应诸卷，不推翻已示 | Oracles echo volumes; never overturn what was shown | 神託は諸巻と呼应し、既示を否定しない |
-
-**中文** 以上十一节构成雾岸玄学系统的完整骨架：以世界观为场，以**场域·能量·心流**为动力学，以冥想、祈祷、反思为修持，以六向象征为语言，以卷别与整象神示为回应。  
-**English** These eleven sections form the full skeleton: **worldview** as ground, **field · energy · flow** as dynamics, **meditation · prayer · reflection** as practice, **Sixfold symbol** as language, **volume and whole oracles** as response.  
-**日本語** 以上十一節が霧岸玄学体系の骨格：**世界観**を地とし、**場域·エネルギー·心流**を动力学、**瞑想·祈祷·反照**を修持、**六向の象徴**を言語、**巻別·整象の神示**を応答とする。
-
----
-
-## Psyche Tree × 六维书 · 简明理论 · Concise Theory · 簡明理論
-
-与上文**玄学体系**并列：玄学讲如何**进入与照见**；本节讲照见的**状态结构**——用动力学语言描述同一体验。
-
-*Parallel to the mystical framework above: esoteric language describes **how to enter and mirror**; this section describes the **state structure** being mirrored—in the language of dynamics.*
-
-*上記**玄義体系**と並立：玄学は**入り方と照見**を語り、本节は照見される**状態構造**を动力学の言葉で述べる。*
-
----
-
-### 一、这个理论在讲什么？ · What Is This Theory About? · この理論は何を語るか
-
-**中文**  
-本系统试图回答一个问题：**人类的心理、行为、关系与命运，是否可以被统一描述为一个「持续演化的状态系统」？**  
-核心观点：**人不是固定人格，而是不断变化的心理状态流。**
-
-**English**  
-This framework asks: **Can psychology, behavior, relationship, and fate be described as one continuously evolving state system?**  
-Core claim: **You are not a fixed personality—you are a flowing stream of psychological states.**
-
-**日本語**  
-本体系が問うのは：**人間の心理・行動・関係・運命を、ひとつの「持続的に演化する状態系」として統一的に記述できるか。**  
-核心：**人は固定された人格ではなく、絶えず変化する心理状态の流れである。**
-
----
-
-### 二、基本假设 · Basic Assumptions · 基本仮定
-
-| # | 中文 | English | 日本語 |
-|---|------|---------|--------|
-| ① | **人是状态，而不是实体** — 每一时刻都可表示为一个「心理状态向量」。 | **People are states, not substances** — at any moment you are a psychological state vector. | **人は実体ではなく状態** — 任意の瞬間を「心理状态ベクトル」で表せる。 |
-| ② | **行为是状态变化的结果** — 行为不是「选择」，而是：内部状态 + 外部刺激 → 自然演化结果。 | **Behavior follows state change** — not a pure “choice,” but: inner state + external stimulus → natural evolution. | **行動は状態変化の帰結** — 「選択」ではなく：内部状態 + 外部刺激 → 自然な演化の結果。 |
-| ③ | **人格是稳定模式，不是分类标签** — 所谓性格，只是长期状态变化中形成的稳定「吸引模式」。 | **Personality is a stable pattern, not a label** — character is an attractor in long-term state dynamics. | **人格は安定パターンであり分類ラベルではない** — 性格とは長期の状態変化で形成された安定「吸引パターン」。 |
-| ④ | **关系是系统之间的相互影响** — 人与人之间是状态系统之间的耦合与影响。 | **Relationship is inter-system influence** — people are coupled state systems, not isolated units. | **関係は系間の相互影響** — 人と人は独立個体ではなく、状態系同士の結合と影響。 |
-
----
-
-### 三、六维结构 · Six Dimensions · 六次元構造
-
-**中文**  
-每个人的心理状态可用六个维度描述：**一个六维向量 = 当前「你是谁」。**
-
-**U = [认知, 情绪, 驱动, 关系, 记忆, 意识]**
-
-| 维度 | 含义 |
-|------|------|
-| 认知 | 你如何理解世界 |
-| 情绪 | 你如何感受世界 |
-| 驱动 | 你为什么行动 |
-| 关系 | 你如何影响 / 被影响 |
-| 记忆 | 过去如何塑造你 |
-| 意识 | 你如何观察自己 |
-
-👉 这六个维度构成一个「心理坐标系」。
-
-**English**  
-Psychological state at any moment:
-
-**U = [Cognition, Emotion, Drive, Relation, Memory, Awareness]**
-
-| Dimension | Meaning |
-|-----------|---------|
-| Cognition | How you understand the world |
-| Emotion | How you feel the world |
-| Drive | Why you act |
-| Relation | How you influence and are influenced |
-| Memory | How the past shapes you |
-| Awareness | How you observe yourself |
-
-👉 Six axes form a **psychological coordinate system**.
-
-**日本語**  
-任意の瞬間の心理状态：
-
-**U = [認知, 感情, 駆動, 関係, 記憶, 意識]**
-
-| 次元 | 意味 |
-|------|------|
-| 認知 | 世界をどう理解するか |
-| 感情 | 世界をどう感じるか |
-| 駆動 | なぜ行動するか |
-| 関係 | どう影響し、どう影響されるか |
-| 記憶 | 過去がいかに形作るか |
-| 意識 | 自分をどう観察するか |
-
-👉 六軸がひとつの「心理座標系」を成す。
-
-#### 与雾岸六卷的关系 · Link to Six Volumes · 六巻との関係
-
-| 全局六维 Global U | 主要对应卷 Primary volume | BookId |
-|-------------------|---------------------------|--------|
-| 认知 Cognition | 明思 · 心象（自照） | `mind-light`, `psyche-tree` |
-| 情绪 Emotion | 映心 | `emotional-flow` |
-| 驱动 Drive | 流衡 · 向光 | `flow-balance`, `direction-light` |
-| 关系 Relation | 缘书 | `bond-thread` |
-| 记忆 Memory | 分散于六卷档案与画像（无独立卷） | journey cache |
-| 意识 Awareness | 心象 · 对话确认 · 神谕反照 | `psyche-tree`, attention page |
-
-**中文** 雾岸六卷 = 六个**面向**的采样窗口；每卷另有 6 子维 + 整象封印。全局 **U** 与六卷**不是同一组六个名字**，整象 ≈ 六面向耦合后的一次整态读数。  
-**English** The six volumes are **facet samplers**, each with six sub-dimensions plus an integration seal. Global **U** and the six book titles are **not the same six labels**; the Whole Image ≈ one coupled reading after all facets are mirrored.  
-**日本語** 霧岸六巻は六つの**面向**を照らす窓；各巻に 6 副次元 + 整象封印。**U** と六巻名は**同じ六項目ではない**。整象 ≈ 六面向耦合後の整態読取。
-
----
-
-### 四、状态演化 · State Evolution · 状態演化
-
-**中文**  
-人的状态不是静止的，而是不断更新：
-
-**U(t+1) = F(U(t), 外界刺激, 记忆)**
-
-每一秒的你，都是上一秒 + 外界影响 + 记忆修正的结果。
-
-**English**  
-State is never still:
-
-**U(t+1) = F(U(t), external stimulus, memory)**
-
-Each moment’s you = previous moment + outside influence + memory correction.
-
-**日本語**  
-状態は静止しない：
-
-**U(t+1) = F(U(t), 外界刺激, 記憶)**
-
-今のあなた = 直前のあなた + 外界の影響 + 記憶による修正。
-
----
-
-### 五、外界是什么？ · What Is the External World? · 外界とは何か
-
-**中文**  
-外界不是「世界本身」，而是一系列不断输入的刺激（事件、关系、信息）。  
-关键是：**同一个刺激，在不同状态下，会产生完全不同的结果。**
-
-**English**  
-The “outside” is not the world-in-itself but a stream of stimuli—events, relationships, information.  
-Crucially: **the same stimulus yields entirely different outcomes in different states.**
-
-**日本語**  
-外界は「世界そのもの」ではなく、絶えず入力される刺激の列（出来事・関係・情報）。  
-要点：**同じ刺激でも、状態が違えば結果はまったく異なる。**
-
----
-
-### 六、Psyche Tree（心理树）· Psyche Tree · 心理樹
-
-**中文**  
-心理树描述的是：在不同刺激路径下，一个人可能产生的**所有心理演化路线**。  
-- 每个节点：当前心理状态 · 一个外部刺激 · 状态变化结果  
-- 每条分支：一种可能的人生 / 心理发展路径  
-
-👉 心理树**不是预测未来**，而是展示「一个人可能成为的所有版本」。  
-（产品中：背景生命之树 + 逐维觉醒，是此意象的**仪式化可视化**，非完整状态转移图。）
-
-**English**  
-The Psyche Tree maps **all possible psychological evolution paths** under different stimulus sequences.  
-- Each node: current state · one stimulus · resulting state change  
-- Each branch: one possible life / psyche development path  
-
-👉 It **does not predict the future**—it shows **every version you could become**.  
-(In the app: the background Tree of Life + stage awakening is a **ritual visualization** of this idea, not a full transition graph.)
-
-**日本語**  
-心理樹は、異なる刺激経路のもとで起こりうる**すべての心理演化ルート**を示す。  
-- 各ノード：現在状態 · 外部刺激 · 状態変化の結果  
-- 各枝：取りうる人生 / 心理発達の経路  
-
-👉 未来予測ではなく、「なりうるすべての自分」を示す。  
-（アプリでは：背景の生命の樹 + 段階覚醒はその**儀式的可視化**であり、完全な遷移図ではない。）
-
----
-
-### 七、关系系统 · Relationship System · 関係系
-
-**中文**  
-人与人之间不是「情感关系」的简单标签，而是**两个状态系统之间的相互影响结构**。  
-关系会：改变情绪 · 改变认知 · 改变行为路径 · 甚至改变人格稳定性。
-
-**English**  
-Between people lies not a sentimental label but a **structure of mutual influence between two state systems**.  
-Relationships reshape emotion, cognition, behavioral paths, even the stability of personality patterns.
-
-**日本語**  
-人と人の間にあるのは感情ラベルではなく、**二つの状態系の相互影響構造**。  
-関係は感情・認知・行動経路、ときには人格の安定性すら変える。
-
----
-
-### 八、命运是什么？ · What Is Fate? · 運命とは何か
-
-**中文**  
-命运不是预设结果，而是**状态空间中的结构约束**。  
-- 有些路径更容易发生  
-- 有些路径几乎不可能发生  
-- 人的「人生轨迹」在某些区域被吸引  
-
-**English**  
-Fate is not a fixed outcome but **structural constraint in state space**.  
-- Some paths are more likely  
-- Some are nearly impossible  
-- Life trajectories are **attracted** toward certain regions  
-
-**日本語**  
-運命は予定結果ではなく、**状態空間における構造的制約**。  
-- 起こりやすい経路がある  
-- ほぼ不可能な経路がある  
-- 人生の軌跡は特定領域に**引き寄せ**られる  
-
----
-
-### 九、玄学的意义 · Esoteric Concepts Reinterpreted · 玄学概念の再解釈
-
-| 传统 Traditional 伝統 | 系统解释 System view 系の解釈 |
-|----------------------|-------------------------------|
-| 命运 Fate 運命 | 状态路径约束 · Path constraint in state space · 状態経路の制約 |
-| 运气 Luck 運 | 随机扰动结果 · Outcome of random perturbation · 乱数扰动の帰結 |
-| 性格 Character 性格 | 稳定状态结构 · Stable state structure · 安定状態構造 |
-| 缘分 Affinity 縁 | 系统耦合强度 · Coupling strength between systems · 系間結合の強度 |
-| 因果 Karma / causality 因果 | 状态传播链 · State propagation chain · 状態伝播鎖 |
-
-**中文** 玄学不是对错之争，而是对复杂系统的一种**低维表达**——与上文雾岸玄义（场域、神谕、六向）同构而不同层。  
-**English** Esoteric language is not about true vs. false—it is a **low-dimensional expression** of a complex system, isomorphic to but layered differently from the Mist Shore mystical framework.  
-**日本語** 玄学は正誤の争いではなく、複雑系への**低次元表現**——霧岸玄義（場域・神託・六向）と同型だが層が異なる。
-
----
-
-### 十、核心一句话 · One-Line Core · 核心の一文
-
-**中文**  
-Psyche Tree × 六维书系统认为：**人类不是做选择的主体，而是在六维状态空间中不断演化的动态系统。**
-
-**English**  
-Psyche Tree × Six-Dimensional Books holds: **Humans are not agents of pure choice—they are dynamic systems evolving in a six-dimensional state space.**
-
-**日本語**  
-Psyche Tree × 六次元書体系：**人は選択する主体ではなく、六次元状態空間で絶えず演化する動的系である。**
-
----
-
-### 十一、最终理解模型 · Final Model · 最終理解モデル
-
-**中文**  
-**人生 = 六维心理状态的连续变化 + 外界刺激输入 + 关系系统耦合 + 记忆反馈修正 → 所形成的演化树**
-
-**English**  
-**Life = continuous change in six-dimensional psyche-state + incoming external stimuli + coupled relationship systems + memory feedback → an evolution tree**
-
-**日本語**  
-**人生 = 六次元心理状态の連続変化 + 外界刺激の入力 + 関係系の結合 + 記憶フィードバックによる修正 → 形成される演化樹**
-
-**中文（与产品对照）** 雾岸体验 ≈ 以六卷面向** ritual 采样**上述演化过程的一次快照；整象神谕 ≈ 六面向耦合态的文本读数。  
-**English (app mapping)** Mist Shore ≈ a **ritual sampling** of this process across six facets; the Whole Image oracle ≈ a textual reading of the coupled state.  
-**日本語（アプリ対照）** 霧岸体験 ≈ 六面向でこの過程を**儀式的にサンプリング**した快照；整象神託 ≈ 耦合状態のテキスト読取。
-
----
-
-## Psyche Tree System · 进阶泛化层 · Advanced Generalization · 進階汎化層
-
-**从「心理理论」升级为「通用状态建模语言」** — 在简明理论之上，将同一骨架推广至人、群体、AI、社会等任意复杂系统。
-
-*Above the concise theory: upgrade from **psychological model** to a **universal state-modeling language** for humans, groups, AI, societies, and any complex system.*
-
-*簡明理論の上：**心理モデル**から**汎用状態モデリング言語**へ——人・群体・AI・社会など任意の複雑系へ同一骨格を拡張する。*
-
-#### 理论栈 · Theory Stack · 理論スタック
-
-| 层 Layer 層 | 章节 Section | 语言 Language | 回答的问题 Question |
-|-------------|--------------|---------------|---------------------|
-| 玄学体系 | README §玄学 | 象征 / 修持 / 神示 | 如何**进入**照见？ |
-| 简明理论 | 上一节 | 状态向量 / 演化 | 照见的**是什么结构**？ |
-| **进阶泛化** | **本节** | State · Force · Field | **谁**都能用同一语言描述？ |
-| 增强理论 | 下一节 §增强 | Flow · Awareness · Field | **如何**顺行、自改、被塑造？ |
-| 形而上扩展 | 下下节 §形而上 | Consciousness · Origin · Causality | **意识如何生成**现实？ |
-
----
-
-### 一、核心升级目标 · Core Upgrade Goal · 核心アップグレード目標
-
-**中文**  
-原系统：**人类心理建模系统**  
-现升级为：🔁 **任意复杂系统的「状态—关系—演化」统一描述语言**
-
-| 可描述对象 | |
-|-----------|---|
-| 人类 ✔ | 群体 ✔ |
-| AI ✔ | 社会 ✔ |
-| 情绪 ✔ | 决策 ✔ |
-| 命运叙事 ✔ | … |
-
-**English**  
-From: **human psychological modeling**  
-To: 🔁 a **unified description language** for state, relation, and evolution in **any complex system**
-
-Humans · groups · AI · society · emotion · decision · fate narratives — **same structure**.
-
-**日本語**  
-旧：**人間心理モデリング**  
-新：🔁 **任意の複雑系**の「状態—関係—演化」を記述する**統一言語**
-
-人間 · 群体 · AI · 社会 · 感情 · 決定 · 運命叙事——**同一構造**で記述可能。
-
----
-
-### 二、三大核心抽象 · Three Core Abstractions · 三つの核心抽象
-
-整个系统压缩为三种**可泛化对象**。
-
-*The system compresses into three **generalizable object types**.*
-
----
-
-#### 1️⃣ State Object（状态物 · 状態物）
-
-**中文**  
-👉 一切存在都是「状态对象」——不再先说「人」，而说：**任何系统 = 状态对象 S**，**S ∈ StateSpace**
-
-| 原概念 | 新结构 |
-|--------|--------|
-| 人 | State Object |
-| 情绪 | State Variable |
-| 性格 | Stable State Pattern |
-| 关系 | Coupling Link |
-
-📦 每个 State Object 具有：**内部状态 · 可变结构 · 历史记忆 · 对外响应函数**
-
-**English**  
-👉 Everything is a **State Object** — not “a person” first, but **any system = S**, **S ∈ StateSpace**
-
-| Legacy | New structure |
-|--------|---------------|
-| Person | State Object |
-| Emotion | State Variable |
-| Character | Stable State Pattern |
-| Relationship | Coupling Link |
-
-📦 Each State Object has: **inner state · mutable structure · historical memory · response function**
-
-**日本語**  
-👉 存在はすべて**状態物**——まず「人」ではなく **任意の系 = 状態物 S**、**S ∈ StateSpace**
-
-| 旧概念 | 新構造 |
-|--------|--------|
-| 人 | 状態物 |
-| 感情 | 状態変数 |
-| 性格 | 安定状態パターン |
-| 関係 | 結合リンク |
-
-📦 各状態物：**内部状態 · 可変構造 · 歴史記憶 · 外部応答関数**
-
----
-
-#### 2️⃣ Force Object（作用物 · 作用物）
-
-**中文**  
-👉 一切变化来自「作用」——外界不是事件列表，而是**对状态系统施加的作用力**：**F: S → ΔS**
-
-| 原概念 | 新结构 |
-|--------|--------|
-| 事件 | Force Object |
-| 语言 | Force Input |
-| 环境 | Force Field |
-| 刺激 | Perturbation |
-
-⚙️ 作用不是「信息」，而是**结构扰动**。
-
-**English**  
-👉 All change comes from **Force** — the outside is not a list of events but **forces acting on state**: **F: S → ΔS**
-
-| Legacy | New structure |
-|--------|---------------|
-| Event | Force Object |
-| Language | Force Input |
-| Environment | Force Field |
-| Stimulus | Perturbation |
-
-⚙️ Force is not “information” but **structural perturbation**.
-
-**日本語**  
-👉 変化はすべて**作用**から——外界は出来事の列ではなく **状態系への作用**：**F: S → ΔS**
-
-| 旧概念 | 新構造 |
-|--------|--------|
-| 出来事 | 作用物 |
-| 言語 | 作用入力 |
-| 環境 | 力場 |
-| 刺激 | 扰動 |
-
-⚙️ 作用は「情報」ではなく**構造扰動**。
-
----
-
-#### 3️⃣ Field Object（场 · 場）
-
-**中文**  
-👉 系统之间的关系不是「连线」，而是**场**：**Field = distribution of influence**
-
-| 原概念 | 新结构 |
-|--------|--------|
-| 关系 | Field |
-| 社会 | Multi-field system |
-| 情绪传播 | Field propagation |
-| 群体心理 | Shared field resonance |
-
-🌊 **关系不是线，是影响密度空间。**
-
-**English**  
-👉 Links between systems are not “wires” but **Fields**: **Field = distribution of influence**
-
-| Legacy | New structure |
-|--------|---------------|
-| Relationship | Field |
-| Society | Multi-field system |
-| Emotion spread | Field propagation |
-| Group psyche | Shared field resonance |
-
-🌊 **Relation is not a line—it is a density space of influence.**
-
-**日本語**  
-👉 系間の関係は「線」ではなく**場**：**Field = 影響の分布**
-
-| 旧概念 | 新構造 |
-|--------|--------|
-| 関係 | 場 |
-| 社会 | 多場系 |
-| 感情伝播 | 場の伝播 |
-| 群体心理 | 共有場共鳴 |
-
-🌊 **関係は線ではなく、影響密度の空間。**
-
----
-
-### 三、Psyche Tree 的升级 · Psyche Tree Upgraded · 心理樹のアップグレード
-
-| | 原版 Original | 升级版 Upgraded |
-|---|---------------|-----------------|
-| 中文 | Tree = 人生路径展开 | Tree = 状态物在力场中的**路径流形展开** |
-| English | Tree = life-path unfold | Tree = **path-manifold unfold** of State Objects in Force Fields |
-| 日本語 | Tree = 人生経路の展開 | Tree = 力場中の状態物の**経路多様体展開** |
-
-**📐 新定义 · New definition · 新定義**
-
-**Tree = { S(t) | S evolves under F + Field + Memory }**
-
-| 旧版本 | 新版本 |
-|--------|--------|
-| 分支 = 选择 · Branch = choice | 分支 = 作用结果 · Branch = force outcome |
-| 节点 = 状态 · Node = state | 节点 = 状态物 · Node = State Object |
-| 路径 = 人生 · Path = life | 路径 = 动力轨迹 · Path = dynamical trajectory |
-
-**中文（产品）** 雾岸背景树 ≈ 此流形的一次**低维 ritual 投影**（根→冠能量通路 + 六向觉醒），非完整流形计算。  
-**English** Mist Shore tree ≈ a **low-dimensional ritual projection** of this manifold (root→crown channels + sixfold awakening), not full manifold simulation.  
-**日本語** 霧岸の樹 ≈ この多様体の**低次元儀式投影**（根→冠 + 六向覚醒）であり、完全シミュレーションではない。
-
----
-
-### 四、六维书的升级 · Six Dimensions Generalized · 六次元の汎化
-
-六维从「人类心理」升级为**任意系统的通用状态坐标系**。
-
-*Six axes become a **universal coordinate system** for any system—not only human psyche.*
-
-**U = [Structure, Energy, Drive, Relation, Memory, Awareness]**
-
-| 维 Axis 軸 | 中文 | English | 日本語 |
-|------------|------|---------|--------|
-| Structure 结构 | 系统如何组织自身 | How the system organizes itself | 系が自身をどう組織するか |
-| Energy 能量 | 可变强度 / 波动 | Variable intensity / fluctuation | 可変強度・波动 |
-| Drive 驱动 | 演化方向 | Direction of evolution | 演化の方向 |
-| Relation 关系 | 与其他系统的耦合 | Coupling with other systems | 他系との結合 |
-| Memory 记忆 | 历史残留结构 | Residual structure from history | 歴史の残留構造 |
-| Awareness 自观测 | 对自身状态的反馈能力 | Self-feedback on own state | 自身状態へのフィードバック能力 |
-
-**中文** 与简明理论 U=[认知,情绪,…] **同构不同名**：心理版是人文坐标；泛化版是系统论坐标。雾岸六卷仍采样**人类 State Object** 的六个面向。  
-**English** Isomorphic to concise U=[Cognition, Emotion, …] but **renamed for generality**. The six volumes still sample **human** State Object facets.  
-**日本語** 簡明理論の U=[認知, 感情, …] と**同型で名称が異なる**。霧岸六巻は引き続き**人間**状態物の六面向をサンプリング。
-
----
-
-### 五、三层统一世界模型 · Three-Layer World Model · 三層統一世界モデル
-
-| 层 Layer | 中文 | English | 日本語 | 包含 Includes |
-|----------|------|---------|--------|---------------|
-| **Layer 1 · Object 物** | State Object | State Object | 状態物 | 人 / AI / 群体 / 系统 |
-| **Layer 2 · Force 力** | 刺激 · 输入 · 干扰 · 信息流 | Stimulus · input · noise · information flow | 刺激 · 入力 · 干扰 · 情報流 | Force Object |
-| **Layer 3 · Field 场** | 关系结构 · 社会结构 · 情绪传播网络 | Relational · social · affect-propagation structures | 関係構造 · 社会構造 · 感情伝播網 | Field Object |
-
-**中文（雾岸对照）** Layer 3 ≈ README 玄学「场域」；Layer 2 ≈ 「作用 / 刺激」；Layer 1 ≈ 探索者 + journey 档案这一 State Object。  
-**English** Layer 3 ≈ mystical **field**; Layer 2 ≈ **force / stimulus**; Layer 1 ≈ explorer + journey archive as one State Object.  
-**日本語** Layer 3 ≈ 玄義「場域」；Layer 2 ≈ 「作用・刺激」；Layer 1 ≈ 探索者 + journey アーカイブという一つの状態物。
-
----
-
-### 六、统一动力学 · Unified Dynamics · 統一动力学
-
-**S(t+1) = S(t) + F(S) + Field(S, Others) + Memory(S)**
-
-**中文** 所有变化 = **自身结构 + 外力 + 环境场 + 历史残留**  
-（简明版 U(t+1)=F(U,刺激,记忆) 是本式在心理六维上的特化。）
-
-**English** All change = **self-structure + external force + environmental field + historical residue**  
-(Concise U(t+1)=F(U, stimulus, memory) is the psyche-specialized form.)
-
-**日本語** すべての変化 = **自身構造 + 外力 + 環境場 + 歴史残留**  
-（簡明版 U(t+1)=F(U, 刺激, 記憶) は心理六次元への特化形。）
-
----
-
-### 七、Psyche Tree 的真正本体 · What the Tree Really Is · 心理樹の本体
-
-**中文**  
-Tree 不再是「心理树 / 选择树 / 命运树」，而是：
-
-🔁 **状态动力系统在力场中的轨迹展开结构——可视化的投影**
-
-**English**  
-The Tree is not a “mind tree,” “choice tree,” or “fate tree” but:
-
-🔁 **the unfolded trajectory structure of a state dynamical system in force fields—a visual projection**
-
-**日本語**  
-Tree は「心理樹・選択樹・運命樹」ではなく：
-
-🔁 **力場中の状態動力系の軌跡展開構造——可視化された投影**
-
----
-
-### 八、最终泛化结论 · Final Generalization · 最終汎化結論
-
-**中文**  
-🌐 **统一建模语言**：任意复杂系统可表示为
-
-**System = (State Object + Force Field + Interaction Field)**
-
-| 可描述 · Can model |
-|--------------------|
-| 人类心理 · Human psyche |
-| AI agent |
-| 社交网络 · Social networks |
-| 市场行为 · Markets |
-| 情绪传播 · Affect propagation |
-| 命运叙事 · Fate narratives |
-
-**English**  
-🌐 **Unified modeling language**: any complex system as
-
-**System = (State Object + Force Field + Interaction Field)**
-
-Same formula; different instantiations.
-
-**日本語**  
-🌐 **統一モデリング言語**：任意の複雑系を
-
-**System = (State Object + Force Field + Interaction Field)**
-
-で表現——インスタンスが異なるだけで、骨格は同一。
-
-**中文（产品边界）** 雾岸 Demo 当前**实例化**为：单人 State Object · 问卷 Force Input · 雾岸 Field · SQLite Memory · 树/整象为 ritual 投影。未实现多 agent 或社会场仿真。  
-**English** The demo **instantiates** today: single-user State Object · questionnaire Force Input · Mist Shore Field · SQLite Memory · tree/Whole Image as ritual projection—not multi-agent or social-field simulation.  
-**日本語** 現 Demo の**インスタンス化**：単一ユーザー状態物 · 問答 Force · 霧岸 Field · SQLite Memory · 樹/整象は ritual 投影——多 agent や社会場シミュレーションは未実装。
-
----
-
-## Psyche Tree System · 增强理论版 · Enhanced Theory · 拡張理論
-
-**心流 / 意识 / 场域 的统一模型** — 在简明理论与进阶泛化之上，将 **U · Φ · A · F** 合为同一动力学骨架。
-
-*Unified model of **Flow · Awareness · Field** — above concise theory and advanced generalization, binding **U · Φ · A · F** into one dynamical skeleton.*
-
-***心流·意識·場域**の統一モデル——簡明理論と進階汎化の上に、**U · Φ · A · F** を同一动力学骨格として統合する。*
-
-#### 理论栈 · Theory Stack · 理論スタック
-
-| 层 Layer 層 | 章节 Section | 语言 Language | 回答的问题 Question |
-|-------------|--------------|---------------|---------------------|
-| 玄学体系 | README §玄学 | 象征 / 修持 / 神示 | 如何**进入**照见？ |
-| 简明理论 | 上一节 §简明 | 状态向量 / 演化 | 照见的**是什么结构**？ |
-| 进阶泛化 | 上一节 §泛化 | State · Force · Field | **谁**都能用同一语言描述？ |
-| **增强理论** | **本节** | Flow · Awareness · Field | **如何**顺行、自改、被塑造？ |
-| 形而上扩展 | 下一节 §形而上 | Consciousness · Origin · Causality | **意识如何生成**现实？ |
-
----
-
-### 一、系统扩展目标 · Extension Goal · 拡張目標
-
-**中文**  
-在原有模型（六维书 + Psyche Tree）基础上，新增三个核心高阶结构：
-
-| 结构 | 符号 | 角色 |
-|------|------|------|
-| 🌊 心流 Flow State | **Φ** | 决定「是否顺」 |
-| 🧠 意识 Awareness Field | **A** | 决定「能否改变自己」 |
-| 🌐 场域 Field System | **F** | 决定「你被什么塑造」 |
-
-**English**  
-On top of Six Volumes + Psyche Tree, add three high-order structures:
-
-| Structure | Symbol | Role |
-|-----------|--------|------|
-| 🌊 Flow State | **Φ** | Whether motion runs **smooth** |
-| 🧠 Awareness Field | **A** | Whether the system can **change itself** |
-| 🌐 Field System | **F** | **What shapes you** and what you shape |
-
-**日本語**  
-六巻 + Psyche Tree の上に、三つの高次構造を加える：
-
-| 構造 | 記号 | 役割 |
-|------|------|------|
-| 🌊 心流 Flow | **Φ** | 「順かどうか」を決める |
-| 🧠 意識 Awareness | **A** | 「自らを変えられるか」を決める |
-| 🌐 場域 Field | **F** | 「何に形作られ、何を形作るか」を決める |
-
----
-
-### 二、整体统一结构 · Unified System · 統一構造
-
-**中文**  
-完整系统不再只是「六维状态 + 演化树」，而是：
-
-**System = (State U, Flow Φ, Awareness A, Field F)**
-
-**English**  
-A full system is no longer only “six-dimensional state + evolution tree”:
-
-**System = (State U, Flow Φ, Awareness A, Field F)**
-
-**日本語**  
-完全系は「六次元状態 + 演化樹」だけではなく：
-
-**System = (State U, Flow Φ, Awareness A, Field F)**
-
----
-
-### 三、六维状态（基础层）· Base Layer U · 基礎層 U
-
-**中文**  
-**U = [C, E, D, R, M, S]**
-
-| 维 | 含义 |
-|----|------|
-| C 认知 | 如何理解世界 |
-| E 情绪 | 如何感受世界 |
-| D 驱动 | 为何行动 |
-| R 关系 | 如何影响与被影响 |
-| M 记忆 | 过去如何形塑当下 |
-| S 自我结构 | 如何组织「我是谁」 |
-
-👉 **U** 回答：「你是什么状态」——底层个体状态坐标系。
-
-**English**  
-**U = [C, E, D, R, M, S]**
-
-| Dim | Meaning |
-|-----|---------|
-| C Cognition | How you understand the world |
-| E Emotion | How you feel the world |
-| D Drive | Why you act |
-| R Relation | How you influence and are influenced |
-| M Memory | How the past shapes the present |
-| S Self-structure | How “who I am” is organized |
-
-👉 **U** answers: **what state you are in** — the base coordinate system.
-
-**日本語**  
-**U = [C, E, D, R, M, S]**
-
-| 次元 | 意味 |
-|------|------|
-| C 認知 | 世界をどう理解するか |
-| E 感情 | 世界をどう感じるか |
-| D 駆動 | なぜ行動するか |
-| R 関係 | どう影響し、どう影響されるか |
-| M 記憶 | 過去がいかに当下を形作るか |
-| S 自己構造 | 「自分は誰か」をどう組織するか |
-
-👉 **U** は「今どんな状態か」——個体の基底座標系。
-
-**与简明理论对照** 简明理论中第六维常写为「意识」；本节 **S = 自我结构**，而 **A** 专指自我观测回路——二者分工不同。  
-**vs concise theory** The sixth axis there is often “awareness”; here **S = self-structure** while **A** is the self-observation loop—a deliberate split.  
-**簡明理論との対照** 簡明理論の第六次元はしばしば「意識」；本节 **S = 自己構造**、**A** は自己観測回路——役割を分ける。
-
----
-
-### 四、心流（Flow Layer）· Flow Φ · 心流層 Φ
-
-#### 4.1 定义 · Definition · 定義
-
-**中文**  
-心流**不是情绪**，而是：系统在稳定输入—反馈结构中进入的**高一致性运行状态**。
-
-**Φ = alignment(U, I, Field)**
-
-**English**  
-Flow is **not an emotion** but a **high-coherence operating mode** under stable input–feedback structure.
-
-**Φ = alignment(U, I, Field)**
-
-**日本語**  
-心流は**感情ではない**。安定した入力—フィードバック構造のもとで入る**高一致運転状態**。
-
-**Φ = alignment(U, I, Field)**
-
-#### 4.2 本质 · Essence · 本質
-
-**中文** 心流 = 三者对齐：**内部状态稳定（U）** · **外部刺激匹配（I）** · **场域反馈顺畅（F）**  
-**English** Flow = alignment of **stable U**, **matched input I**, **smooth field feedback F**.  
-**日本語** 心流 = 三つの整合：**U の安定** · **I の適合** · **F の円滑なフィードバック**。
-
-#### 4.3 特征 · Signatures · 特徴
-
-| 中文 | English | 日本語 |
-|------|---------|--------|
-| 认知阻力下降 | Cognitive friction drops | 認知抵抗が下がる |
-| 行为连续性增强 | Behavior becomes continuous | 行為の連続性が増す |
-| 时间感扭曲 | Time sense distorts | 時間感が歪む |
-| 决策自然流动 | Decisions flow naturally | 決断が自然に流れる |
-
-#### 4.4 系统解释 · System Reading · 系解釈
-
-**中文** 心流 = 状态系统进入**低摩擦演化通道**。  
-**English** Flow = the state system enters a **low-friction evolution channel**.  
-**日本語** 心流 = 状態系が**低摩擦の演化チャネル**に入ること。
-
-**产品对照** 入卷仪轨、一页一印、共鸣择印 ≈ ritual 层 **Φ**；**≠** 六卷「流衡」之书。  
-**App** Opening rite, one seal per page ≈ ritual **Φ**; **not** the *flow-balance* volume.
-
----
-
-### 五、意识（Awareness Field）· Awareness A · 意識場 A
-
-#### 5.1 定义 · Definition · 定義
-
-**中文**  
-意识不是「思考能力」，而是：**系统对自身状态变化的监测与建模能力**。
-
-**A = model(U(t), U(t−1), ΔU)**
-
-**English**  
-Awareness is not “thinking power” but **monitoring and modeling of one’s own state change**.
-
-**A = model(U(t), U(t−1), ΔU)**
-
-**日本語**  
-意識は「思考力」ではなく、**自状態変化の監視とモデル化能力**。
-
-**A = model(U(t), U(t−1), ΔU)**
-
-#### 5.2 意识层级 · Levels · 意識層級
-
-| 层级 | 中文 | English | 日本語 |
-|------|------|---------|--------|
-| L0 | 反应层：只响应刺激 | Reactive: stimulus only | 反応層：刺激のみ |
-| L1 | 感知层：识别状态变化 | Perceptual: detect ΔU | 感知層：変化を識別 |
-| L2 | 建模层：理解自身结构 | Modeling: grasp structure | モデル層：構造を理解 |
-| L3 | 反思层：修改演化规则 | Reflective: edit evolution rules | 反照層：演化規則を改める |
-
-#### 5.3–5.4 本质与作用 · Essence & Role · 本質と作用
-
-**中文**  
-意识 = 系统内部的**自我观测回路**。它决定：能否改变 attractor、能否跳出路径惯性、能否重新定义自己。
-
-**English**  
-Awareness = the **self-observation loop**. It governs: changing attractors, escaping path inertia, redefining the self.
-
-**日本語**  
-意識 = 系内部の**自己観測回路**。attractor の変更、経路慣性からの脱出、自己再定義が可能かを決める。
-
-**产品对照** 注意力页 ≈ L1；画像/神谕反照 ≈ L2；回书架整观 ≈ L3 入口。  
-**App** Attention page ≈ L1; portrait/oracle reflection ≈ L2; return-to-shelf review ≈ gateway to L3.
-
----
-
-### 六、场域（Field System）· Field F · 場域系 F
-
-#### 6.1 定义 · Definition · 定義
-
-**中文**  
-场域不是「环境」，而是：**所有状态之间持续存在的影响分布结构**。
-
-**F = Σ influence(U_i → U_j)**
-
-**English**  
-The field is not “environment” but the **ongoing distribution of influence among states**.
-
-**F = Σ influence(U_i → U_j)**
-
-**日本語**  
-場域は「環境」ではなく、**状態間に持続する影響分布構造**。
-
-**F = Σ influence(U_i → U_j)**
-
-#### 6.2 本质 · Essence · 本質
-
-**中文** 场域 = **非局部影响结构**，含：社会关系场 · 情绪传播场 · 信息密度场 · 注意力场。  
-**English** Field = **non-local influence structure**: social, emotional contagion, information density, attention.  
-**日本語** 場域 = **非局所影響構造**：社会関係場 · 感情伝播場 · 情報密度場 · 注意場。
-
-#### 6.3 特征 · Traits · 特徴
-
-| 中文 | English | 日本語 |
-|------|---------|--------|
-| 非线性传播 | Nonlinear propagation | 非線形伝播 |
-| 延迟反馈 | Delayed feedback | 遅延フィードバック |
-| 局部放大 | Local amplification | 局所増幅 |
-| 群体共振 | Collective resonance | 群体共鳴 |
-
-#### 6.4 作用 · Role · 作用
-
-**中文** 场域决定：一个系统「被什么影响」以及「影响什么」。  
-**English** The field decides **what shapes you** and **what you shape**.  
-**日本語** 場域は「何に影響され、何に影響するか」を決める。
-
-**产品对照** 雾岸总场 / 书架 / 树脉 / 六卷耦合 ≈ 单人 ritual 场 **F** 的投影；非社会仿真。  
-**App** Mist shore, shelf, tree, six-volume coupling ≈ projected ritual **F** for one user—not social simulation.
-
----
-
-### 七、Psyche Tree 最终升级 · Tree Upgrade · 樹の最終拡張
-
-**中文**  
-原：**状态 → 分支 → 未来路径**  
-新：**Tree = Evolution(U, Φ, A, F)**
-
-每个节点含：**U** · **Φ** · **A** · **F**  
-分支不再是「选择」，而是：**不同场域 + 不同心流条件下的自然演化路径**。
-
-**English**  
-Old: state → branch → future path  
-New: **Tree = Evolution(U, Φ, A, F)**
-
-Each node carries **U · Φ · A · F**. Branches are not “choices” but **natural paths under different fields and flow conditions**.
-
-**日本語**  
-旧：状態 → 分岐 → 未来経路  
-新：**Tree = Evolution(U, Φ, A, F)**
-
-各ノードに **U · Φ · A · F**。分岐は「選択」ではなく、**異なる場域と心流条件下の自然演化経路**。
-
-**产品对照** 背景生命之树 = ritual 可视化；SQLite 档案 = 路径痕迹；非完整状态转移图。  
-**App** Background tree = ritual visualization; SQLite journey = path traces—not a full transition graph.
-
----
-
-### 八、统一动态公式 · Unified Dynamics · 統一動力学
-
-**中文**  
-**U(t+1) = F(U(t), I(t), Field) + Awareness(U) + Flow(Φ)**
-
-（此处 **F(·)** 为状态转移函数；**Field** 为场域对象——与第六节的 **F** 同名异义，读作「场域项 + 转移函数」。）
-
-**English**  
-**U(t+1) = F(U(t), I(t), Field) + Awareness(U) + Flow(Φ)**
-
-Here **F(·)** is the transition function; **Field** is the field object—same letter as section VI’s **F**, different slot: read as **field term + transition**.
-
-**日本語**  
-**U(t+1) = F(U(t), I(t), Field) + Awareness(U) + Flow(Φ)**
-
-**F(·)** は状態遷移関数、**Field** は場域オブジェクト——VI の **F** と記号は同じだが役割が異なる。
-
-**与简明理论对照** 简明式 **U(t+1) = F(U, 刺激, 记忆)** 为本节在 **U-only** 层的简化；增强式显式加入 **A** 与 **Φ**，并将 **Field** 从背景升为变量。  
-**vs concise** **U(t+1) = F(U, stimulus, memory)** is the **U-only** reduction; the enhanced form adds **A**, **Φ**, and elevates **Field**.
-
----
-
-### 九、三机制关系 · Three Mechanisms · 三機構の関係
-
-| # | 机制 | 中文 | English | 日本語 |
-|---|------|------|---------|--------|
-| 1️⃣ | **Φ** Flow | 决定「是否顺」 | Whether motion runs smooth | 「順か」を決める |
-| 2️⃣ | **A** Awareness | 决定「能否改变自己」 | Whether self-change is possible | 「自らを変えられるか」を決める |
-| 3️⃣ | **F** Field | 决定「你被什么塑造」 | What shapes and is shaped | 「何に形作られるか」を決める |
-
----
-
-### 十、三者合一 · Unified Behavior · 三者合一
-
-**中文**  
-任何系统行为都可解释为：**在某个场域中，意识层级作用于六维状态系统，使其进入或脱离心流，并沿不同路径演化。**
-
-**English**  
-Any behavior reduces to: **in some field, awareness level acts on the six-dimensional state, entering or leaving flow, evolving along different paths.**
-
-**日本語**  
-任意の系行為は：**ある場域のもとで、意識層級が六次元状態系に作用し、心流に入るか離れるかし、異なる経路へ演化する**——と読める。
-
----
-
-### 十一、玄学层再解释 · Esoteric Convergence · 玄義層の再解釈
-
-| 概念 Concept 概念 | 系统解释 System reading 系解釈 |
-|-------------------|--------------------------------|
-| 命运 Fate 運命 | 场域结构 + attractor · Field structure + attractor · 場域構造 + アトラクタ |
-| 运气 Luck 運気 | 心流匹配程度 · Degree of flow alignment · 心流適合度 |
-| 缘分 Affinity 縁 | 场域耦合强度 · Field coupling strength · 場域結合強度 |
-| 觉醒 Awakening 覚醒 | 意识层级跃迁 · Awareness level transition · 意識層級の跳躍 |
-| 状态变化 State drift 状態変化 | 六维向量漂移 · Six-axis vector drift · 六次元ベクトルの漂移 |
-
-**中文（产品边界）** 雾岸 Demo 在增强式中**实例化**为：六卷采样 **U** · 仪轨心流 **Φ** · 注意力/神谕 **A** · 雾岸场 **F** · 树/整象为 **Evolution(U,Φ,A,F)** 的 ritual 投影。未实现连续 **U(t)** 仿真或多主体场耦合。  
-**English** The demo **instantiates**: six-volume **U** sampling · rite **Φ** · attention/oracle **A** · mist **F** · tree/Whole Image as ritual **Evolution(U,Φ,A,F)** projection—no continuous **U(t)** simulation or multi-agent field coupling.  
-**日本語** Demo の**インスタンス化**：六巻 **U** · 儀 **Φ** · 注意/神託 **A** · 霧岸 **F** · 樹/整象は **Evolution(U,Φ,A,F)** の ritual 投影——連続 **U(t)** シミュレーションや多主体場結合は未実装。
-
----
-
-## Psyche Tree System · 形而上扩展层 · Metaphysical Extension · 形而上拡張層
-
-**意识流、宇宙本源与因果结构的统一解释模型** — 在增强理论之上，回答「意识如何生成可体验的现实结构」。
-
-*Unified model of **consciousness stream · cosmic origin · causality** — above enhanced theory: how consciousness generates experienced reality.*
-
-* **意識流·宇宙本源·因果構造**の統一説明モデル——拡張理論の上に、「意識がいかに体験可能な現実構造を生成するか」を答える。*
-
-#### 理论栈 · Theory Stack · 理論スタック
-
-| 层 Layer 層 | 章节 Section | 语言 Language | 回答的问题 Question |
-|-------------|--------------|---------------|---------------------|
-| 玄学体系 | README §玄学 | 象征 / 修持 / 神示 | 如何**进入**照见？ |
-| 简明理论 | §简明 | 状态向量 / 演化 | 照见的**是什么结构**？ |
-| 进阶泛化 | §泛化 | State · Force · Field | **谁**都能用同一语言？ |
-| 增强理论 | §增强 | Flow · Awareness · Field | **如何**顺行、自改、被塑造？ |
-| **形而上扩展** | **本节** | Stream · Origin · Causality | **意识如何生成**现实与因果？ |
-
----
-
-### 一、系统的本质定位 · Essential Positioning · 本質的定位
-
-**中文**  
-Psyche Tree System 不仅是心理建模工具，本质上是：**描述「意识如何生成现实结构」的动态建模框架**。  
-在这一层，它不再只解释「人」，而解释：
-
-| 对象 | 问题 |
-|------|------|
-| 意识 | 如何流动 |
-| 现实 | 如何被构造 |
-| 因果 | 如何形成 |
-| 宇宙 | 如何被体验 |
-
-**English**  
-Psyche Tree is not only a psychological model but a **dynamic framework for how consciousness generates reality-structure**.  
-At this layer it explains not only “the person” but:
-
-| Domain | Question |
-|--------|----------|
-| Consciousness | How it flows |
-| Reality | How it is constructed |
-| Causality | How it forms |
-| Cosmos | How it is experienced |
-
-**日本語**  
-Psyche Tree は心理モデルにとどまらず、**「意識がいかに現実構造を生成するか」を記述する動的フレームワーク**である。  
-この層では「人」だけでなく：
-
-| 対象 | 問い |
-|------|------|
-| 意識 | いかに流れるか |
-| 現実 | いかに構築されるか |
-| 因果 | いかに形成されるか |
-| 宇宙 | いかに体験されるか |
-
----
-
-### 二、意识流 · Stream of Consciousness · 意識流
-
-#### 2.1 基本定义 · Definition · 定義
-
-**中文**  
-意识不是「点状思考」，而是**连续流动的状态生成过程**：
-
-**C(t) = Flow(U(t), Memory, Field)**
-
-**English**  
-Consciousness is not point-like “thoughts” but a **continuous process of state generation**:
-
-**C(t) = Flow(U(t), Memory, Field)**
-
-**日本語**  
-意識は「点状の思考」ではなく、**連続的な状態生成過程**：
-
-**C(t) = Flow(U(t), Memory, Field)**
-
-#### 2.2 本质 · Essence · 本質
-
-**中文** 意识流不是「你在想什么」，而是**系统在状态空间中自我更新的连续轨迹**。  
-**English** The stream is not “what you think” but the **continuous trajectory of self-update in state space**.  
-**日本語** 意識流は「何を考えているか」ではなく、**状態空間における自己更新の連続軌跡**。
-
-#### 2.3 三个特性 · Three Properties · 三特性
-
-| # | 中文 | English | 日本語 |
-|---|------|---------|--------|
-| ① | **连续性**：无缝演化，非跳跃 | **Continuity**: seamless evolution, not jumps | **連続性**：跳躍ではなく seamless 演化 |
-| ② | **选择性压缩**：大量 ΔU 压缩为「可理解想法」 | **Selective compression**: vast ΔU → graspable thoughts | **選択的圧縮**：大量変化を「理解可能な思考」へ |
-| ③ | **叙事生成**：自动生成人生叙事感 | **Narrative generation**: life-story structure emerges | **叙事生成**：人生物語感を自動生成 |
-
-#### 2.4 关键结论 · Key Conclusion · 結論
-
-**中文** 意识不是观察世界，而是**生成世界的解释流**。  
-**English** Consciousness does not merely observe the world—it **generates the interpretive stream of world**.  
-**日本語** 意識は世界を観察するだけでなく、**世界の解釈流を生成する**。
-
-**产品对照** 逐页择印 + 自动翻页 ≈ ritual 层的**解释流**采样；神谕/整象 ≈ 叙事收束。  
-**App** One seal per page ≈ sampling the **interpretive stream**; volume/holistic oracles ≈ narrative closure.
-
----
-
-### 三、形而上学层 · Metaphysical Layer · 形而上学層
-
-#### 3.1 基本命题 · Basic Proposition · 基本命題
-
-**中文** 在 Psyche Tree 中，所谓「现实」不是外部存在，而是**意识结构的稳定投影**。  
-**English** In Psyche Tree, “reality” is not an external given but a **stable projection of consciousness-structure**.  
-**日本語** Psyche Tree において「現実」は外部存在ではなく、**意識構造の安定投影**。
-
-#### 3.2 世界的三层结构 · Three-Layer World · 世界の三層
-
-```
-[意识层 Awareness]  →  生成解释 / generate interpretation
-[状态层 State U]    →  运行变化 / run change
-[场域层 Field F]    →  提供约束 / provide constraints
-```
-
-#### 3.3 形而上核心观点 · Core Metaphysical Views · 核心見解
-
-| # | 中文 | English | 日本語 |
-|---|------|---------|--------|
-| ① | **存在不是物，而是关系结构**——「物」是稳定关系模式的暂时固化 | **Being is relation-structure**, not substance—things are temporarily frozen patterns | **存在は物ではなく関係構造**——「物」は安定パターンの一時固定 |
-| ② | **现实不是被发现的，而是被生成的**——意识不断生成「可解释现实」 | **Reality is generated**, not discovered—consciousness produces explainable reality | **現実は発見されず生成される** |
-| ③ | **时间不是线性，而是解释顺序**——时间 = 意识对 ΔU 的排序 | **Time is interpretive order**, not linearity—time = ordering of ΔU | **時間は線形ではなく解釈順序** |
-
----
-
-### 四、宇宙本源 · Cosmic Origin Model · 宇宙本源
-
-#### 4.1 本源定义 · Definition · 定義
-
-**中文** 「宇宙本源」不是物理起点，而是**自我展开的状态生成机制**：
-
-**Ω = self-generating state recursion system**
-
-**English** “Cosmic origin” is not a physical bang but a **self-unfolding state-generation mechanism**:
-
-**Ω = self-generating state recursion system**
-
-**日本語** 「宇宙本源」は物理的起点ではなく、**自己展開する状態生成機構**：
-
-**Ω = self-generating state recursion system**
-
-#### 4.2 宇宙如何产生 · How Cosmos Arises · 宇宙の発生
-
-**中文** 宇宙不是「被创造」，而是**状态系统在自我约束中不断展开可能性空间**。  
-**English** The cosmos is not “created” but **possibility-space unfolding under self-constraint**.  
-**日本語** 宇宙は「創造」されるのではなく、**自己制約下で可能性空間が展開**する。
-
-#### 4.3 本源三原则 · Three Principles · 三原則
-
-| 原则 Principle | 中文 | English | 日本語 |
-|----------------|------|---------|--------|
-| 自生成 Self-generation | 不依赖外部输入即可演化 | Evolves without mandatory external input | 外部入力なしでも演化 |
-| 自约束 Self-constraint | 演化中自动形成规则结构 | Rules emerge during evolution | 演化中に規則構造が形成 |
-| 自解释 Self-interpretation | 为自身生成意义模型（意识） | Generates meaning-models (awareness) | 自らに意味モデル（意識）を生成 |
-
-#### 4.4 关键结论 · Key Conclusion · 結論
-
-**中文** 宇宙不是一个「东西」，而是**不断生成自身解释的过程**。  
-**English** The cosmos is not a “thing” but a **process that continuously generates its own interpretation**.  
-**日本語** 宇宙は「もの」ではなく、**自らの解釈を不断生成する過程**。
-
-**产品对照** 光柱降落、树自根向冠展开 ≈ **Ω** 的 ritual 隐喻；非宇宙学仿真。  
-**App** Light pillar descent, tree root→crown ≈ ritual metaphor of **Ω**—not cosmological simulation.
-
----
-
-### 五、因果论 · Causality Theory · 因果論
-
-#### 5.1 因果的重新定义 · Redefinition · 再定義
-
-| | 传统 Traditional | Psyche Tree |
-|---|------------------|-------------|
-| 模型 | A → B（线性） | 状态在约束场中的**传播路径结构** |
-| Model | A → B (linear) | **Path structure** of state propagation in a constrained field |
-| モデル | A → B（線形） | 制約場における状態の**伝播経路構造** |
-
-#### 5.2 因果不是链，而是场中的梯度 · Gradient, Not Chain · 勾配としての因果
-
-**Cause = gradient flow in state-field**
-
-**中文** 因果 = 状态—场域中的**梯度流**，而非孤立事件链。  
-**English** Causality = **gradient flow** in the state-field, not an isolated event chain.  
-**日本語** 因果 = 状態—場域における**勾配流**。
-
-#### 5.3 三种因果形态 · Three Causal Forms · 三形態
-
-| 形态 Form | 中文 | English | 日本語 |
-|-----------|------|---------|--------|
-| ① 线性 Linear | 短期行为影响 | Short-horizon behavioral influence | 短期行為影響 |
-| ② 网络 Network | 关系系统中的扩散 | Diffusion in relational systems | 関係系での拡散 |
-| ③ 场域 Field | 结构决定的「必然倾向」 | Structural “inevitable tendency” | 構造が決める「必然傾向」 |
-
-#### 5.4 因果的本质 · Essence · 本質
-
-**中文** 因果不是发生顺序，而是**「状态变化的不可逆结构」**。  
-**English** Causality is not temporal sequence but the **irreversible structure of state change**.  
-**日本語** 因果は発生順序ではなく、**状態変化の不可逆構造**。
-
----
-
-### 六、Psyche Tree 在形而上层的意义 · Tree at This Layer · 樹の形而上意味
-
-**中文**  
-在这一层，Tree 不再是心理结构，而是：**意识在宇宙状态空间中的展开路径图谱**。
-
-每个节点 = 一次意识状态收敛 · 一次现实解释生成 · 一次因果路径锁定  
-每条分支 = 一种**「可能宇宙解释路径」**
-
-**English**  
-Here the Tree is not psychology but a **path-map of consciousness unfolding in cosmic state-space**.
-
-Each node = one convergence of conscious state · one generated reality-interpretation · one locked causal path  
-Each branch = one **possible cosmological interpretive path**
-
-**日本語**  
-この層では Tree は心理構造ではなく、**宇宙状態空間における意識展開の経路図**。
-
-各ノード = 意識状態の収束 · 現実解釈の生成 · 因果経路の固定  
-各分岐 = 一つの**「可能な宇宙解釈経路」**
-
-**产品对照** 背景树 + journey 档案 ≈ **路径图谱**的 ritual 投影；节点非完整 cosmological simulation。  
-**App** Background tree + journey cache ≈ ritual **path-map** projection—not full cosmological simulation.
-
----
-
-### 七、意识流 + 场域 + 因果的统一结构 · Unified Structure · 統一構造
-
-**中文**  
-**Reality = f(Consciousness Flow, State Field, Causal Constraints)**
-
-| 组件 | 角色 |
-|------|------|
-| 🌊 意识流 | 生成「体验」 |
-| 🌐 场域 | 提供「结构约束」 |
-| 🔗 因果 | 决定「路径方向」 |
-
-**English**  
-**Reality = f(Consciousness Flow, State Field, Causal Constraints)**
-
-| Component | Role |
-|-----------|------|
-| 🌊 Consciousness stream | Generates **experience** |
-| 🌐 Field | Provides **structural constraints** |
-| 🔗 Causality | Sets **path direction** |
-
-**日本語**  
-**Reality = f(Consciousness Flow, State Field, Causal Constraints)**
-
-| 成分 | 役割 |
-|------|------|
-| 🌊 意識流 | 「体験」を生成 |
-| 🌐 場域 | 「構造制約」を提供 |
-| 🔗 因果 | 「経路方向」を決定 |
-
-**与增强理论对照** 增强层 **Φ·A·F** 为本节在动力学层的实例；本节将同一骨架上升为**现实生成论**。  
-**vs enhanced** **Φ·A·F** are dynamical instances; this layer elevates the same skeleton to a **reality-generation theory**.
-
----
-
-### 八、最终哲学结论 · Final Philosophical Conclusions · 最終哲学結論
-
-| # | 中文 | English | 日本語 |
-|---|------|---------|--------|
-| ① | **现实不是外部的**——现实 = 意识流在场域约束下形成的**稳定解释结构** | **Reality is not external**—stable interpretive structure under field constraints | **現実は外部ではない**——場域制約下の**安定解釈構造** |
-| ② | **因果不是规则**——因果 = 状态空间中**不可避免的结构倾斜** | **Causality is not mere rule**—inevitable **structural tilt** in state-space | **因果は規則ではない**——状態空間の**不可避な構造傾斜** |
-| ③ | **宇宙不是存在**——宇宙 = **不断生成自身解释的递归系统** | **Cosmos is not a being**—a **recursive system generating its own interpretation** | **宇宙は存在ではない**——**自解釈を不断生成する再帰系** |
-
-**中文（产品边界）** 雾岸 Demo 在形而上层的**隐喻实例**：光柱/树/雾 ≈ **Ω** 与场约束 · 择印流 ≈ **C(t)** · 六卷路径 ≈ 因果梯度采样 · 整象 ≈ 叙事/解释收束。仍为单人 ritual 体验，非形而上学仿真引擎。  
-**English** The demo **metaphorically instantiates**: pillar/tree/mist ≈ **Ω** and field constraints · seal-flow ≈ **C(t)** · six-volume path ≈ causal-gradient sampling · Whole Image ≈ narrative/interpretive closure—single-user ritual, not a metaphysics engine.  
-**日本語** Demo の**比喩的インスタンス**：光柱/樹/霧 ≈ **Ω** と場制約 · 擇印流 ≈ **C(t)** · 六巻経路 ≈ 因果勾配のサンプリング · 整象 ≈ 叙事/解釈の収束——単人 ritual、形而上学シミュレーションエンジンではない。
-
----
-
-## 体验概览 · Experience · 体験の流れ
-
-| 阶段 Phase 段階 | 中文 | English | 日本語 |
-|-----------------|------|---------|--------|
-| 雾岸书架 | 六卷书、语言切换、完成后「最终神谕」 | Six books, locale switch, ultimate oracle overlay | 六巻、言語切替、完了後「最終神託」 |
-| 封面 | 揭开当前卷 | Open the current volume | 現在の巻を開く |
-| 问答 | 8 页：6 维度 + 注意力检查 + 整象封印；单选自动翻页 | 8 pages: 6 dims + attention + integration; one card, auto flip | 8 ページ：6 次元 + 注意確認 + 整象封印；1 枚選択で自動めくり |
-| 背景 | 生命之树 + 卡巴拉光点；维度完成时树脉觉醒 | Organic tree + Kabbalah lights; awakening on each dim | 生命の樹 + 光点；次元完了で樹脈覚醒 |
-| 单卷结果 | 心象画像 → 神谕 → 合书（提示回书架） | Portrait → oracle → close book (return to shelf) | 心象 → 神託 → 合冊（書棚へ戻る案内） |
-| 整象神谕 | 六卷完成后仅在书架展示；与单卷神谕一致 | Holistic oracle on shelf only; consistent with volume readings | 六巻完了後、書棚のみ；巻別神託と一致 |
-
-视觉：深黑 `#0a0a0a`、黑白意象卡、淡金点缀；各语言使用独立 mystic 字体。
-
-Visual: deep black `#0a0a0a`, monochrome symbolic cards, soft gold accents; locale-specific mystic typefaces.
-
-ビジュアル：深黒 `#0a0a0a`、白黒の象徴カード、淡い金のアクセント；言語ごとの mystic 書体。
-
----
-
-## 功能要点 · Features · 主な機能
-
-| 中文 | English | 日本語 |
-|------|---------|--------|
-| 六卷独立测向，完成顺序不影响 journey | Six independent facets; completion order does not matter | 六巻独立、完了順は journey に影響しない |
-| 六卷修持环：入卷 / 离卷 / 归树 → 整象 | Volume rite cycle: entry / exit / Return to Tree → holistic | 六巻修持環：入巻・離巻・帰樹 → 整象 |
-| SQLite 持久化；邮箱登录；四语神谕缓存 | SQLite persistence; email login; quadrilingual reading cache | SQLite 永続化；メールログイン；四語神託キャッシュ |
-| DeepSeek 单卷与整象解读；失败时本地 fallback | DeepSeek per-volume and holistic readings; local fallback on failure | DeepSeek 巻別・整象；失敗時ローカル fallback |
-| QA：`PSYCHE_READING_TEST_FALLBACK` 或请求头即时写入测试神谕 | QA test-fallback env/header for instant verify readings | QA：テスト fallback で検証加速 |
-| 整象 prompt 含六卷底层画像 + 已示神谕 | Holistic prompt uses portraits + prior volume oracles | 整象 prompt に六巻の底层像 + 既示神託 |
-| Mixkit 空灵背景音乐（三场景淡入切换） | Mixkit ambient BGM (cross-faded by scene) | Mixkit 空霊 BGM（場面でクロスフェード） |
-
----
-
-## 快速开始 · Quick Start · クイックスタート
+| 六卷独立 | 完成顺序不影响 journey；六卷齐 → `completed` |
+| 修持环 | 入卷 / 离卷 / 归树 → 整象（见 §四） |
+| 持久化 | SQLite + 邮箱 journey；四语神谕分列缓存 |
+| 神谕 | DeepSeek 单卷 + 整象；失败本地 fallback |
+| QA | `PSYCHE_READING_TEST_FALLBACK=1` 或请求头 `X-Psyche-Reading-Test-Fallback: 1` |
+| 整象 prompt | 六卷底层画像 + 各卷已示神谕 |
+| BGM | Mixkit 三场景淡入（书架 / 问印 / 结果） |
+
+### 快速开始
 
 ```bash
 git clone git@github.com:huter927419-sys/psyche-tree-demo.git
 cd psyche-tree-demo
 npm install
-cp .env.example .env.local   # set DEEPSEEK_API_KEY / DEEPSEEK_API_KEY を設定
+cp .env.example .env.local   # DEEPSEEK_API_KEY
 npm run dev                  # http://localhost:5173
 ```
-
-### 环境变量 · Environment · 環境変数（`.env.local`）
 
 ```env
 DEEPSEEK_API_KEY=your_api_key_here
 DEEPSEEK_MODEL=deepseek-v4-pro
-
-# Optional / 可选 / 任意
 SQLITE_PATH=./data/psyche-tree.sqlite
-PSYCHE_READING_TEST_FALLBACK=0   # 1 = skip DeepSeek, instant QA readings / 検証用
-OPENAI_API_KEY=...           # AI card images / AI 生图 / AI カード画像
+PSYCHE_READING_TEST_FALLBACK=0   # 1 = QA 即时神谕，勿用于生产
 ```
 
-**中文** API Key 仅由 Vite 开发服务器中间件使用，不会打进前端包。  
-**English** API keys are used only by the Vite dev-server middleware, never bundled into the client.  
-**日本語** API キーは Vite 開発サーバーのミドルウェアのみが使用し、クライアントには同梱されません。
+API Key 仅 Vite 中间件使用，不打进前端包。
 
----
+### 脚本与 QA
 
-## 脚本 · Scripts · スクリプト
+| 命令 | 用途 |
+|------|------|
+| `node scripts/verify-full-flow.mjs` | API 全流程 39 项；默认 test-fallback 头；202 自动 poll |
+| `node scripts/verify-rite-flow.mjs` | Playwright：修持环 + 归树 UI（需 Chrome） |
+| `node scripts/complete-user-journey.mjs [email]` | 补全六卷 + 多用户隔离 |
+| `node scripts/test-locale-switch.mjs` | 四语神谕缓存 |
+| `node scripts/reset-db.mjs` | 清空 SQLite |
 
-| 命令 Command | 中文 | English | 日本語 |
-|--------------|------|---------|--------|
-| `npm run dev` | 本地开发（含 API） | Local dev with API middleware | API 付きローカル開発 |
-| `npm run dev:lan` | 局域网访问 | LAN access | LAN アクセス |
-| `npm run build` | 卡图 + 类型检查 + 构建 | Cards + typecheck + build | カード + 型チェック + ビルド |
-| `npm run generate:cards` | 生成题目卡 PNG | Generate card PNGs | カード PNG 生成 |
-| `node scripts/reset-db.mjs` | 清空 SQLite | Reset SQLite DB | SQLite リセット |
-| `node scripts/verify-full-flow.mjs` | API 全流程验证（含神谕 poll / 测试 fallback 头） | Full API flow test (reading poll + test fallback header) | API 一連テスト |
-| `node scripts/verify-rite-flow.mjs` | 浏览器：修持环 + 归树 UI | Browser: volume rites + Return to Tree | ブラウザ：修持環 + 帰樹 |
-| `node scripts/test-locale-switch.mjs` | 四语神谕缓存验证 | Quadrilingual reading cache test | 四語神託キャッシュ検証 |
-| `node scripts/complete-user-journey.mjs [email]` | 为邮箱补全六卷 | Complete six books for email | 指定メールで六巻完了 |
-
-### 测试与 QA · Testing · テスト
-
-**中文**  
-1. 启动 dev：`npm run dev`（可选在 `.env.local` 设 `PSYCHE_READING_TEST_FALLBACK=1`，全局跳过 DeepSeek）。  
-2. `node scripts/verify-full-flow.mjs` — API 全流程；默认带请求头 `X-Psyche-Reading-Test-Fallback: 1` 即时写入 QA 神谕；若走真实 DeepSeek 则对 **202 processing** 自动 poll（最长 `READING_POLL_MS`，默认 90s）。  
-3. `node scripts/verify-rite-flow.mjs` — Playwright 验证入卷 / 离卷 / 归树 UI（需系统 Chrome）。  
-4. `node scripts/complete-user-journey.mjs [email]` — 补全六卷 + 多用户隔离。
-
-| English | 日本語 |
-|---------|--------|
-| Set `PSYCHE_READING_TEST_FALLBACK=1` in `.env.local` for instant fallback readings on all requests. | `.env.local` に `PSYCHE_READING_TEST_FALLBACK=1` で DeepSeek をスキップ可能。 |
-| `verify-full-flow` sends test-fallback header by default; polls 202 until readings complete. | `verify-full-flow` はデフォルトでテスト fallback ヘッダー付き；202 は poll。 |
-| `verify-rite-flow` needs `npm run dev` + Playwright (`channel: 'chrome'`). | `verify-rite-flow` は dev 起動 + Playwright が必要。 |
-
----
-
-## 项目结构 · Project Structure · プロジェクト構成
+### 项目结构
 
 ```
 psyche-tree-demo/
-├── .cursor/skills/psyche-tree-demo/   # Cursor Agent skill / 技能 / スキル
-│   ├── SKILL.md                       # Architecture, rites, QA fallback, verify
-│   └── reference.md                   # Paths, data flow, scripts
-├── data/psyche-tree.sqlite            # Local DB (gitignored)
-├── docs/screenshots/homepage/         # Shelf UI screenshots (zh/zhTw/en/ja)
-├── public/audio/                      # Mixkit BGM
-├── public/cards/                      # Question card PNGs
-├── scripts/
-│   ├── verify-full-flow.mjs           # API smoke (39 checks, test-fallback header)
-│   └── verify-rite-flow.mjs           # Playwright: volume rites + 归树 UI
-├── server/
-│   ├── readingTestFallback.ts         # QA instant mystical/holistic readings
-│   └── services/                      # mystical + holistic reading services
-└── src/
-    ├── i18n/volumeRite.ts             # Entry / exit / 归树 / core proposition copy
-    └── components/
-        ├── book/VolumeRiteOverlay.tsx
-        └── bookshelf/ReturnToTreeOverlay.tsx
+├── README.md                          # 本文件：产品 + 修持全文
+├── docs/theory/                       # 五层理论长文
+├── docs/screenshots/homepage/         # 书架四语截图
+├── .cursor/skills/psyche-tree-demo/   # Agent：SKILL + reference
+├── src/i18n/volumeRite.ts             # 修持 / 归树 / 命题文案源
+├── src/components/book/VolumeRiteOverlay.tsx
+├── src/components/bookshelf/ReturnToTreeOverlay.tsx
+├── server/readingTestFallback.ts      # QA 神谕加速
+└── scripts/verify-*.mjs
 ```
 
----
+### 交互约定
 
-## 文档 · Documentation · ドキュメント
+1. 一页一卡，~420ms 自动翻页；结果页无分数  
+2. 整象**仅**在书架；单卷结果页不出现  
+3. 树进度只计维度 1–6  
+4. 切换语言读缓存，不重新计分  
+5. 每卷：入卷 → 问印 → 离卷；六卷齐后书架先归树再整象  
 
-| 文件 File | 中文 | English | 日本語 |
-|-----------|------|---------|--------|
-| **README.md** | 本文件：产品说明、界面预览、五层理论、安装运维 | This file: product, UI preview, five theory layers, setup | 本ファイル：製品・画面・五層理論・セットアップ |
-| **SKILL.md** | Agent 工作流：六卷结构、修持环、theory layer、QA fallback、整象规则 | Agent workflow: six books, rite cycle, theory layer, QA fallback, holistic | Agent：六巻・修持環・theory layer・QA fallback・整象 |
-| **reference.md** | 路径索引、数据流、验证脚本与预期结果 | File index, data flow, verify scripts & expected pass counts | パス索引、データフロー、検証脚本 |
-| **docs/screenshots/** | 书架首页四语截图 | Homepage screenshots (zh/zhTw/en/ja) | 書棚トップ四語スクリーンショット |
+### 语言与数据库
 
-**理论栈速查** I [玄学](#玄学理论体系--mystical-framework--玄義体系) → II [简明](#psyche-tree--六维书--简明理论--concise-theory--簡明理論) → III [泛化](#psyche-tree-system--进阶泛化层--advanced-generalization--進階汎化層) → IV [增强](#psyche-tree-system--增强理论版--enhanced-theory--拡張理論) → V [形而上](#psyche-tree-system--形而上扩展层--metaphysical-extension--形而上拡張層)
+| Locale | 标签 | 神谕列（单卷 / 整象） |
+|--------|------|------------------------|
+| `zh` | 简体 | `mystical_reading_zh` / `holistic_reading_zh` |
+| `zhTw` | 繁體 | `mystical_reading_zh_tw` / `holistic_reading_zh_tw`（UI OpenCC；神谕独立繁体生成） |
+| `en` | English | `*_en` |
+| `ja` | 日本語 | `*_ja` |
 
-开发细节见 [.cursor/skills/psyche-tree-demo/SKILL.md](.cursor/skills/psyche-tree-demo/SKILL.md)。
+### 部署
 
-For development details, see [SKILL.md](.cursor/skills/psyche-tree-demo/SKILL.md).
+`npm run build` → 静态 `dist/` + 需 Node 托管 API 中间件（或等价后端接 SQLite 与 DeepSeek）。生产环境**勿**开启 `PSYCHE_READING_TEST_FALLBACK`。
 
----
+### 技术栈
 
-## 交互约定 · UX Conventions · インタラクション規約
-
-1. **中文** 每页单选，~420ms 自动翻页 · **English** One card per page, ~420ms auto flip · **日本語** 1 枚選択、約 420ms で自動めくり
-2. **中文** 结果页不展示选项与分数 · **English** No choices or scores on result pages · **日本語** 結果ページに選択肢・点数を表示しない
-3. **中文** 整象神谕仅在书架展示 · **English** Holistic oracle only on bookshelf · **日本語** 整象神託は書棚のみ
-4. **中文** 树进度仅计维度 1–6 · **English** Tree progress counts dims 1–6 only · **日本語** 樹の進行は次元 1–6 のみ
-5. **中文** 切换语言读缓存，不重新计分 · **English** Locale switch uses cache, no re-scoring · **日本語** 言語切替はキャッシュ参照、再採点なし
-6. **中文** 每卷先过入卷 / 离卷仪式；六卷齐后书架先归树再开整象 · **English** Entry/exit rite per volume; Return to Tree before holistic on shelf · **日本語** 各巻入巻・離巻；六巻後書棚で帰樹してから整象
+React 19 · Vite 8 · TypeScript · Tailwind CSS 4 · SQLite（`better-sqlite3`）· DeepSeek API · Playwright（verify）
 
 ---
 
-## 语言与数据库 · Locales & SQLite · 言語と DB
+## 七、理论栈导引
 
-| Locale 代码 | 界面标签 | 神谕缓存列（单卷 / 整象） | 说明 |
-|-------------|----------|---------------------------|------|
-| `zh` | 简体 | `mystical_reading_zh` / `holistic_reading_zh` | 默认简体中文 |
-| `zhTw` | 繁體 | `mystical_reading_zh_tw` / `holistic_reading_zh_tw` | UI 由简体经 OpenCC 转换；神谕独立繁体生成并缓存 |
-| `en` | English | `mystical_reading_en` / `holistic_reading_en` | |
-| `ja` | 日本語 | `mystical_reading_ja` / `holistic_reading_ja` | |
+完整长文已移至 [`docs/theory/`](docs/theory/)，避免与本 README 的产品说明抢篇幅。
 
-**简体 vs 繁體 · 玄学文案对照**
+| 层 | 文档 | 一句话 |
+|----|------|--------|
+| I 玄学体系 | [01-mystical-framework.md](docs/theory/01-mystical-framework.md) | 世界观、场域·能量·心流、冥想祈祷反思、双层神示 |
+| II 简明理论 | [02-concise-theory.md](docs/theory/02-concise-theory.md) | 六维状态结构 + 整象封印 |
+| III 进阶泛化 | [03-advanced-generalization.md](docs/theory/03-advanced-generalization.md) | State · Force · Field 通用建模 |
+| IV 增强理论 | [04-enhanced-theory.md](docs/theory/04-enhanced-theory.md) | Flow · Awareness · Field 统一 |
+| V 形而上扩展 | [05-metaphysical-extension.md](docs/theory/05-metaphysical-extension.md) | Stream · Origin · Causality |
 
-| 层级 | 简体 `zh` | 繁體 `zhTw` | 语义是否相同 |
-|------|-----------|-------------|--------------|
-| 书架 / 卷题 / 引导 / 理论前缀 / 题库 | 简体源文案 | OpenCC `cn→tw`（含函数返回值如页脚） | 是，仅字形不同 |
-| 单卷 / 整象神谕 | DeepSeek 简体生成 | DeepSeek **独立繁体**生成 | 否，各自缓存，措辞可不同 |
-| 心理学侧写模板 | 简体维度描述 | 同上，经 OpenCC 转繁 | 是 |
-
-示例：`整象神谕` → `整象神諭`；`【仪轨·观·界石｜心湖场｜六向·心象】` → `【儀軌·觀·界石｜心湖場｜六向·心象】`。
-
-**字体**：`html[lang="zh-Hant"]` 使用 Noto Serif TC 正文栈；简体使用 Noto Serif SC。神谕手写标题两语共用 Zhi Mang Xing。
-
-首次生成神谕时并行写入 **zh · zhTw · en · ja** 四份缓存；切换阅读语言只读对应列，不重新计分或重调模型。
-
-Migration **`007_locale_zh_tw.sql`** 扩展现有库；新库直接使用 `schema.sql` v7。
-
-| English | 日本語 |
-|---------|--------|
-| On first oracle generation, **zh · zhTw · en · ja** are cached in parallel; locale switch reads the matching column only. | 初回神託生成時に **zh · zhTw · en · ja** を並列キャッシュ；言語切替は該当列のみ参照。 |
+问印前的 **theory layer**（`books/shared/theoryLayer.ts`）是 II–IV 层的题面化前缀；答案卡仍为心理学表述。开发细节：[SKILL.md](.cursor/skills/psyche-tree-demo/SKILL.md) · [reference.md](.cursor/skills/psyche-tree-demo/reference.md)。
 
 ---
 
-## 部署 · Deployment · デプロイ
-
-**中文** DeepSeek 与 SQLite 当前挂在 Vite dev/preview 中间件上；生产环境需独立后端或 Serverless 代理。  
-**English** DeepSeek and SQLite run on the Vite dev/preview middleware; production needs a standalone backend or serverless proxy.  
-**日本語** DeepSeek と SQLite は Vite dev/preview ミドルウェア上；本番は独立バックエンドまたは serverless プロキシが必要です。
-
----
-
-## 技术栈 · Tech Stack · 技術スタック
-
-React 19 · TypeScript · Vite 8 · Tailwind CSS 4 · better-sqlite3 · DeepSeek API · sharp
+*雾岸六卷 — 校准看见，而非索取标准答案。*
