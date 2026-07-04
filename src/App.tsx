@@ -318,12 +318,7 @@ function App() {
   const skyAwakeningLevel =
     phase === 'questions' ? treeRevealStage : result ? activeBook?.meta.treeProgressMax ?? 6 : 0
 
-  const visualTierPreferred: VisualTier =
-    phase === 'shelf'
-      ? 'balanced'
-      : phase === 'cover'
-        ? 'balanced'
-        : 'minimal'
+  const visualTierPreferred: VisualTier = 'balanced'
   const visualTier = useVisualTier(visualTierPreferred)
   const readingFocus = phase === 'questions' && !isClosing
 
@@ -351,8 +346,8 @@ function App() {
       />
       <AmbientPhraseLayer
         locale={locale}
-        active={phase === 'shelf' || phase === 'cover'}
-        subdued={readingFocus}
+        active={phase === 'shelf' || phase === 'cover' || phase === 'questions'}
+        subdued={phase === 'questions' && !isClosing}
       />
       <TreeOfLifeBackground
         revealStage={treeRevealStage}

@@ -10,6 +10,7 @@ import {
 } from './treeOrganic'
 import type { Locale } from '../../i18n/locale'
 import { getProgressLabels } from '../../i18n/treeLabels'
+import { getUi } from '../../i18n/ui'
 import { BilingualCrossfadeText } from '../i18n/BilingualCrossfadeText'
 
 interface TreeAwakeningOverlayProps {
@@ -159,6 +160,7 @@ export function TreeAwakeningOverlay({
 
       <div className="tree-awakening-text">
         <p className="tree-awakening-tag">{awakeningTag}</p>
+        <p className="tree-awakening-energy">{getUi(locale).treeEnergyPulse}</p>
         <p className="tree-awakening-label">
           <BilingualCrossfadeText
             zh={labelZh}

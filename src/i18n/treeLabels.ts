@@ -319,4 +319,12 @@ export const AMBIENT_PHRASES: Array<{ zh: string; en: string; ja: string }> = [
   { zh: '每一道光都是回答', en: 'Every light is an answer', ja: '一筋の光も答えである' },
   { zh: '雾中照见自己', en: 'See yourself in the mist', ja: '霧の中で自分を照見せよ' },
   { zh: '择一卷，向内探索', en: 'Choose one volume; turn inward', ja: '一巻を選び、内へ探れ' },
+  { zh: '雾只收诚心，不收戏语', en: 'Mist receives sincerity, not jest', ja: '霧は誠心のみを受け、戯言を受けない' },
+  { zh: '先静后感，再择光印', en: 'Be still, feel, then choose', ja: '先に静め、感じ、光印を選ぶ' },
+  { zh: '不断优劣，只在雾中留痕', en: 'No ranking—only a trace in mist', ja: '優劣を断たず、霧に痕を残す' },
+  { zh: '树与雾皆不催促', en: 'Tree and mist do not hurry you', ja: '樹も霧も急がせない' },
+  { zh: '心流不追分，场域方不散', en: 'Flow, not scoring, keeps the field', ja: '心流は点数を追わず、場域を保つ' },
+  { zh: '神谕呼应诸卷，不推翻已示', en: 'Oracles echo volumes; never overturn', ja: '神託は諸巻と呼应し、既示を否定しない' },
+  { zh: '灵息涨落，如湖起纹', en: 'Spirit-breath rises and falls like ripples', ja: '霊息の涨落、湖の紋の如し' },
+  { zh: '翻开即入卷场', en: 'Open a volume; enter its field', ja: '開けば巻場に入る' },
 ]

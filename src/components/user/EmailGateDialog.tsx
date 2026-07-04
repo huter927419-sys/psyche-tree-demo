@@ -45,6 +45,7 @@ export function EmailGateDialog({
         <p className="email-gate-eyebrow">{ui.emailGateEyebrow}</p>
         <h2 className="email-gate-title">{ui.emailGateTitle}</h2>
         <p className="email-gate-hint">{ui.emailGateHint}</p>
+        <p className="email-gate-footnote">{ui.emailGateFootnote}</p>
         <label className="email-gate-label" htmlFor="journey-email">
           {ui.emailLabel}
         </label>

@@ -62,7 +62,8 @@ export function HolisticOracleOverlay({
 
       <div className={`holistic-oracle-panel holistic-oracle-panel--${locale}`}>
         <header className="holistic-oracle-header">
-          <p className="holistic-oracle-eyebrow">{ui.ultimateOracleEyebrow}</p>
+          <p className="holistic-oracle-eyebrow">{ui.holisticTag}</p>
+          <p className="holistic-oracle-chapter">{ui.holisticChapterLabel}</p>
           <button
             type="button"
             className="holistic-oracle-close"
@@ -91,7 +92,8 @@ export function HolisticOracleOverlay({
         <div
           className={`holistic-oracle-reading-wrap${symbolsDone ? ' holistic-oracle-reading-wrap--visible' : ''}`}
         >
-          <h2 className="holistic-oracle-title">{ui.ultimateOracleTitle}</h2>
+          <h2 className="holistic-oracle-title">{ui.holisticTitle}</h2>
+          <p className="holistic-oracle-hint">{ui.holisticHint}</p>
           <p className="holistic-oracle-reading whitespace-pre-line">{reading}</p>
         </div>
 

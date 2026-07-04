@@ -4,7 +4,7 @@ import type { Locale } from '../../i18n/locale'
 import { getOpeningGuide } from '../../i18n/openingGuide'
 
 /** Total on-screen time (ms) — enough to read the rite once */
-const DISPLAY_MS = 2800
+const DISPLAY_MS = 4200
 /** Fade-out duration (ms) */
 const FADE_MS = 650
 
@@ -49,6 +49,7 @@ export function BookOpeningGuide({ bookId, locale }: BookOpeningGuideProps) {
           <span />
         </div>
         <p className="book-opening-guide-tag">{copy.tag}</p>
+        <p className="book-opening-guide-field">{copy.field}</p>
         <p className="book-opening-guide-title">{copy.title}</p>
         <p className="book-opening-guide-body">{copy.body}</p>
         <div className="book-opening-guide-ornament book-opening-guide-ornament--bottom" aria-hidden>

@@ -12,6 +12,14 @@ const ui = {
     shelfProseAria: '雾岸序言',
     shelfFacetLabel: '六向',
     shelfFacetNames: ['心象', '映心', '明思', '缘书', '流衡', '向光'],
+    shelfFacetSymbols: [
+      '界石·湖·根',
+      '河·湖·潮',
+      '星·脉·镜',
+      '丝·桥·温',
+      '舟·山·源',
+      '光·径·步',
+    ],
     shelfFacetHint: '各照一面',
     shelfProseSeal: '六卷齐时，整象神谕自现',
     shelfFooter: (n: number) => `${n} 卷 · 悬浮于雾`,
@@ -48,9 +56,9 @@ const ui = {
     musicAriaOn: '关闭背景音乐',
     musicAriaOff: '开启背景音乐',
     questionHint:
-      '请在右页择一与你此刻感受共鸣的意象——选定后，记忆将自行翻过。',
+      '请在右页择一与你此刻感受共鸣的意象——心流之中，一印一页，选定后记忆将自行翻过。',
     reviewModeHint: '此卷已照见，光印不可改选——可翻页细读。',
-    attentionHint: '请在右页择一光印，确认你仍与自己同在。',
+    attentionHint: '临在之祷：择一光印，确认你仍与自己同在——雾只收诚心。',
     scenarioLabel: '问印',
     sealMark: '问',
     sealRevealHint: '点以观问',
@@ -58,10 +66,16 @@ const ui = {
     closingBody:
       '树不会催促叶落，雾不会催促散去——你的节奏，自有神圣的时间。',
     backToLabel: (label: string) => `← 返回${label}`,
+    oracleContemplationNote:
+      '神谕供冥想与反照，非行为命令——请在雾中慢读，不必急于执行。',
+    flowBalanceFlowNote:
+      '「流衡」是六向之一（守衡应变）；「心流」是此刻一印一页的入卷状态——二者同名不同义。',
+    treeEnergyPulse: '树脉亮起，灵息自根向冠',
     emailGateEyebrow: '雾岸 · 留印',
-    emailGateTitle: '留下你的邮箱',
+    emailGateTitle: '诚心留印',
     emailGateHint:
-      '每次答题前需留印登录；系统将生成唯一雾岸标识，关联你的六卷档案。',
+      '入卷前，愿以真实择印——在岸上留下你的印，使六卷记忆相认，雾中方可留痕。',
+    emailGateFootnote: '系统将为此印生成雾岸标识，关联六卷档案。',
     emailLabel: '邮箱',
     emailPlaceholder: 'you@example.com',
     emailGateContinue: '进入探索',
@@ -110,6 +124,14 @@ const ui = {
       'Flow Balance',
       'Path Light',
     ],
+    shelfFacetSymbols: [
+      'Stone·Lake·Root',
+      'River·Lake·Tide',
+      'Star·Path·Mirror',
+      'Thread·Bridge·Warmth',
+      'Boat·Mountain·Source',
+      'Light·Path·Step',
+    ],
     shelfFacetHint: 'Each mirrors a single face',
     shelfProseSeal: 'When all six stand aligned, the whole oracle speaks.',
     shelfFooter: (n: number) => `${n} volumes · held in mist`,
@@ -125,7 +147,7 @@ const ui = {
     languageLabel: 'Language',
     memorySpread: (n: number, total: number) => `This volume · ${n}/${total}`,
     facetOfWhole: 'One of six facets',
-    dialogueCheck: 'Attention check',
+    dialogueCheck: 'Dialogue check',
     selectOneHint: 'Choose one to turn the page',
     prevPage: 'Previous',
     nextPage: 'Next',
@@ -149,10 +171,11 @@ const ui = {
     musicAriaOn: 'Turn off background music',
     musicAriaOff: 'Turn on background music',
     questionHint:
-      'Choose an image on the right that resonates—then memory turns the page.',
+      'Choose an image that resonates—in flow, one seal per page; memory turns itself.',
     reviewModeHint:
       'This volume is sealed—your marks cannot change. Turn pages to read.',
-    attentionHint: 'Choose a light mark on the right to confirm you are present.',
+    attentionHint:
+      'Prayer of presence: choose a mark to confirm you are still with yourself—mist receives sincerity only.',
     scenarioLabel: 'Question Seal',
     sealMark: 'Q',
     sealRevealHint: 'Tap to reveal',
@@ -160,10 +183,16 @@ const ui = {
     closingBody:
       'The tree does not hurry leaves; mist does not hurry to lift—your rhythm has its time.',
     backToLabel: (label: string) => `← Back to ${label}`,
+    oracleContemplationNote:
+      'The oracle is for contemplation, not command—read slowly in mist; do not hurry to act.',
+    flowBalanceFlowNote:
+      'Flow Balance is a facet (adaptation); 心流 is the one-seal-per-page state of this rite—not the same word.',
+    treeEnergyPulse: 'Tree-path brightens; spirit-breath rises root to crown',
     emailGateEyebrow: 'Shore · Leave a mark',
-    emailGateTitle: 'Your email',
+    emailGateTitle: 'Seal your sincerity',
     emailGateHint:
-      'Sign in before each volume; a unique mist ID links your six-volume archive.',
+      'Before you enter, vow truthful seals—leave your mark on the shore so six memories may recognize you.',
+    emailGateFootnote: 'A mist ID links your six-volume archive on this device.',
     emailLabel: 'Email',
     emailPlaceholder: 'you@example.com',
     emailGateContinue: 'Continue',
@@ -207,6 +236,14 @@ const ui = {
     shelfProseAria: '霧岸の序',
     shelfFacetLabel: '六向',
     shelfFacetNames: ['心象', '映心', '明思', '縁書', '流衡', '向光'],
+    shelfFacetSymbols: [
+      '界石·湖·根',
+      '河·湖·潮',
+      '星·脈·鏡',
+      '糸·橋·温',
+      '舟·山·源',
+      '光·径·歩',
+    ],
     shelfFacetHint: '各一面を映す',
     shelfProseSeal: '六巻揃えば、整象神託自ら現る',
     shelfFooter: (n: number) => `${n} 巻 · 霧に浮かぶ`,
@@ -246,9 +283,10 @@ const ui = {
     musicAriaOn: '背景音楽をオフ',
     musicAriaOff: '背景音楽をオン',
     questionHint:
-      '右頁から、今の感覚と共鳴する意象を一つ選んでください——選べば、記憶は自ら頁をめくります。',
+      '右頁から、今の感覚と共鳴する意象を一つ——心流の中、一印一ページ。選べば記憶は自らめくる。',
     reviewModeHint: 'この巻は照見済——光印は改選できません。頁をめくってお読みください。',
-    attentionHint: '右頁から光印を一つ選び、自分と向き合っていることを確かめてください。',
+    attentionHint:
+      '臨在の祈祷：光印を一つ選び、自分と共にいることを確かめよ——霧は誠心のみを受ける。',
     scenarioLabel: '問印',
     sealMark: '問',
     sealRevealHint: 'タップして問印を見る',
@@ -256,10 +294,16 @@ const ui = {
     closingBody:
       '樹は葉の落ちを急がず、霧も散るを急がない——あなたの歩みには、それぞれ神聖な時があります。',
     backToLabel: (label: string) => `← ${label}へ戻る`,
-    emailGateEyebrow: '霧岸 · 印を残す',
-    emailGateTitle: 'メールアドレスを残す',
+    oracleContemplationNote:
+      '神託は反照と瞑想のため——命令ではない。霧の中でゆっくり読み、急いで実行しないで。',
+    flowBalanceFlowNote:
+      '「流衡」は六向の一つ（守衡と応変）；「心流」は今この一印一ページの入巻状態——同じ語ではない。',
+    treeEnergyPulse: '樹脈が灯り、霊息は根から冠へ',
+    emailGateEyebrow: '霧岸 · 留印',
+    emailGateTitle: '誠心を留めよ',
     emailGateHint:
-      '各巻の前に印を残してログインしてください。一意の霧岸标识が、六巻の記録と結ばれます。',
+      '入巻前に、真実の印を選ぶ誓いを——岸に印を刻み、六巻の記憶が互いを認め、霧に痕を残せ。',
+    emailGateFootnote: 'この印に霧岸識別子が付き、六巻のアーカイブが結ばれます。',
     emailLabel: 'メール',
     emailPlaceholder: 'you@example.com',
     emailGateContinue: '探索へ',

@@ -110,7 +110,7 @@ export function BookshelfUltimateOracle({
             {ui.ultimateOracleLabel}
           </span>
           <span className="bookshelf-ultimate-oracle-trigger-hint">
-            {loading ? ui.ultimateOracleLoading : ui.ultimateOracleHint}
+            {loading ? ui.holisticLoading : ui.ultimateOracleHint}
           </span>
         </button>
         <p className="bookshelf-ultimate-oracle-footnote">{ui.shelfFooter(TOTAL_BOOKS)}</p>

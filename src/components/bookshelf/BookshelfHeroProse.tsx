@@ -182,6 +182,12 @@ export function BookshelfHeroProse({
         >
           {ui.shelfFacetHint}
         </p>
+        <p
+          className={`bookshelf-hero-facet-symbols${animate ? ' bookshelf-hero-tail' : ''}`}
+          style={animate ? { animationDelay: `${hintStart + 0.12}s` } : undefined}
+        >
+          {ui.shelfFacetSymbols.join(' · ')}
+        </p>
       </div>
 
       <p

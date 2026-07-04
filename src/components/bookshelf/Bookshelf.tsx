@@ -183,7 +183,9 @@ export function Bookshelf({
 
       {journeySnapshot?.status !== 'completed' && (
         <p className="mt-12 text-xs text-[rgba(200,200,200,0.3)] tracking-[0.35em]">
-          {ui.shelfFooter(books.length)}
+          {completedBookIds.length > 0 && completedBookIds.length < books.length
+            ? ui.journeyProgress(completedBookIds.length, books.length)
+            : ui.shelfFooter(books.length)}
         </p>
       )}
     </div>

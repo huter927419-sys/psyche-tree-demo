@@ -1242,6 +1242,13 @@ html[lang="ja"] {
   text-transform: none;
 }
 
+.holistic-oracle-chapter {
+  font-size: 0.58rem;
+  letter-spacing: 0.32em;
+  color: rgba(200, 200, 200, 0.48);
+  margin-top: 0.35rem;
+}
+
 .holistic-oracle-close {
   display: grid;
   place-items: center;
@@ -1333,6 +1340,17 @@ html[lang="ja"] {
   color: rgba(245, 245, 245, 0.94);
   margin-bottom: 0.75rem;
   text-align: center;
+}
+
+.holistic-oracle-hint {
+  font-size: 0.72rem;
+  line-height: 1.75;
+  letter-spacing: 0.08em;
+  color: rgba(210, 210, 210, 0.5);
+  text-align: center;
+  margin: 0 0 1.1rem;
+  max-width: 28rem;
+  margin-inline: auto;
 }
 
 .holistic-oracle-panel--zh .holistic-oracle-title,
@@ -3548,6 +3566,13 @@ html[lang="ja"] {
   margin-bottom: 0.75rem;
 }
 
+.tree-awakening-energy {
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  color: rgba(220, 220, 220, 0.55);
+  margin-bottom: 0.65rem;
+}
+
 .tree-awakening-label {
   font-family: var(--font-serif);
   font-size: 1.1rem;
@@ -3854,6 +3879,15 @@ html[lang="ja"] .ambient-phrase-text {
   margin-bottom: 0.75rem;
 }
 
+.book-opening-guide-field {
+  position: relative;
+  z-index: 1;
+  font-size: 0.62rem;
+  letter-spacing: 0.36em;
+  color: rgba(210, 210, 210, 0.58);
+  margin: -0.35rem 0 0.85rem;
+}
+
 .book-opening-guide-title {
   position: relative;
   z-index: 1;
@@ -4113,7 +4147,15 @@ html.app-page-hidden *::after {
   font-size: 0.82rem;
   line-height: 1.65;
   color: rgba(220, 220, 220, 0.52);
-  margin-bottom: 1.25rem;
+  margin-bottom: 0.65rem;
+}
+
+.email-gate-footnote {
+  font-size: 0.68rem;
+  line-height: 1.6;
+  letter-spacing: 0.06em;
+  color: rgba(190, 190, 190, 0.38);
+  margin-bottom: 1.1rem;
 }
 
 .email-gate-label {
@@ -4391,6 +4433,14 @@ html.app-page-hidden *::after {
 .bookshelf-hero-facet-hint {
   margin: 0;
   text-align: center;
+}
+
+.bookshelf-hero-facet-symbols {
+  margin: 0.45rem 0 0;
+  text-align: center;
+  font-size: 0.66rem;
+  letter-spacing: 0.24em;
+  color: rgba(200, 196, 188, 0.38);
 }
 
 .bookshelf-hero-seal {

@@ -423,7 +423,9 @@ export function BookReader({
               ? ui.reviewModeHint
               : q.type === 'attention'
                 ? ui.attentionHint
-                : ui.questionHint}
+                : book.meta.id === 'flow-balance'
+                  ? `${ui.questionHint} ${ui.flowBalanceFlowNote}`
+                  : ui.questionHint}
           </p>
           <div className="book-page-footer-note">
             <span>{formatPageLabel(index + 1, questionCount, locale)}</span>
@@ -492,6 +494,7 @@ export function BookReader({
               {labels.mysticalTitle}
             </h2>
             <p className="book-page-hint">{labels.mysticalHint}</p>
+            <p className="book-page-hint mt-2 opacity-80">{ui.oracleContemplationNote}</p>
             <p className="book-page-hint mt-3 opacity-70">{ui.facetOfWhole}</p>
           </>
         )
@@ -506,6 +509,9 @@ export function BookReader({
                 ? ui.holisticOnShelfHint
                 : ui.journeyProgress(assessmentsCompleted, 6)}
             </p>
+            {!journeyComplete && (
+              <p className="book-page-hint mt-2 opacity-75">{labels.closingHint}</p>
+            )}
           </>
         )
       }
@@ -571,6 +577,9 @@ export function BookReader({
           <div className="book-scroll-content flex flex-col items-center justify-center min-h-[280px] gap-6">
             <p className="book-body-text text-center">
               {journeyComplete ? ui.holisticOnShelfBody : ui.closingBodyPartial}
+            </p>
+            <p className="book-body-text text-center text-sm opacity-80 italic">
+              {ui.closingBody}
             </p>
             <button
               type="button"
