@@ -1,5 +1,6 @@
 import type { BookId } from '../books/types'
 import type { Locale } from './locale'
+import { getTheoryGuideSupplement } from '../books/shared/theoryLayer'
 import { JA_GUIDES_BY_BOOK } from './questionGuide.ja'
 
 export interface QuestionGuideCopy {
@@ -707,40 +708,59 @@ export function getQuestionGuide(
   questionId: string,
   locale: Locale,
 ): QuestionGuideCopy {
+  let base: QuestionGuideCopy | undefined
+
   if (locale === 'ja') {
     const jaGuide = JA_GUIDES_BY_BOOK[bookId]?.[questionId]
-    if (jaGuide) return jaGuide
+    if (jaGuide) base = jaGuide
   }
 
-  const bookGuides = guidesByBook[bookId]
-  const specific = bookGuides?.[questionId]?.[locale === 'en' ? 'en' : 'zh']
-  if (specific) return specific
+  if (!base) {
+    const bookGuides = guidesByBook[bookId]
+    const specific = bookGuides?.[questionId]?.[locale === 'en' ? 'en' : 'zh']
+    if (specific) base = specific
+  }
 
-  const fallback = bookGuides?.[questionId]?.zh
-  if (fallback && locale !== 'zh') {
-    return {
-      rite: fallback.rite,
-      guide: fallback.guide,
-      note: fallback.note,
+  if (!base) {
+    const bookGuides = guidesByBook[bookId]
+    const fallback = bookGuides?.[questionId]?.zh
+    if (fallback && locale !== 'zh') {
+      base = {
+        rite: fallback.rite,
+        guide: fallback.guide,
+        note: fallback.note,
+      }
+    } else if (fallback) {
+      base = fallback
     }
   }
 
-  const fallbacks: Record<Locale, QuestionGuideCopy> = {
-    zh: {
-      rite: '观',
-      guide: '松肩闭息，择最契此刻一印。',
-      note: '非断优劣，只在雾中留痕。',
-    },
-    en: {
-      rite: 'Seal · Contemplation',
-      guide: 'Breathe once. Let the symbol that resonates choose you.',
-      note: 'The reading mirrors; it does not judge.',
-    },
-    ja: {
-      rite: '観 · 静',
-      guide: '一度息を整え、今共鳴する象徴を右から選んでください。',
-      note: '霊示は裁きません。霧の中の一帧だけを映します。',
-    },
+  if (!base) {
+    const fallbacks: Record<Locale, QuestionGuideCopy> = {
+      zh: {
+        rite: '观',
+        guide: '松肩闭息，择最契此刻一印。',
+        note: '非断优劣，只在雾中留痕。',
+      },
+      en: {
+        rite: 'Seal · Contemplation',
+        guide: 'Breathe once. Let the symbol that resonates choose you.',
+        note: 'The reading mirrors; it does not judge.',
+      },
+      ja: {
+        rite: '観 · 静',
+        guide: '一度息を整え、今共鳴する象徴を右から選んでください。',
+        note: '霊示は裁きません。霧の中の一帧だけを映します。',
+      },
+    }
+    base = fallbacks[locale]
   }
-  return fallbacks[locale]
+
+  const theory = getTheoryGuideSupplement(bookId, questionId, locale)
+  if (!theory) return base
+
+  return {
+    ...base,
+    note: `${theory} ${base.note}`,
+  }
 }

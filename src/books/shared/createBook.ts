@@ -17,6 +17,7 @@ import {
   defaultAttentionEn,
   defaultAttentionJa,
 } from './questionFlow'
+import { enrichBookContent } from './theoryLayer'
 
 type DimInput = Omit<DimensionQuestion, 'type'>
 
@@ -90,7 +91,7 @@ function createFromPack(pack: LocalizedBookPack, locale: Locale): BookDefinition
   const useJa = locale === 'ja' && jaPack
   const activePack = useEn ? enPack! : useJa ? jaPack! : pack
   const meta = activePack.meta
-  const content = activePack.content
+  const content = enrichBookContent(activePack.content, meta.id, locale)
   const template = content.mysticalPromptTemplate
   const labels = activePack.resultChapterLabels
 

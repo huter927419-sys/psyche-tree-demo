@@ -44,6 +44,7 @@ Dim 1–3 → attention check → Dim 4–6 → integration (dimensionIndex 7)
 ```
 
 - **6 dimensions**: main facet (`dimensionIndex` 1–6); tree progress counts these only
+- **Theory layer**: `books/shared/theoryLayer.ts` enriches **prompts** + question **guide notes** (zh/en/ja); answer cards stay psychology-only for layout
 - **1 integration**: `dimensionIndex: 7` (e.g. 观·整象 / 流·整湖)
 - **1 attention**: after dim 3; decoy cards scoped to current book
 - **Results**: psychology profile + per-book DeepSeek mystical reading (zh/en/ja cached)
