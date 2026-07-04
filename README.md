@@ -30,10 +30,10 @@
 | II | [02-concise-theory.md](docs/theory/02-concise-theory.md) | 六维状态结构 |
 | III | [03-advanced-generalization.md](docs/theory/03-advanced-generalization.md) | State / Force / Field 泛化 |
 | IV | [04-enhanced-theory.md](docs/theory/04-enhanced-theory.md) | 心流、意识、场域 |
-| V | [05-metaphysical-extension.md](docs/theory/05-metaphysical-extension.md) | 意识与因果 |
+| V | [05-metaphysical-extension.md](docs/theory/05-metaphysical-extension.md) | 形而上学：意识与因果 |
 
 *English:* Layer I = how to enter; II–V = structure → modeling → dynamics → metaphysics.  
-*日本語:* I は入り方、II–V は構造から形而上へ。
+*日本語:* I は入り方、II–V は構造から形而上学へ。
 
 问印里的 theory layer（`theoryLayer.ts`）只是把 II–IV 做成题面；卡面答案仍是平常心理学说法，不是第二套世界观。
 

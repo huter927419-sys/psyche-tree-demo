@@ -8,6 +8,6 @@
 | II | [02-concise-theory.md](./02-concise-theory.md) | 六维状态结构 |
 | III | [03-advanced-generalization.md](./03-advanced-generalization.md) | 泛化建模 |
 | IV | [04-enhanced-theory.md](./04-enhanced-theory.md) | 心流 / 意识 / 场域 |
-| V | [05-metaphysical-extension.md](./05-metaphysical-extension.md) | 形而上扩展 |
+| V | [05-metaphysical-extension.md](./05-metaphysical-extension.md) | 形而上学扩展 |
 
 各层正文里 zh / en / ja 分节写。问印 `theoryLayer.ts` 对应 II–IV 的题面；修持文案在 `volumeRite.ts`。

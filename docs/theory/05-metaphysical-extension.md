@@ -1,4 +1,4 @@
-## Psyche Tree System · 形而上扩展层 · Metaphysical Extension · 形而上拡張層
+## Psyche Tree System · 形而上学扩展层 · Metaphysical Extension · 形而上学拡張層
 
 **意识流、宇宙本源与因果结构的统一解释模型** — 在增强理论之上，回答「意识如何生成可体验的现实结构」。
 
@@ -14,7 +14,7 @@
 | 简明理论 | §简明 | 状态向量 / 演化 | 照见的**是什么结构**？ |
 | 进阶泛化 | §泛化 | State · Force · Field | **谁**都能用同一语言？ |
 | 增强理论 | §增强 | Flow · Awareness · Field | **如何**顺行、自改、被塑造？ |
-| **形而上扩展** | **本节** | Stream · Origin · Causality | **意识如何生成**现实与因果？ |
+| **形而上学扩展** | **本节** | Stream · Origin · Causality | **意识如何生成**现实与因果？ |
 
 ---
 
@@ -115,7 +115,7 @@ Consciousness is not point-like “thoughts” but a **continuous process of sta
 [场域层 Field F]    →  提供约束 / provide constraints
 ```
 
-#### 3.3 形而上核心观点 · Core Metaphysical Views · 核心見解
+#### 3.3 形而上学核心观点 · Core Metaphysical Views · 核心見解
 
 | # | 中文 | English | 日本語 |
 |---|------|---------|--------|
@@ -200,7 +200,7 @@ Consciousness is not point-like “thoughts” but a **continuous process of sta
 
 ---
 
-### 六、Psyche Tree 在形而上层的意义 · Tree at This Layer · 樹の形而上意味
+### 六、Psyche Tree 在形而上学层的意义 · Tree at This Layer · 樹の形而上学意味
 
 **中文**  
 在这一层，Tree 不再是心理结构，而是：**意识在宇宙状态空间中的展开路径图谱**。
@@ -267,7 +267,7 @@ Each branch = one **possible cosmological interpretive path**
 | ② | **因果不是规则**——因果 = 状态空间中**不可避免的结构倾斜** | **Causality is not mere rule**—inevitable **structural tilt** in state-space | **因果は規則ではない**——状態空間の**不可避な構造傾斜** |
 | ③ | **宇宙不是存在**——宇宙 = **不断生成自身解释的递归系统** | **Cosmos is not a being**—a **recursive system generating its own interpretation** | **宇宙は存在ではない**——**自解釈を不断生成する再帰系** |
 
-**中文（产品边界）** 雾岸 Demo 在形而上层的**隐喻实例**：光柱/树/雾 ≈ **Ω** 与场约束 · 择印流 ≈ **C(t)** · 六卷路径 ≈ 因果梯度采样 · 整象 ≈ 叙事/解释收束。仍为单人 ritual 体验，非形而上学仿真引擎。  
+**中文（产品边界）** 雾岸 Demo 在形而上学层的**隐喻实例**：光柱/树/雾 ≈ **Ω** 与场约束 · 择印流 ≈ **C(t)** · 六卷路径 ≈ 因果梯度采样 · 整象 ≈ 叙事/解释收束。仍为单人 ritual 体验，非形而上学仿真引擎。  
 **English** The demo **metaphorically instantiates**: pillar/tree/mist ≈ **Ω** and field constraints · seal-flow ≈ **C(t)** · six-volume path ≈ causal-gradient sampling · Whole Image ≈ narrative/interpretive closure—single-user ritual, not a metaphysics engine.  
 **日本語** Demo の**比喩的インスタンス**：光柱/樹/霧 ≈ **Ω** と場制約 · 擇印流 ≈ **C(t)** · 六巻経路 ≈ 因果勾配のサンプリング · 整象 ≈ 叙事/解釈の収束——単人 ritual、形而上学シミュレーションエンジンではない。
 

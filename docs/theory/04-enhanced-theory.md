@@ -14,7 +14,7 @@
 | 简明理论 | 上一节 §简明 | 状态向量 / 演化 | 照见的**是什么结构**？ |
 | 进阶泛化 | 上一节 §泛化 | State · Force · Field | **谁**都能用同一语言描述？ |
 | **增强理论** | **本节** | Flow · Awareness · Field | **如何**顺行、自改、被塑造？ |
-| 形而上扩展 | 下一节 §形而上 | Consciousness · Origin · Causality | **意识如何生成**现实？ |
+| 形而上学扩展 | 下一节 §形而上学 | Consciousness · Origin · Causality | **意识如何生成**现实？ |
 
 ---
 
