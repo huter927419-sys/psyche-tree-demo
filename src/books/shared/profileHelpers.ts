@@ -5,28 +5,51 @@ export type LevelDescriptions = Record<
   Record<DimensionResult['level'], string>
 >
 
+type ProfileLocale = 'zh' | 'en' | 'ja'
+
+const incompleteFacet: Record<ProfileLocale, string> = {
+  zh: '该维度的信息尚不完整。',
+  en: 'This facet is not fully visible yet.',
+  ja: 'この面向は、まだ霧の中に隠れています。',
+}
+
+function formatDimension(
+  d: DimensionResult,
+  descriptions: LevelDescriptions,
+  locale: ProfileLocale,
+): string {
+  const desc =
+    descriptions[d.dimensionIndex]?.[d.level] ?? incompleteFacet[locale]
+  if (locale === 'en') return `[${d.title}] ${desc}`
+  if (locale === 'ja') return `［${d.title}］${desc}`
+  return `【${d.title}】${desc}`
+}
+
 export function generatePsychologyProfile(
   dimensions: DimensionResult[],
   descriptions: LevelDescriptions,
+  locale: ProfileLocale = 'zh',
 ): string {
-  return dimensions
-    .map((d) => {
-      const desc =
-        descriptions[d.dimensionIndex]?.[d.level] ?? '该维度的信息尚不完整。'
-      return `【${d.title}】${desc}`
-    })
-    .join('\n\n')
+  const format = (d: DimensionResult) =>
+    formatDimension(d, descriptions, locale)
+
+  const main = dimensions
+    .filter((d) => d.dimensionIndex >= 1 && d.dimensionIndex <= 6)
+    .sort((a, b) => a.dimensionIndex - b.dimensionIndex)
+  const integration = dimensions.find((d) => d.dimensionIndex === 7)
+  const mainText = main.map(format).join('\n\n')
+
+  if (!integration) return mainText
+  return `${mainText}\n\n${format(integration)}`
 }
 
 export function buildPsychologyPromptInput(
   dimensions: DimensionResult[],
   descriptions: LevelDescriptions,
+  locale: ProfileLocale = 'zh',
 ): string {
   return dimensions
-    .map((d) => {
-      const desc = descriptions[d.dimensionIndex]?.[d.level] ?? ''
-      return `【${d.title}】${desc}`
-    })
+    .map((d) => formatDimension(d, descriptions, locale))
     .join('\n\n')
 }
 

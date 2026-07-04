@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react'
+import { memo, type CSSProperties } from 'react'
 import type { VisualTier } from '../hooks/useVisualTier'
 
 interface SkyAtmosphereProps {
@@ -9,7 +9,7 @@ interface SkyAtmosphereProps {
   readingFocus?: boolean
 }
 
-export function SkyAtmosphere({
+export const SkyAtmosphere = memo(function SkyAtmosphere({
   intensity = 'welcome',
   awakeningLevel = 0,
   isComplete = false,
@@ -21,7 +21,7 @@ export function SkyAtmosphere({
   const isJourney = intensity === 'journey'
   const isLite = visualTier !== 'full'
   const isMinimal = visualTier === 'minimal'
-  const focusDim = readingFocus ? 0.52 : 1
+  const focusDim = readingFocus ? 0.32 : 1
 
   const beamOpacity =
     (isJourney
@@ -135,7 +135,9 @@ export function SkyAtmosphere({
         />
       )}
 
-      {isComplete && !isMinimal && <div className="sky-completion-bloom" />}
+      {isComplete && !isMinimal && !readingFocus && (
+        <div className="sky-completion-bloom" />
+      )}
     </div>
   )
-}
+})

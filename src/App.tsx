@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { AssessmentResult } from './types'
 import type { BookDefinition, BookId } from './books/types'
 import { getBook, getBooks } from './books/registry'
@@ -14,6 +14,8 @@ import {
 } from './components/book/BookJourneyStage'
 import { BookReader } from './components/book/BookReader'
 import { Bookshelf } from './components/bookshelf/Bookshelf'
+import { UserEmailCorner } from './components/user/UserEmailCorner'
+import { EmailGateDialog } from './components/user/EmailGateDialog'
 import { AmbientPhraseLayer } from './components/i18n/AmbientPhraseLayer'
 import { TreeAwakeningOverlay } from './components/tree/TreeAwakeningOverlay'
 import { AmbientMusicControl } from './components/AmbientMusicControl'
@@ -21,6 +23,16 @@ import { SkyAtmosphere } from './components/SkyAtmosphere'
 import { useVisualTier, type VisualTier } from './hooks/useVisualTier'
 import { LocaleContext, type Locale } from './i18n/locale'
 import { getUi } from './i18n/ui'
+import {
+  fetchJourney,
+  findAssessmentForBook,
+  getJourneySession,
+  logoutUser,
+  restoreJourneyFromStorage,
+  type JourneyAssessmentDto,
+  type JourneyDto,
+} from './services/journeyApi'
+import { buildAssessmentFromStored } from './services/storedAssessment'
 
 type AppPhase = 'shelf' | 'cover' | 'questions'
 
@@ -45,6 +57,17 @@ function App() {
   const [awakeningStage, setAwakeningStage] = useState<number | null>(null)
   const [treeRecoilKey, setTreeRecoilKey] = useState(0)
   const [musicBootstrap, setMusicBootstrap] = useState(0)
+  const [savedBookSession, setSavedBookSession] =
+    useState<JourneyAssessmentDto | null>(null)
+  const [journeySnapshot, setJourneySnapshot] = useState<JourneyDto | null>(null)
+  const [userEmail, setUserEmail] = useState<string | null>(
+    () => getJourneySession().email,
+  )
+  const [userId, setUserId] = useState<string | null>(
+    () => getJourneySession().userId,
+  )
+  const [emailGateOpen, setEmailGateOpen] = useState(false)
+  const [holisticFlashSignal, setHolisticFlashSignal] = useState(0)
   const prevTreeStage = useRef(0)
   const pickupTimer = useRef<number | null>(null)
   const transitionTimer = useRef<number | null>(null)
@@ -63,8 +86,31 @@ function App() {
   useEffect(() => () => clearTransitionTimers(), [])
 
   useEffect(() => {
-    document.documentElement.lang = locale === 'en' ? 'en' : 'zh-CN'
+    document.documentElement.lang =
+      locale === 'en' ? 'en' : locale === 'ja' ? 'ja' : 'zh-CN'
   }, [locale])
+
+  useEffect(() => {
+    const syncHidden = () => {
+      document.documentElement.classList.toggle('app-page-hidden', document.hidden)
+    }
+    syncHidden()
+    document.addEventListener('visibilitychange', syncHidden)
+    return () => document.removeEventListener('visibilitychange', syncHidden)
+  }, [])
+
+  const refreshJourneySnapshot = useCallback(async () => {
+    const journey = await restoreJourneyFromStorage()
+    setJourneySnapshot(journey)
+    const session = getJourneySession()
+    setUserEmail(session.email)
+    setUserId(session.userId)
+    return journey
+  }, [])
+
+  useEffect(() => {
+    void refreshJourneySnapshot()
+  }, [refreshJourneySnapshot])
 
   useEffect(() => {
     if (phase !== 'questions') {
@@ -93,9 +139,24 @@ function App() {
     setJourneyMode('expanded')
     prevTreeStage.current = 0
     setAwakeningStage(null)
+    setSavedBookSession(null)
   }
 
-  const selectBook = (book: BookDefinition) => {
+  const applyJourneyForBook = (
+    journey: JourneyDto,
+    book: BookDefinition,
+  ) => {
+    setJourneySnapshot(journey)
+    const stored = findAssessmentForBook(journey, book.meta.id)
+    if (stored) {
+      setSavedBookSession(stored)
+      setTreeRevealStage(book.meta.treeProgressMax)
+    } else {
+      setSavedBookSession(null)
+    }
+  }
+
+  const selectBook = async (book: BookDefinition) => {
     clearTransitionTimers()
     setActiveBookId(book.meta.id)
     setPhase('cover')
@@ -104,8 +165,28 @@ function App() {
     setResult(null)
     setCoverOpening(false)
     setIsClosing(false)
+    setSavedBookSession(null)
     prevTreeStage.current = 0
     setAwakeningStage(null)
+
+    let journey = journeySnapshot
+    if (!journey) {
+      const { journeyId } = getJourneySession()
+      if (journeyId) {
+        try {
+          journey = await fetchJourney(journeyId)
+        } catch {
+          journey = await refreshJourneySnapshot()
+        }
+      } else {
+        journey = await refreshJourneySnapshot()
+      }
+    }
+
+    if (journey) {
+      applyJourneyForBook(journey, book)
+    }
+
     pickupTimer.current = window.setTimeout(() => {
       setJourneyMode('expanded')
       pickupTimer.current = null
@@ -119,9 +200,39 @@ function App() {
 
   const openBook = () => {
     if (!activeBook || coverOpening || isClosing) return
+
+    const { journeyId, email } = getJourneySession()
+    if (!journeyId && !email) {
+      setEmailGateOpen(true)
+      return
+    }
+
+    void prepareAndOpenBook()
+  }
+
+  const prepareAndOpenBook = async () => {
+    if (!activeBook) return
+
+    const journey = await refreshJourneySnapshot()
+    if (!journey) {
+      setUserEmail(null)
+      setUserId(null)
+      setEmailGateOpen(true)
+      return
+    }
+
+    applyJourneyForBook(journey, activeBook)
+
     setMusicBootstrap((n) => n + 1)
     setCoverOpening(true)
     setJourneyMode('expanding')
+
+    const stored = journey
+      ? findAssessmentForBook(journey, activeBook.meta.id)
+      : undefined
+    if (stored) {
+      setResult(buildAssessmentFromStored(stored, activeBook))
+    }
 
     transitionTimer.current = window.setTimeout(() => {
       setPhase('questions')
@@ -133,6 +244,13 @@ function App() {
     }, BOOK_EXPAND_MS)
   }
 
+  const handleEmailGateReady = ({ email, userId: uid }: { email: string; userId: string }) => {
+    setEmailGateOpen(false)
+    setUserEmail(email)
+    setUserId(uid)
+    void prepareAndOpenBook()
+  }
+
   const closeBookToShelf = () => {
     if (!activeBook || isClosing) return
     setIsClosing(true)
@@ -140,6 +258,15 @@ function App() {
 
     transitionTimer.current = window.setTimeout(() => {
       resetBookSession()
+      void (async () => {
+        const journey = await refreshJourneySnapshot()
+        if (
+          journey?.status === 'completed' &&
+          journey.assessments.length >= 6
+        ) {
+          setHolisticFlashSignal((n) => n + 1)
+        }
+      })()
       window.scrollTo({ top: 0, behavior: 'smooth' })
     }, BOOK_CLOSE_MS)
   }
@@ -149,6 +276,25 @@ function App() {
     setResult(assessmentResult)
     setTreeRevealStage(activeBook.meta.treeProgressMax)
   }
+
+  const handleLogout = useCallback(() => {
+    logoutUser()
+    setUserEmail(null)
+    setUserId(null)
+    setJourneySnapshot(null)
+    clearTransitionTimers()
+    setPhase('shelf')
+    setActiveBookId(null)
+    setResult(null)
+    setTreeRevealStage(0)
+    setCoverOpening(false)
+    setIsClosing(false)
+    setJourneyMode('expanded')
+    setAwakeningStage(null)
+    setSavedBookSession(null)
+    prevTreeStage.current = 0
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [])
 
   const inBookSession = activeBookId !== null && phase !== 'shelf'
 
@@ -170,21 +316,44 @@ function App() {
     phase === 'shelf' || phase === 'cover' || isClosing ? 'welcome' : 'journey'
 
   const skyAwakeningLevel =
-    phase === 'questions' ? treeRevealStage : result ? activeBook?.meta.treeProgressMax ?? 7 : 0
+    phase === 'questions' ? treeRevealStage : result ? activeBook?.meta.treeProgressMax ?? 6 : 0
 
   const visualTierPreferred: VisualTier =
     phase === 'shelf'
-      ? 'full'
+      ? 'balanced'
       : phase === 'cover'
         ? 'balanced'
         : 'minimal'
   const visualTier = useVisualTier(visualTierPreferred)
-  const readingFocus = phase === 'questions' && !isClosing && !result
+  const readingFocus = phase === 'questions' && !isClosing
+
+  const completedBookIds = useMemo(
+    () => journeySnapshot?.assessments.map((a) => a.bookId) ?? [],
+    [journeySnapshot],
+  )
 
   return (
     <LocaleContext.Provider value={{ locale, setLocale }}>
-    <div className={`relative min-h-screen${readingFocus ? ' app-reading-focus' : ''}`}>
-      <AmbientPhraseLayer active={phase === 'shelf' || phase === 'cover'} subdued={readingFocus} />
+    <div
+      className={`relative min-h-screen${readingFocus ? ' app-reading-focus' : ''}${userEmail ? ' app-has-user-email' : ''}`}
+    >
+      <UserEmailCorner
+        email={userEmail}
+        userId={userId}
+        locale={locale}
+        onLogout={handleLogout}
+      />
+      <EmailGateDialog
+        open={emailGateOpen}
+        locale={locale}
+        onClose={() => setEmailGateOpen(false)}
+        onReady={handleEmailGateReady}
+      />
+      <AmbientPhraseLayer
+        locale={locale}
+        active={phase === 'shelf' || phase === 'cover'}
+        subdued={readingFocus}
+      />
       <TreeOfLifeBackground
         revealStage={treeRevealStage}
         variant={treeVariant}
@@ -219,6 +388,12 @@ function App() {
             locale={locale}
             onLocaleChange={setLocale}
             onSelect={selectBook}
+            completedBookIds={completedBookIds}
+            journeySnapshot={journeySnapshot}
+            holisticFlashSignal={holisticFlashSignal}
+            onJourneyUpdated={() => {
+              void refreshJourneySnapshot()
+            }}
           />
         )}
 
@@ -234,7 +409,10 @@ function App() {
                   onLocaleChange={setLocale}
                   enterFromCover={coverOpening}
                   treeRevealStage={treeRevealStage}
+                  savedSession={savedBookSession}
+                  journeySnapshot={journeySnapshot}
                   onProgressChange={(index, answers) => {
+                    if (savedBookSession) return
                     setTreeRevealStage(
                       countCompletedDimensions(
                         index,
@@ -246,6 +424,9 @@ function App() {
                   }}
                   onAssessmentDone={handleAssessmentDone}
                   onClose={closeBookToShelf}
+                  onJourneyPersisted={() => {
+                    void refreshJourneySnapshot()
+                  }}
                 />
               </div>
             )}
@@ -261,6 +442,7 @@ function App() {
                   onOpen={openBook}
                   onBack={backToShelf}
                   opening={coverOpening}
+                  reviewMode={Boolean(savedBookSession)}
                 />
               </div>
             )}

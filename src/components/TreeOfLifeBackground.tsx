@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { memo, useEffect, useRef } from 'react'
 import { shouldRunEnergySupply, type VisualTier } from '../hooks/useVisualTier'
 import {
   areRootsRevealed,
@@ -34,7 +34,7 @@ interface TreeOfLifeBackgroundProps {
   readingFocus?: boolean
 }
 
-export function TreeOfLifeBackground({
+export const TreeOfLifeBackground = memo(function TreeOfLifeBackground({
   revealStage = 0,
   variant = 'explore',
   recoilKey = 0,
@@ -56,10 +56,10 @@ export function TreeOfLifeBackground({
     el.classList.add('tree-organic-recoil')
   }, [recoilKey])
 
-  const focusDim = readingFocus ? 0.42 : 1
+  const focusDim = readingFocus ? 0.24 : 1
 
   return (
-    <div className={`fixed inset-0 overflow-hidden pointer-events-none z-0 tree-bg-root tree-bg-root--${visualTier}${readingFocus ? ' tree-bg-root--reading-focus' : ''}`}>
+    <div className={`fixed inset-0 overflow-hidden pointer-events-none z-0 tree-bg-root tree-bg-root--${visualTier}${isWelcome ? ' tree-bg-root--welcome' : ''}${readingFocus ? ' tree-bg-root--reading-focus' : ''}`}>
       <div className="tree-bg-base" />
       <div
         className="tree-bg-depth"
@@ -73,7 +73,7 @@ export function TreeOfLifeBackground({
         style={{
           opacity:
             (isWelcome
-              ? 0.35
+              ? 0.22
               : isComplete
                 ? 0.85
                 : 0.18 + (revealStage / 7) * 0.55) * focusDim,
@@ -90,6 +90,7 @@ export function TreeOfLifeBackground({
       <div
         className="absolute inset-0 transition-opacity duration-1000"
         style={{
+          opacity: focusDim,
           background: isComplete
             ? 'radial-gradient(ellipse 78% 68% at 50% 22%, rgba(255,255,255,0.16) 0%, transparent 58%)'
             : isWelcome
@@ -101,8 +102,14 @@ export function TreeOfLifeBackground({
       <svg
         ref={svgRef}
         className={`absolute inset-0 w-full h-full tree-bg-svg ${
-          isWelcome ? 'opacity-95 scale-[1.08]' : isComplete ? 'opacity-90' : 'opacity-85'
-        } ${isWelcome || isComplete ? 'animate-breathe' : ''}${showEnergyFlow ? ' tree-bg-svg--flowing' : ''}`}
+          readingFocus
+            ? 'opacity-28'
+            : isWelcome
+              ? 'opacity-[0.72] scale-[1.06] tree-bg-svg--welcome'
+              : isComplete
+                ? 'opacity-90'
+                : 'opacity-85'
+        } ${isWelcome && visualTier === 'full' ? 'animate-breathe' : isComplete ? 'animate-breathe' : ''}${showEnergyFlow ? ' tree-bg-svg--flowing' : ''}${readingFocus ? ' tree-bg-svg--muted' : ''}`}
         viewBox="0 0 800 900"
         preserveAspectRatio="xMidYMid slice"
         fill="none"
@@ -350,6 +357,7 @@ export function TreeOfLifeBackground({
               revealed={revealed}
               newlyEnergized={newlyEnergized}
               isComplete={isComplete}
+              isWelcome={isWelcome}
               visualTier={visualTier}
               op={op}
             />
@@ -479,18 +487,22 @@ export function TreeOfLifeBackground({
       <div className="tree-bg-grain" />
     </div>
   )
-}
+})
 
 export function countCompletedDimensions(
   currentIndex: number,
   answers: Record<string, string[]>,
-  questions: Array<{ type: string; id: string }>,
-  maxStage = 7,
+  questions: Array<{ type: string; id: string; dimensionIndex?: number }>,
+  maxStage = 6,
 ): number {
   let completed = 0
   for (let i = 0; i < currentIndex; i += 1) {
     const q = questions[i]
-    if (q.type === 'dimension' && (answers[q.id]?.length ?? 0) > 0) {
+    if (
+      q.type === 'dimension' &&
+      (q.dimensionIndex ?? 0) <= 6 &&
+      (answers[q.id]?.length ?? 0) > 0
+    ) {
       completed += 1
     }
   }
@@ -498,6 +510,7 @@ export function countCompletedDimensions(
   const current = questions[currentIndex]
   if (
     current?.type === 'dimension' &&
+    (current.dimensionIndex ?? 0) <= 6 &&
     (answers[current.id]?.length ?? 0) > 0
   ) {
     completed += 1

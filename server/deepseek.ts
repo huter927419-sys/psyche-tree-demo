@@ -33,15 +33,43 @@ export function buildMysticalPrompt(psychologyInput: string): string {
   return mysticalPromptTemplate.replace('[PSYCHOLOGY]', psychologyInput)
 }
 
+function buildOracleMessages(
+  locale: 'zh' | 'en' | 'ja',
+  prompt: string,
+): DeepSeekMessage[] {
+  if (locale === 'en') {
+    return [
+      {
+        role: 'system',
+        content:
+          'You are a symbolic oracle writer. Reply entirely in English. Do not use Chinese characters.',
+      },
+      { role: 'user', content: prompt },
+    ]
+  }
+  if (locale === 'ja') {
+    return [
+      {
+        role: 'system',
+        content:
+          'あなたは象徴と霊示を紡ぐ神託者です。回答はすべて自然な日本語で書いてください。中国語の文字は使わないでください。荘厳で詩的な口調を保ってください。',
+      },
+      { role: 'user', content: prompt },
+    ]
+  }
+  return [{ role: 'user', content: prompt }]
+}
+
 export async function callDeepSeekMysticalReading(
   psychologyInput: string,
   apiKey: string,
   model: string,
   bookId = 'psyche-tree',
-  locale: 'zh' | 'en' = 'zh',
+  locale: 'zh' | 'en' | 'ja' = 'zh',
 ): Promise<string> {
   const { buildMysticalPromptForBook } = await import('./bookPrompts.js')
   const prompt = buildMysticalPromptForBook(bookId, psychologyInput, locale)
+  const messages = buildOracleMessages(locale, prompt)
 
   const response = await fetch(`${DEEPSEEK_BASE_URL}/chat/completions`, {
     method: 'POST',
@@ -51,7 +79,7 @@ export async function callDeepSeekMysticalReading(
     },
     body: JSON.stringify({
       model,
-      messages: [{ role: 'user', content: prompt } satisfies DeepSeekMessage],
+      messages,
       temperature: 0.85,
       max_tokens: 1500,
       stream: false,
@@ -69,6 +97,47 @@ export async function callDeepSeekMysticalReading(
   const content = data.choices?.[0]?.message?.content?.trim()
   if (!content) {
     throw new Error('DeepSeek 返回内容为空')
+  }
+
+  return content
+}
+
+export async function callDeepSeekHolisticReading(
+  psychologyInput: string,
+  apiKey: string,
+  model: string,
+  locale: 'zh' | 'en' | 'ja' = 'zh',
+): Promise<string> {
+  const { buildHolisticPrompt } = await import('./bookPrompts.js')
+  const prompt = buildHolisticPrompt(psychologyInput, locale)
+  const messages = buildOracleMessages(locale, prompt)
+
+  const response = await fetch(`${DEEPSEEK_BASE_URL}/chat/completions`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model,
+      messages,
+      temperature: 0.85,
+      max_tokens: 2000,
+      stream: false,
+      thinking: { type: 'disabled' },
+    }),
+  })
+
+  const data = (await response.json()) as DeepSeekChatResponse
+
+  if (!response.ok) {
+    const message = data.error?.message ?? `API 错误 (${response.status})`
+    throw new Error(message)
+  }
+
+  const content = data.choices?.[0]?.message?.content?.trim()
+  if (!content) {
+    throw new Error('返回内容为空')
   }
 
   return content
@@ -112,7 +181,7 @@ export function createMysticalReadingMiddleware(apiKey: string, model: string) {
       const body = JSON.parse(raw) as {
         psychologyInput?: string
         bookId?: string
-        locale?: 'zh' | 'en'
+        locale?: 'zh' | 'en' | 'ja'
       }
 
       if (!body.psychologyInput?.trim()) {

@@ -3,7 +3,20 @@ import type { AssessmentResult, CardOption } from '../../types'
 import type { BookDefinition } from '../../books/types'
 import { getBookResultLabels } from '../../books/types'
 import { computeResults, getAttentionCheckCards } from '../../data/scoring'
-import { fetchMysticalReading } from '../../services/mysticalReadingApi'
+import {
+  fetchMysticalReadingForAssessment,
+  saveBookAssessmentWithAnswers,
+  saveFallbackReading,
+} from '../../services/assessmentApi'
+import {
+  fetchHolisticReading,
+  clearJourneySession,
+  getJourneySession,
+  isStaleJourneyError,
+  type JourneyAssessmentDto,
+  type JourneyDto,
+} from '../../services/journeyApi'
+import { buildAssessmentFromStored } from '../../services/storedAssessment'
 import type { Locale } from '../../i18n/locale'
 import { getUi } from '../../i18n/ui'
 import { getQuestionGuide } from '../../i18n/questionGuide'
@@ -19,17 +32,49 @@ import { useBookFlip } from './useBookFlip'
 const AUTO_FLIP_MS = 420
 const RESULT_PAGES = 3
 
+function pickMysticalReading(
+  session: JourneyAssessmentDto | null | undefined,
+  targetLocale: Locale,
+): { reading: string | null; fallback: boolean } {
+  if (!session) return { reading: null, fallback: false }
+  const byLocale: Record<
+    Locale,
+    { reading?: string | null; source?: string | null }
+  > = {
+    zh: {
+      reading: session.mysticalReadingZh,
+      source: session.mysticalReadingSourceZh,
+    },
+    en: {
+      reading: session.mysticalReadingEn,
+      source: session.mysticalReadingSourceEn,
+    },
+    ja: {
+      reading: session.mysticalReadingJa,
+      source: session.mysticalReadingSourceJa,
+    },
+  }
+  const entry = byLocale[targetLocale]
+  if (entry.reading) {
+    return { reading: entry.reading, fallback: entry.source === 'fallback' }
+  }
+  return { reading: null, fallback: false }
+}
+
 interface BookReaderProps {
   book: BookDefinition
   locale: Locale
   onLocaleChange: (locale: Locale) => void
   enterFromCover?: boolean
   treeRevealStage?: number
+  savedSession?: JourneyAssessmentDto | null
+  journeySnapshot?: JourneyDto | null
   onProgressChange?: (
     currentIndex: number,
     answers: Record<string, string[]>,
   ) => void
   onAssessmentDone: (result: AssessmentResult) => void
+  onJourneyPersisted?: () => void | Promise<void>
   onClose: () => void
 }
 
@@ -39,10 +84,14 @@ export function BookReader({
   onLocaleChange,
   enterFromCover = false,
   treeRevealStage = 0,
+  savedSession = null,
+  journeySnapshot = null,
   onProgressChange,
   onAssessmentDone,
+  onJourneyPersisted,
   onClose,
 }: BookReaderProps) {
+  const readOnly = savedSession !== null
   const { questions } = book
   const questionCount = questions.length
   const totalSpreads = questionCount + RESULT_PAGES
@@ -66,9 +115,16 @@ export function BookReader({
   const ui = getUi(locale)
   const [mysticalReading, setMysticalReading] = useState('')
   const [loadingReading, setLoadingReading] = useState(false)
-  const [readingError, setReadingError] = useState<string | null>(null)
-  const [readingModel, setReadingModel] = useState<string | null>(null)
   const [usedFallback, setUsedFallback] = useState(false)
+  const [readingError, setReadingError] = useState<string | null>(null)
+  const [assessmentId, setAssessmentId] = useState<string | null>(null)
+  const [journeyComplete, setJourneyComplete] = useState(false)
+  const [assessmentsCompleted, setAssessmentsCompleted] = useState(0)
+  const [saveError, setSaveError] = useState<string | null>(null)
+  const [mysticalCache, setMysticalCache] = useState<
+    Partial<Record<Locale, { reading: string; fallback: boolean }>>
+  >({})
+  const hydratedRef = useRef(false)
 
   const isQuestionSpread = pageIndex < questionCount
   const resultPageIndex = pageIndex - questionCount
@@ -95,37 +151,150 @@ export function BookReader({
   }, [pageIndex, answers, onProgressChange, questionCount])
 
   useEffect(() => {
+    if (readOnly) return
+    if (Object.keys(answers).length === 0) return
+    setAssessment(computeResults(answers, questions, book))
+  }, [book, questions, answers, readOnly])
+
+  useEffect(() => {
+    if (!savedSession || hydratedRef.current) return
+    hydratedRef.current = true
+
+    setAnswers(savedSession.answers)
+    setAssessmentId(savedSession.id)
+    const result = buildAssessmentFromStored(savedSession, book)
+    setAssessment(result)
+    onAssessmentDone(result)
+
+    const mysticalFromSession = pickMysticalReading(savedSession, locale)
+    if (mysticalFromSession.reading) {
+      setMysticalReading(mysticalFromSession.reading)
+      setUsedFallback(mysticalFromSession.fallback)
+      setMysticalCache((prev) => ({
+        ...prev,
+        [locale]: {
+          reading: mysticalFromSession.reading!,
+          fallback: mysticalFromSession.fallback,
+        },
+      }))
+    }
+    if (savedSession.mysticalReadingZh) {
+      setMysticalCache((prev) => ({
+        ...prev,
+        zh: {
+          reading: savedSession.mysticalReadingZh!,
+          fallback: savedSession.mysticalReadingSourceZh === 'fallback',
+        },
+      }))
+    }
+    if (savedSession.mysticalReadingEn) {
+      setMysticalCache((prev) => ({
+        ...prev,
+        en: {
+          reading: savedSession.mysticalReadingEn!,
+          fallback: savedSession.mysticalReadingSourceEn === 'fallback',
+        },
+      }))
+    }
+    if (savedSession.mysticalReadingJa) {
+      setMysticalCache((prev) => ({
+        ...prev,
+        ja: {
+          reading: savedSession.mysticalReadingJa!,
+          fallback: savedSession.mysticalReadingSourceJa === 'fallback',
+        },
+      }))
+    }
+
+    if (journeySnapshot) {
+      setAssessmentsCompleted(journeySnapshot.assessments.length)
+      if (journeySnapshot.status === 'completed') {
+        setJourneyComplete(true)
+      }
+    }
+  }, [
+    book,
+    journeySnapshot,
+    locale,
+    onAssessmentDone,
+    savedSession,
+  ])
+
+  useEffect(() => {
     if (!assessment || pageIndex < questionCount) return
 
     let cancelled = false
-    const promptInput = book.buildPsychologyPromptInput(assessment.dimensions)
 
     async function loadReading() {
+      const cached = mysticalCache[locale] ?? pickMysticalReading(savedSession, locale)
+      if (cached.reading) {
+        setMysticalReading(cached.reading)
+        setUsedFallback(cached.fallback)
+        setLoadingReading(false)
+        return
+      }
+
       setLoadingReading(true)
-      setReadingError(null)
       setUsedFallback(false)
+      setReadingError(null)
+
+      if (!assessmentId) {
+        const fallback = book.generateMysticalReading(
+          assessment!.dimensions,
+          assessment!.psychologyProfile,
+        )
+        if (!cancelled) {
+          setMysticalReading(fallback)
+          setUsedFallback(true)
+          setReadingError(saveError ?? ui.saveFailNoSession)
+          setLoadingReading(false)
+        }
+        return
+      }
 
       try {
-        const { reading, model } = await fetchMysticalReading(
-          promptInput,
-          book.meta.id,
-          locale,
-        )
+        const { reading, readingZh, readingEn, readingJa, source } =
+          await fetchMysticalReadingForAssessment(assessmentId, locale)
         if (cancelled) return
+        const nextCache: Partial<
+          Record<Locale, { reading: string; fallback: boolean }>
+        > = {}
+        if (readingZh) {
+          nextCache.zh = { reading: readingZh, fallback: source === 'fallback' }
+        }
+        if (readingEn) {
+          nextCache.en = { reading: readingEn, fallback: source === 'fallback' }
+        }
+        if (readingJa) {
+          nextCache.ja = { reading: readingJa, fallback: source === 'fallback' }
+        }
+        nextCache[locale] = {
+          reading,
+          fallback: source === 'fallback',
+        }
+        setMysticalCache((prev) => ({ ...prev, ...nextCache }))
         setMysticalReading(reading)
-        setReadingModel(model ?? null)
+        setUsedFallback(source === 'fallback')
       } catch (err) {
         if (cancelled) return
-        const message =
-          err instanceof Error ? err.message : ui.deepSeekFail
-        setReadingError(message)
-        setMysticalReading(
-          book.generateMysticalReading(
-            assessment!.dimensions,
-            assessment!.psychologyProfile,
-          ),
+        const message = err instanceof Error ? err.message : ui.readingFail
+        if (isStaleJourneyError(message)) {
+          clearJourneySession()
+        }
+        const fallback = book.generateMysticalReading(
+          assessment!.dimensions,
+          assessment!.psychologyProfile,
         )
+        setMysticalReading(fallback)
         setUsedFallback(true)
+        setReadingError(message)
+        setMysticalCache((prev) => ({
+          ...prev,
+          [locale]: { reading: fallback, fallback: true },
+        }))
+        if (assessmentId && !isStaleJourneyError(message)) {
+          void saveFallbackReading(assessmentId, fallback, locale)
+        }
       } finally {
         if (!cancelled) setLoadingReading(false)
       }
@@ -136,7 +305,7 @@ export function BookReader({
     return () => {
       cancelled = true
     }
-  }, [assessment, book, locale, pageIndex, questionCount, ui.deepSeekFail])
+  }, [assessment, assessmentId, book, locale, pageIndex, questionCount, savedSession, saveError, ui])
 
   const scheduleFlip = useCallback(
     (direction: 'next' | 'prev', target: number, delay = AUTO_FLIP_MS) => {
@@ -155,7 +324,7 @@ export function BookReader({
 
   const selectCard = useCallback(
     (questionId: string, cardId: string) => {
-      if (flipping || isAdvancing || !isQuestionSpread) return
+      if (readOnly || flipping || isAdvancing || !isQuestionSpread) return
 
       const qIndex = pageIndex
       const nextAnswers = { ...answers, [questionId]: [cardId] }
@@ -169,7 +338,46 @@ export function BookReader({
       const result = computeResults(nextAnswers, questions, book)
       setAssessment(result)
       onAssessmentDone(result)
-      scheduleFlip('next', questionCount)
+
+      void (async () => {
+        const { journeyId } = getJourneySession()
+        if (!journeyId) {
+          setSaveError(ui.saveFailNoSession)
+          scheduleFlip('next', questionCount)
+          return
+        }
+
+        try {
+          setSaveError(null)
+          const saved = await saveBookAssessmentWithAnswers(
+            journeyId,
+            book.meta.id,
+            locale,
+            result,
+            book.buildPsychologyPromptInput(result.dimensions),
+            nextAnswers,
+          )
+          setAssessmentId(saved.id)
+          setAssessmentsCompleted(saved.assessmentsCompleted)
+          if (saved.journeyStatus === 'completed') {
+            setJourneyComplete(true)
+            void fetchHolisticReading(journeyId, locale)
+              .then(() => onJourneyPersisted?.())
+              .catch(() => onJourneyPersisted?.())
+          } else {
+            void onJourneyPersisted?.()
+          }
+        } catch (error) {
+          setAssessmentId(null)
+          const message =
+            error instanceof Error ? error.message : ui.saveFail
+          if (isStaleJourneyError(message)) {
+            clearJourneySession()
+          }
+          setSaveError(message)
+        }
+        scheduleFlip('next', questionCount)
+      })()
     },
     [
       answers,
@@ -181,6 +389,9 @@ export function BookReader({
       pageIndex,
       questionCount,
       questions,
+      locale,
+      onJourneyPersisted,
+      readOnly,
       scheduleFlip,
     ],
   )
@@ -208,7 +419,11 @@ export function BookReader({
             ariaLabel={ui.sealRevealAria}
           />
           <p className="book-page-hint book-page-hint--action">
-            {q.type === 'attention' ? ui.attentionHint : ui.questionHint}
+            {readOnly
+              ? ui.reviewModeHint
+              : q.type === 'attention'
+                ? ui.attentionHint
+                : ui.questionHint}
           </p>
           <div className="book-page-footer-note">
             <span>{formatPageLabel(index + 1, questionCount, locale)}</span>
@@ -216,7 +431,7 @@ export function BookReader({
         </>
       )
     },
-    [book.meta.id, locale, questionCount, questions, ui],
+    [book.meta.id, locale, questionCount, questions, readOnly, ui],
   )
 
   const buildQuestionRight = useCallback(
@@ -224,8 +439,8 @@ export function BookReader({
       const q = questions[index]
       const ids = answers[q.id] ?? []
       const pageCards: CardOption[] =
-        q.type === 'dimension' ? q.cards : getAttentionCheckCards(q)
-      const locked = !interactive || flipping || isAdvancing
+        q.type === 'dimension' ? q.cards : getAttentionCheckCards(q, book)
+      const locked = readOnly || !interactive || flipping || isAdvancing
 
       return (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 md:gap-3 flex-1 content-start">
@@ -243,7 +458,7 @@ export function BookReader({
         </div>
       )
     },
-    [answers, flipping, isAdvancing, questions, selectCard],
+    [answers, flipping, isAdvancing, questions, readOnly, selectCard],
   )
 
   const buildResultLeft = useCallback(
@@ -252,10 +467,7 @@ export function BookReader({
         return (
           <>
             <p className="book-chapter-tag">{labels.psychologyTag}</p>
-            <h2
-              className="book-page-title"
-              style={{ fontFamily: 'var(--font-serif)' }}
-            >
+            <h2 className="book-page-title">
               {labels.psychologyTitle}
             </h2>
             <p className="book-page-hint">{labels.psychologyHint}</p>
@@ -264,6 +476,11 @@ export function BookReader({
               !assessment.attentionPassed && (
                 <p className="book-attention-note mt-4">{ui.attentionNote}</p>
               )}
+            {saveError && (
+              <p className="book-attention-note mt-4" role="alert">
+                {saveError}
+              </p>
+            )}
           </>
         )
       }
@@ -271,44 +488,37 @@ export function BookReader({
         return (
           <>
             <p className="book-chapter-tag">{labels.mysticalTag}</p>
-            <h2
-              className="book-page-title"
-              style={{ fontFamily: 'var(--font-serif)' }}
-            >
+            <h2 className="book-page-title">
               {labels.mysticalTitle}
             </h2>
             <p className="book-page-hint">{labels.mysticalHint}</p>
-            {readingModel && !loadingReading && !usedFallback && (
-              <p className="book-meta-tag mt-4">DeepSeek · {readingModel}</p>
-            )}
+            <p className="book-page-hint mt-3 opacity-70">{ui.facetOfWhole}</p>
           </>
         )
       }
-      return (
-        <>
-          <p className="book-chapter-tag">{ui.chapterClose}</p>
-          <h2
-            className="book-page-title"
-            style={{ fontFamily: 'var(--font-serif)' }}
-          >
-            {ui.chapterCloseTitle}
-          </h2>
-          <p className="book-page-hint">{labels.closingHint}</p>
-          <div className="book-seal mt-8" aria-hidden>
-            <span>{book.meta.coverTitle}</span>
-          </div>
-        </>
-      )
+      if (rIndex === 2) {
+        return (
+          <>
+            <p className="book-chapter-tag">{ui.chapterClose}</p>
+            <h2 className="book-page-title">{ui.chapterCloseTitle}</h2>
+            <p className="book-page-hint">
+              {journeyComplete
+                ? ui.holisticOnShelfHint
+                : ui.journeyProgress(assessmentsCompleted, 6)}
+            </p>
+          </>
+        )
+      }
+      return null
     },
     [
       assessment,
+      assessmentsCompleted,
       book.meta.hasAttentionChecks,
-      book.meta.id,
+      journeyComplete,
       labels,
+      saveError,
       ui,
-      loadingReading,
-      readingModel,
-      usedFallback,
     ],
   )
 
@@ -340,8 +550,13 @@ export function BookReader({
               </div>
             ) : (
               <>
-                {usedFallback && readingError && (
-                  <p className="book-attention-note mb-4">{ui.deepSeekFallback}</p>
+                {usedFallback && (
+                  <>
+                    <p className="book-attention-note mb-4">{ui.readingFallback}</p>
+                    {readingError && (
+                      <p className="book-attention-note mb-4 opacity-75">{readingError}</p>
+                    )}
+                  </>
                 )}
                 <p className="book-body-text italic whitespace-pre-line">
                   {mysticalReading}
@@ -351,21 +566,27 @@ export function BookReader({
           </div>
         )
       }
-      return (
-        <div className="book-scroll-content flex flex-col items-center justify-center min-h-[280px] gap-6">
-          <p className="book-body-text text-center">{ui.closingBody}</p>
-          <button
-            type="button"
-            onClick={onClose}
-            className="book-nav-btn book-nav-btn-primary"
-          >
-            {ui.backToShore}
-          </button>
-        </div>
-      )
+      if (rIndex === 2) {
+        return (
+          <div className="book-scroll-content flex flex-col items-center justify-center min-h-[280px] gap-6">
+            <p className="book-body-text text-center">
+              {journeyComplete ? ui.holisticOnShelfBody : ui.closingBodyPartial}
+            </p>
+            <button
+              type="button"
+              onClick={onClose}
+              className="book-nav-btn book-nav-btn-primary"
+            >
+              {ui.backToShore}
+            </button>
+          </div>
+        )
+      }
+      return null
     },
     [
       assessment,
+      journeyComplete,
       loadingReading,
       mysticalReading,
       onClose,
@@ -403,10 +624,7 @@ export function BookReader({
 
   const handleNext = () => {
     if (pageIndex >= totalSpreads - 1 || flipping || isAdvancing) return
-    if (
-      pageIndex >= questionCount + 1 &&
-      loadingReading
-    ) {
+    if (pageIndex >= questionCount + 1 && loadingReading) {
       return
     }
     runFlip('next', pageIndex + 1)
@@ -466,7 +684,10 @@ export function BookReader({
       <TreeProgress revealStage={treeStage} bookId={book.meta.id} locale={locale} />
       <BookShell
         left={buildLeft(pageIndex)}
-        right={buildRight(pageIndex, isQuestionSpread && !flipping && !isAdvancing)}
+        right={buildRight(
+          pageIndex,
+          isQuestionSpread && !flipping && !isAdvancing && !readOnly,
+        )}
         incomingLeft={incomingSpread?.left}
         incomingRight={incomingSpread?.right}
         pageNumber={displayPageNumber}
@@ -480,13 +701,27 @@ export function BookReader({
         locale={locale}
         footer={
           isQuestionSpread ? (
-            <BookNav
-              onBack={handleBack}
-              backDisabled={pageIndex === 0 || flipping || isAdvancing}
-              backLabel={ui.prevPage}
-              selectOneHint={ui.selectOneHint}
-              showNext={false}
-            />
+            readOnly ? (
+              <BookNav
+                onBack={handleBack}
+                onNext={handleNext}
+                backDisabled={pageIndex === 0 || flipping || isAdvancing}
+                nextDisabled={
+                  flipping || isAdvancing || pageIndex >= totalSpreads - 1
+                }
+                backLabel={ui.prevPage}
+                nextLabel={ui.nextPage}
+                selectOneHint={ui.reviewModeHint}
+              />
+            ) : (
+              <BookNav
+                onBack={handleBack}
+                backDisabled={pageIndex === 0 || flipping || isAdvancing}
+                backLabel={ui.prevPage}
+                selectOneHint={ui.selectOneHint}
+                showNext={false}
+              />
+            )
           ) : resultPageIndex < RESULT_PAGES - 1 ? (
             <BookNav
               onBack={handleBack}

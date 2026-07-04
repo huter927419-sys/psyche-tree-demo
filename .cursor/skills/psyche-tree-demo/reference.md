@@ -1,121 +1,107 @@
 # psyche-tree-demo — Reference
 
-## Books
+## Book page flow
 
-| ID | Title (zh/en) | Questions source |
-|----|---------------|------------------|
-| `psyche-tree` | 心象 / Mindscape | `src/data/questions.ts` |
-| `emotional-flow` | 映心 / Heart Mirror | `src/books/emotional-flow/` + EN bundle |
+| Page | Content |
+|------|---------|
+| 1–3 | Dimensions 1–3 |
+| 4 | Attention check |
+| 5–7 | Dimensions 4–6 |
+| 8 | Integration (dimensionIndex 7) |
 
-Registry: `src/books/registry.ts` → `getBook(id, locale)`.
+Built by `buildBookQuestionFlow()` in `books/shared/questionFlow.ts`.
 
-## App phases
+## Dimension titles by book
 
-| Phase | Component | Notes |
-|-------|-----------|-------|
-| `shelf` | `Bookshelf` | Two volumes, music, lang toggle |
-| `cover` | `BookCover`, `BookJourneyStage` | Pickup animation, `BookClosedVisual` |
-| `reading` | `BookReader` | Opening guide → quiz spreads |
-| `result` | `BookResult` | 3 pages, then close to shelf |
+### 心象 `psyche-tree`
+界石 · 映波 · 定息 · 自照 · 内守 · 根息 → **观·整象**
 
-## Question flow (9 pages per book)
+### 映心 `emotional-flow`
+流势 · 流言 · 流联 · 流身 · 流息 · 流变 → **流·整湖**
 
-| Index | Type | Notes |
-|-------|------|-------|
-| 0 | Dim 1 | |
-| 1 | Dim 2 | |
-| 2 | Attention | Must pick 星光探索者 / star-explorer |
-| 3 | Dim 3 | |
-| 4 | Dim 4 | |
-| 5 | Dim 5 | |
-| 6 | Attention | Must pick 稳固之山 / stable-mountain |
-| 7 | Dim 6 | |
-| 8 | Dim 7 | Auto-complete → results |
+### 明思 `mind-light`
+思流 · 学纹 · 专镜 · 辨光 · 创泉 · 择印 → **脉·归光**
 
-Built by `buildQuestionFlow()` in `questions.ts`.
+### 缘书 `bond-thread`
+丝近 · 丝温 · 丝距 · 丝信 · 丝守 · 丝复 → **缘·整丝**
 
-## Left page content stack
+### 流衡 `flow-balance`
+分力 · 守源 · 雾行 · 急缓 · 转势 · 定舟 → **衡·整流**
 
-1. `book-chapter-tag` — dimension title or「对话确认」
-2. `book-question-mystical` — rite / guide / note from `questionGuide.ts`
-3. `book-question-divider`
-4. `QuestionSealReveal` — tap seal → scenario label + `q.prompt` → auto-hide
-5. `book-page-hint--action` — right-page instruction
+### 向光 `direction-light`
+光向 · 光义 · 步履 · 共振 · 持愿 · 探径 → **向·整光**
 
-## Question seal strings (ui.ts)
-
-| Key | zh | en |
-|-----|----|----|
-| `scenarioLabel` | 问印 | Question Seal |
-| `sealMark` | 问 | Q |
-| `sealRevealHint` | 点以观问 | Tap to reveal |
-
-Default `autoHideMs`: 4200.
-
-## Score → level
-
-`scoring.ts` `scoreLevel()`:
-
-| Average | Level |
-|---------|-------|
-| ≥ 1.5 | high |
-| ≥ 0.5 | mid-high |
-| ≥ -0.5 | mid |
-| ≥ -1.5 | mid-low |
-| else | low |
-
-Single-card selection: average = that card's score.
-
-## Tree stages
-
-1 根 · 2 基 · 3 脉 · 4 干 · 5 枝 · 6 冠 · 7 光 — `Sephira.revealStage` bottom→top.
-
-## Visual tier
-
-| Surface | Tier | Effects reduced |
-|---------|------|-----------------|
-| Shelf | `full` | All ambient effects |
-| Cover | `balanced` | Some blur/ghost trimmed |
-| Quiz | `minimal` | No card backdrop-blur, minimal SVG blur |
-
-Hook: `src/hooks/useVisualTier.ts`.
-
-## DeepSeek
-
-POST `/api/mystical-reading` — psychology prompt (interpretations only). Server: `server/deepseek.ts`, per-book prompts in `server/bookPrompts.ts`. Thinking disabled.
-
-## Card pipeline
-
-```bash
-npm run generate:cards       # PNG via card-art-renderer.mjs
-npm run generate:cards:ai    # DALL-E 3, needs OPENAI_API_KEY
-```
-
-Patterns in `scripts/generate-card-images.mjs` `PATTERNS` — must match question `pattern` fields. SVG fallbacks removed; PNG only.
-
-## Key new files (2025–2026 refactor)
+## Client paths
 
 ```
-src/components/book/BookReader.tsx
-src/components/book/BookOpeningGuide.tsx
-src/components/book/QuestionSealReveal.tsx
-src/components/book/BookClosedVisual.tsx
-src/components/book/BookJourneyStage.tsx
-src/components/bookshelf/Bookshelf.tsx
-src/components/i18n/LanguageToggle.tsx
-src/components/i18n/AmbientPhraseLayer.tsx
-src/components/SkyAtmosphere.tsx
-src/hooks/useVisualTier.ts
-src/i18n/
-src/books/
-scripts/card-art-renderer.mjs
+src/App.tsx                         # phase: shelf | cover | questions | result
+src/books/registry.ts
+src/books/{id}/content.ts
+src/books/shared/createBook.ts
+src/components/bookshelf/           # Bookshelf, HolisticOracleOverlay, UltimateOracle
+src/components/book/BookReader.tsx  # save assessment, fetch mystical reading
+src/i18n/ui.ts                      # all UI strings zh/en/ja
+src/i18n/questionGuide.ts           # + questionGuide.ja.ts
+src/i18n/openingGuide.ts
+src/i18n/treeLabels.ts
+src/services/assessmentApi.ts
+src/services/journeyApi.ts
+src/audio/backgroundMusic.ts        # welcome / questions / result tracks
+```
+
+## Server paths
+
+```
+server/api/router.ts
+server/db/schema.sql
+server/db/repositories/journeys.ts    # BOOK_IDS, buildHolisticPromptInput, completion
+server/db/repositories/assessments.ts # save, mystical reading cache columns
+server/services/mysticalReadingService.ts
+server/services/holisticReadingService.ts
 server/bookPrompts.ts
 ```
 
-## Mac demo recording (optional)
+## Reading data flow
 
-⇧⌘5 → record → Desktop `.mov`. Convert:
-
-```bash
-ffmpeg -i ~/Desktop/录屏.mov -c:v libx264 -c:a aac ~/Desktop/录屏.mp4
 ```
+answers → computeResults() → dimensions + psychology_prompt_input
+  → save book_assessments
+  → resolveMysticalReading (zh/en/ja parallel, cached)
+
+six books complete → journey.status = completed
+  → resolveHolisticReading
+  → ensureVolumeOraclesForHolistic (all 6 mystical readings)
+  → buildHolisticPromptInput (portrait + 已示神谕 per book)
+  → DeepSeek holistic template → holistic_reading_{zh,en,ja}
+```
+
+## Tree progress
+
+`countCompletedDimensions()` counts only `dimensionIndex <= 6`. Integration does not advance tree stage. `treeProgressMax: 6` on all books.
+
+## Scoring
+
+`computeResults()` in `scoring.ts`. Attention decoys via `getAttentionCheckCards(q, book)` scoped to current book.
+
+## Background music (Mixkit)
+
+| Phase | File | Track |
+|-------|------|-------|
+| welcome (shelf/cover) | `nature-meditation.mp3` | #345 |
+| questions | `spirit-woods.mp3` | #139 |
+| result | `rest-now.mp3` | #584 |
+
+## Verification scripts
+
+| Script | Purpose |
+|--------|---------|
+| `scripts/reset-db.mjs` | Wipe SQLite |
+| `scripts/verify-full-flow.mjs` | API + save + readings smoke test |
+| `scripts/verify-e2e.mjs` | Browser-oriented checks |
+| `scripts/test-locale-switch.mjs` | zh/en/ja reading cache |
+| `scripts/complete-user-journey.mjs` | Fill 6 books for an email |
+| `scripts/test-multi-user-concurrent.mjs` | Isolation |
+
+## Card images
+
+`public/cards/{pattern}.png` — `npm run generate:cards` (`scripts/generate-card-images.mjs`)

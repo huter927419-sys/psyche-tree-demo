@@ -90,8 +90,8 @@ export function getOpacityForElement(
 ): { stroke: number; fill: number; glow: number } {
   if (variant === 'welcome') {
     return revealed
-      ? { stroke: 0.55, fill: 0.08, glow: 0.35 }
-      : { stroke: 0.2, fill: 0, glow: 0.1 }
+      ? { stroke: 0.4, fill: 0.07, glow: 0.24 }
+      : { stroke: 0.14, fill: 0, glow: 0.06 }
   }
   if (variant === 'complete') {
     return { stroke: 0.75, fill: 0.12, glow: 0.55 }

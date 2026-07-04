@@ -53,8 +53,10 @@ export function TreeAwakeningOverlay({
   const { awakeningTag } = getProgressLabels(bookId ?? 'psyche-tree', locale)
   const enLabels = getProgressLabels(bookId ?? 'psyche-tree', 'en')
   const zhLabels = getProgressLabels(bookId ?? 'psyche-tree', 'zh')
+  const jaLabels = getProgressLabels(bookId ?? 'psyche-tree', 'ja')
   const labelEn = enLabels.stageLabels[stage] ?? enLabels.fallbackLabel
   const labelZh = zhLabels.stageLabels[stage] ?? zhLabels.fallbackLabel
+  const labelJa = jaLabels.stageLabels[stage] ?? jaLabels.fallbackLabel
   const litNodes = sephirot.filter((s) => s.revealStage <= stage)
   const variant = 'explore' as const
 
@@ -161,6 +163,7 @@ export function TreeAwakeningOverlay({
           <BilingualCrossfadeText
             zh={labelZh}
             en={labelEn}
+            ja={labelJa}
             activeLocale={locale}
           />
         </p>

@@ -24,8 +24,6 @@ export function BookResult({ book, result, onRestart }: BookResultProps) {
 
   const [mysticalReading, setMysticalReading] = useState(result.mysticalReading)
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [model, setModel] = useState<string | null>(null)
   const [usedFallback, setUsedFallback] = useState(false)
 
   useEffect(() => {
@@ -33,22 +31,17 @@ export function BookResult({ book, result, onRestart }: BookResultProps) {
 
     async function loadReading() {
       setLoading(true)
-      setError(null)
       setUsedFallback(false)
 
       try {
-        const { reading, model: usedModel } = await fetchMysticalReading(
+        const { reading } = await fetchMysticalReading(
           promptInput,
           book.meta.id,
         )
         if (cancelled) return
         setMysticalReading(reading)
-        setModel(usedModel ?? null)
-      } catch (err) {
+      } catch {
         if (cancelled) return
-        const message =
-          err instanceof Error ? err.message : 'DeepSeek 解读生成失败'
-        setError(message)
         setMysticalReading(
           book.generateMysticalReading(
             result.dimensions,
@@ -81,7 +74,7 @@ export function BookResult({ book, result, onRestart }: BookResultProps) {
   const leftPages = [
     <>
       <p className="book-chapter-tag">{labels.psychologyTag}</p>
-      <h2 className="book-page-title" style={{ fontFamily: 'var(--font-serif)' }}>
+      <h2 className="book-page-title">
         {labels.psychologyTitle}
       </h2>
       <p className="book-page-hint">{labels.psychologyHint}</p>
@@ -93,17 +86,14 @@ export function BookResult({ book, result, onRestart }: BookResultProps) {
     </>,
     <>
       <p className="book-chapter-tag">{labels.mysticalTag}</p>
-      <h2 className="book-page-title" style={{ fontFamily: 'var(--font-serif)' }}>
+      <h2 className="book-page-title">
         {labels.mysticalTitle}
       </h2>
       <p className="book-page-hint">{labels.mysticalHint}</p>
-      {model && !loading && !usedFallback && (
-        <p className="book-meta-tag mt-4">DeepSeek · {model}</p>
-      )}
     </>,
     <>
       <p className="book-chapter-tag">收束</p>
-      <h2 className="book-page-title" style={{ fontFamily: 'var(--font-serif)' }}>
+      <h2 className="book-page-title">
         合卷归岸
       </h2>
       <p className="book-page-hint">{labels.closingHint}</p>
@@ -125,9 +115,9 @@ export function BookResult({ book, result, onRestart }: BookResultProps) {
         </div>
       ) : (
         <>
-          {usedFallback && error && (
+          {usedFallback && (
             <p className="book-attention-note mb-4">
-              DeepSeek 暂不可用，已使用本地模板。
+              Remote oracle unavailable; showing a local reading instead.
             </p>
           )}
           <p className="book-body-text italic whitespace-pre-line">

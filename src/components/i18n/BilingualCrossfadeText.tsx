@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
+import type { Locale } from '../../i18n/locale'
 
 interface BilingualCrossfadeTextProps {
   zh: string
   en: string
-  /** When set, primary language stays visible; other fades as ghost. */
-  activeLocale?: 'zh' | 'en'
+  ja?: string
+  /** When set, primary language stays visible; others fade as ghost. */
+  activeLocale?: Locale
   className?: string
   intervalMs?: number
 }
@@ -12,6 +14,7 @@ interface BilingualCrossfadeTextProps {
 export function BilingualCrossfadeText({
   zh,
   en,
+  ja,
   activeLocale,
   className = '',
   intervalMs = 5200,
@@ -23,6 +26,16 @@ export function BilingualCrossfadeText({
     const timer = window.setInterval(() => setShowEn((v) => !v), intervalMs)
     return () => window.clearInterval(timer)
   }, [activeLocale, intervalMs])
+
+  if (activeLocale === 'ja' && ja) {
+    return (
+      <span className={`bilingual-crossfade ${className}`}>
+        <span className="bilingual-crossfade-line bilingual-crossfade-line--ja is-active">
+          {ja}
+        </span>
+      </span>
+    )
+  }
 
   const enVisible = activeLocale ? activeLocale === 'en' : showEn
   const zhVisible = activeLocale ? activeLocale === 'zh' : !showEn

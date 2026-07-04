@@ -3,23 +3,23 @@ export type MusicPhase = 'welcome' | 'questions' | 'result'
 /** Mixkit Free Stock Music License — https://mixkit.co/license/#musicFree */
 export const MUSIC_TRACKS: Record<MusicPhase, { src: string; title: string }> = {
   welcome: {
-    src: '/audio/meditation-sitar.mp3',
-    title: 'Meditation Sitar (Mixkit)',
+    src: '/audio/nature-meditation.mp3',
+    title: 'Nature Meditation (Mixkit)',
   },
   questions: {
-    src: '/audio/deep-calm.mp3',
-    title: 'Deep Calm (Mixkit)',
+    src: '/audio/spirit-woods.mp3',
+    title: 'Spirit in the Woods (Mixkit)',
   },
   result: {
-    src: '/audio/ethereal-dream.mp3',
-    title: 'Ethereal Dream (Mixkit)',
+    src: '/audio/rest-now.mp3',
+    title: 'Rest Now (Mixkit)',
   },
 }
 
 const PHASE_VOLUME: Record<MusicPhase, number> = {
-  welcome: 0.34,
-  questions: 0.24,
-  result: 0.3,
+  welcome: 0.28,
+  questions: 0.2,
+  result: 0.26,
 }
 
 const FADE_MS = 1600

@@ -148,6 +148,7 @@ interface EnergizedNodeProps {
   revealed: boolean
   newlyEnergized: boolean
   isComplete: boolean
+  isWelcome?: boolean
   visualTier: VisualTier
   op: { stroke: number; fill: number; glow: number }
 }
@@ -158,6 +159,7 @@ export function EnergizedNode({
   revealed,
   newlyEnergized,
   isComplete,
+  isWelcome = false,
   visualTier,
   op,
 }: EnergizedNodeProps) {
@@ -166,8 +168,12 @@ export function EnergizedNode({
     : revealed
       ? 'tree-node-energized'
       : 'tree-node-dormant'
-  const animateAura = visualTier === 'full' && (newlyEnergized || index === 0)
-  const showRingSupply = visualTier === 'full' && newlyEnergized
+  const animateAura = visualTier === 'full' && !isWelcome && (newlyEnergized || index === 0)
+  const showRingSupply = visualTier === 'full' && newlyEnergized && !isWelcome
+  const showInnerLight = visualTier !== 'minimal'
+  const showGlowHalo = visualTier !== 'minimal'
+  const minStroke = isWelcome ? 0.38 : 0.78
+  const minFill = isWelcome ? 0.09 : 0.22
 
   return (
     <g className={pulseClass} style={{ transition: 'opacity 1.2s ease' }}>
@@ -181,7 +187,7 @@ export function EnergizedNode({
             opacity={newlyEnergized ? 0.9 : op.glow * 0.75}
             className={animateAura ? 'tree-node-aura-pulse' : undefined}
           />
-          {visualTier !== 'minimal' && (
+          {showGlowHalo && (
             <circle
               cx={sephira.cx}
               cy={sephira.cy}
@@ -196,12 +202,12 @@ export function EnergizedNode({
         cx={sephira.cx}
         cy={sephira.cy}
         r={sephira.r}
-        stroke={`rgba(255,255,255,${revealed ? Math.max(op.stroke, 0.78) : op.stroke * 0.35})`}
+        stroke={`rgba(255,255,255,${revealed ? Math.max(op.stroke, minStroke) : op.stroke * 0.35})`}
         strokeWidth={index === 0 ? 1.5 : 1.1}
-        fill={`rgba(255,255,255,${revealed ? Math.max(op.fill, 0.22) : op.fill})`}
+        fill={`rgba(255,255,255,${revealed ? Math.max(op.fill, minFill) : op.fill})`}
         className="tree-node-core"
       />
-      {revealed && visualTier !== 'minimal' && (
+      {revealed && showInnerLight && (
         <circle
           cx={sephira.cx}
           cy={sephira.cy}

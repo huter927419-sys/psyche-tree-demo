@@ -12,6 +12,7 @@ interface BookCoverProps {
   onOpen: () => void
   onBack: () => void
   opening?: boolean
+  reviewMode?: boolean
 }
 
 export function BookCover({
@@ -21,16 +22,9 @@ export function BookCover({
   onOpen,
   onBack,
   opening = false,
+  reviewMode = false,
 }: BookCoverProps) {
   const ui = getUi(locale)
-  const zhBook =
-    book.meta.id === 'emotional-flow'
-      ? { sub: '八维情感', tag: '照见此刻感受' }
-      : { sub: '七维内观', tag: '树影逐层展开' }
-  const enBook =
-    book.meta.id === 'emotional-flow'
-      ? { sub: 'Eight dimensions', tag: 'See what you feel now' }
-      : { sub: 'Seven inner dimensions', tag: 'Shadows of the tree unfold' }
 
   return (
     <div className="book-cover-scene book-scene flex flex-col items-center justify-center min-h-[min(88vh,920px)] px-4 py-6 md:py-8">
@@ -55,15 +49,16 @@ export function BookCover({
       >
         {locale === 'en' ? (
           <>
-            <span className="book-cover-eyebrow-line">{enBook.sub}</span>
+            <span className="book-cover-eyebrow-line">{book.meta.coverSubtitle}</span>
             <span className="book-cover-eyebrow-line book-cover-eyebrow-tag">
-              {enBook.tag}
+              {book.meta.coverTagline}
             </span>
           </>
         ) : (
           <BilingualCrossfadeText
-            zh={`${zhBook.sub} · ${zhBook.tag}`}
-            en={`${enBook.sub} · ${enBook.tag}`}
+            zh={`${book.meta.coverSubtitle} · ${book.meta.coverTagline}`}
+            en={`${book.meta.coverSubtitle} · ${book.meta.coverTagline}`}
+            ja={`${book.meta.coverSubtitle} · ${book.meta.coverTagline}`}
             activeLocale={locale}
             intervalMs={4500}
           />
@@ -80,8 +75,10 @@ export function BookCover({
       </div>
 
       <div className="book-cover-copy">
-        <p className="book-cover-lead">{ui.coverOpenHint}</p>
-        <p className="book-cover-detail">{book.meta.coverHint}</p>
+        <p className="book-cover-lead">
+          {reviewMode ? ui.coverReviewHint : ui.coverOpenHint}
+        </p>
+        {!reviewMode && <p className="book-cover-detail">{book.meta.coverHint}</p>}
       </div>
 
       <button
@@ -90,7 +87,7 @@ export function BookCover({
         disabled={opening}
         className="book-nav-btn book-nav-btn-primary book-cover-open-btn disabled:opacity-50"
       >
-        {opening ? ui.coverOpening : ui.coverOpen}
+        {opening ? ui.coverOpening : reviewMode ? ui.coverReview : ui.coverOpen}
       </button>
     </div>
   )

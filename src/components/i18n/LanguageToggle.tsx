@@ -1,5 +1,5 @@
 import type { Locale } from '../../i18n/locale'
-import { LOCALE_LABELS } from '../../i18n/locale'
+import { LOCALE_CODES, LOCALE_LABELS } from '../../i18n/locale'
 
 interface LanguageToggleProps {
   locale: Locale
@@ -23,7 +23,7 @@ export function LanguageToggle({
       {label && !compact && (
         <span className="language-toggle-label">{label}</span>
       )}
-      {(['zh', 'en'] as const).map((code) => (
+      {LOCALE_CODES.map((code) => (
         <button
           key={code}
           type="button"

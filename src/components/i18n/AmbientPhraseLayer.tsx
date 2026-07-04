@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react'
+import type { Locale } from '../../i18n/locale'
 import { AMBIENT_PHRASES } from '../../i18n/treeLabels'
-import { BilingualCrossfadeText } from './BilingualCrossfadeText'
 
 interface AmbientPhraseLayerProps {
+  locale: Locale
   /** When false, timers stop and layer hides (saves work during quiz). */
   active?: boolean
   subdued?: boolean
 }
 
 export function AmbientPhraseLayer({
+  locale,
   active = true,
   subdued = false,
 }: AmbientPhraseLayerProps) {
@@ -26,19 +28,14 @@ export function AmbientPhraseLayer({
   if (!active) return null
 
   const phrase = AMBIENT_PHRASES[index]
+  const text = phrase[locale]
 
   return (
     <div
       className={`ambient-phrase-layer${subdued ? ' ambient-phrase-layer--subdued' : ''}`}
       aria-hidden
     >
-      <BilingualCrossfadeText
-        key={index}
-        zh={phrase.zh}
-        en={phrase.en}
-        className="ambient-phrase-text"
-        intervalMs={3400}
-      />
+      <span className="ambient-phrase-text">{text}</span>
     </div>
   )
 }

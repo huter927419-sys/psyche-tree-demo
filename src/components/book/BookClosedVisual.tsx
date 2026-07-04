@@ -1,8 +1,9 @@
 import type { BookDefinition } from '../../books/types'
+import type { Locale } from '../../i18n/locale'
 
 interface BookClosedVisualProps {
   book: BookDefinition
-  locale?: 'zh' | 'en'
+  locale?: Locale
   size?: 'default' | 'hero'
   /** opening = cover swings open; closing = cover folds shut */
   motion?: 'idle' | 'opening' | 'closing'
@@ -37,12 +38,14 @@ export function BookClosedVisual({
             <div className="book-cover-texture" aria-hidden />
             <div className="book-cover-ornament top" aria-hidden />
             <h2
-              className={`font-serif text-[#f0f0f0] text-center leading-snug mb-1 px-1${
+              className={
                 locale === 'en'
-                  ? ' text-lg sm:text-xl tracking-[0.04em]'
-                  : ' text-xl sm:text-2xl'
-              }`}
-              style={{ fontFamily: 'var(--font-serif)' }}
+                  ? 'font-serif text-[#f0f0f0] text-center leading-snug mb-1 px-1 text-lg sm:text-xl tracking-[0.04em]'
+                  : 'book-cover-title-mystic'
+              }
+              style={
+                locale === 'en' ? { fontFamily: 'var(--font-serif)' } : undefined
+              }
             >
               {locale === 'en'
                 ? book.meta.coverTitle.split(/\s+/).map((word) => (

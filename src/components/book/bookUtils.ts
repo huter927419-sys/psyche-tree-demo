@@ -12,7 +12,7 @@ export function formatPageLabel(
   total: number,
   locale: Locale = 'zh',
 ): string {
-  if (locale === 'en') {
+  if (locale === 'en' || locale === 'ja') {
     return `${current} / ${total}`
   }
   return `${toChinesePage(current)} / ${toChinesePage(total)}`

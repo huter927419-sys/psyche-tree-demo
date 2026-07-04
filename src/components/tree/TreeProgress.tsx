@@ -10,19 +10,16 @@ interface TreeProgressProps {
 }
 
 export function TreeProgress({ revealStage, bookId, locale }: TreeProgressProps) {
+  const labels = getProgressLabels(bookId, locale)
   const zhLabels = getProgressLabels(bookId, 'zh')
   const enLabels = getProgressLabels(bookId, 'en')
-  const label =
-    locale === 'en'
-      ? enLabels.stageLabels[revealStage]
-      : zhLabels.stageLabels[revealStage]
-  const idleZh = zhLabels.idleLabel
-  const idleEn = enLabels.idleLabel
+  const jaLabels = getProgressLabels(bookId, 'ja')
+  const label = labels.stageLabels[revealStage]
 
   return (
     <div className="tree-progress-hud">
       <div className="tree-progress-dots">
-        {zhLabels.stageShort.map((short, i) => {
+        {labels.stageShort.map((short, i) => {
           const stage = i + 1
           const lit = revealStage >= stage
           const active = revealStage === stage
@@ -30,7 +27,7 @@ export function TreeProgress({ revealStage, bookId, locale }: TreeProgressProps)
             <div
               key={short}
               className={`tree-progress-dot ${lit ? 'lit' : ''} ${active ? 'active' : ''}`}
-              title={zhLabels.stageLabels[stage]}
+              title={labels.stageLabels[stage]}
             >
               <span>{short}</span>
             </div>
@@ -42,6 +39,7 @@ export function TreeProgress({ revealStage, bookId, locale }: TreeProgressProps)
           <BilingualCrossfadeText
             zh={zhLabels.stageLabels[revealStage]}
             en={enLabels.stageLabels[revealStage]}
+            ja={jaLabels.stageLabels[revealStage]}
             activeLocale={locale}
           />
         </p>
@@ -49,8 +47,9 @@ export function TreeProgress({ revealStage, bookId, locale }: TreeProgressProps)
       {revealStage === 0 && (
         <p className="tree-progress-label dim">
           <BilingualCrossfadeText
-            zh={idleZh}
-            en={idleEn}
+            zh={zhLabels.idleLabel}
+            en={enLabels.idleLabel}
+            ja={jaLabels.idleLabel}
             activeLocale={locale}
             intervalMs={4800}
           />

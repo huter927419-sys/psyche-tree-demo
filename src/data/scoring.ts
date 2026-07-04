@@ -5,10 +5,10 @@ import type {
   DimensionResult,
   QuestionItem,
 } from '../types'
-import { findCardById } from './questions'
+import type { BookDefinition } from '../books/types'
+import { findCardInBook } from '../books/shared/findCard'
 import { generatePsychologyProfile } from './psychologyProfile'
 import { generateMysticalReading } from './mysticalReading'
-import type { BookDefinition } from '../books/types'
 
 function scoreLevel(
   average: number,
@@ -88,10 +88,13 @@ export function computeResults(
   }
 }
 
-export function getAttentionCheckCards(question: QuestionItem): CardOption[] {
+export function getAttentionCheckCards(
+  question: QuestionItem,
+  book: BookDefinition,
+): CardOption[] {
   if (question.type !== 'attention') return []
 
-  const found = findCardById(question.requiredCardId)
+  const found = findCardInBook(question.requiredCardId, book)
   if (!found) return []
 
   const { card, dimension } = found

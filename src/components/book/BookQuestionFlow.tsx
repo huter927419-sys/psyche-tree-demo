@@ -97,10 +97,7 @@ export function BookQuestionFlow({
       return (
         <>
           <p className="book-chapter-tag">{subtitle}</p>
-          <h2
-            className="book-page-title"
-            style={{ fontFamily: 'var(--font-serif)' }}
-          >
+          <h2 className="book-page-title">
             {q.prompt}
           </h2>
           <p className="book-page-hint mt-6">
@@ -122,7 +119,7 @@ export function BookQuestionFlow({
       const q = questions[index]
       const ids = answers[q.id] ?? []
       const pageCards: CardOption[] =
-        q.type === 'dimension' ? q.cards : getAttentionCheckCards(q)
+        q.type === 'dimension' ? q.cards : getAttentionCheckCards(q, book)
       const locked = !interactive || flipping || isAdvancing
 
       return (

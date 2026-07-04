@@ -1,119 +1,84 @@
 ---
 name: psyche-tree-demo
 description: >-
-  Develop the 雾岸书架 demo (React/Vite): two mystical books (心象 psyche-tree,
-  映心 emotional-flow), bilingual zh/en, bookshelf→cover→quiz→results, Tree of
-  Life background, question seal reveal, DeepSeek reading. Use when editing
-  psyche-tree-demo, books/i18n, BookReader, cards, scoring, tree visuals, or
-  performance tiers.
+  Develop the 雾岸六卷 demo (React 19 / Vite 8 / SQLite): six mystical books,
+  trilingual UI (zh/en/ja), bookshelf + flip-book flow, Tree progress,
+  DeepSeek per-book and holistic readings. Use when editing psyche-tree-demo,
+  books, i18n, server API, assessments, or card art.
 ---
 
-# 雾岸书架 · psyche-tree-demo
+# 雾岸六卷 · psyche-tree-demo
 
-## Product intent
+## Six books (one facet each)
 
-Two floating memory volumes on a mist shelf. Each book: **shelf → cover → opening guide → quiz → 3 result pages → close**. Sacred monochrome aesthetic (`#0a0a0a`, silver lines, subtle gold). Psychology prose + optional DeepSeek mystical layer. **Never expose scores or selected card names** in results.
+| BookId | 卷 | 测向 |
+|--------|-----|------|
+| `psyche-tree` | 心象 | 自我内在 |
+| `emotional-flow` | 映心 | 情感流动 |
+| `mind-light` | 明思 | 思维脉动 |
+| `bond-thread` | 缘书 | 联结之丝 |
+| `flow-balance` | 流衡 | 守衡应变 |
+| `direction-light` | 向光 | 方向步履 |
 
-| Book ID | 中文 | English |
-|---------|------|---------|
-| `psyche-tree` | 心象 | Mindscape |
-| `emotional-flow` | 映心 | Heart Mirror |
-
-## Flow (App.tsx)
+## Per-book structure (8 pages)
 
 ```
-shelf → cover → reading (BookReader) → result → shelf
+Dim 1–3 → attention check → Dim 4–6 → integration (dimensionIndex 7)
 ```
 
-- **Shelf**: `Bookshelf.tsx` — pick book, language toggle, ambient phrases
-- **Cover**: `BookCover.tsx` + `BookJourneyStage.tsx` — closed book scales to open
-- **Quiz**: `BookReader.tsx` — replaces old `BookQuestionFlow` as main reader
-- **Results**: `BookResult.tsx` — 心象画像 → 神谕 → 合书
+- **6 dimensions**: main facet (`dimensionIndex` 1–6); tree progress counts these only
+- **1 integration**: `dimensionIndex: 7` (e.g. 观·整象 / 流·整湖)
+- **1 attention**: after dim 3; decoy cards scoped to current book
+- **Results**: psychology profile + per-book DeepSeek mystical reading (zh/en/ja cached)
 
-## Non-negotiable UX rules
+## Journey & holistic oracle
 
-1. **One card per page** — select replaces prior choice; auto flip ~420ms; footer back only.
-2. **Results**: interpretation only — no card names, scores, dimension tables.
-3. **Psychology copy**: `【维度名】…` via `generatePsychologyProfile()` — never show averages.
-4. **Card art**: smooth B&W gradients, **no** `feTurbulence` / grain. **PNG only** in `public/cards/` (`CardImage` uses `.png`).
-5. **Tree**: organic trunk/branches/canopy (`treeOrganic.ts`); sephirot = glowing nodes. `treeRevealStage` from `countCompletedDimensions()`. Stage up → `TreeAwakeningOverlay`; stage down → recoil on `TreeOfLifeBackground`.
-6. **Question left page order**: chapter tag → mystical guide → divider → **QuestionSealReveal** → action hint. Scenario prompt hidden until user taps seal.
-7. **Reading focus**: dim sky/tree/cards during quiz only (`readingFocus` in App), not on results.
+- User email → one `journey` row; six `book_assessments` (one per book, any order)
+- Journey `completed` when all six `BOOK_IDS` present (order-independent)
+- **整象神谕** only on **bookshelf** (`BookshelfUltimateOracle` / `HolisticOracleOverlay`), not on book result last page
+- Holistic prompt = six sections × (底层画像 `psychology_prompt_input` + **已示神谕** `mystical_reading_{locale}`)
+- Before holistic generation, server ensures all six volume mystical readings exist
 
-## Question seal (问印)
+## Adding a book
 
-`QuestionSealReveal.tsx` — default hidden scenario; tap **问** (zh) / **Q** (en) stamp to reveal label + prompt; auto-hide ~4.2s. Styles: `.book-question-seal-*` in `index.css`. Reset per question via `key={q.id}`.
+1. `src/books/{id}/content.ts` — `LocalizedBookPack`
+2. `src/books/{id}/book.ts` — `createLocalizedBook(pack)`
+3. `src/books/types.ts` — extend `BookId`
+4. `src/books/registry.ts` — register factory
+5. `src/i18n/openingGuide.ts`, `questionGuide.ts`, `questionGuide.ja.ts`
+6. `src/i18n/treeLabels.ts` — stage labels + ambient phrases
+7. `server/bookPrompts.ts` — per-book + holistic DeepSeek templates
 
-Mystical copy per dimension: `src/i18n/questionGuide.ts`. Opening ritual copy: `src/i18n/openingGuide.ts` → `BookOpeningGuide.tsx` (~2.8s overlay, Strict Mode safe).
+Shared: `books/shared/createBook.ts`, `questionFlow.ts`, `card.ts`, `profileHelpers.ts`, `findCard.ts`
 
-## i18n
+## Server (Vite middleware)
 
-| Path | Role |
-|------|------|
-| `src/i18n/locale.ts` | `Locale`, persistence |
-| `src/i18n/ui.ts` | UI strings (seal, hints, shelf) |
-| `src/i18n/treeLabels.ts` | Tree stage labels |
-| `src/i18n/questionGuide.ts` | Per-question mystical guides |
-| `src/i18n/openingGuide.ts` | Book opening overlay |
-| `src/data/*.en.ts` | EN question/profile/mystical data |
-| `src/books/` | Book registry + per-book bundles |
+```
+server/api/router.ts          # REST: journeys, assessments, readings, holistic
+server/db/                    # SQLite schema + migrations + repositories
+server/services/              # mysticalReadingService, holisticReadingService
+server/bookPrompts.ts         # prompt templates zh/en/ja
+server/deepseek.ts            # DeepSeek chat calls
+```
 
-`getBook(id, locale)` drives content. `LanguageToggle` on shelf, cover, reader. `AmbientPhraseLayer` crossfades background phrases (shelf/cover only).
+DB path: `data/psyche-tree.sqlite` (or `SQLITE_PATH`). Reset: `node scripts/reset-db.mjs`.
 
-## Performance (`useVisualTier`)
+## Non-negotiable UX
 
-Tier ladder: shelf `full` → cover `balanced` → quiz `minimal`. Controls blur, ghost SVG blur, sacred illumination. **Bug to avoid**: `preferred: 'minimal'` must resolve to `'minimal'`, not fall through to `'balanced'`.
+- One card per page, auto flip ~420ms, no scores shown
+- Question seal reveal for scenario prompt
+- `useVisualTier`: shelf full / cover balanced / quiz minimal
+- Psychology copy: `【title】desc`; integration last
+- Locale switch reads cached readings; does not re-score
 
-## Architecture map
-
-| Area | Path |
-|------|------|
-| App state | `src/App.tsx` |
-| Books | `src/books/registry.ts`, `psyche-tree/book.ts`, `emotional-flow/book.ts` |
-| Reader | `src/components/book/BookReader.tsx` |
-| Opening guide | `BookOpeningGuide.tsx` |
-| Question seal | `QuestionSealReveal.tsx` |
-| 3D flip | `useBookFlip.ts`, `BookShell.tsx` |
-| Tree | `TreeOfLifeBackground.tsx`, `tree/treeOrganic.ts`, `treeData.ts` |
-| Sky | `SkyAtmosphere.tsx` |
-| Questions | `src/data/questions.ts` + `questions.en.ts` |
-| Scoring | `src/data/scoring.ts` |
-| DeepSeek | `server/deepseek.ts`, `server/bookPrompts.ts`, `mysticalReadingApi.ts` |
-| Cards | `scripts/generate-card-images.mjs`, `card-art-renderer.mjs`, `card-prompts.mjs` |
-
-## Attention checks
-
-Two interleaved checks (after dims 2 & 5): `star-explorer`, `stable-mountain`. Failure → `attentionPassed: false` + disclaimer on results; does not block generation.
-
-## Common tasks
-
-### Add dimension question
-
-Edit `questions.ts` (+ `questions.en.ts`). Card `pattern` must exist in `public/cards/{pattern}.png`. Regenerate: `npm run generate:cards`.
-
-### Edit mystical question guide
-
-`src/i18n/questionGuide.ts` — `rite`, `guide`, `note` per book/dimension/locale. Reference 「下方问印」 not plain 「读情境」.
-
-### Edit seal UX
-
-`QuestionSealReveal.tsx` + `ui.ts` (`sealMark`, `sealRevealHint`) + `.book-question-seal-*` CSS.
-
-### DeepSeek
-
-`.env.local`: `DEEPSEEK_API_KEY`, `DEEPSEEK_MODEL=deepseek-v4-pro`. Never commit keys. Production needs backend proxy.
-
-### Verify
+## Verify
 
 ```bash
-npm run dev
+npm run dev                    # needs .env.local DEEPSEEK_API_KEY
 npm run build
+node scripts/verify-full-flow.mjs
+node scripts/test-locale-switch.mjs
+node scripts/complete-user-journey.mjs [email]
 ```
 
-## Styling
-
-Book/paper: `src/index.css` (`.book-*`, flip ~1050ms). Left page mystical block: `.book-question-mystical`. Pages semi-transparent so tree shows through.
-
-## Additional detail
-
-See [reference.md](reference.md) for question flow, API shape, and file index.
+See [reference.md](reference.md) for file index and data flow.

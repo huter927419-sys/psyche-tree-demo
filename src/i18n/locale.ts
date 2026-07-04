@@ -1,11 +1,14 @@
 import { createContext, useContext } from 'react'
 
-export type Locale = 'zh' | 'en'
+export type Locale = 'zh' | 'en' | 'ja'
 
 export const LOCALE_LABELS: Record<Locale, string> = {
   zh: '中文',
   en: 'English',
+  ja: '日本語',
 }
+
+export const LOCALE_CODES: Locale[] = ['zh', 'en', 'ja']
 
 const LocaleContext = createContext<{
   locale: Locale

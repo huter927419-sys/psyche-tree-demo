@@ -57,7 +57,9 @@ export function shouldRunEnergySupply(
   tier: VisualTier,
 ): boolean {
   if (tier === 'minimal') return false
-  if (variant === 'welcome' || variant === 'complete') return tier === 'full'
+  // Shelf/cover welcome: static tree glow only — no parallel supply loops.
+  if (variant === 'welcome') return false
+  if (variant === 'complete') return tier === 'full'
   if (tier === 'balanced') {
     return itemStage >= revealStage - 1 && itemStage <= revealStage
   }
