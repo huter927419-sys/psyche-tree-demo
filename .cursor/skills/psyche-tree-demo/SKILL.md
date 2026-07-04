@@ -2,7 +2,7 @@
 name: psyche-tree-demo
 description: >-
   Develop the 雾岸六卷 demo (React 19 / Vite 8 / SQLite): six mystical books,
-  trilingual UI (zh/en/ja), bookshelf + flip-book flow, Tree progress,
+  quad-lingual UI (zh / zhTw / en / ja), bookshelf + flip-book flow, Tree progress,
   DeepSeek per-book and holistic readings. Use when editing psyche-tree-demo,
   books, i18n, server API, assessments, or card art.
 ---
@@ -26,7 +26,8 @@ Full trilingual theory: [README.md](../../../README.md#玄学理论体系--mysti
 Concise state-system theory (zh/en/ja): [README.md](../../../README.md#psyche-tree--六维书--简明理论--concise-theory--簡明理論).  
 Advanced generalization layer (State · Force · Field): [README.md](../../../README.md#psyche-tree-system--进阶泛化层--advanced-generalization--進階汎化層).  
 Enhanced theory (Flow · Awareness · Field unified): [README.md](../../../README.md#psyche-tree-system--增强理论版--enhanced-theory--拡張理論).  
-Metaphysical extension (Stream · Origin · Causality): [README.md](../../../README.md#psyche-tree-system--形而上扩展层--metaphysical-extension--形而上拡張層).
+Metaphysical extension (Stream · Origin · Causality): [README.md](../../../README.md#psyche-tree-system--形而上扩展层--metaphysical-extension--形而上拡張層).  
+Locales & SQLite (zh / zhTw / en / ja): [README.md](../../../README.md#语言与数据库--locales--sqlite--言語と-db).
 
 ## Six books (one facet each)
 
@@ -46,10 +47,10 @@ Dim 1–3 → attention check → Dim 4–6 → integration (dimensionIndex 7)
 ```
 
 - **6 dimensions**: main facet (`dimensionIndex` 1–6); tree progress counts these only
-- **Theory layer**: `books/shared/theoryLayer.ts` enriches **prompts** + question **guide notes** (zh/en/ja); answer cards stay psychology-only for layout
+- **Theory layer**: `books/shared/theoryLayer.ts` enriches **prompts** + question **guide notes** (zh/en/ja source; zhTw via OpenCC); answer cards stay psychology-only for layout
 - **1 integration**: `dimensionIndex: 7` (e.g. 观·整象 / 流·整湖)
 - **1 attention**: after dim 3; decoy cards scoped to current book
-- **Results**: psychology profile + per-book DeepSeek mystical reading (zh/en/ja cached)
+- **Results**: psychology profile + per-book DeepSeek mystical reading (zh / zhTw / en / ja cached separately)
 
 ## Journey & holistic oracle
 
@@ -77,7 +78,7 @@ Shared: `books/shared/createBook.ts`, `questionFlow.ts`, `card.ts`, `profileHelp
 server/api/router.ts          # REST: journeys, assessments, readings, holistic
 server/db/                    # SQLite schema + migrations + repositories
 server/services/              # mysticalReadingService, holisticReadingService
-server/bookPrompts.ts         # prompt templates zh/en/ja
+server/bookPrompts.ts         # prompt templates zh / zhTw / en / ja
 server/deepseek.ts            # DeepSeek chat calls
 ```
 
@@ -99,6 +100,7 @@ npm run build
 node scripts/verify-full-flow.mjs
 node scripts/test-locale-switch.mjs
 node scripts/complete-user-journey.mjs [email]
+node scripts/capture-homepage-screenshots.mjs   # docs/screenshots/homepage/*.png
 ```
 
 See [reference.md](reference.md) for file index and data flow.

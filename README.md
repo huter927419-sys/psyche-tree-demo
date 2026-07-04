@@ -8,13 +8,13 @@
 ## 简介 · Overview · 概要
 
 **中文**  
-网页版自我探索 Demo：六卷 mystical books（心象 / 映心 / 明思 / 缘书 / 流衡 / 向光），以翻书式问答收集六个心理学维度与整象封印；背景是一棵随进度逐层展开的生命之树。每卷给出心象画像与 DeepSeek 单卷神谕；六卷完成后，在雾岸书架呈现整象神谕。界面与神谕均支持**中文 / English / 日本語**。
+网页版自我探索 Demo：六卷 mystical books（心象 / 映心 / 明思 / 缘书 / 流衡 / 向光），以翻书式问答收集六个心理学维度与整象封印；背景是一棵随进度逐层展开的生命之树。每卷给出心象画像与 DeepSeek 单卷神谕；六卷完成后，在雾岸书架呈现整象神谕。界面与神谕均支持**简体中文 / 繁體中文 / English / 日本語**。
 
 **English**  
-A web-based self-exploration demo: six mystical volumes (Mindscape, Heart Mirror, Mind Light, Bond Book, Flow Balance, Path Light) presented as a flip-book questionnaire across six psychological dimensions plus an integration seal, with a Tree of Life that unfolds in the background. Each volume yields a psychological portrait and a DeepSeek mystical reading; after all six are complete, a holistic oracle appears on the mist-shore bookshelf. UI and readings are available in **Chinese, English, and Japanese**.
+A web-based self-exploration demo: six mystical volumes (Mindscape, Heart Mirror, Mind Light, Bond Book, Flow Balance, Path Light) presented as a flip-book questionnaire across six psychological dimensions plus an integration seal, with a Tree of Life that unfolds in the background. Each volume yields a psychological portrait and a DeepSeek mystical reading; after all six are complete, a holistic oracle appears on the mist-shore bookshelf. UI and readings are available in **Simplified Chinese, Traditional Chinese, English, and Japanese**.
 
 **日本語**  
-ウェブ版の自己探索デモ：六巻（心象・映心・明思・縁書・流衡・向光）をめくる問答で、六つの心理次元と整象の封印を集めます。背景には進行に応じて展開する生命の樹。各巻で心象プロフィールと DeepSeek による巻別神託を示し、六巻完了後は霧岸の書棚で整象神託を表示します。UI と神託は**中国語・英語・日本語**に対応しています。
+ウェブ版の自己探索デモ：六巻（心象・映心・明思・縁書・流衡・向光）をめくる問答で、六つの心理次元と整象の封印を集めます。背景には進行に応じて展開する生命の樹。各巻で心象プロフィールと DeepSeek による巻別神託を示し、六巻完了後は霧岸の書棚で整象神託を表示します。UI と神託は**簡体字中国語・繁体字中国語・英語・日本語**に対応しています。
 
 ---
 
@@ -24,9 +24,9 @@ A web-based self-exploration demo: six mystical volumes (Mindscape, Heart Mirror
 
 | 章节 Section | 中文 | English | 日本語 |
 |--------------|------|---------|--------|
-| [界面预览](#界面预览--ui-preview--画面プレビュー) | 书架首页三语截图 | Homepage screenshots (zh/en/ja) | 書棚トップ三語スクリーンショット |
+| [界面预览](#界面预览--ui-preview--画面プレビュー) | 书架首页四语截图 | Homepage screenshots (zh/zhTw/en/ja) | 書棚トップ四語スクリーンショット |
 | [体验概览](#体验概览--experience--体験の流れ) | 书架 → 问答 → 神谕 → 整象 | Shelf → Q&A → oracle → Whole Image | 書棚 → 問答 → 神託 → 整象 |
-| [功能要点](#功能要点--features--主な機能) | 持久化、三语缓存、整象 | SQLite, trilingual cache, holistic | 永続化・三語キャッシュ・整象 |
+| [功能要点](#功能要点--features--主な機能) | 持久化、四语缓存、整象 | SQLite, quadrilingual cache, holistic | 永続化・四語キャッシュ・整象 |
 | [快速开始](#快速开始--quick-start--クイックスタート) | 安装与 `.env.local` | Install & env | セットアップと環境変数 |
 | [脚本](#脚本--scripts--スクリプト) | 验证与运维命令 | Dev & verify scripts | 検証・運用スクリプト |
 | [项目结构](#项目结构--project-structure--プロジェクト構成) | 目录说明 | Repo layout | ディレクトリ構成 |
@@ -36,7 +36,7 @@ A web-based self-exploration demo: six mystical volumes (Mindscape, Heart Mirror
 
 ### 理论体系 · Theory · 理論
 
-五层文档均为**中英日三语**，自「如何进入体验」递进到「意识如何生成现实结构」。
+五层文档均为**多语**（简体 / 繁體 / English / 日本語），自「如何进入体验」递进到「意识如何生成现实结构」。
 
 | 层 Layer | 锚点 Anchor | 回答的问题 Question |
 |----------|-------------|---------------------|
@@ -52,7 +52,7 @@ A web-based self-exploration demo: six mystical volumes (Mindscape, Heart Mirror
 
 ## 界面预览 · UI Preview · 画面プレビュー
 
-雾岸书架首页；右上角 **阅读语言 / Language / 読む言語** 切换三语。完整截图见 [`docs/screenshots/homepage/`](docs/screenshots/homepage/)。
+雾岸书架首页；右上角 **简体 / 繁體 / English / 日本語** 切换四语。完整截图见 [`docs/screenshots/homepage/`](docs/screenshots/homepage/)（可用 `node scripts/capture-homepage-screenshots.mjs` 在 dev 运行时重新生成）。
 
 ### 中文 · 雾岸书架
 
@@ -64,6 +64,19 @@ A web-based self-exploration demo: six mystical volumes (Mindscape, Heart Mirror
 | 主标题 | 雾岸书架 |
 | 引导 | 你从光中降落 / 雾霭散去之处，六卷记忆悬浮于岸 / 六向一体，共成整象 |
 | 底部 | 6 卷 · 悬浮于雾 |
+
+### 繁體 · 霧岸書架
+
+![書架首頁 · 繁體](docs/screenshots/homepage/homepage-zh-tw.png)
+
+| 元素 | 文案 |
+|------|------|
+| 副标题 | 霧中 · 記憶之岸 |
+| 主标题 | 霧岸書架 |
+| 引导 | 你從光中降落 / 霧靄散去之處，六卷記憶懸浮於岸 / 六向一體，共成整象 |
+| 底部 | 6 卷 · 懸浮於霧 |
+
+繁體 UI 由简体经 **OpenCC** 转换（含动态文案如页脚）；正文字体为 **Noto Serif TC**，玄学标题仍用 **Zhi Mang Xing** 手写体。
 
 ### English · Mist Shelf
 
@@ -1606,7 +1619,7 @@ Visual: deep black `#0a0a0a`, monochrome symbolic cards, soft gold accents; loca
 | 中文 | English | 日本語 |
 |------|---------|--------|
 | 六卷独立测向，完成顺序不影响 journey | Six independent facets; completion order does not matter | 六巻独立、完了順は journey に影響しない |
-| SQLite 持久化；邮箱登录；三语神谕缓存 | SQLite persistence; email login; trilingual reading cache | SQLite 永続化；メールログイン；三語神託キャッシュ |
+| SQLite 持久化；邮箱登录；四语神谕缓存 | SQLite persistence; email login; quadrilingual reading cache | SQLite 永続化；メールログイン；四語神託キャッシュ |
 | DeepSeek 单卷与整象解读；失败时本地 fallback | DeepSeek per-volume and holistic readings; local fallback on failure | DeepSeek 巻別・整象；失敗時ローカル fallback |
 | 整象 prompt 含六卷底层画像 + 已示神谕 | Holistic prompt uses portraits + prior volume oracles | 整象 prompt に六巻の底层像 + 既示神託 |
 | Mixkit 空灵背景音乐（三场景淡入切换） | Mixkit ambient BGM (cross-faded by scene) | Mixkit 空霊 BGM（場面でクロスフェード） |
@@ -1650,7 +1663,7 @@ OPENAI_API_KEY=...           # AI card images / AI 生图 / AI カード画像
 | `npm run generate:cards` | 生成题目卡 PNG | Generate card PNGs | カード PNG 生成 |
 | `node scripts/reset-db.mjs` | 清空 SQLite | Reset SQLite DB | SQLite リセット |
 | `node scripts/verify-full-flow.mjs` | API 全流程验证 | Full API flow test | API 一連テスト |
-| `node scripts/test-locale-switch.mjs` | 三语神谕缓存验证 | Trilingual reading cache test | 三語神託キャッシュ検証 |
+| `node scripts/test-locale-switch.mjs` | 四语神谕缓存验证 | Quadrilingual reading cache test | 四語神託キャッシュ検証 |
 | `node scripts/complete-user-journey.mjs [email]` | 为邮箱补全六卷 | Complete six books for email | 指定メールで六巻完了 |
 
 ---
@@ -1663,7 +1676,7 @@ psyche-tree-demo/
 │   ├── SKILL.md                       # Architecture & conventions
 │   └── reference.md                   # Paths, data flow, scripts
 ├── data/psyche-tree.sqlite            # Local DB (gitignored)
-├── docs/screenshots/homepage/         # Shelf UI screenshots (zh/en/ja)
+├── docs/screenshots/homepage/         # Shelf UI screenshots (zh/zhTw/en/ja)
 ├── public/audio/                      # Mixkit BGM
 ├── public/cards/                      # Question card PNGs
 ├── scripts/                           # Verify, reset, image gen
@@ -1680,7 +1693,7 @@ psyche-tree-demo/
 | **README.md** | 本文件：产品说明、界面预览、五层理论、安装运维 | This file: product, UI preview, five theory layers, setup | 本ファイル：製品・画面・五層理論・セットアップ |
 | **SKILL.md** | Agent 工作流：六卷结构、theory layer、整象规则 | Agent workflow: six books, theory layer, holistic rules | Agent：六巻・theory layer・整象規則 |
 | **reference.md** | 路径索引、数据流、验证脚本 | File index, data flow, test scripts | パス索引、データフロー、検証脚本 |
-| **docs/screenshots/** | 书架首页三语截图 | Homepage screenshots (zh/en/ja) | 書棚トップ三語スクリーンショット |
+| **docs/screenshots/** | 书架首页四语截图 | Homepage screenshots (zh/zhTw/en/ja) | 書棚トップ四語スクリーンショット |
 
 **理论栈速查** I [玄学](#玄学理论体系--mystical-framework--玄義体系) → II [简明](#psyche-tree--六维书--简明理论--concise-theory--簡明理論) → III [泛化](#psyche-tree-system--进阶泛化层--advanced-generalization--進階汎化層) → IV [增强](#psyche-tree-system--增强理论版--enhanced-theory--拡張理論) → V [形而上](#psyche-tree-system--形而上扩展层--metaphysical-extension--形而上拡張層)
 
@@ -1697,6 +1710,37 @@ For development details, see [SKILL.md](.cursor/skills/psyche-tree-demo/SKILL.md
 3. **中文** 整象神谕仅在书架展示 · **English** Holistic oracle only on bookshelf · **日本語** 整象神託は書棚のみ
 4. **中文** 树进度仅计维度 1–6 · **English** Tree progress counts dims 1–6 only · **日本語** 樹の進行は次元 1–6 のみ
 5. **中文** 切换语言读缓存，不重新计分 · **English** Locale switch uses cache, no re-scoring · **日本語** 言語切替はキャッシュ参照、再採点なし
+
+---
+
+## 语言与数据库 · Locales & SQLite · 言語と DB
+
+| Locale 代码 | 界面标签 | 神谕缓存列（单卷 / 整象） | 说明 |
+|-------------|----------|---------------------------|------|
+| `zh` | 简体 | `mystical_reading_zh` / `holistic_reading_zh` | 默认简体中文 |
+| `zhTw` | 繁體 | `mystical_reading_zh_tw` / `holistic_reading_zh_tw` | UI 由简体经 OpenCC 转换；神谕独立繁体生成并缓存 |
+| `en` | English | `mystical_reading_en` / `holistic_reading_en` | |
+| `ja` | 日本語 | `mystical_reading_ja` / `holistic_reading_ja` | |
+
+**简体 vs 繁體 · 玄学文案对照**
+
+| 层级 | 简体 `zh` | 繁體 `zhTw` | 语义是否相同 |
+|------|-----------|-------------|--------------|
+| 书架 / 卷题 / 引导 / 理论前缀 / 题库 | 简体源文案 | OpenCC `cn→tw`（含函数返回值如页脚） | 是，仅字形不同 |
+| 单卷 / 整象神谕 | DeepSeek 简体生成 | DeepSeek **独立繁体**生成 | 否，各自缓存，措辞可不同 |
+| 心理学侧写模板 | 简体维度描述 | 同上，经 OpenCC 转繁 | 是 |
+
+示例：`整象神谕` → `整象神諭`；`【仪轨·观·界石｜心湖场｜六向·心象】` → `【儀軌·觀·界石｜心湖場｜六向·心象】`。
+
+**字体**：`html[lang="zh-Hant"]` 使用 Noto Serif TC 正文栈；简体使用 Noto Serif SC。神谕手写标题两语共用 Zhi Mang Xing。
+
+首次生成神谕时并行写入 **zh · zhTw · en · ja** 四份缓存；切换阅读语言只读对应列，不重新计分或重调模型。
+
+Migration **`007_locale_zh_tw.sql`** 扩展现有库；新库直接使用 `schema.sql` v7。
+
+| English | 日本語 |
+|---------|--------|
+| On first oracle generation, **zh · zhTw · en · ja** are cached in parallel; locale switch reads the matching column only. | 初回神託生成時に **zh · zhTw · en · ja** を並列キャッシュ；言語切替は該当列のみ参照。 |
 
 ---
 

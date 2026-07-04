@@ -72,7 +72,7 @@ async function ensureAllMysticalReadings(
 
 /**
  * Generate or return mystical readings for ONE assessment row.
- * First request fires zh, en, and ja prompts in parallel and saves all three;
+ * First request fires zh, zhTw, en, and ja prompts in parallel and saves all four;
  * later locale switches use cache.
  */
 export async function resolveMysticalReading(
@@ -170,10 +170,12 @@ export function toAssessmentDto(row: BookAssessmentRow) {
     attentionFailures: JSON.parse(row.attention_failures_json),
     mysticalReading: getMysticalReadingForLocale(row, row.locale),
     mysticalReadingZh: getMysticalReadingForLocale(row, 'zh'),
+    mysticalReadingZhTw: getMysticalReadingForLocale(row, 'zhTw'),
     mysticalReadingEn: getMysticalReadingForLocale(row, 'en'),
     mysticalReadingSource: row.mystical_reading_source,
     mysticalReadingJa: getMysticalReadingForLocale(row, 'ja'),
     mysticalReadingSourceZh: getMysticalSourceForLocale(row, 'zh'),
+    mysticalReadingSourceZhTw: getMysticalSourceForLocale(row, 'zhTw'),
     mysticalReadingSourceEn: getMysticalSourceForLocale(row, 'en'),
     mysticalReadingSourceJa: getMysticalSourceForLocale(row, 'ja'),
     mysticalReadingModel: row.mystical_reading_model,

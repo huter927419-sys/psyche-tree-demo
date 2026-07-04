@@ -1,4 +1,8 @@
 import type { Locale } from '../../i18n/locale'
+import {
+  convertStringsDeep,
+  resolveContentLocale,
+} from '../../i18n/traditionalChinese'
 import type { DimensionQuestion, QuestionItem } from '../../types'
 import type { BookDefinition, BookMeta } from '../types'
 import { BOOK_EN_STRINGS } from '../en/bookStrings'
@@ -73,9 +77,7 @@ function buildQuestions(
 }
 
 function profileLocale(locale: Locale): 'zh' | 'en' | 'ja' {
-  if (locale === 'en') return 'en'
-  if (locale === 'ja') return 'ja'
-  return 'zh'
+  return resolveContentLocale(locale)
 }
 
 function createFromPack(pack: LocalizedBookPack, locale: Locale): BookDefinition {
@@ -90,8 +92,13 @@ function createFromPack(pack: LocalizedBookPack, locale: Locale): BookDefinition
   const useEn = locale === 'en' && enPack
   const useJa = locale === 'ja' && jaPack
   const activePack = useEn ? enPack! : useJa ? jaPack! : pack
-  const meta = activePack.meta
-  const content = enrichBookContent(activePack.content, meta.id, locale)
+  let meta = activePack.meta
+  const contentLocale = resolveContentLocale(locale)
+  let content = enrichBookContent(activePack.content, meta.id, contentLocale)
+  if (locale === 'zhTw') {
+    meta = convertStringsDeep(meta)
+    content = convertStringsDeep(content)
+  }
   const template = content.mysticalPromptTemplate
   const labels = activePack.resultChapterLabels
 

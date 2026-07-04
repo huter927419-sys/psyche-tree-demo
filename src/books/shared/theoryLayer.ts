@@ -1,8 +1,9 @@
 import type { BookId } from '../types'
 import type { Locale } from '../../i18n/locale'
+import { resolveContentLocale, toTraditionalChinese } from '../../i18n/traditionalChinese'
 import type { BookContent } from './createBook'
 
-type L = Record<Locale, string>
+type L = Record<'zh' | 'en' | 'ja', string>
 
 export interface DimensionTheory {
   /** Esoteric seal tag on the question (观·界石) */
@@ -829,16 +830,18 @@ function promptPrefix(
   dim: DimensionTheory,
   locale: Locale,
 ): string {
-  const field = layer.volumeField[locale]
-  const facet = layer.sixfoldFacet[locale]
-  const seal = dim.sealTag[locale]
-  if (locale === 'en') {
+  const contentLocale = resolveContentLocale(locale)
+  const field = layer.volumeField[contentLocale]
+  const facet = layer.sixfoldFacet[contentLocale]
+  const seal = dim.sealTag[contentLocale]
+  if (contentLocale === 'en') {
     return `[Rite · ${seal} · ${field} · ${facet}] `
   }
-  if (locale === 'ja') {
+  if (contentLocale === 'ja') {
     return `【儀·${seal}｜${field}｜${facet}】`
   }
-  return `【仪轨·${seal}｜${field}｜${facet}】`
+  const prefix = `【仪轨·${seal}｜${field}｜${facet}】`
+  return locale === 'zhTw' ? toTraditionalChinese(prefix) : prefix
 }
 
 export function enrichBookContent(
@@ -879,7 +882,8 @@ export function getTheoryGuideSupplement(
     dimIndex === 6 ? layer.integration : layer.dimensions[dimIndex]
   if (!theory) return null
 
-  return theory.guideLine[locale]
+  const line = theory.guideLine[resolveContentLocale(locale)]
+  return locale === 'zhTw' ? toTraditionalChinese(line) : line
 }
 
 function resolveDimensionIndex(

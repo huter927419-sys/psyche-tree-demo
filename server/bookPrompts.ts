@@ -1,3 +1,6 @@
+import type { Locale } from './db/types.js'
+import { resolveContentLocale, toTraditionalChinese } from './traditionalChinese.js'
+
 const templates: Record<string, Record<'zh' | 'en' | 'ja', string>> = {
   'psyche-tree': {
     zh: `你是一位深谙自我象征的玄学解读者。
@@ -142,11 +145,15 @@ Write one coherent interpretation in English.`,
 export function buildMysticalPromptForBook(
   bookId: string,
   psychologyInput: string,
-  locale: 'zh' | 'en' | 'ja' = 'zh',
+  locale: Locale = 'zh',
 ): string {
+  const contentLocale = resolveContentLocale(locale)
   const template =
-    templates[bookId]?.[locale] ?? templates['psyche-tree'][locale]
-  return template.replace('[PSYCHOLOGY]', psychologyInput)
+    templates[bookId]?.[contentLocale] ?? templates['psyche-tree'][contentLocale]
+  const input =
+    locale === 'zhTw' ? toTraditionalChinese(psychologyInput) : psychologyInput
+  const prompt = template.replace('[PSYCHOLOGY]', input)
+  return locale === 'zhTw' ? toTraditionalChinese(prompt) : prompt
 }
 
 const holisticTemplate = {
@@ -178,9 +185,14 @@ Give the whole-image oracle directly, in one voice.`,
 
 export function buildHolisticPrompt(
   psychologyInput: string,
-  locale: 'zh' | 'en' | 'ja' = 'zh',
+  locale: Locale = 'zh',
 ): string {
-  return holisticTemplate[locale].replace('[PSYCHOLOGY]', psychologyInput)
+  const contentLocale = resolveContentLocale(locale)
+  const template = holisticTemplate[contentLocale]
+  const input =
+    locale === 'zhTw' ? toTraditionalChinese(psychologyInput) : psychologyInput
+  const prompt = template.replace('[PSYCHOLOGY]', input)
+  return locale === 'zhTw' ? toTraditionalChinese(prompt) : prompt
 }
 
 /** @deprecated Use buildMysticalPromptForBook */

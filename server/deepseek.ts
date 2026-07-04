@@ -1,4 +1,6 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
+import type { Locale } from './db/types.js'
+import { resolveContentLocale, toTraditionalChinese } from './traditionalChinese.js'
 
 const DEEPSEEK_BASE_URL = 'https://api.deepseek.com'
 
@@ -33,11 +35,9 @@ export function buildMysticalPrompt(psychologyInput: string): string {
   return mysticalPromptTemplate.replace('[PSYCHOLOGY]', psychologyInput)
 }
 
-function buildOracleMessages(
-  locale: 'zh' | 'en' | 'ja',
-  prompt: string,
-): DeepSeekMessage[] {
-  if (locale === 'en') {
+function buildOracleMessages(locale: Locale, prompt: string): DeepSeekMessage[] {
+  const contentLocale = resolveContentLocale(locale)
+  if (contentLocale === 'en') {
     return [
       {
         role: 'system',
@@ -47,7 +47,7 @@ function buildOracleMessages(
       { role: 'user', content: prompt },
     ]
   }
-  if (locale === 'ja') {
+  if (contentLocale === 'ja') {
     return [
       {
         role: 'system',
@@ -55,6 +55,16 @@ function buildOracleMessages(
           'あなたは象徴と霊示を紡ぐ神託者です。回答はすべて自然な日本語で書いてください。中国語の文字は使わないでください。荘厳で詩的な口調を保ってください。',
       },
       { role: 'user', content: prompt },
+    ]
+  }
+  if (locale === 'zhTw') {
+    return [
+      {
+        role: 'system',
+        content:
+          '你是玄學解讀者。請全程使用繁體中文書寫，用詞貼近台灣常用書面語，語氣莊嚴而詩意。',
+      },
+      { role: 'user', content: toTraditionalChinese(prompt) },
     ]
   }
   return [{ role: 'user', content: prompt }]
@@ -65,7 +75,7 @@ export async function callDeepSeekMysticalReading(
   apiKey: string,
   model: string,
   bookId = 'psyche-tree',
-  locale: 'zh' | 'en' | 'ja' = 'zh',
+  locale: Locale = 'zh',
 ): Promise<string> {
   const { buildMysticalPromptForBook } = await import('./bookPrompts.js')
   const prompt = buildMysticalPromptForBook(bookId, psychologyInput, locale)
@@ -106,7 +116,7 @@ export async function callDeepSeekHolisticReading(
   psychologyInput: string,
   apiKey: string,
   model: string,
-  locale: 'zh' | 'en' | 'ja' = 'zh',
+  locale: Locale = 'zh',
 ): Promise<string> {
   const { buildHolisticPrompt } = await import('./bookPrompts.js')
   const prompt = buildHolisticPrompt(psychologyInput, locale)

@@ -1,5 +1,6 @@
 import type { BookId } from '../books/types'
 import type { Locale } from './locale'
+import { convertStringsDeep, resolveContentLocale } from './traditionalChinese'
 
 export interface ProgressLabelSet {
   stageLabels: Record<number, string>
@@ -295,7 +296,7 @@ const DIRECTION_LIGHT_JA: ProgressLabelSet = {
 
 const LABELS: Record<
   BookId,
-  Record<Locale, ProgressLabelSet>
+  Record<'zh' | 'en' | 'ja', ProgressLabelSet>
 > = {
   'psyche-tree': { zh: PSYCHE_TREE_ZH, en: PSYCHE_TREE_EN, ja: PSYCHE_TREE_JA },
   'emotional-flow': { zh: EMOTIONAL_FLOW_ZH, en: EMOTIONAL_FLOW_EN, ja: EMOTIONAL_FLOW_JA },
@@ -310,7 +311,8 @@ export function getProgressLabels(
   bookId: BookId,
   locale: Locale,
 ): ProgressLabelSet {
-  return LABELS[bookId][locale]
+  const labels = LABELS[bookId][resolveContentLocale(locale)]
+  return locale === 'zhTw' ? convertStringsDeep(labels) : labels
 }
 
 export const AMBIENT_PHRASES: Array<{ zh: string; en: string; ja: string }> = [

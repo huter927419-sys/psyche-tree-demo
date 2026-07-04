@@ -1,5 +1,6 @@
 import type { BookId } from '../books/types'
 import type { Locale } from './locale'
+import { convertStringsDeep, resolveContentLocale } from './traditionalChinese'
 import { getTheoryGuideSupplement } from '../books/shared/theoryLayer'
 import { JA_GUIDES_BY_BOOK } from './questionGuide.ja'
 
@@ -736,7 +737,7 @@ export function getQuestionGuide(
   }
 
   if (!base) {
-    const fallbacks: Record<Locale, QuestionGuideCopy> = {
+    const fallbacks: Record<'zh' | 'en' | 'ja', QuestionGuideCopy> = {
       zh: {
         rite: '观',
         guide: '松肩闭息，择最契此刻一印。',
@@ -753,14 +754,17 @@ export function getQuestionGuide(
         note: '霊示は裁きません。霧の中の一帧だけを映します。',
       },
     }
-    base = fallbacks[locale]
+    base = fallbacks[resolveContentLocale(locale)]
   }
 
-  const theory = getTheoryGuideSupplement(bookId, questionId, locale)
-  if (!theory) return base
+  const theory = getTheoryGuideSupplement(bookId, questionId, resolveContentLocale(locale))
+  if (!theory) {
+    return locale === 'zhTw' ? convertStringsDeep(base) : base
+  }
 
-  return {
+  const merged = {
     ...base,
     note: `${theory} ${base.note}`,
   }
+  return locale === 'zhTw' ? convertStringsDeep(merged) : merged
 }

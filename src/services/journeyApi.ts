@@ -78,10 +78,12 @@ export interface JourneyAssessmentDto {
   attentionFailures: string[]
   mysticalReading: string | null
   mysticalReadingZh?: string | null
+  mysticalReadingZhTw?: string | null
   mysticalReadingEn?: string | null
   mysticalReadingJa?: string | null
   mysticalReadingSource: string | null
   mysticalReadingSourceZh?: string | null
+  mysticalReadingSourceZhTw?: string | null
   mysticalReadingSourceEn?: string | null
   mysticalReadingSourceJa?: string | null
   mysticalReadingStatus: string
@@ -92,10 +94,12 @@ export interface JourneyHolisticDto {
   status: string
   reading: string | null
   readingZh?: string | null
+  readingZhTw?: string | null
   readingEn?: string | null
   readingJa?: string | null
   source: string | null
   sourceZh?: string | null
+  sourceZhTw?: string | null
   sourceEn?: string | null
   sourceJa?: string | null
   readingLocale?: Locale
@@ -218,6 +222,7 @@ export async function fetchHolisticReading(
   reading: string
   source?: string
   readingZh?: string | null
+  readingZhTw?: string | null
   readingEn?: string | null
   readingJa?: string | null
 }> {
@@ -231,6 +236,7 @@ export async function fetchHolisticReading(
     const data = (await response.json()) as {
       reading?: string
       readingZh?: string | null
+      readingZhTw?: string | null
       readingEn?: string | null
       readingJa?: string | null
       status?: string
@@ -252,6 +258,7 @@ export async function fetchHolisticReading(
         reading: data.reading,
         source: data.source,
         readingZh: data.readingZh,
+        readingZhTw: data.readingZhTw,
         readingEn: data.readingEn,
         readingJa: data.readingJa,
       }

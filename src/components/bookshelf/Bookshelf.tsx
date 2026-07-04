@@ -21,6 +21,7 @@ interface BookshelfProps {
 function bookshelfSceneClass(locale: Locale): string {
   if (locale === 'en') return ' bookshelf-scene--en'
   if (locale === 'ja') return ' bookshelf-scene--ja'
+  if (locale === 'zhTw') return ' bookshelf-scene--zh-tw'
   return ''
 }
 
@@ -31,7 +32,7 @@ function BookshelfBookCover({
   book: BookDefinition
   locale: Locale
 }) {
-  if (locale === 'zh' || locale === 'ja') {
+  if (locale === 'zh' || locale === 'zhTw' || locale === 'ja') {
     return (
       <div className="bookshelf-book-cover-body bookshelf-book-cover-body--zh">
         <p className="bookshelf-book-cover-title--zh bookshelf-book-cover-title--mystic">

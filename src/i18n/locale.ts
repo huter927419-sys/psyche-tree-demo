@@ -1,14 +1,15 @@
 import { createContext, useContext } from 'react'
 
-export type Locale = 'zh' | 'en' | 'ja'
+export type Locale = 'zh' | 'zhTw' | 'en' | 'ja'
 
 export const LOCALE_LABELS: Record<Locale, string> = {
-  zh: '中文',
+  zh: '简体',
+  zhTw: '繁體',
   en: 'English',
   ja: '日本語',
 }
 
-export const LOCALE_CODES: Locale[] = ['zh', 'en', 'ja']
+export const LOCALE_CODES: Locale[] = ['zh', 'zhTw', 'en', 'ja']
 
 const LocaleContext = createContext<{
   locale: Locale
@@ -23,6 +24,13 @@ export function useLocale() {
 
 export function useLocaleOptional() {
   return useContext(LocaleContext)
+}
+
+export function parseLocale(value: unknown, fallback: Locale = 'zh'): Locale {
+  if (value === 'en' || value === 'ja' || value === 'zh' || value === 'zhTw') {
+    return value
+  }
+  return fallback
 }
 
 export { LocaleContext }

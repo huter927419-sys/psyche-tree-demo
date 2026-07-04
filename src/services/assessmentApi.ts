@@ -76,6 +76,7 @@ export async function fetchMysticalReadingForAssessment(
   reading: string
   source?: string
   readingZh?: string | null
+  readingZhTw?: string | null
   readingEn?: string | null
   readingJa?: string | null
 }> {
@@ -97,6 +98,7 @@ export async function fetchMysticalReadingForAssessment(
     const data = (await response.json()) as {
       reading?: string
       readingZh?: string | null
+      readingZhTw?: string | null
       readingEn?: string | null
       readingJa?: string | null
       status?: string
@@ -118,6 +120,7 @@ export async function fetchMysticalReadingForAssessment(
         reading: data.reading,
         source: data.source,
         readingZh: data.readingZh,
+        readingZhTw: data.readingZhTw,
         readingEn: data.readingEn,
         readingJa: data.readingJa,
       }

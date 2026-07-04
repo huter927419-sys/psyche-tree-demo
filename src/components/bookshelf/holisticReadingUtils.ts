@@ -14,6 +14,10 @@ export function pickHolisticReadingForLocale(
       reading: snapshot.holistic.readingZh,
       source: snapshot.holistic.sourceZh,
     },
+    zhTw: {
+      reading: snapshot.holistic.readingZhTw,
+      source: snapshot.holistic.sourceZhTw,
+    },
     en: {
       reading: snapshot.holistic.readingEn,
       source: snapshot.holistic.sourceEn,

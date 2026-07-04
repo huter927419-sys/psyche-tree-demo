@@ -1,4 +1,4 @@
-export type Locale = 'zh' | 'en' | 'ja'
+export type Locale = 'zh' | 'zhTw' | 'en' | 'ja'
 export type JourneyStatus = 'in_progress' | 'completed'
 export type ReadingStatus = 'pending' | 'processing' | 'completed' | 'failed'
 export type ReadingSource = 'deepseek' | 'fallback'
@@ -34,6 +34,9 @@ export interface JourneyRow {
   holistic_prompt_input_ja: string | null
   holistic_reading_ja: string | null
   holistic_reading_source_ja: ReadingSource | null
+  holistic_reading_zh_tw: string | null
+  holistic_reading_source_zh_tw: ReadingSource | null
+  holistic_prompt_input_zh_tw: string | null
 }
 
 export interface BookAssessmentRow {
@@ -59,6 +62,8 @@ export interface BookAssessmentRow {
   mystical_reading_source_en: ReadingSource | null
   mystical_reading_ja: string | null
   mystical_reading_source_ja: ReadingSource | null
+  mystical_reading_zh_tw: string | null
+  mystical_reading_source_zh_tw: ReadingSource | null
   created_at: string
   updated_at: string
 }

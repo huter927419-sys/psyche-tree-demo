@@ -1,5 +1,6 @@
 import type { BookId } from '../books/types'
 import type { Locale } from './locale'
+import { convertStringsDeep, resolveContentLocale } from './traditionalChinese'
 
 const guides = {
   'psyche-tree': {
@@ -124,14 +125,20 @@ const guides = {
   },
 } as const satisfies Record<
   BookId,
-  Record<Locale, { tag: string; field: string; title: string; body: string }>
+  Record<'zh' | 'en' | 'ja', { tag: string; field: string; title: string; body: string }>
 >
 
-export type OpeningGuideCopy = (typeof guides)[BookId][Locale]
+export type OpeningGuideCopy = {
+  tag: string
+  field: string
+  title: string
+  body: string
+}
 
 export function getOpeningGuide(
   bookId: BookId,
   locale: Locale,
 ): OpeningGuideCopy {
-  return guides[bookId][locale]
+  const copy = guides[bookId][resolveContentLocale(locale)]
+  return locale === 'zhTw' ? convertStringsDeep(copy) : copy
 }

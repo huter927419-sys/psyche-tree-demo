@@ -8,6 +8,8 @@
   --font-serif-en: "Cormorant Garamond", Georgia, serif;
   --font-mystic-zh: "Zhi Mang Xing", "Long Cang", "Kaiti SC", "STKaiti", serif;
   --font-prose-zh: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
+  --font-mystic-zh-tw: "Zhi Mang Xing", "Long Cang", "Kaiti TC", "STKaiti", "PMingLiU", serif;
+  --font-prose-zh-tw: "Noto Serif TC", "PingFang TC", "Heiti TC", "Songti TC", serif;
   --font-mystic-en: "Cinzel", "Cormorant Garamond", "Palatino Linotype", serif;
   --font-mystic-ja: "New Tegomin", "Zen Old Mincho", "Hiragino Mincho ProN", serif;
   --font-prose-ja: "Shippori Mincho", "Noto Serif JP", "Hiragino Mincho ProN", serif;
@@ -43,8 +45,19 @@ html[lang="en"] {
 html[lang="zh-CN"] {
   --font-serif: var(--font-serif-zh);
   --font-body: var(--font-serif-zh);
+  --font-mystic-zh: "Zhi Mang Xing", "Long Cang", "Kaiti SC", "STKaiti", serif;
+  --font-prose-zh: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
   font-weight: 500;
   letter-spacing: 0.04em;
+}
+
+html[lang="zh-Hant"] {
+  --font-serif: var(--font-prose-zh-tw);
+  --font-body: var(--font-prose-zh-tw);
+  --font-mystic-zh: var(--font-mystic-zh-tw);
+  --font-prose-zh: var(--font-prose-zh-tw);
+  font-weight: 500;
+  letter-spacing: 0.045em;
 }
 
 html[lang="ja"] {

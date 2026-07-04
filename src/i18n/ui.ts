@@ -1,4 +1,5 @@
 import type { Locale } from './locale'
+import { localizeChineseCopy } from './traditionalChinese'
 
 const ui = {
   zh: {
@@ -337,8 +338,95 @@ const ui = {
   },
 } as const
 
-export type UiStrings = (typeof ui)[Locale]
+export type UiStrings = {
+  shelfEyebrow: string
+  shelfTitle: string
+  shelfProseLines: readonly string[]
+  shelfProseAria: string
+  shelfFacetLabel: string
+  shelfFacetNames: readonly string[]
+  shelfFacetSymbols: readonly string[]
+  shelfFacetHint: string
+  shelfProseSeal: string
+  shelfFooter: (n: number) => string
+  shelfCompletedMark: string
+  backToShore: string
+  coverOpenHint: string
+  coverOpening: string
+  coverOpen: string
+  coverReview: string
+  coverReviewHint: string
+  closeCaption: string
+  languageLabel: string
+  memorySpread: (n: number, total: number) => string
+  facetOfWhole: string
+  dialogueCheck: string
+  selectOneHint: string
+  prevPage: string
+  nextPage: string
+  closeBook: string
+  backToShelf: string
+  loadingReading: string
+  readingFallback: string
+  attentionNote: string
+  readingFail: string
+  saveFail: string
+  saveFailNoSession: string
+  chapterClose: string
+  chapterCloseTitle: string
+  ghostMemory: string
+  musicOn: string
+  musicOff: string
+  cardLight: string
+  musicEnable: string
+  musicAriaOn: string
+  musicAriaOff: string
+  questionHint: string
+  reviewModeHint: string
+  attentionHint: string
+  scenarioLabel: string
+  sealMark: string
+  sealRevealHint: string
+  sealRevealAria: string
+  closingBody: string
+  backToLabel: (label: string) => string
+  oracleContemplationNote: string
+  flowBalanceFlowNote: string
+  treeEnergyPulse: string
+  emailGateEyebrow: string
+  emailGateTitle: string
+  emailGateHint: string
+  emailGateFootnote: string
+  emailLabel: string
+  emailPlaceholder: string
+  emailGateContinue: string
+  emailGateCancel: string
+  emailGateSaving: string
+  emailGateFail: string
+  userEmailLabel: string
+  userIdLabel: string
+  userLogout: string
+  userLogoutHint: string
+  holisticTag: string
+  holisticTitle: string
+  holisticChapterLabel: string
+  holisticHint: string
+  holisticLoading: string
+  journeyProgress: (done: number, total: number) => string
+  closingBodyPartial: string
+  holisticOnShelfHint: string
+  holisticOnShelfBody: string
+  ultimateOracleEyebrow: string
+  ultimateOracleTitle: string
+  ultimateOracleLabel: string
+  ultimateOracleHint: string
+  ultimateOracleLoading: string
+  ultimateOracleClose: string
+  ultimateOracleAria: string
+}
 
 export function getUi(locale: Locale): UiStrings {
-  return ui[locale]
+  if (locale === 'en') return ui.en
+  if (locale === 'ja') return ui.ja
+  return localizeChineseCopy(locale, ui.zh)
 }

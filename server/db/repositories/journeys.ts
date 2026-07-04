@@ -7,17 +7,24 @@ import {
   allReadingsComplete,
   holisticReadingColumn,
 } from '../readingLocales.js'
+import {
+  convertStringsDeep,
+  resolveContentLocale,
+  toTraditionalChinese,
+} from '../../traditionalChinese.js'
 
 function journeyReading(journey: JourneyRow, locale: Locale): string | null | undefined {
   if (locale === 'zh') return journey.holistic_reading_zh
   if (locale === 'en') return journey.holistic_reading_en
-  return journey.holistic_reading_ja
+  if (locale === 'ja') return journey.holistic_reading_ja
+  return journey.holistic_reading_zh_tw
 }
 
 function journeySource(journey: JourneyRow, locale: Locale): ReadingSource | null | undefined {
   if (locale === 'zh') return journey.holistic_reading_source_zh
   if (locale === 'en') return journey.holistic_reading_source_en
-  return journey.holistic_reading_source_ja
+  if (locale === 'ja') return journey.holistic_reading_source_ja
+  return journey.holistic_reading_source_zh_tw
 }
 
 export const BOOK_IDS = [
@@ -139,7 +146,7 @@ export function getJourneyWithAssessments(journeyId: string) {
 }
 
 const HOLISTIC_SECTION: Record<
-  Locale,
+  'zh' | 'en' | 'ja',
   { portrait: string; oracle: string; missingBook: string; missingOracle: string }
 > = {
   zh: {
@@ -164,12 +171,17 @@ const HOLISTIC_SECTION: Record<
   },
 }
 
+function getHolisticSection(locale: Locale) {
+  const section = HOLISTIC_SECTION[resolveContentLocale(locale)]
+  return locale === 'zhTw' ? convertStringsDeep(section) : section
+}
+
 function formatHolisticBookSection(
   facetTitle: string,
   row: BookAssessmentRow | undefined,
   locale: Locale,
 ): string {
-  const section = HOLISTIC_SECTION[locale]
+  const section = getHolisticSection(locale)
   const header =
     locale === 'en'
       ? `[${facetTitle}]`
@@ -198,8 +210,17 @@ export function buildHolisticPromptInput(
 
   const byBook = new Map(data.assessments.map((a) => [a.book_id, a]))
   const locale = displayLocale ?? data.journey.locale
-  const labels =
+  const baseLabels =
     locale === 'en' ? BOOK_FACET_EN : locale === 'ja' ? BOOK_FACET_JA : BOOK_FACET_ZH
+  const labels =
+    locale === 'zhTw'
+      ? Object.fromEntries(
+          Object.entries(baseLabels).map(([bookId, label]) => [
+            bookId,
+            toTraditionalChinese(label),
+          ]),
+        )
+      : baseLabels
 
   return BOOK_IDS.map((bookId) =>
     formatHolisticBookSection(labels[bookId] ?? bookId, byBook.get(bookId), locale),

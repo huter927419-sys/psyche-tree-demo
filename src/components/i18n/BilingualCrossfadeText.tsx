@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { Locale } from '../../i18n/locale'
+import { toTraditionalChinese } from '../../i18n/traditionalChinese'
 
 interface BilingualCrossfadeTextProps {
   zh: string
@@ -37,8 +38,19 @@ export function BilingualCrossfadeText({
     )
   }
 
+  if (activeLocale === 'zhTw') {
+    return (
+      <span className={`bilingual-crossfade ${className}`}>
+        <span className="bilingual-crossfade-line bilingual-crossfade-line--zh is-active">
+          {toTraditionalChinese(zh)}
+        </span>
+      </span>
+    )
+  }
+
   const enVisible = activeLocale ? activeLocale === 'en' : showEn
-  const zhVisible = activeLocale ? activeLocale === 'zh' : !showEn
+  const zhVisible =
+    activeLocale ? activeLocale === 'zh' : !showEn
 
   return (
     <span className={`bilingual-crossfade ${className}`}>

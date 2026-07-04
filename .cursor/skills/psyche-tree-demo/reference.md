@@ -1,5 +1,32 @@
 # psyche-tree-demo — Reference
 
+## Locale & reading cache
+
+| Code | UI label | SQLite columns |
+|------|----------|----------------|
+| `zh` | 简体 | `mystical_reading_zh`, `holistic_reading_zh` |
+| `zhTw` | 繁體 | `mystical_reading_zh_tw`, `holistic_reading_zh_tw` |
+| `en` | English | `mystical_reading_en`, `holistic_reading_en` |
+| `ja` | 日本語 | `mystical_reading_ja`, `holistic_reading_ja` |
+
+First oracle request generates all four in parallel; locale switch reads cache only.
+
+**zh vs zhTw (esoteric copy)**
+
+| Layer | `zh` | `zhTw` | Same meaning? |
+|-------|------|--------|---------------|
+| Shelf, books, guides, theory prefixes, questions | Simplified source | OpenCC `cn→tw` (incl. function return strings) | Yes |
+| Volume + holistic oracle | DeepSeek simplified | DeepSeek **Traditional** (separate cache) | No — wording may differ |
+| Psychology profile templates | Simplified dim text | OpenCC from book content | Yes |
+
+Fonts: `html[lang="zh-CN"]` → Noto Serif SC; `html[lang="zh-Hant"]` → Noto Serif TC; mystic titles → Zhi Mang Xing (both).
+
+Traditional UI text: `opencc-js` in `src/i18n/traditionalChinese.ts` (+ server mirror).
+
+Homepage screenshots: `docs/screenshots/homepage/homepage-{zh,zh-tw,en,ja}.png` — regenerate with `node scripts/capture-homepage-screenshots.mjs` (dev server required).
+
+Migration: `server/db/migrations/007_locale_zh_tw.sql`
+
 ## Book page flow
 
 | Page | Content |
@@ -40,7 +67,8 @@ src/books/{id}/content.ts
 src/books/shared/createBook.ts
 src/components/bookshelf/           # Bookshelf, HolisticOracleOverlay, UltimateOracle
 src/components/book/BookReader.tsx  # save assessment, fetch mystical reading
-src/i18n/ui.ts                      # all UI strings zh/en/ja
+src/i18n/ui.ts                      # UI strings zh (+ zhTw via OpenCC), en, ja
+src/i18n/traditionalChinese.ts      # OpenCC + convertStringsDeep (incl. functions)
 src/i18n/questionGuide.ts           # + questionGuide.ja.ts
 src/i18n/openingGuide.ts
 src/i18n/treeLabels.ts
@@ -66,13 +94,13 @@ server/bookPrompts.ts
 ```
 answers → computeResults() → dimensions + psychology_prompt_input
   → save book_assessments
-  → resolveMysticalReading (zh/en/ja parallel, cached)
+  → resolveMysticalReading (zh / zhTw / en / ja parallel, cached)
 
 six books complete → journey.status = completed
   → resolveHolisticReading
   → ensureVolumeOraclesForHolistic (all 6 mystical readings)
   → buildHolisticPromptInput (portrait + 已示神谕 per book)
-  → DeepSeek holistic template → holistic_reading_{zh,en,ja}
+  → DeepSeek holistic template → holistic_reading_{zh,zh_tw,en,ja}
 ```
 
 ## Tree progress
@@ -108,7 +136,8 @@ Do not conflate **心流** (consciousness flow) with **流衡** `flow-balance` (
 | `scripts/reset-db.mjs` | Wipe SQLite |
 | `scripts/verify-full-flow.mjs` | API + save + readings smoke test |
 | `scripts/verify-e2e.mjs` | Browser-oriented checks |
-| `scripts/test-locale-switch.mjs` | zh/en/ja reading cache |
+| `scripts/test-locale-switch.mjs` | zh / zhTw / en / ja reading cache |
+| `scripts/capture-homepage-screenshots.mjs` | Four homepage PNGs for README |
 | `scripts/complete-user-journey.mjs` | Fill 6 books for an email |
 | `scripts/test-multi-user-concurrent.mjs` | Isolation |
 

@@ -144,6 +144,7 @@ function parseRequestedLocale(
 ): Locale {
   if (value === 'en') return 'en'
   if (value === 'ja') return 'ja'
+  if (value === 'zhTw') return 'zhTw'
   if (value === 'zh') return 'zh'
   return fallback
 }
@@ -156,7 +157,13 @@ async function handleCreateJourney(req: IncomingMessage, res: ServerResponse) {
   }
 
   const locale: Locale =
-    body.locale === 'en' ? 'en' : body.locale === 'ja' ? 'ja' : 'zh'
+    body.locale === 'en'
+      ? 'en'
+      : body.locale === 'ja'
+        ? 'ja'
+        : body.locale === 'zhTw'
+          ? 'zhTw'
+          : 'zh'
   const journey = createJourney(body.email, locale)
   const user = getJourneyWithAssessments(journey.id)
 
@@ -349,6 +356,7 @@ async function handleMysticalReading(
   sendJson(res, 200, {
     reading: result.reading,
     readingZh: getMysticalReadingForLocale(updatedRow, 'zh'),
+    readingZhTw: getMysticalReadingForLocale(updatedRow, 'zhTw'),
     readingEn: getMysticalReadingForLocale(updatedRow, 'en'),
     readingJa: getMysticalReadingForLocale(updatedRow, 'ja'),
     source: result.source,
@@ -422,6 +430,7 @@ async function handleHolisticReading(
   sendJson(res, 200, {
     reading: result.reading,
     readingZh: getHolisticReadingForLocale(journeyRow, 'zh'),
+    readingZhTw: getHolisticReadingForLocale(journeyRow, 'zhTw'),
     readingEn: getHolisticReadingForLocale(journeyRow, 'en'),
     readingJa: getHolisticReadingForLocale(journeyRow, 'ja'),
     source: result.source,

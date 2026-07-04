@@ -87,7 +87,13 @@ function App() {
 
   useEffect(() => {
     document.documentElement.lang =
-      locale === 'en' ? 'en' : locale === 'ja' ? 'ja' : 'zh-CN'
+      locale === 'en'
+        ? 'en'
+        : locale === 'ja'
+          ? 'ja'
+          : locale === 'zhTw'
+            ? 'zh-Hant'
+            : 'zh-CN'
   }, [locale])
 
   useEffect(() => {

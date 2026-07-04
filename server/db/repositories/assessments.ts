@@ -16,13 +16,15 @@ import {
 function localeReading(row: BookAssessmentRow, locale: Locale): string | null | undefined {
   if (locale === 'zh') return row.mystical_reading_zh
   if (locale === 'en') return row.mystical_reading_en
-  return row.mystical_reading_ja
+  if (locale === 'ja') return row.mystical_reading_ja
+  return row.mystical_reading_zh_tw
 }
 
 function localeSource(row: BookAssessmentRow, locale: Locale): ReadingSource | null | undefined {
   if (locale === 'zh') return row.mystical_reading_source_zh
   if (locale === 'en') return row.mystical_reading_source_en
-  return row.mystical_reading_source_ja
+  if (locale === 'ja') return row.mystical_reading_source_ja
+  return row.mystical_reading_source_zh_tw
 }
 
 export function saveBookAssessment(

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { Locale } from '../../i18n/locale'
 import { AMBIENT_PHRASES } from '../../i18n/treeLabels'
+import { toTraditionalChinese } from '../../i18n/traditionalChinese'
 
 interface AmbientPhraseLayerProps {
   locale: Locale
@@ -28,7 +29,14 @@ export function AmbientPhraseLayer({
   if (!active) return null
 
   const phrase = AMBIENT_PHRASES[index]
-  const text = phrase[locale]
+  const text =
+    locale === 'en'
+      ? phrase.en
+      : locale === 'ja'
+        ? phrase.ja
+        : locale === 'zhTw'
+          ? toTraditionalChinese(phrase.zh)
+          : phrase.zh
 
   return (
     <div

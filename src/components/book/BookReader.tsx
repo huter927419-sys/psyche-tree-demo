@@ -45,6 +45,10 @@ function pickMysticalReading(
       reading: session.mysticalReadingZh,
       source: session.mysticalReadingSourceZh,
     },
+    zhTw: {
+      reading: session.mysticalReadingZhTw,
+      source: session.mysticalReadingSourceZhTw,
+    },
     en: {
       reading: session.mysticalReadingEn,
       source: session.mysticalReadingSourceEn,
@@ -205,6 +209,15 @@ export function BookReader({
         },
       }))
     }
+    if (savedSession.mysticalReadingZhTw) {
+      setMysticalCache((prev) => ({
+        ...prev,
+        zhTw: {
+          reading: savedSession.mysticalReadingZhTw!,
+          fallback: savedSession.mysticalReadingSourceZhTw === 'fallback',
+        },
+      }))
+    }
 
     if (journeySnapshot) {
       setAssessmentsCompleted(journeySnapshot.assessments.length)
@@ -253,7 +266,7 @@ export function BookReader({
       }
 
       try {
-        const { reading, readingZh, readingEn, readingJa, source } =
+        const { reading, readingZh, readingZhTw, readingEn, readingJa, source } =
           await fetchMysticalReadingForAssessment(assessmentId, locale)
         if (cancelled) return
         const nextCache: Partial<
@@ -261,6 +274,12 @@ export function BookReader({
         > = {}
         if (readingZh) {
           nextCache.zh = { reading: readingZh, fallback: source === 'fallback' }
+        }
+        if (readingZhTw) {
+          nextCache.zhTw = {
+            reading: readingZhTw,
+            fallback: source === 'fallback',
+          }
         }
         if (readingEn) {
           nextCache.en = { reading: readingEn, fallback: source === 'fallback' }

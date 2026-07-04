@@ -59,6 +59,10 @@ function runMigrations(database: Database.Database) {
   if (version < 6) {
     applyMigration(database, 6, '006_locale_ja.sql')
   }
+
+  if (version < 7) {
+    applyMigration(database, 7, '007_locale_zh_tw.sql')
+  }
 }
 
 export function getDb(): Database.Database {

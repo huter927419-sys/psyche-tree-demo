@@ -41,6 +41,7 @@ export interface BookDefinition {
 }
 
 import type { Locale } from '../i18n/locale'
+import { toTraditionalChinese, convertStringsDeep } from '../i18n/traditionalChinese'
 
 const RESULT_COPY: Record<
   BookId,
@@ -255,18 +256,28 @@ const RESULT_COPY: Record<
 
 const RESULT_LOCALE_KEY: Record<Locale, 'zh' | 'en' | 'ja'> = {
   zh: 'zh',
+  zhTw: 'zh',
   en: 'en',
   ja: 'ja',
 }
 
 export function getBookResultLabels(book: BookDefinition, locale: Locale = 'zh') {
-  const copy = RESULT_COPY[book.meta.id][RESULT_LOCALE_KEY[locale]]
-  const closingHints: Record<Locale, string> = {
+  const key = RESULT_LOCALE_KEY[locale]
+  const copy =
+    locale === 'zhTw'
+      ? convertStringsDeep(RESULT_COPY[book.meta.id][key])
+      : RESULT_COPY[book.meta.id][key]
+  const closingHints: Record<'zh' | 'en' | 'ja', string> = {
     zh: `《${book.meta.coverTitle}》已合上。雾仍将散去，光仍会再来。`,
     en: `"${book.meta.coverTitle}" is closed. Mist will lift; light will return.`,
     ja: `『${book.meta.coverTitle}』は閉じました。霧はやがて薄れ、光は再び来るでしょう。`,
   }
-  const closingHint = closingHints[locale]
+  const closingHint =
+    locale === 'zhTw'
+      ? toTraditionalChinese(
+          `《${book.meta.coverTitle}》已合上。雾仍将散去，光仍会再来。`,
+        )
+      : closingHints[key]
 
   return { ...copy, closingHint }
 }
