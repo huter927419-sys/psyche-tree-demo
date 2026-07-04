@@ -54,7 +54,7 @@ Built by `buildBookQuestionFlow()` in `books/shared/questionFlow.ts`.
 | [08-观论.md](../../../docs/theory/08-观论.md) | 观 |
 | [09-命论.md](../../../docs/theory/09-命论.md) | 命 / 形而上学 |
 | [10-整象论.md](../../../docs/theory/10-整象论.md) | 整象 |
-| [appendix-现代对应.md](../../../docs/theory/appendix-现代对应.md) | 符号与旧稿对照 |
+| [appendix-现代对应.md](../../../docs/theory/appendix-现代对应.md) | 现代符号与概念 |
 | [volume-rite-copy.md](../../../docs/volume-rite-copy.md) | 修持三语文案 |
 | [SKILL.md](../SKILL.md) | Agent 约定 |
 | [reference.md](./reference.md) | 本文件：路径与数据流 |
@@ -185,7 +185,7 @@ six books complete → journey.status = completed
 | 入卷慢、一页一印、不示分 | [06 心流论](../../../docs/theory/06-心流论.md) |
 | 湖 / 河 / 星空等卷场 | [01 雾岸世界](../../../docs/theory/01-雾岸世界.md) · [07 万象论](../../../docs/theory/07-万象论.md) |
 | 对话确认、归树 | [08 观论](../../../docs/theory/08-观论.md) |
-| U / Φ / A / F、State Object | [appendix-现代对应.md](../../../docs/theory/appendix-现代对应.md) · [archive/](../../../docs/theory/archive/) |
+| U / Φ / A / F、State Object | [appendix-现代对应.md](../../../docs/theory/appendix-现代对应.md) |
 
 勿混淆 **心流**（consciousness flow，06）与 **`flow-balance` 卷**（守衡面向，06 文中已分）。
 

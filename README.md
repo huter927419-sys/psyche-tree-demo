@@ -24,7 +24,7 @@
 
 ## 一、理论栈
 
-按顺序读 [`docs/theory/`](docs/theory/) **01 → 10**，再读 [附录：现代对应](docs/theory/appendix-现代对应.md)。每篇只问一个问题；符号与旧五层稿在附录与 [archive/](docs/theory/archive/)。
+按顺序读 [`docs/theory/`](docs/theory/) **01 → 10**，再读 [附录：现代对应](docs/theory/appendix-现代对应.md)。每篇只问一个问题。
 
 | 篇 | 文档 | 问题 |
 |----|------|------|
@@ -40,7 +40,7 @@
 | 10 | [10-整象论.md](docs/theory/10-整象论.md) | 整象为何只能最后出现？ |
 | — | [appendix-现代对应.md](docs/theory/appendix-现代对应.md) | U / State / Field 等（第二语言） |
 
-完整索引：[docs/theory/README.md](docs/theory/README.md) · 旧稿：[archive/](docs/theory/archive/) · 改写说明：[00-论纲与改写计划.md](docs/theory/00-论纲与改写计划.md)
+完整索引：[docs/theory/README.md](docs/theory/README.md)
 
 ---
 
@@ -210,7 +210,7 @@ Key 只在 Vite 中间件用，不进前端包。`npm run build` 出 `dist/` + N
 ```
 psyche-tree-demo/
 ├── README.md
-├── docs/theory/              # 01–10 + appendix + archive
+├── docs/theory/              # 01–10 + appendix
 ├── docs/volume-rite-copy.md  # 修持文案
 ├── docs/screenshots/
 ├── .cursor/skills/…/SKILL.md
