@@ -43,19 +43,16 @@ Built by `buildBookQuestionFlow()` in `books/shared/questionFlow.ts`.
 | Doc | 说明 |
 |-----|------|
 | [README.md](../../../README.md) | 产品概览、体验路径、开发 |
-| [docs/theory/README.md](../../../docs/theory/README.md) | 理论 01–10 索引 |
-| [01-雾岸世界.md](../../../docs/theory/01-雾岸世界.md) | 世界 |
-| [02-照见论.md](../../../docs/theory/02-照见论.md) | 照见 |
-| [03-各人之雾.md](../../../docs/theory/03-各人之雾.md) | 差异 |
-| [04-生长论.md](../../../docs/theory/04-生长论.md) | 生长 |
-| [05-缘论.md](../../../docs/theory/05-缘论.md) | 缘 |
-| [06-心流论.md](../../../docs/theory/06-心流论.md) | 心流 |
-| [07-万象论.md](../../../docs/theory/07-万象论.md) | 万象 |
-| [08-观论.md](../../../docs/theory/08-观论.md) | 观 |
-| [09-命论.md](../../../docs/theory/09-命论.md) | 命 / 形而上学 |
-| [10-整象论.md](../../../docs/theory/10-整象论.md) | 整象 |
+| [docs/theory/README.md](../../../docs/theory/README.md) | 理论：01–06 + 附录 + implement |
+| [appendix-现代对应.md](../../../docs/theory/appendix-现代对应.md) | 读态总论 |
+| [implement/README.md](../../../docs/theory/implement/README.md) | 实现层 01–08 索引 |
+| [01-本源.md](../../../docs/theory/01-本源.md) | 世界观：变与本 |
+| [02-观照.md](../../../docs/theory/02-观照.md) | 认识自己 |
+| [03-流动.md](../../../docs/theory/03-流动.md) | 变化与节奏 |
+| [04-因应.md](../../../docs/theory/04-因应.md) | 回应与差异 |
+| [05-共生.md](../../../docs/theory/05-共生.md) | 连接与相互影响 |
+| [06-向光.md](../../../docs/theory/06-向光.md) | 方向与整象 |
 | [appendix-现代对应.md](../../../docs/theory/appendix-现代对应.md) | 现代符号与概念 |
-| [interpretation/](../../../docs/theory/interpretation/README.md) | 附录符号与术语解读（四篇） |
 | [volume-rite-copy.md](../../../docs/volume-rite-copy.md) | 修持三语文案 |
 | [SKILL.md](./SKILL.md) | Agent 约定 |
 | [reference.md](./reference.md) | 本文件：路径与数据流 |
@@ -64,13 +61,13 @@ Built by `buildBookQuestionFlow()` in `books/shared/questionFlow.ts`.
 
 | BookId | 理论 | 修持 MD |
 |--------|------|---------|
-| `psyche-tree` | [02 照见论](../../../docs/theory/02-照见论.md) | [§心象](../../../docs/volume-rite-copy.md#第一卷--心象) |
-| `emotional-flow` | [02](../../../docs/theory/02-照见论.md) · [03](../../../docs/theory/03-各人之雾.md) | [§映心](../../../docs/volume-rite-copy.md#第二卷--映心) |
-| `mind-light` | [02 照见论](../../../docs/theory/02-照见论.md) | [§明思](../../../docs/volume-rite-copy.md#第三卷--明思) |
-| `bond-thread` | [05 缘论](../../../docs/theory/05-缘论.md) | [§缘书](../../../docs/volume-rite-copy.md#第四卷--缘书) |
-| `flow-balance` | [06 心流论](../../../docs/theory/06-心流论.md) | [§流衡](../../../docs/volume-rite-copy.md#第五卷--流衡) |
-| `direction-light` | [04 生长论](../../../docs/theory/04-生长论.md) | [§向光](../../../docs/volume-rite-copy.md#第六卷--向光) |
-| 归树 / 整象 | [08 观论](../../../docs/theory/08-观论.md) · [10 整象论](../../../docs/theory/10-整象论.md) | [§归树](../../../docs/volume-rite-copy.md#归树--return-to-the-tree--帰樹) |
+| `psyche-tree` | [02 观照](../../../docs/theory/02-观照.md) | [§心象](../../../docs/volume-rite-copy.md#第一卷-心象) |
+| `emotional-flow` | [02 观照](../../../docs/theory/02-观照.md) · [03 流动](../../../docs/theory/03-流动.md) | [§映心](../../../docs/volume-rite-copy.md#第二卷-映心) |
+| `mind-light` | [02 观照](../../../docs/theory/02-观照.md) | [§明思](../../../docs/volume-rite-copy.md#第三卷-明思) |
+| `bond-thread` | [05 共生](../../../docs/theory/05-共生.md) | [§缘书](../../../docs/volume-rite-copy.md#第四卷-缘书) |
+| `flow-balance` | [03 流动](../../../docs/theory/03-流动.md) | [§流衡](../../../docs/volume-rite-copy.md#第五卷-流衡) |
+| `direction-light` | [06 向光](../../../docs/theory/06-向光.md) | [§向光](../../../docs/volume-rite-copy.md#第六卷-向光) |
+| 归树 / 整象 | [02 观照](../../../docs/theory/02-观照.md) · [06 向光](../../../docs/theory/06-向光.md) | [§归树](../../../docs/volume-rite-copy.md#归树-return-to-the-tree-帰樹) |
 
 ## Volume rite sections
 
@@ -177,18 +174,16 @@ six books complete → journey.status = completed
 
 `countCompletedDimensions()` counts only `dimensionIndex <= 6`. Integration does not advance tree stage. `treeProgressMax: 6` on all books.
 
-## 场域 · 心流 · 观（文档用语）
-
-产品代码里仍可见 openingGuide「能量之波」、`treeEnergyFlow` 等命名；**读者向文档**请用新理论栈，勿从第一章推导：
+## 体验 ↔ 理论（文档用语）
 
 | 体验 | 读 |
 |------|-----|
-| 入卷慢、一页一印、不示分 | [06 心流论](../../../docs/theory/06-心流论.md) |
-| 湖 / 河 / 星空等卷场 | [01 雾岸世界](../../../docs/theory/01-雾岸世界.md) · [07 万象论](../../../docs/theory/07-万象论.md) |
-| 对话确认、归树 | [08 观论](../../../docs/theory/08-观论.md) |
-| U / Φ / A / F、State Object | [appendix-现代对应.md](../../../docs/theory/appendix-现代对应.md) |
+| 入卷慢、一页一印、不示分 | [03 流动](../../../docs/theory/03-流动.md) · [附录](../../../docs/theory/appendix-现代对应.md#修持-理论-产品) |
+| 湖 / 河 / 星空等卷意象 | [appendix · U](../../../docs/theory/appendix-现代对应.md) · [02 观照](../../../docs/theory/02-观照.md) |
+| 对话确认、归树 | [02 观照](../../../docs/theory/02-观照.md) · [06 向光](../../../docs/theory/06-向光.md) |
+| U / Φ / A / F | [appendix-现代对应.md](../../../docs/theory/appendix-现代对应.md) |
 
-勿混淆 **心流**（consciousness flow，06）与 **`flow-balance` 卷**（守衡面向，06 文中已分）。
+勿混淆 **流衡卷**（守衡面向，03）与 **入卷顺畅**（附录 Φ，产品用语「心流」）。
 
 ## Scoring
 

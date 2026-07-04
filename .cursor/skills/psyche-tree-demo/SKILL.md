@@ -18,22 +18,21 @@ The product follows a full mystical **system**, not only symbols:
 |--------|--------|
 | **Core proposition** 核心命题 | Calibration of seeing—not hunting answers; `volumeRite.ts`, Return to Tree before holistic oracle |
 | **Volume rite cycle** 修持环 | Entry / exit overlays per book (`VolumeRiteOverlay`); six volumes → 归树 → 整象 |
-| **Worldview** 世界观 | Mist shore, six volumes, tree, sacred time — [01-雾岸世界](../../../docs/theory/01-雾岸世界.md) |
-| **Mirroring & rites** 照见与修持 | [02](../../../docs/theory/02-照见论.md) [06](../../../docs/theory/06-心流论.md) [08](../../../docs/theory/08-观论.md) [10](../../../docs/theory/10-整象论.md) ↔ [volume-rite-copy](../../../docs/volume-rite-copy.md) |
+| **Worldview** 世界观 | Mist shore, six volumes, tree — [appendix](../../../docs/theory/appendix-现代对应.md) · [01–06](../../../docs/theory/01-本源.md) |
+| **Mirroring & rites** 照见与修持 | [02 观照](../../../docs/theory/02-观照.md) [03 流动](../../../docs/theory/03-流动.md) [06 向光](../../../docs/theory/06-向光.md) ↔ [volume-rite-copy](../../../docs/volume-rite-copy.md) |
 | **Meditation · Prayer · Reflection** | Opening rite, one seal/page, dialogue check, portrait + oracle |
 | **Symbol + revelation** | Six facets → volume oracle → holistic oracle (shelf only) |
 
-Docs: [README](../../../README.md) · [theory 01–10](../../../docs/theory/README.md) · [appendix](../../../docs/theory/appendix-现代对应.md) · [rite copy](../../../docs/volume-rite-copy.md).
+Docs: [README](../../../README.md) · [theory 01–06](../../../docs/theory/README.md) · [appendix](../../../docs/theory/appendix-现代对应.md) · [rite copy](../../../docs/volume-rite-copy.md).
 
 ## Theory stack (product docs)
 
-Read **01 → 10** before changing copy or prompts: [docs/theory/README.md](../../../docs/theory/README.md).
+Read **01–06** for meaning; read **implement/01–08** before changing flow, rites, or oracles—**theory → practice**, not a code index: [docs/theory/implement/README.md](../../../docs/theory/implement/README.md).
 
-| # | File | Question |
-|---|------|----------|
-| 1 | [01-雾岸世界.md](../../../docs/theory/01-雾岸世界.md) | 我来到哪里？ |
-| 2 | [02-照见论.md](../../../docs/theory/02-照见论.md) | 为什么会照见自己？ |
-| 3–10 | [index](../../../docs/theory/README.md) | 见 theory README |
+| Layer | Files |
+|-------|-------|
+| Read态 + 世界观 | [appendix](../../../docs/theory/appendix-现代对应.md) · [01–06](../../../docs/theory/01-本源.md) |
+| **Practice layer** | [implement/01–08](../../../docs/theory/implement/README.md) — seven-section template; read before flow/rite/oracle changes |
 
 ## Six books (one facet each)
 
@@ -78,16 +77,16 @@ Dim 1–3 → attention check → Dim 4–6 → integration (dimensionIndex 7)
 
 Copy lives in `src/i18n/volumeRite.ts` (zh / en / ja; zhTw via OpenCC). Styles: `.volume-rite-overlay`, `.return-tree-overlay` in `index.css`.
 
-**Full rite copy (zh / en / ja)** — [docs/volume-rite-copy.md](../../../docs/volume-rite-copy.md). Theory links: [README §理论栈](../../../README.md#一理论栈). Regenerate: `npm run generate:rite-docs`. Source: `volumeRite.ts`.
+**Full rite copy (zh / en / ja)** — [docs/volume-rite-copy.md](../../../docs/volume-rite-copy.md). Theory: [README §三理论栈](../../../README.md#三理论栈) · [implement/01–08](../../../docs/theory/implement/README.md). Regenerate: `npm run generate:rite-docs`. Source: `volumeRite.ts`.
 
 | BookId | 卷 | 理论 | 修持 MD |
 |--------|-----|------|---------|
-| `psyche-tree` | 心象 | [02 照见论](../../../docs/theory/02-照见论.md) | [§心象](../../../docs/volume-rite-copy.md#第一卷--心象) |
-| `emotional-flow` | 映心 | [02](../../../docs/theory/02-照见论.md) · [03](../../../docs/theory/03-各人之雾.md) | [§映心](../../../docs/volume-rite-copy.md#第二卷--映心) |
-| `mind-light` | 明思 | [02 照见论](../../../docs/theory/02-照见论.md) | [§明思](../../../docs/volume-rite-copy.md#第三卷--明思) |
-| `bond-thread` | 缘书 | [05 缘论](../../../docs/theory/05-缘论.md) | [§缘书](../../../docs/volume-rite-copy.md#第四卷--缘书) |
-| `flow-balance` | 流衡 | [06 心流论](../../../docs/theory/06-心流论.md) | [§流衡](../../../docs/volume-rite-copy.md#第五卷--流衡) |
-| `direction-light` | 向光 | [04 生长论](../../../docs/theory/04-生长论.md) | [§向光](../../../docs/volume-rite-copy.md#第六卷--向光) |
+| `psyche-tree` | 心象 | [02 观照](../../../docs/theory/02-观照.md) | [§心象](../../../docs/volume-rite-copy.md#第一卷-心象) |
+| `emotional-flow` | 映心 | [02 观照](../../../docs/theory/02-观照.md) · [03 流动](../../../docs/theory/03-流动.md) | [§映心](../../../docs/volume-rite-copy.md#第二卷-映心) |
+| `mind-light` | 明思 | [02 观照](../../../docs/theory/02-观照.md) | [§明思](../../../docs/volume-rite-copy.md#第三卷-明思) |
+| `bond-thread` | 缘书 | [05 共生](../../../docs/theory/05-共生.md) | [§缘书](../../../docs/volume-rite-copy.md#第四卷-缘书) |
+| `flow-balance` | 流衡 | [03 流动](../../../docs/theory/03-流动.md) | [§流衡](../../../docs/volume-rite-copy.md#第五卷-流衡) |
+| `direction-light` | 向光 | [06 向光](../../../docs/theory/06-向光.md) | [§向光](../../../docs/volume-rite-copy.md#第六卷-向光) |
 
 **Do not** reintroduce `BookOpeningGuide` flash for entry—the entry rite overlay replaces it.
 

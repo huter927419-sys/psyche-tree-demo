@@ -2,7 +2,7 @@
 
 心象生命之树探索 · *Mist Shore · Six Books* · 霧岸六巻
 
-文档以**简体、英文、日本語**并列写就；下面各节按需出现，不必每段都三语重复。
+网页 Demo：**六卷翻书留痕**，背景是一棵随六痕亮起的生命之树。理论以叙事为第一语言（[docs/theory/](docs/theory/) **简体 · English · 日本語**）；本文是**项目入口**——产品怎么走、文档去哪读、代码怎么跑。
 
 ---
 
@@ -10,38 +10,39 @@
 
 | | |
 |---|---|
-| [一、理论栈](#一理论栈) | 十篇正文 + 附录，建议先读 |
+| [一、这是什么](#一这是什么) | Demo 概览 · 与常见测评之分 |
 | [二、核心命题](#二核心命题) | 雾岸在说什么 |
-| [三、这是什么](#三这是什么) | Demo 概览 |
-| [四、体验路径](#四体验路径) | 从书架到整象 |
+| [三、理论栈](#三理论栈) | 世界观六篇 + 实践八章 + 附录 |
+| [四、一次同旅](#四一次同旅) | 书架 → 六卷 → 归树 → 整象 |
 | [五、修持环](#五修持环) | 入卷 / 离卷 / 归树；[引导语全文](docs/volume-rite-copy.md) |
-| [六、界面预览](#六界面预览) | 书架截图 |
-| [七、开发与运维](#七开发与运维) | 安装、脚本、约定 |
+| [六、改体验前 · 四问](#六改体验前-四问) | 动流程前先对照实践篇 |
+| [七、界面预览](#七界面预览) | 书架截图 |
+| [八、开发与运维](#八开发与运维) | 安装、脚本、约定 |
 
-长文理论在 [`docs/theory/`](docs/theory/)。改代码看 [SKILL.md](.cursor/skills/psyche-tree-demo/SKILL.md)。修持文案源：`src/i18n/volumeRite.ts`，导出 MD：`npm run generate:rite-docs`。
+长文：[理论栈索引](docs/theory/README.md) · [实践篇索引](docs/theory/implement/README.md) · 改代码：[SKILL.md](.cursor/skills/psyche-tree-demo/SKILL.md)  
+修持文案源：`src/i18n/volumeRite.ts` · 导出 MD：`npm run generate:rite-docs`
 
 ---
 
-## 一、理论栈
+## 一、这是什么
 
-按顺序读 [`docs/theory/`](docs/theory/) **01 → 10**，再读 [附录：现代对应](docs/theory/appendix-现代对应.md)。附录里的符号与现代词若仍抽象，读 [解读篇](docs/theory/interpretation/README.md)（四篇）。各章正文为 **简体 · 英文 · 日本語** 并列。
+**雾岸**不是「答完 → 打分 → 给型」的测评，而是**先校准如何看见，再留此息之象**：
 
-| 篇 | 文档 | 问题 |
-|----|------|------|
-| 1 | [01-雾岸世界.md](docs/theory/01-雾岸世界.md) | 我来到哪里？ |
-| 2 | [02-照见论.md](docs/theory/02-照见论.md) | 为什么会照见自己？ |
-| 3 | [03-各人之雾.md](docs/theory/03-各人之雾.md) | 为何每人雾不同？ |
-| 4 | [04-生长论.md](docs/theory/04-生长论.md) | 人为何改变？ |
-| 5 | [05-缘论.md](docs/theory/05-缘论.md) | 人与人如何相互影响？ |
-| 6 | [06-心流论.md](docs/theory/06-心流论.md) | 为何有时非常自然？ |
-| 7 | [07-万象论.md](docs/theory/07-万象论.md) | 为何能照见万象？ |
-| 8 | [08-观论.md](docs/theory/08-观论.md) | 为何能知道自己正在变？ |
-| 9 | [09-命论.md](docs/theory/09-命论.md) | 人生为何形成轨迹？ |
-| 10 | [10-整象论.md](docs/theory/10-整象论.md) | 整象为何只能最后出现？ |
-| — | [appendix-现代对应.md](docs/theory/appendix-现代对应.md) | 状态 / 场域 等（第二语言） |
-| 解读 | [interpretation/](docs/theory/interpretation/README.md) | 符号、形而上学、心流、场域 |
+- **六卷**（心象 / 映心 / 明思 / 缘书 / 流衡 / 向光）——同一棵树上的六束光，顺序任意。
+- **问印**——一页一择、无分数；留的是**此息之应**，不是 IQ 测验。
+- **单卷**——画像 + 卷内神谕；**整象**只在六痕齐、**归树**之后于书架开口，非六份报告拼接。
+- **四语界面**：简体、繁體（OpenCC）、English、日本語；神谕各语言独立生成与缓存。
 
-完整索引：[docs/theory/README.md](docs/theory/README.md)
+*Six flip-books, Tree of Life, per-volume oracle, holistic oracle after Return to the Tree—calibration, not typing.*
+
+**文档分工**
+
+| 读什么 | 去哪 |
+|--------|------|
+| 世界为何如此（变·见·行·答·连·向） | [01–06 世界观](docs/theory/01-本源.md) |
+| 体验应如何践行（态·觉·续·接·应·生·向·整） | [实践篇 01–08](docs/theory/implement/README.md) |
+| 符号 U、工程对照 | [附录 · U](docs/theory/appendix-现代对应.md) |
+| 引导语原文 | [volume-rite-copy.md](docs/volume-rite-copy.md) |
 
 ---
 
@@ -59,47 +60,70 @@
 *The world may not change because of you—but how you see keeps changing you.*  
 *世界はあなたのために変わらなくても、見方はあなた自身を変え続ける。*
 
----
-
-大多数测评默认「答完 → 打分 → 给结论」。雾岸把顺序倒过来：先校准「看见」，再谈映像。六卷像六面镜，整象是六卷都走过、归树之后的一次开口——不是标准答案库。[十篇理论](docs/theory/README.md)讲机制；这两句是价值起点（也在 [09-命论](docs/theory/09-命论.md) 归树段与产品内呈现）。
+归树前的**核心命题**与 [06 向光](docs/theory/06-向光.md)、[07 意义论 · 实践原则](docs/theory/implement/07-意义论.md) 同脉——聚光校准，非远处奖杯。
 
 ---
 
-## 三、这是什么
+## 三、理论栈
 
-一个网页 Demo：六卷翻书问答（心象 / 映心 / 明思 / 缘书 / 流衡 / 向光），背景是一棵随进度亮起的生命之树。每卷结束有心象画像和单卷神谕；六卷都完成后，回书架走**归树**，才出现整象神谕。
+```
+附录 · U（可穿插）
+    ↓
+世界观 01 本源 → … → 06 向光     （六篇成环：变·见·行·答·连·往）
+    ↓
+实践篇 01 存在 → … → 08 整合       （八章同构：态·觉·续·接·应·生·向·整）
+    ↓
+本 Demo：六卷同旅 · 留痕 · 归树 · 整象
+```
 
-界面四语：简体、繁體（OpenCC）、English、日本語。繁体 UI 由简体转，神谕各语言单独生成、单独缓存。
+| 层 | 索引 | 何时读 |
+|----|------|--------|
+| **世界观** | [docs/theory/README.md](docs/theory/README.md) | 理解机制、写文案、对外讲述 |
+| **实践篇** | [docs/theory/implement/README.md](docs/theory/implement/README.md) | **改流程、神谕、问印、归树前必读** |
+| **附录** | [appendix-现代对应.md](docs/theory/appendix-现代对应.md) | U / Φ / A / F；[修持↔理论↔产品](docs/theory/appendix-现代对应.md#修持-理论-产品) |
 
-*Flip-book self-exploration, Tree of Life background, per-volume oracle, holistic oracle after Return to the Tree. Four locales.*  
-*六巻の問答、生命の樹、巻別神託、帰樹後の整象。四言語。*
+**六篇 ↔ 八章（简）**
+
+| 世界观 | 章眼 | 实践篇 | 章眼（践行） |
+|--------|------|--------|--------------|
+| [01 本源](docs/theory/01-本源.md) | 变→态→命→觉 | [01 存在论](docs/theory/implement/01-存在论.md) | 读态，不贴型 |
+| [02 观照](docs/theory/02-观照.md) | 照见开叉于链 | [02 意识论](docs/theory/implement/02-意识论.md) | 先觉，再答 |
+| [03 流动](docs/theory/03-流动.md) | 稳者变中归息 | [03 流动论](docs/theory/implement/03-流动论.md) | 一息可留，一生不可截 |
+| [05 共生](docs/theory/05-共生.md) | 真连接仍各自应 | [04 关系论](docs/theory/implement/04-关系论.md) | 连接，而不占有 |
+| [04 因应](docs/theory/04-因应.md) | 命是回应的编织 | [05 因应论](docs/theory/implement/05-因应论.md) | 留应，不留命 |
+| （跨章） | 痕上生象 | [06 生成论](docs/theory/implement/06-生成论.md) | 鸣其已生，不造其未生 |
+| [06 向光](docs/theory/06-向光.md) | 今息知所重、一步 | [07 意义论](docs/theory/implement/07-意义论.md) | 归树，不归终 |
+| [附录 · U](docs/theory/appendix-现代对应.md) | 六脉并看 | [08 整合论](docs/theory/implement/08-整合论.md) | 见整体，而非见部分 |
+
+实践篇每章七节：**实践问 → 理论根源 → 章眼 → 理论原则 → 实践原则（含仪轨链）→ 不可与可 → 实现映射 → 理论位置 → 本章收**。详见 [章体模板](docs/theory/implement/README.md#章体模板01-08-统一)。
 
 ---
 
-## 四、体验路径
+## 四、一次同旅
 
 ```mermaid
 flowchart LR
-  A[Mist Shelf] --> B[Entry rite]
-  B --> C[8 seals Q and A]
-  C --> D[Exit rite]
-  D --> E[Portrait plus volume oracle]
+  A[书架] --> B[入卷]
+  B --> C[问印择印]
+  C --> D[离卷]
+  D --> E[画像与卷内神谕]
   E --> A
-  A --> F{All 6 done?}
-  F -->|yes| G[Return to Tree]
-  G --> H[Core proposition]
-  H --> I[Holistic oracle]
+  A --> F{六痕齐?}
+  F -->|是| G[归树]
+  G --> H[核心命题]
+  H --> I[整象神谕]
 ```
 
-| 节点 | 做什么 | 理论 |
-|------|--------|------|
-| 书架 | 选卷、留邮箱、看树；六卷齐后出现整象入口 | [01 雾岸世界](docs/theory/01-雾岸世界.md) |
-| 入卷 | 全屏引导，见 [五、修持环](#五修持环) | [02 照见论](docs/theory/02-照见论.md) · [06 心流论](docs/theory/06-心流论.md) |
-| 问印 | 8 页：6 维 + 注意力 + 整象封印；一页一卡，约 420ms 翻页，无分数 | [03 各人之雾](docs/theory/03-各人之雾.md) |
-| 离卷 | 合卷前短仪式；心象卷可写一句 | [08 观论](docs/theory/08-观论.md) |
-| 单卷结果 | 画像 → 神谕 → 合书 → 回书架（**整象不在单卷里**） | [04 生长论](docs/theory/04-生长论.md) |
-| 归树 | 首次开整象前必过；树没变，看树的人变了 | [08 观论](docs/theory/08-观论.md) · [09 命论](docs/theory/09-命论.md) |
-| 整象 | 书架 overlay，不是六份报告的拼接 | [10 整象论](docs/theory/10-整象论.md) |
+| 节点 | 做什么 | 世界观 | 实践篇 |
+|------|--------|--------|--------|
+| 书架 | 选卷、留邮箱、看树亮痕；六齐后出现整象入口 | [01 本源](docs/theory/01-本源.md) · [附录 · U](docs/theory/appendix-现代对应.md) | [01 存在](docs/theory/implement/01-存在论.md) · [08 整合](docs/theory/implement/08-整合论.md) |
+| 入卷 | 全屏引导，先停再答 | [02 观照](docs/theory/02-观照.md) | [02 意识](docs/theory/implement/02-意识论.md) |
+| 问印 | 8 页：六维 + 注意力 + 卷内齐观印；一页一卡，无分数 | [04 因应](docs/theory/04-因应.md) | [05 因应](docs/theory/implement/05-因应论.md) · [08 整合](docs/theory/implement/08-整合论.md) |
+| 离卷 | 合卷前短仪式；心象卷可写一句 | [02 观照](docs/theory/02-观照.md) · [03 流动](docs/theory/03-流动.md) | [02 意识](docs/theory/implement/02-意识论.md) |
+| 单卷结果 | 画像 → 神谕 → 合书；**不出整象** | [03 流动](docs/theory/03-流动.md) | [06 生成](docs/theory/implement/06-生成论.md) · [01 存在](docs/theory/implement/01-存在论.md) |
+| 同卷再入 | 文案如故，接缘者已变 | [03 流动](docs/theory/03-流动.md) | [03 流动论 · 不可与可](docs/theory/implement/03-流动论.md) |
+| 六卷同旅 | 六痕互文于同一网 | [05 共生](docs/theory/05-共生.md) | [04 关系](docs/theory/implement/04-关系论.md) |
+| 归树 → 整象 | 树未变，看树者变；齐观后开口 | [06 向光](docs/theory/06-向光.md) | [07 意义](docs/theory/implement/07-意义论.md) · [08 整合](docs/theory/implement/08-整合论.md) |
 
 视觉：深黑底、黑白意象卡、淡金点缀；各语言用各自的 mystic 字体。
 
@@ -107,57 +131,61 @@ flowchart LR
 
 ## 五、修持环
 
-每卷固定三步：**入卷 → 问印 → 离卷**。六卷顺序随意。齐了之后：**归树 → 核心命题 → 整象神谕**。
+每卷固定三步：**入卷 → 问印 → 离卷**。六卷顺序随意。六痕齐后：**归树 → 核心命题 → 整象神谕**。
 
-为什么要这套仪式——
+| 步骤 | 要义 | 实践篇 |
+|------|------|--------|
+| **入卷** | 放下上一刻；看见先于作答 | [02 意识 · 实践原则](docs/theory/implement/02-意识论.md) |
+| **问印** | 照见此息之应，非考试 | [05 因应](docs/theory/implement/05-因应论.md) |
+| **离卷** | 收息离开；允许未全命名 | [02 意识 · 不可与可](docs/theory/implement/02-意识论.md) |
+| **归树** | 收束一路，不归终；再开整象 | [07 意义](docs/theory/implement/07-意义论.md) |
 
-- **入卷**：让人慢下来。看见比作答先发生。
-- **离卷**：结果出来前留一点空；心象卷可以写一句。
-- **归树**：六卷容易变成六块「结论」；归树把散开的视线收回到同一棵树，再开整象。
+| 卷 | 意象 | 照什么 | 修持文案 |
+|----|------|--------|----------|
+| 心象 | 湖 | 自我；可写「今天看见了什么」 | [§心象](docs/volume-rite-copy.md#第一卷-心象) |
+| 映心 | 落叶顺河 | 情感；不必全命名 | [§映心](docs/volume-rite-copy.md#第二卷-映心) |
+| 明思 | 夜空、北极星 | 思维；最后一念自熄 | [§明思](docs/volume-rite-copy.md#第三卷-明思) |
+| 缘书 | 丝线 | 关系；不断、不拉 | [§缘书](docs/volume-rite-copy.md#第四卷-缘书) |
+| 流衡 | 船心 | 节奏、守衡 | [§流衡](docs/volume-rite-copy.md#第五卷-流衡) |
+| 向光 | 远方微光 | 方向；今天一小步 | [§向光](docs/volume-rite-copy.md#第六卷-向光) |
 
-| 卷 | 意象 | 测什么 | 理论 | 修持文案 |
-|----|------|--------|------|----------|
-| 心象 | 湖 | 自我；可写「今天看见了什么」 | [02 照见论](docs/theory/02-照见论.md) | [volume-rite §心象](docs/volume-rite-copy.md#第一卷--心象) |
-| 映心 | 落叶顺河 | 情感；不必全命名 | [02](docs/theory/02-照见论.md) · [03](docs/theory/03-各人之雾.md) | [§映心](docs/volume-rite-copy.md#第二卷--映心) |
-| 明思 | 夜空、北极星 | 思维；最后一念自熄 | [02 照见论](docs/theory/02-照见论.md) | [§明思](docs/volume-rite-copy.md#第三卷--明思) |
-| 缘书 | 丝线 | 关系；不断、不拉 | [05 缘论](docs/theory/05-缘论.md) | [§缘书](docs/volume-rite-copy.md#第四卷--缘书) |
-| 流衡 | 船心 | 节奏、守衡 | [06 心流论](docs/theory/06-心流论.md) | [§流衡](docs/volume-rite-copy.md#第五卷--流衡) |
-| 向光 | 远方微光 | 方向；今天一小步 | [04 生长论](docs/theory/04-生长论.md) | [§向光](docs/volume-rite-copy.md#第六卷--向光) |
-
-归树与整象：[08 观论](docs/theory/08-观论.md) · [10 整象论](docs/theory/10-整象论.md) · [归树全文](docs/volume-rite-copy.md#归树--return-to-the-tree--帰樹)
-
-代码：`VolumeRiteOverlay`、`ReturnToTreeOverlay`，文案 [`volumeRite.ts`](src/i18n/volumeRite.ts)。
-
-### 引导语全文
-
-[`docs/volume-rite-copy.md`](docs/volume-rite-copy.md)（简体 / 英文 / 日本語，与产品同源；理论对照见 [附录](docs/theory/appendix-现代对应.md#修持--理论--产品)）
+归树全文：[volume-rite-copy · 归树](docs/volume-rite-copy.md#归树-return-to-the-tree-帰樹)  
+代码：`VolumeRiteOverlay`、`ReturnToTreeOverlay` · [`volumeRite.ts`](src/i18n/volumeRite.ts)
 
 心象 · 入卷开头示例：
 
-> 阅读前，请安静坐三分钟。不要回忆今天发生了什么。……  
-> *Before reading, sit quietly for three minutes. Do not replay what happened today.……*  
-> *読む前に、三分間静かに座れ。今日起きたことを振り返るな。……*
+> 阅读前，请安静坐三分钟。不要回忆今天发生了什么。……
 
 ---
 
-## 六、界面预览
+## 六、改体验前 · 四问
 
-截图在 [`docs/screenshots/homepage/`](docs/screenshots/homepage/)。本地 dev 跑着时可执行：
+动问印、神谕、归树或整象前，对照 [实践篇 · 四问](docs/theory/implement/README.md#改体验前-四问)：
+
+1. 是否在**贴型**或**判对错**？→ [01 存在](docs/theory/implement/01-存在论.md) · [05 因应](docs/theory/implement/05-因应论.md) **不可与可**
+2. 是否在**催促改**而跳过照见？→ [02 意识](docs/theory/implement/02-意识论.md) **理论原则 · 不可与可**
+3. 是否把结果**焊死**或**拼接**？→ [03 流动](docs/theory/implement/03-流动论.md) · [08 整合](docs/theory/implement/08-整合论.md) **不可与可**
+4. 是否在**绑人**或**替人应**？→ [04 关系](docs/theory/implement/04-关系论.md) **不可与可**
+
+改读卷结构另问（[08 整合 · 实现映射](docs/theory/implement/08-整合论.md)）：是否拆维？是否平均？是否拼接？是否单卷代齐观？
+
+---
+
+## 七、界面预览
+
+截图：[docs/screenshots/homepage/](docs/screenshots/homepage/) · 本地抓取：
 
 ```bash
 node scripts/capture-homepage-screenshots.mjs
 ```
 
-| | |
-|---|---|
-| 简体 | ![zh](docs/screenshots/homepage/homepage-zh.png) |
-| 繁體 | ![zh-tw](docs/screenshots/homepage/homepage-zh-tw.png) |
-| English | ![en](docs/screenshots/homepage/homepage-en.png) |
-| 日本語 | ![ja](docs/screenshots/homepage/homepage-ja.png) |
+| 简体 | 繁體 | English | 日本語 |
+|------|------|---------|--------|
+| ![zh](docs/screenshots/homepage/homepage-zh.png) | ![zh-tw](docs/screenshots/homepage/homepage-zh-tw.png) | ![en](docs/screenshots/homepage/homepage-en.png) | ![ja](docs/screenshots/homepage/homepage-ja.png) |
 
 ---
 
-## 七、开发与运维
+## 八、开发与运维
 
 ### 跑起来
 
@@ -189,13 +217,13 @@ Key 只在 Vite 中间件用，不进前端包。`npm run build` 出 `dist/` + N
 | `node scripts/test-locale-switch.mjs` | 四语神谕缓存 |
 | `node scripts/reset-db.mjs` | 清空 SQLite |
 
-### 别踩的线
+### 产品红线（与实践篇一致）
 
-1. 一页一卡，~420ms，没有分数。
-2. 整象只在书架出现。
-3. 树进度只计维度 1–6。
-4. 换语言读缓存，不重复调模型（除非缺该语言）。
-5. 生产不要开 `PSYCHE_READING_TEST_FALLBACK`。
+1. 一页一卡，无分数；问印读**此息之应**，非测验。
+2. **整象只在书架**，六痕齐且过归树后；非单卷、非六块拼接。
+3. 树亮痕只计维度 1–6；U 六脉并看，非六型完成度。
+4. 神谕从痕显现（[06 生成论](docs/theory/implement/06-生成论.md)），换语言读缓存。
+5. 生产不开 `PSYCHE_READING_TEST_FALLBACK`。
 
 ### 语言与库
 
@@ -206,20 +234,28 @@ Key 只在 Vite 中间件用，不进前端包。`npm run build` 出 `dist/` + N
 | `en` | 英文 | `*_en` |
 | `ja` | 日文 | `*_ja` |
 
-### 结构
+### 文档结构
 
 ```
 psyche-tree-demo/
-├── README.md
-├── docs/theory/              # 01–10 + appendix + interpretation
-├── docs/volume-rite-copy.md  # 修持文案
-├── docs/screenshots/
-├── .cursor/skills/…/SKILL.md
-└── src/i18n/volumeRite.ts
+├── README.md                          # 本文件 · 项目入口
+├── docs/
+│   ├── theory/
+│   │   ├── README.md                  # 理论栈索引（世界观 + 实践指向）
+│   │   ├── 01-本源.md … 06-向光.md    # 世界观六篇
+│   │   ├── appendix-现代对应.md       # U / 工程第二语言
+│   │   └── implement/
+│   │       ├── README.md              # 实践篇索引（改体验前读）
+│   │       └── 01-存在论.md … 08-整合论.md
+│   ├── volume-rite-copy.md            # 修持引导语（不改理论正文）
+│   └── screenshots/
+├── .cursor/skills/psyche-tree-demo/   # 开发 Skill
+└── src/i18n/volumeRite.ts             # 修持文案源
 ```
 
 React 19 · Vite 8 · TypeScript · Tailwind 4 · SQLite · DeepSeek · Playwright
 
 ---
 
-*雾岸六卷 — 校准看见，而不是索取标准答案。*
+*雾岸六卷 — 校准看见，而不是索取标准答案。*  
+*人不可定。态可照。* · [01 存在论 · 本章收](docs/theory/implement/01-存在论.md)
