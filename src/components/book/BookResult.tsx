@@ -171,8 +171,8 @@ export function BookResult({ book, result, onRestart }: BookResultProps) {
             onNext={goNext}
             backDisabled={pageIndex === 0 || flipping}
             nextDisabled={flipping || (pageIndex === 1 && loading)}
-            backLabel="上一页"
-            nextLabel="翻页"
+            backLabel="溯息"
+            nextLabel="展息"
           />
         ) : (
           <div className="flex justify-center">

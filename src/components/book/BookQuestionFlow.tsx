@@ -193,7 +193,7 @@ export function BookQuestionFlow({
           <BookNav
             onBack={handleBack}
             backDisabled={currentIndex === 0 || flipping || isAdvancing}
-            backLabel="上一页"
+            backLabel="溯息"
             showNext={false}
           />
         }

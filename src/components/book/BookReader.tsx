@@ -758,15 +758,15 @@ export function BookReader({
                 nextDisabled={
                   flipping || isAdvancing || pageIndex >= totalSpreads - 1
                 }
-                backLabel={ui.prevPage}
-                nextLabel={ui.nextPage}
+                backLabel={ui.guideTurnPrev}
+                nextLabel={ui.guideTurnNext}
                 selectOneHint={ui.reviewModeHint}
               />
             ) : (
               <BookNav
                 onBack={handleBack}
                 backDisabled={pageIndex === 0 || flipping || isAdvancing}
-                backLabel={ui.prevPage}
+                backLabel={ui.guideTurnPrev}
                 selectOneHint={ui.selectOneHint}
                 showNext={false}
               />
@@ -781,8 +781,8 @@ export function BookReader({
                 isAdvancing ||
                 (pageIndex === questionCount + 1 && loadingReading)
               }
-              backLabel={ui.prevPage}
-              nextLabel={ui.nextPage}
+              backLabel={ui.guideTurnPrev}
+              nextLabel={ui.guideTurnNext}
             />
           ) : (
             <div className="flex justify-center">

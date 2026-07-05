@@ -294,15 +294,15 @@ export function BookNav({
   onBack,
   onNext,
   onRestart,
-  backLabel = '上一页',
-  nextLabel = '翻页',
+  backLabel = '溯息',
+  nextLabel = '展息',
   restartLabel = '归序首',
   backDisabled,
   nextDisabled,
   restartDisabled,
   showNext = true,
   showRestart = false,
-  selectOneHint = '择一即翻页',
+  selectOneHint = '择一即展息',
 }: BookNavProps) {
   return (
     <div className="book-nav-stack">

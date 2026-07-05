@@ -72,6 +72,20 @@ Built by `buildBookQuestionFlow()` in `books/shared/questionFlow.ts`.
 
 `guideCover*`, `guideSection*`, `guideAxisEast` / `guideAxisModern`, `guideEnterShore`, `guideTurnPrev` (溯息), `guideTurnNext` (展息), `guideRestartReading` (归序首), `guidePageTurnPrevAria`, `guidePageTurnNextAria`, `guideVolumeHandoffHint`, `guideFirstVisitHint` — zh source; zhTw OpenCC; en/ja tables in `ui.ts`.
 
+### Six-volume book nav keys (`ui.ts`)
+
+Same **息间翻页** labels as guide — wired in `BookReader` → `BookNav`:
+
+| Key | 简体 | Used when |
+|-----|------|-----------|
+| `guideTurnPrev` | 溯息 | Footer back on questions + results + review |
+| `guideTurnNext` | 展息 | Footer forward on results + review |
+| `selectOneHint` | 择一即展息 | Question spread — no forward button until seal picked |
+| `reviewModeHint` | …可溯息、展息细读 | Review mode footer hint |
+| `coverReviewHint` | …溯息、展息细读… | Cover when volume already mirrored |
+
+`BookShell` / `BookNav` defaults: 溯息 / 展息 / 择一即展息 (fallback if caller omits labels).
+
 ## Documentation map · 文档索引
 
 | Doc | 说明 |
@@ -150,12 +164,12 @@ src/components/bookshelf/           # Bookshelf, BookshelfGuideSlot, BookshelfVo
 src/components/book/BookCoverArt.tsx
 src/components/guide/               # GuideCover, GuideReader, GuidePageContent, GuideIllustration
 src/components/ambient/ShoreZenAmbience.tsx
-src/components/book/BookShell.tsx   # flip + optional pageClickEnabled (guide)
-src/components/book/BookReader.tsx  # save assessment, fetch mystical reading, volume rites
+src/components/book/BookShell.tsx   # flip + BookNav defaults 溯息/展息; pageClickEnabled (guide)
+src/components/book/BookReader.tsx  # footer uses guideTurnPrev/Next; mystical reading + volume rites
 src/components/book/BookClosedVisual.tsx
 src/components/book/VolumeRiteOverlay.tsx
 src/components/TreeOfLifeBackground.tsx  # photoBackdrop prop
-src/i18n/ui.ts                      # UI strings + guideSection* / guideCover* keys
+src/i18n/ui.ts                      # guideTurnPrev/Next, selectOneHint, review hints; guideSection*
 src/i18n/traditionalChinese.ts      # OpenCC + convertStringsDeep (incl. functions)
 src/i18n/questionGuide.ts           # + questionGuide.ja.ts
 src/i18n/openingGuide.ts           # brief field tags (legacy flash; rites in volumeRite.ts)

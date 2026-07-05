@@ -64,14 +64,19 @@ shelf → click 同观 → guide (GuideCover) → 展卷 → guide reading (Guid
 
 ### Guide navigation (序卷 UX)
 
-| Action | 简体 label | Implementation |
-|--------|------------|----------------|
-| Previous spread | **溯息** | `ui.guideTurnPrev` — footer `BookNav` + click **left page** |
-| Next spread | **展息** | `ui.guideTurnNext` — footer + click **right page** |
-| Restart from opening | **归序首** | `ui.guideRestartReading` — resets spread to 0 via `saveGuideSpreadIndex(0)`; shown when `pageIndex > 0` |
+Shared **息间翻页** vocabulary for 同观 **and** six volumes — do not reintroduce「上一页 / 翻页 / Next page」on book footers.
+
+| Action | 简体 label | en | ja | Implementation |
+|--------|------------|-----|-----|----------------|
+| Previous spread | **溯息** | Turn back | 前息へ | `ui.guideTurnPrev` — footer `BookNav`; guide also: click **left page** |
+| Next spread | **展息** | Turn forward | 次息へ | `ui.guideTurnNext` — footer; guide also: click **right page** |
+| Restart from opening | **归序首** | Return to opening | 序首に還る | `ui.guideRestartReading` — **guide only**; resets spread via `saveGuideSpreadIndex(0)` |
+| Pick seal (no next btn) | **择一即展息** | Choose one—the spread breathes forward | 一つ選べ、息自ら展ず | `ui.selectOneHint` — six-volume question spreads |
 
 - `BookShell` optional `pageClickEnabled` + `onPageClick('left'|'right')` — **guide only**; six-volume quiz keeps card selection on right page
-- Do **not** use generic `prevPage` / `nextPage` on guide footer
+- **BookReader** footer: always `ui.guideTurnPrev` / `ui.guideTurnNext` (not hardcoded Chinese)
+- `ui.prevPage` / `ui.nextPage` — legacy aliases kept in sync with guide labels; prefer `guideTurnPrev` / `guideTurnNext` in new code
+- Review-mode hints (`coverReviewHint`, `reviewModeHint`): say 溯息、展息 — not 翻页
 
 ### Guide typography (zh / zhTw)
 
@@ -247,6 +252,7 @@ DB path: `data/psyche-tree.sqlite` (or `SQLITE_PATH`). Reset: `node scripts/rese
 - Psychology copy: `【title】desc`; integration last
 - Locale switch reads cached readings; does not re-score
 - Guide: click left/right page **or** footer 溯息/展息; 归序首 resets spread only (not logout)
+- Six volumes: footer 溯息/展息 same keys as guide; question spreads show 择一即展息 until seal chosen
 - Homepage: photo slideshow only when `availableBackgroundScenes().length > 0`
 
 ## Verify
