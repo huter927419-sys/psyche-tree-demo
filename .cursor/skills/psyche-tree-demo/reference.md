@@ -178,6 +178,7 @@ six books complete → journey.status = completed
 
 | 体验 | 读 |
 |------|-----|
+| **入卷息间** · 首段回息 · ~4s 后再续 | [02 观照 · 息间](../../../docs/theory/02-观照.md) · [02 意识论](../../../docs/theory/implement/02-意识论.md) · `ENTRY_BREATH_INTERVAL_MS` |
 | 入卷慢、一页一印、不示分 | [03 流动](../../../docs/theory/03-流动.md) · [附录](../../../docs/theory/appendix-现代对应.md#修持-理论-产品) |
 | 湖 / 河 / 星空等卷意象 | [appendix · U](../../../docs/theory/appendix-现代对应.md) · [02 观照](../../../docs/theory/02-观照.md) |
 | 对话确认、归树 | [02 观照](../../../docs/theory/02-观照.md) · [06 向光](../../../docs/theory/06-向光.md) |

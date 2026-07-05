@@ -27,18 +27,40 @@ function fail(name, detail = '') {
 
 async function clickThroughRite(page, donePattern) {
   const done = page.getByRole('button', { name: donePattern })
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 14; i++) {
     if (await done.isVisible().catch(() => false)) {
-      await done.click()
-      return true
+      if (await done.isEnabled().catch(() => false)) {
+        await done.click()
+        return true
+      }
     }
     const next = page.getByRole('button', { name: /下一段|Next|次へ/ })
     if (await next.isVisible().catch(() => false)) {
-      await next.click()
-      await page.waitForTimeout(350)
-      continue
+      try {
+        await page.waitForFunction(
+          () => {
+            const buttons = [...document.querySelectorAll('button')]
+            const btn = buttons.find((b) => /下一段|Next|次へ/.test(b.textContent ?? ''))
+            return Boolean(btn && !btn.disabled)
+          },
+          { timeout: 10_000 },
+        )
+        await next.click()
+        await page.waitForTimeout(350)
+        continue
+      } catch {
+        await page.waitForTimeout(500)
+        continue
+      }
     }
-    await page.waitForTimeout(200)
+    await page.waitForTimeout(500)
+  }
+  if (
+    (await done.isVisible().catch(() => false)) &&
+    (await done.isEnabled().catch(() => false))
+  ) {
+    await done.click()
+    return true
   }
   return false
 }
@@ -191,7 +213,10 @@ async function main() {
     fail('Entry rite overlay shown')
   }
 
-  const entryDone = await clickThroughRite(page, /进入问印|Enter the seals|問印へ/)
+  const entryDone = await clickThroughRite(
+    page,
+    /在息间后，进入问印|进入问印|After the breath-interval, enter seals|Enter the seals|息間ののち、問印へ|問印へ/,
+  )
   if (entryDone) pass('Entry rite completed')
   else fail('Entry rite completed')
 

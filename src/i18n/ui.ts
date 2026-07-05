@@ -108,12 +108,13 @@ const ui = {
     ultimateOracleAria: '整象神谕',
     volumeRitePrev: '上一段',
     volumeRiteNext: '下一段',
-    volumeRiteBegin: '进入问印',
+    volumeRiteBegin: '在息间后，进入问印',
     volumeRiteSeeResult: '进入照见',
     volumeRiteExitLabel: '离卷仪式',
-    volumeRiteEntryAria: '入卷修持',
+    volumeRiteEntryAria: '入卷修持 · 息间',
     volumeRiteExitAria: '离卷修持',
     volumeRiteJournalOptional: '可选：写下一句，不必分享',
+    volumeRiteBreathIntervalHint: '在息间——不必急，下一息再续',
     corePropositionLabel: 'Psyche Tree · 核心命题',
     returnToTreeAria: '归树',
     returnToTreeContinue: '继续整象神谕',
@@ -238,12 +239,13 @@ const ui = {
     ultimateOracleAria: 'Whole-image oracle',
     volumeRitePrev: 'Previous',
     volumeRiteNext: 'Next',
-    volumeRiteBegin: 'Enter the seals',
+    volumeRiteBegin: 'After the breath-interval, enter seals',
     volumeRiteSeeResult: 'Enter the mirror',
     volumeRiteExitLabel: 'Closing rite',
-    volumeRiteEntryAria: 'Volume entry rite',
+    volumeRiteEntryAria: 'Volume entry rite · breath-interval',
     volumeRiteExitAria: 'Volume closing rite',
     volumeRiteJournalOptional: 'Optional: one sentence, for yourself only',
+    volumeRiteBreathIntervalHint: 'In the breath-interval—no hurry; next when ready',
     corePropositionLabel: 'Psyche Tree · Core proposition',
     returnToTreeAria: 'Return to the Tree',
     returnToTreeContinue: 'Continue to whole oracle',
@@ -359,12 +361,13 @@ const ui = {
     ultimateOracleAria: '整象神託',
     volumeRitePrev: '前へ',
     volumeRiteNext: '次へ',
-    volumeRiteBegin: '問印へ',
+    volumeRiteBegin: '息間ののち、問印へ',
     volumeRiteSeeResult: '照見へ',
     volumeRiteExitLabel: '離巻の儀',
-    volumeRiteEntryAria: '入巻の修持',
+    volumeRiteEntryAria: '入巻の修持 · 息間',
     volumeRiteExitAria: '離巻の修持',
     volumeRiteJournalOptional: '任意：一文を書いてもよい（共有不要）',
+    volumeRiteBreathIntervalHint: '息間に——急がず、次の一息で',
     corePropositionLabel: 'Psyche Tree · 核心命題',
     returnToTreeAria: '帰樹',
     returnToTreeContinue: '整象神託へ',
@@ -464,6 +467,7 @@ export type UiStrings = {
   volumeRiteEntryAria: string
   volumeRiteExitAria: string
   volumeRiteJournalOptional: string
+  volumeRiteBreathIntervalHint: string
   corePropositionLabel: string
   returnToTreeAria: string
   returnToTreeContinue: string

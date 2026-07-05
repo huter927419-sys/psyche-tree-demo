@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import type { BookId } from '../../books/types'
 import type { Locale } from '../../i18n/locale'
 import { getUi } from '../../i18n/ui'
+import { ENTRY_BREATH_INTERVAL_MS } from '../../i18n/volumeRite'
 import {
   getTrilingualEntryRite,
   getTrilingualExitRite,
@@ -34,19 +35,33 @@ export function VolumeRiteOverlay({
   const steps = mode === 'entry' ? (entryRite?.steps ?? []) : exitSteps
   const [stepIndex, setStepIndex] = useState(0)
   const [journal, setJournal] = useState('')
+  const [breathReady, setBreathReady] = useState(true)
 
   useEffect(() => {
     if (open) {
       setStepIndex(0)
       setJournal('')
+      setBreathReady(mode !== 'entry')
     }
   }, [open, mode, bookId])
+
+  useEffect(() => {
+    if (!open || mode !== 'entry' || stepIndex !== 0) {
+      setBreathReady(true)
+      return
+    }
+    setBreathReady(false)
+    const timer = window.setTimeout(() => setBreathReady(true), ENTRY_BREATH_INTERVAL_MS)
+    return () => window.clearTimeout(timer)
+  }, [open, mode, stepIndex, bookId])
 
   if (!open || steps.length === 0) return null
 
   const step = steps[stepIndex]
   const isLast = stepIndex >= steps.length - 1
   const showJournal = Boolean(step.journalPrompt)
+  const onBreathIntervalStep = mode === 'entry' && stepIndex === 0
+  const canAdvance = !onBreathIntervalStep || breathReady
 
   const handleNext = () => {
     if (isLast) {
@@ -96,6 +111,11 @@ export function VolumeRiteOverlay({
         <div className="volume-rite-body">
           <RiteTrilingualText locale={locale} value={step.sectionLabel} variant="label" />
           <RiteTrilingualStepBody locale={locale} step={step} />
+          {onBreathIntervalStep && !breathReady && (
+            <p className="volume-rite-breath-hint" aria-live="polite">
+              {ui.volumeRiteBreathIntervalHint}
+            </p>
+          )}
           {showJournal && step.journalPrompt && (
             <label className="volume-rite-journal">
               <RiteTrilingualText locale={locale} value={step.journalPrompt} />
@@ -132,6 +152,7 @@ export function VolumeRiteOverlay({
             type="button"
             className="book-nav-btn book-nav-btn-primary"
             onClick={handleNext}
+            disabled={!canAdvance}
           >
             {isLast
               ? mode === 'entry'

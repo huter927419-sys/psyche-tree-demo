@@ -135,7 +135,7 @@ flowchart LR
 
 | 步骤 | 要义 | 实践篇 |
 |------|------|--------|
-| **入卷** | 放下上一刻；看见先于作答 | [02 意识 · 实践原则](docs/theory/implement/02-意识论.md) |
+| **入卷** | **在息间**：先回息，再应；照见在回应之前 | [02 观照 · 息间](docs/theory/02-观照.md) · [02 意识](docs/theory/implement/02-意识论.md) |
 | **问印** | 照见此息之应，非考试 | [05 因应](docs/theory/implement/05-因应论.md) |
 | **离卷** | 收息离开；允许未全命名 | [02 意识 · 不可与可](docs/theory/implement/02-意识论.md) |
 | **归树** | 收束一路，不归终；再开整象 | [07 意义](docs/theory/implement/07-意义论.md) |
@@ -152,9 +152,9 @@ flowchart LR
 归树全文：[volume-rite-copy · 归树](docs/volume-rite-copy.md#归树-return-to-the-tree-帰樹)  
 代码：`VolumeRiteOverlay`、`ReturnToTreeOverlay` · [`volumeRite.ts`](src/i18n/volumeRite.ts)
 
-心象 · 入卷开头示例：
+心象 · 入卷开头示例（六卷共用首段 **息间**）：
 
-> 阅读前，请安静坐三分钟。不要回忆今天发生了什么。……
+> 人与回应之间，隔着一息。……真正的照见，不发生在解释之后，而发生在回应之前。
 
 ---
 
@@ -219,11 +219,12 @@ Key 只在 Vite 中间件用，不进前端包。`npm run build` 出 `dist/` + N
 
 ### 产品红线（与实践篇一致）
 
-1. 一页一卡，无分数；问印读**此息之应**，非测验。
-2. **整象只在书架**，六痕齐且过归树后；非单卷、非六块拼接。
-3. 树亮痕只计维度 1–6；U 六脉并看，非六型完成度。
-4. 神谕从痕显现（[06 生成论](docs/theory/implement/06-生成论.md)），换语言读缓存。
-5. 生产不开 `PSYCHE_READING_TEST_FALLBACK`。
+1. **入卷首段为息间**——六卷共用；首屏约 4 秒后再可「下一段」；末钮「在息间后，进入问印」。见 [02 观照 · 息间](docs/theory/02-观照.md)。
+2. 一页一卡，无分数；问印读**此息之应**，非测验。
+3. **整象只在书架**，六痕齐且过归树后；非单卷、非六块拼接。
+4. 树亮痕只计维度 1–6；U 六脉并看，非六型完成度。
+5. 神谕从痕显现（[06 生成论](docs/theory/implement/06-生成论.md)），换语言读缓存。
+6. 生产不开 `PSYCHE_READING_TEST_FALLBACK`。
 
 ### 语言与库
 

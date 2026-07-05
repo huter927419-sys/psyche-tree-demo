@@ -26,6 +26,35 @@
 
 ### 入卷 · Entry rite · 入巻
 
+#### 息间 · Breath-interval · 息間
+
+> **简体**
+> 在回应之前
+>
+> **English**
+> Before response
+>
+> **日本語**
+> 応答の前に
+
+> **简体**
+> 人与回应之间，隔着一息。
+> 这一息，不是空白——是生命尚未决定如何接缘的时候。
+> 入卷前，先回息：放下上一刻。
+> 真正的照见，不发生在解释之后，而发生在回应之前。
+>
+> **English**
+> Between you and your answer lies one breath.
+> Not blank—not hesitation—but when life has not yet chosen how to meet.
+> Before entry: return to this breath. Release the last moment.
+> True mirroring happens not after explanation—but before response.
+>
+> **日本語**
+> 人と応の間には、常に一息ある。
+> 空白でも躊躇でもなく——まだ如何接縁するか決していない時。
+> 入巻前に、回息せよ：上一刻を置く。
+> 真の照見は説明の後に非ず、応答の前に起こる。
+
 #### 入卷仪式 · Entry rite · 入巻の儀
 
 > **简体**
@@ -148,6 +177,35 @@
 
 ### 入卷 · Entry rite · 入巻
 
+#### 息间 · Breath-interval · 息間
+
+> **简体**
+> 在回应之前
+>
+> **English**
+> Before response
+>
+> **日本語**
+> 応答の前に
+
+> **简体**
+> 人与回应之间，隔着一息。
+> 这一息，不是空白——是生命尚未决定如何接缘的时候。
+> 入卷前，先回息：放下上一刻。
+> 真正的照见，不发生在解释之后，而发生在回应之前。
+>
+> **English**
+> Between you and your answer lies one breath.
+> Not blank—not hesitation—but when life has not yet chosen how to meet.
+> Before entry: return to this breath. Release the last moment.
+> True mirroring happens not after explanation—but before response.
+>
+> **日本語**
+> 人と応の間には、常に一息ある。
+> 空白でも躊躇でもなく——まだ如何接縁するか決していない時。
+> 入巻前に、回息せよ：上一刻を置く。
+> 真の照見は説明の後に非ず、応答の前に起こる。
+
 #### 入卷 · Entry · 入巻
 
 > **简体**
@@ -236,6 +294,35 @@
 
 ### 入卷 · Entry rite · 入巻
 
+#### 息间 · Breath-interval · 息間
+
+> **简体**
+> 在回应之前
+>
+> **English**
+> Before response
+>
+> **日本語**
+> 応答の前に
+
+> **简体**
+> 人与回应之间，隔着一息。
+> 这一息，不是空白——是生命尚未决定如何接缘的时候。
+> 入卷前，先回息：放下上一刻。
+> 真正的照见，不发生在解释之后，而发生在回应之前。
+>
+> **English**
+> Between you and your answer lies one breath.
+> Not blank—not hesitation—but when life has not yet chosen how to meet.
+> Before entry: return to this breath. Release the last moment.
+> True mirroring happens not after explanation—but before response.
+>
+> **日本語**
+> 人と応の間には、常に一息ある。
+> 空白でも躊躇でもなく——まだ如何接縁するか決していない時。
+> 入巻前に、回息せよ：上一刻を置く。
+> 真の照見は説明の後に非ず、応答の前に起こる。
+
 #### 观照 · Contemplation · 観照
 
 > **简体**
@@ -307,6 +394,35 @@
 
 ### 入卷 · Entry rite · 入巻
 
+#### 息间 · Breath-interval · 息間
+
+> **简体**
+> 在回应之前
+>
+> **English**
+> Before response
+>
+> **日本語**
+> 応答の前に
+
+> **简体**
+> 人与回应之间，隔着一息。
+> 这一息，不是空白——是生命尚未决定如何接缘的时候。
+> 入卷前，先回息：放下上一刻。
+> 真正的照见，不发生在解释之后，而发生在回应之前。
+>
+> **English**
+> Between you and your answer lies one breath.
+> Not blank—not hesitation—but when life has not yet chosen how to meet.
+> Before entry: return to this breath. Release the last moment.
+> True mirroring happens not after explanation—but before response.
+>
+> **日本語**
+> 人と応の間には、常に一息ある。
+> 空白でも躊躇でもなく——まだ如何接縁するか決していない時。
+> 入巻前に、回息せよ：上一刻を置く。
+> 真の照見は説明の後に非ず、応答の前に起こる。
+
 #### 观照 · Contemplation · 観照
 
 > **简体**
@@ -377,6 +493,35 @@
 > リズムを映す
 
 ### 入卷 · Entry rite · 入巻
+
+#### 息间 · Breath-interval · 息間
+
+> **简体**
+> 在回应之前
+>
+> **English**
+> Before response
+>
+> **日本語**
+> 応答の前に
+
+> **简体**
+> 人与回应之间，隔着一息。
+> 这一息，不是空白——是生命尚未决定如何接缘的时候。
+> 入卷前，先回息：放下上一刻。
+> 真正的照见，不发生在解释之后，而发生在回应之前。
+>
+> **English**
+> Between you and your answer lies one breath.
+> Not blank—not hesitation—but when life has not yet chosen how to meet.
+> Before entry: return to this breath. Release the last moment.
+> True mirroring happens not after explanation—but before response.
+>
+> **日本語**
+> 人と応の間には、常に一息ある。
+> 空白でも躊躇でもなく——まだ如何接縁するか決していない時。
+> 入巻前に、回息せよ：上一刻を置く。
+> 真の照見は説明の後に非ず、応答の前に起こる。
 
 #### 观照 · Contemplation · 観照
 
@@ -450,6 +595,35 @@
 > 方向を映す
 
 ### 入卷 · Entry rite · 入巻
+
+#### 息间 · Breath-interval · 息間
+
+> **简体**
+> 在回应之前
+>
+> **English**
+> Before response
+>
+> **日本語**
+> 応答の前に
+
+> **简体**
+> 人与回应之间，隔着一息。
+> 这一息，不是空白——是生命尚未决定如何接缘的时候。
+> 入卷前，先回息：放下上一刻。
+> 真正的照见，不发生在解释之后，而发生在回应之前。
+>
+> **English**
+> Between you and your answer lies one breath.
+> Not blank—not hesitation—but when life has not yet chosen how to meet.
+> Before entry: return to this breath. Release the last moment.
+> True mirroring happens not after explanation—but before response.
+>
+> **日本語**
+> 人と応の間には、常に一息ある。
+> 空白でも躊躇でもなく——まだ如何接縁するか決していない時。
+> 入巻前に、回息せよ：上一刻を置く。
+> 真の照見は説明の後に非ず、応答の前に起こる。
 
 #### 观照 · Contemplation · 観照
 

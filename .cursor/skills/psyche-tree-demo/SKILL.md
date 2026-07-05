@@ -90,6 +90,20 @@ Copy lives in `src/i18n/volumeRite.ts` (zh / en / ja; zhTw via OpenCC). Styles: 
 
 **Do not** reintroduce `BookOpeningGuide` flash for entry—the entry rite overlay replaces it.
 
+## Product red lines · 产品红线（实践层）
+
+Read [02 观照 · 息间](../../../docs/theory/02-观照.md) and [implement/02 意识论](../../../docs/theory/implement/02-意识论.md) before changing entry flow, seals, or oracles.
+
+| Red line | Rationale |
+|----------|-----------|
+| **Entry opens in 息间** | Every volume prepends a shared breath-interval step in `volumeRite.ts`—mirror before response, not after explanation |
+| **Do not rush past 息间** | First entry step waits `ENTRY_BREATH_INTERVAL_MS` (~4s) before「下一段」; final button reads「在息间后，进入问印」 |
+| **Aware before answer** | No scores, no verdict copy on seals; entry/exit rites guard the fork before old groove answers |
+| **Do not remove entry overlay** | Skipping `VolumeRiteOverlay` entry breaks theory↔product chain ([02 意识 · 实践原则](../../../docs/theory/implement/02-意识论.md)) |
+| **Do not substitute post-hoc explanation** | Holistic/oracle copy reflects what was mirrored—never replace pre-response pause with「学会内观」tips |
+
+Theory term **息间** = breath between person and response; **回息** = return to this breath (entry rite copy + pause UX).
+
 ## Reading test fallback (QA only)
 
 Instant mystical/holistic readings for verify scripts—**never enable in production**.

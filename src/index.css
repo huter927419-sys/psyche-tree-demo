@@ -5048,6 +5048,15 @@ html[lang="ja"] .app-user-email-value {
   margin-bottom: 0;
 }
 
+.volume-rite-breath-hint {
+  margin: 1.25rem 0 0;
+  font-size: 0.92rem;
+  letter-spacing: 0.06em;
+  color: color-mix(in srgb, var(--mist-gold) 72%, var(--mist-fog));
+  font-style: italic;
+  text-align: center;
+}
+
 .volume-rite-journal {
   display: block;
   margin-top: 1.1rem;
