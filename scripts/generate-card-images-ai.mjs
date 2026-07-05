@@ -56,10 +56,43 @@ async function generateImage(apiKey, prompt) {
 
 async function postProcess(buffer) {
   const sharp = (await import('sharp')).default
+  const w = PNG_WIDTH
+  const h = PNG_HEIGHT
+  const grain = Buffer.alloc(w * h * 4)
+  for (let i = 0; i < w * h; i++) {
+    const v = 72 + Math.floor(Math.random() * 36)
+    grain[i * 4] = v
+    grain[i * 4 + 1] = v
+    grain[i * 4 + 2] = v
+    grain[i * 4 + 3] = 14
+  }
+  const grainBuf = await sharp(grain, { raw: { width: w, height: h, channels: 4 } })
+    .blur(0.5)
+    .png()
+    .toBuffer()
+
   return sharp(buffer)
     .resize(PNG_WIDTH, PNG_HEIGHT, { fit: 'cover', position: 'centre' })
     .grayscale()
-    .normalize()
+    .modulate({ brightness: 0.9, contrast: 1.12 })
+    .sharpen({ sigma: 0.45, m1: 0.4, m2: 0.25 })
+    .composite([
+      { input: grainBuf, blend: 'overlay' },
+      {
+        input: Buffer.from(
+          `<svg width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="v" cx="50%" cy="48%" r="72%">
+                <stop offset="50%" stop-color="#000" stop-opacity="0"/>
+                <stop offset="100%" stop-color="#000" stop-opacity="0.48"/>
+              </radialGradient>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#v)"/>
+          </svg>`,
+        ),
+        blend: 'multiply',
+      },
+    ])
     .png({ compressionLevel: 6 })
     .toBuffer()
 }

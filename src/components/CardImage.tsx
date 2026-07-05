@@ -7,7 +7,7 @@ export function CardImage({ pattern, className = '' }: CardImageProps) {
   return (
     <div className={`relative w-full h-full overflow-hidden bg-[#050505] ${className}`}>
       <img
-        src={`/cards/${pattern}.png?v=3`}
+        src={`/cards/${pattern}.png?v=5`}
         alt=""
         className="w-full h-full object-cover block"
         loading="lazy"

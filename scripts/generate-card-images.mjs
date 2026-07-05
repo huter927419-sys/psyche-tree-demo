@@ -10,7 +10,8 @@ import { fileURLToPath } from 'node:url'
 import { renderCardSvg, PATTERNS } from './card-art-renderer.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
-const OUT = join(__dirname, '../public/cards')
+/** Procedural SVG renders — kept separate from user/AI art in public/cards/ */
+const OUT = join(__dirname, '../public/cards-procedural')
 const PNG_WIDTH = 1120
 const PNG_HEIGHT = 560
 
@@ -80,8 +81,8 @@ async function main() {
     if (file.endsWith('.svg')) unlinkSync(join(OUT, file))
   }
 
-  console.log(`\nGenerated ${PATTERNS.length} cinematic PNG files in public/cards/`)
-  console.log('提示：若需更写实的 AI 配图，配置 OPENAI_API_KEY 后运行 npm run generate:cards:ai -- --force')
+  console.log(`\nGenerated ${PATTERNS.length} procedural PNG files in public/cards-procedural/`)
+  console.log('运行时配图在 public/cards/；导入用户图: node scripts/import-card-image.mjs <pattern> <path>')
 }
 
 main().catch((err) => {
