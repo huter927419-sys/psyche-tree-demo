@@ -100,7 +100,7 @@ const ui = {
       '树不会催促叶落，雾不会催促散去——你的节奏，自有神圣的时间。',
     backToLabel: (label: string) => `← 返回${label}`,
     oracleContemplationNote:
-      '神谕供冥想与反照，非行为命令——请在雾中慢读，不必急于执行。',
+      '神谕先照见，末尾「雾中一步」供息间微行——非命令，择一念而入，不必尽行。',
     flowBalanceFlowNote:
       '「流衡」是六向之一（守衡应变）；「心流」是此刻一印一页的入卷状态——二者同名不同义。',
     treeEnergyPulse: '树脉亮起，灵息自根向冠',
@@ -262,7 +262,7 @@ const ui = {
       'The tree does not hurry leaves; mist does not hurry to lift—your rhythm has its time.',
     backToLabel: (label: string) => `← Back to ${label}`,
     oracleContemplationNote:
-      'The oracle is for contemplation, not command—read slowly in mist; do not hurry to act.',
+      'The oracle mirrors first;「One step in mist」at the end invites a small practice—not command. Choose one thread; do not hurry to do all.',
     flowBalanceFlowNote:
       'Flow Balance is a facet (adaptation); 心流 is the one-seal-per-page state of this rite—not the same word.',
     treeEnergyPulse: 'Tree-path brightens; spirit-breath rises root to crown',
@@ -418,7 +418,7 @@ const ui = {
       '樹は葉の落ちを急がず、霧も散るを急がない——あなたの歩みには、それぞれ神聖な時があります。',
     backToLabel: (label: string) => `← ${label}へ戻る`,
     oracleContemplationNote:
-      '神託は反照と瞑想のため——命令ではない。霧の中でゆっくり読み、急いで実行しないで。',
+      '神託は先に照見し、末尾の「霧中の一歩」は息間の微行——命令ではない。一つの糸を選び、すべてを急がないで。',
     flowBalanceFlowNote:
       '「流衡」は六向の一つ（守衡と応変）；「心流」は今この一印一ページの入巻状態——同じ語ではない。',
     treeEnergyPulse: '樹脈が灯り、霊息は根から冠へ',

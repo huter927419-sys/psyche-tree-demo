@@ -94,6 +94,7 @@ export function HolisticOracleOverlay({
         >
           <h2 className="holistic-oracle-title">{ui.holisticTitle}</h2>
           <p className="holistic-oracle-hint">{ui.holisticHint}</p>
+          <p className="holistic-oracle-hint mt-2 opacity-80">{ui.oracleContemplationNote}</p>
           <p className="holistic-oracle-reading whitespace-pre-line">{reading}</p>
         </div>
 

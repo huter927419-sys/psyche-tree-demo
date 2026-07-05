@@ -1,6 +1,38 @@
 import type { Locale } from './db/types.js'
 import { resolveContentLocale, toTraditionalChinese } from './traditionalChinese.js'
 
+/** Appended to volume oracle prompts — contemplation plus one symbolic micro-practice. */
+const volumeActionGuidance: Record<'zh' | 'en' | 'ja', string> = {
+  zh: `格式要求（须遵守）：
+全文分两段，一气读完、自然衔接。
+第一段照见当前生命之态与流动（篇幅较长）。
+第二段必须以「【雾中一步】」起首（四字须完全一致），用象征语写出一帖可在息间践行的微向——非命令、非医学或法律处方；禁用「你应该」「必须」「立刻」；只写一步，宜小宜缓，须与本卷象征呼应（如留空、停息、写下一字、向水面低语等）。`,
+  en: `Format (required):
+Two parts in one continuous reading, naturally linked.
+Part one mirrors present energy and flow (longer).
+Part two must begin exactly with "[One step in mist]" — one small symbolic practice for breath-space, not a command, not medical or legal advice; forbid "you must", "you should", "immediately"; one step only, small and slow, echoing this volume's symbols (e.g. leave a margin, pause one breath, write one true word).`,
+  ja: `形式（必須）：
+一続きの読みで自然に二段に分けること。
+第一段は今の生命エネルギーの状態と流れを照らす（長め）。
+第二段は必ず「【霧中の一歩】」で始めること——象徴語で息間に践れる一つの微向を。命令ではない。医学・法律の助言ではない。「すべき」「必ず」「今すぐ」は禁じる。一歩のみ、小さくゆっくり、この巻の象徴と呼应させること。`,
+}
+
+/** Appended to whole-image oracle prompt. */
+const holisticActionGuidance: Record<'zh' | 'en' | 'ja', string> = {
+  zh: `格式要求（须遵守）：
+全文分两段，一气读完、自然衔接。
+第一段整象照见，串联六向（篇幅较长；勿分卷罗列）。
+第二段必须以「【整树之微行】」起首（六字须完全一致），写出一帖贯穿六向的息间微向——同样非命令、非处方；禁用「你应该」「必须」「立刻」；只写一步，宜小宜缓，可自然收束六卷意象。`,
+  en: `Format (required):
+Two parts in one continuous reading, naturally linked.
+Part one mirrors the whole life-image across six facets (longer; do not list volume by volume).
+Part two must begin exactly with "[One whole-tree step]" — one small practice weaving the six facets, same constraints: not a command, not medical/legal advice; forbid "you must/should/immediately"; one step only, small and slow.`,
+  ja: `形式（必須）：
+一続きの読みで自然に二段に分けること。
+第一段は六向をつないだ整象の照見（長め；巻ごとに列挙しない）。
+第二段は必ず「【整樹の微行】」で始めること——六向を貫く息間の一歩を象徴語で。命令・処方ではない。「すべき」「必ず」「今すぐ」は禁じる。一歩のみ、小さくゆっくり。`,
+}
+
 const templates: Record<string, Record<'zh' | 'en' | 'ja', string>> = {
   'psyche-tree': {
     zh: `你是一位深谙自我象征的玄学解读者。
@@ -152,7 +184,10 @@ export function buildMysticalPromptForBook(
     templates[bookId]?.[contentLocale] ?? templates['psyche-tree'][contentLocale]
   const input =
     locale === 'zhTw' ? toTraditionalChinese(psychologyInput) : psychologyInput
-  const prompt = template.replace('[PSYCHOLOGY]', input)
+  const prompt =
+    template.replace('[PSYCHOLOGY]', input) +
+    '\n\n' +
+    volumeActionGuidance[contentLocale]
   return locale === 'zhTw' ? toTraditionalChinese(prompt) : prompt
 }
 
@@ -191,7 +226,10 @@ export function buildHolisticPrompt(
   const template = holisticTemplate[contentLocale]
   const input =
     locale === 'zhTw' ? toTraditionalChinese(psychologyInput) : psychologyInput
-  const prompt = template.replace('[PSYCHOLOGY]', input)
+  const prompt =
+    template.replace('[PSYCHOLOGY]', input) +
+    '\n\n' +
+    holisticActionGuidance[contentLocale]
   return locale === 'zhTw' ? toTraditionalChinese(prompt) : prompt
 }
 

@@ -176,7 +176,7 @@ server/db/repositories/journeys.ts    # BOOK_IDS, buildHolisticPromptInput, comp
 server/db/repositories/assessments.ts # save, mystical reading cache columns
 server/services/mysticalReadingService.ts
 server/services/holisticReadingService.ts
-server/bookPrompts.ts
+server/bookPrompts.ts                 # volume + holistic prompts; appends 雾中一步 / 整树之微行 guidance
 ```
 
 ## QA reading test fallback

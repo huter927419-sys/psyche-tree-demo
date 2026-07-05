@@ -153,7 +153,7 @@ Dim 1–3 → attention check → Dim 4–6 → integration (dimensionIndex 7)
 - **Theory layer**: `books/shared/theoryLayer.ts` enriches **prompts** + question **guide notes** (zh/en/ja source; zhTw via OpenCC); answer cards stay psychology-only. Concept mapping: [appendix-现代对应.md](../../../docs/theory/appendix-现代对应.md) — not the narrative theory stack.
 - **1 integration**: `dimensionIndex: 7` (e.g. 观·整象 / 流·整湖)
 - **1 attention**: after dim 3; decoy cards scoped to current book
-- **Results**: psychology profile + per-book DeepSeek mystical reading (zh / zhTw / en / ja cached separately)
+- **Results**: psychology profile + per-book DeepSeek mystical reading (zh / zhTw / en / ja cached separately); each oracle = **照见** + **`【雾中一步】`** (one symbolic micro-practice, not command)
 
 ## Journey & holistic oracle
 
@@ -161,7 +161,7 @@ Dim 1–3 → attention check → Dim 4–6 → integration (dimensionIndex 7)
 - Journey `completed` when all six `BOOK_IDS` present (order-independent)
 - **整象神谕** only on **bookshelf** (`BookshelfUltimateOracle` / `HolisticOracleOverlay`), not on book result last page
 - **归树 (Return to Tree)** before first holistic open per journey: `ReturnToTreeOverlay` → core proposition → closing → holistic; once per journey via `sessionStorage` key `psyche-return-tree-${journeyId}`
-- Holistic prompt = six sections × (底层画像 `psychology_prompt_input` + **已示神谕** `mystical_reading_{locale}`)
+- Holistic prompt = six sections × (底层画像 `psychology_prompt_input` + **已示神谕** `mystical_reading_{locale}`); response ends with **`【整树之微行】`**
 - Before holistic generation, server ensures all six volume mystical readings exist
 
 ## Volume rite cycle (修持环)
@@ -199,6 +199,7 @@ Read [02 观照 · 息间](../../../docs/theory/02-观照.md) and [implement/02 
 | **Aware before answer** | No scores, no verdict copy on seals; entry/exit rites guard the fork before old groove answers |
 | **Do not remove entry overlay** | Skipping `VolumeRiteOverlay` entry breaks theory↔product chain ([02 意识 · 实践原则](../../../docs/theory/implement/02-意识论.md)) |
 | **Do not substitute post-hoc explanation** | Holistic/oracle copy reflects what was mirrored—never replace pre-response pause with「学会内观」tips |
+| **Oracle micro-practice is symbolic, not prescription** | `【雾中一步】` / `【整树之微行】` = one small breath-space gesture in metaphor; forbid「你应该/必须」; UI note in `ui.oracleContemplationNote` |
 
 Theory term **息间** = breath between person and response; **回息** = return to this breath (entry rite copy + pause UX).
 
