@@ -698,7 +698,7 @@ export function BookReader({
     : book.meta.treeProgressMax
 
   return (
-    <>
+    <div className="book-reader-stack">
       <header className="book-reader-header">
         <button
           type="button"
@@ -797,6 +797,6 @@ export function BookReader({
           )
         }
       />
-    </>
+    </div>
   )
 }

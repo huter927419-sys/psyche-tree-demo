@@ -3,8 +3,11 @@ import type { BookDefinition } from '../../books/types'
 import type { Locale } from '../../i18n/locale'
 import { getUi } from '../../i18n/ui'
 import { LanguageToggle } from '../i18n/LanguageToggle'
+import type { GuideShelfState } from '../../books/guide'
+import { BookshelfGuideSlot } from './BookshelfGuideSlot'
 import { BookshelfHeroProse } from './BookshelfHeroProse'
 import { BookshelfUltimateOracle } from './BookshelfUltimateOracle'
+import { BookshelfVolumeCover } from './BookshelfVolumeCover'
 import type { JourneyDto } from '../../services/journeyApi'
 
 interface BookshelfProps {
@@ -12,6 +15,10 @@ interface BookshelfProps {
   locale: Locale
   onLocaleChange: (locale: Locale) => void
   onSelect: (book: BookDefinition) => void
+  onOpenGuide: () => void
+  guideShelfState: GuideShelfState
+  showGuideFirstVisitHint: boolean
+  guideVolumeHandoff?: boolean
   completedBookIds?: string[]
   journeySnapshot?: JourneyDto | null
   holisticFlashSignal?: number
@@ -25,59 +32,15 @@ function bookshelfSceneClass(locale: Locale): string {
   return ''
 }
 
-function BookshelfBookCover({
-  book,
-  locale,
-}: {
-  book: BookDefinition
-  locale: Locale
-}) {
-  if (locale === 'zh' || locale === 'zhTw' || locale === 'ja') {
-    return (
-      <div className="bookshelf-book-cover-body bookshelf-book-cover-body--zh">
-        <p className="bookshelf-book-cover-title--zh bookshelf-book-cover-title--mystic">
-          {book.meta.coverTitle}
-        </p>
-        <span className="bookshelf-book-cover-rule" aria-hidden />
-        <div className="bookshelf-book-cover-meta--zh">
-          <p className="bookshelf-book-cover-sub--zh">{book.meta.coverSubtitle}</p>
-          <p className="bookshelf-book-cover-tag--zh">{book.meta.coverTagline}</p>
-        </div>
-      </div>
-    )
-  }
-
-  const titleWords = book.meta.coverTitle.split(/\s+/).filter(Boolean)
-  const monogram = titleWords.map((word) => word[0]?.toUpperCase() ?? '').join('')
-
-  return (
-    <div className="bookshelf-book-cover-body bookshelf-book-cover-body--en">
-      <span className="bookshelf-book-spine-mark" aria-hidden>
-        {monogram}
-      </span>
-      <div className="bookshelf-book-cover-main--en">
-        <div className="bookshelf-book-cover-title-en">
-          {titleWords.map((word) => (
-            <span key={word} className="bookshelf-book-cover-title-line">
-              {word}
-            </span>
-          ))}
-        </div>
-        <span className="bookshelf-book-cover-rule" aria-hidden />
-        <div className="bookshelf-book-cover-meta--en">
-          <p className="bookshelf-book-cover-sub-en">{book.meta.coverSubtitle}</p>
-          <p className="bookshelf-book-cover-tag-en">{book.meta.coverTagline}</p>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 export function Bookshelf({
   books,
   locale,
   onLocaleChange,
   onSelect,
+  onOpenGuide,
+  guideShelfState,
+  showGuideFirstVisitHint,
+  guideVolumeHandoff = false,
   completedBookIds = [],
   journeySnapshot = null,
   holisticFlashSignal = 0,
@@ -127,16 +90,29 @@ export function Bookshelf({
         onFacetBeaconReset={handleFacetBeaconReset}
       />
 
+      <BookshelfGuideSlot
+        locale={locale}
+        shelfState={guideShelfState}
+        showFirstVisitHint={showGuideFirstVisitHint}
+        onOpen={onOpenGuide}
+      />
+
       <div className="bookshelf-unit w-full max-w-[980px]">
+        {guideVolumeHandoff && (
+          <p className="bookshelf-volume-handoff-hint animate-fade-in">
+            {ui.guideVolumeHandoffHint}
+          </p>
+        )}
         <div className="bookshelf-row">
           {books.map((book, i) => {
             const completed = completedBookIds.includes(book.meta.id)
             const beacon = beaconActive[i] === true
+            const handoff = guideVolumeHandoff && !completed
             return (
             <button
               key={book.meta.id}
               type="button"
-              className={`bookshelf-book animate-fade-in${completed ? ' bookshelf-book--completed' : ''}${beacon ? ' bookshelf-book--beacon' : ''} ${book.meta.accent === 'silver' ? 'bookshelf-book-silver' : 'bookshelf-book-gold'}`}
+              className={`bookshelf-book animate-fade-in${completed ? ' bookshelf-book--completed' : ''}${beacon ? ' bookshelf-book--beacon' : ''}${handoff ? ' bookshelf-book--handoff' : ''} ${book.meta.accent === 'silver' ? 'bookshelf-book-silver' : 'bookshelf-book-gold'}`}
               style={{
                 '--fade-in-delay': `${0.15 + i * 0.12}s`,
                 '--book-tilt': `${-12 + i * 1.2}deg`,
@@ -160,7 +136,12 @@ export function Bookshelf({
                 >
                   <div className="bookshelf-book-texture" aria-hidden />
                   <div className="bookshelf-book-cover-sheen" aria-hidden />
-                  <BookshelfBookCover book={book} locale={locale} />
+                  <BookshelfVolumeCover
+                    locale={locale}
+                    title={book.meta.coverTitle}
+                    subtitle={book.meta.coverSubtitle}
+                    tagline={book.meta.coverTagline}
+                  />
                 </div>
                 <div className="bookshelf-book-pages" aria-hidden>
                   <span className="bookshelf-book-pages-edge" aria-hidden />

@@ -14,12 +14,15 @@ import {
 } from './components/book/BookJourneyStage'
 import { BookReader } from './components/book/BookReader'
 import { Bookshelf } from './components/bookshelf/Bookshelf'
+import { GuideCover } from './components/guide/GuideCover'
+import { GuideReader } from './components/guide/GuideReader'
 import { UserEmailCorner } from './components/user/UserEmailCorner'
 import { EmailGateDialog } from './components/user/EmailGateDialog'
 import { AmbientPhraseLayer } from './components/i18n/AmbientPhraseLayer'
 import { TreeAwakeningOverlay } from './components/tree/TreeAwakeningOverlay'
 import { AmbientMusicControl } from './components/AmbientMusicControl'
 import { SkyAtmosphere } from './components/SkyAtmosphere'
+import { ShoreZenAmbience } from './components/ambient/ShoreZenAmbience'
 import { useVisualTier, type VisualTier } from './hooks/useVisualTier'
 import { LocaleContext, type Locale } from './i18n/locale'
 import { getUi } from './i18n/ui'
@@ -33,8 +36,15 @@ import {
   type JourneyDto,
 } from './services/journeyApi'
 import { buildAssessmentFromStored } from './services/storedAssessment'
+import {
+  clearGuideVolumeHandoff,
+  getGuideShelfState,
+  isGuideVolumeHandoffPending,
+  markGuideOpened,
+  shouldShowGuideFirstVisitHint,
+} from './books/guide'
 
-type AppPhase = 'shelf' | 'cover' | 'questions'
+type AppPhase = 'shelf' | 'guide' | 'cover' | 'questions'
 
 const BOOK_PICKUP_MS = 900
 const BOOK_EXPAND_MS = 1400
@@ -68,6 +78,11 @@ function App() {
   )
   const [emailGateOpen, setEmailGateOpen] = useState(false)
   const [holisticFlashSignal, setHolisticFlashSignal] = useState(0)
+  const [guideRevision, setGuideRevision] = useState(0)
+  const [guideStep, setGuideStep] = useState<'cover' | 'reading'>('cover')
+  const [guideCoverOpening, setGuideCoverOpening] = useState(false)
+  const [guideJourneyMode, setGuideJourneyMode] =
+    useState<BookJourneyMode>('pickup')
   const prevTreeStage = useRef(0)
   const pickupTimer = useRef<number | null>(null)
   const transitionTimer = useRef<number | null>(null)
@@ -163,6 +178,10 @@ function App() {
   }
 
   const selectBook = async (book: BookDefinition) => {
+    if (isGuideVolumeHandoffPending()) {
+      clearGuideVolumeHandoff()
+      setGuideRevision((n) => n + 1)
+    }
     clearTransitionTimers()
     setActiveBookId(book.meta.id)
     setPhase('cover')
@@ -302,36 +321,96 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [])
 
-  const inBookSession = activeBookId !== null && phase !== 'shelf'
+  const inBookSession =
+    activeBookId !== null && phase !== 'shelf' && phase !== 'guide'
 
-  const treeVariant =
-    phase === 'shelf' || phase === 'cover' || isClosing
-      ? 'welcome'
-      : result
-        ? 'complete'
-        : 'explore'
+  const guideInBook =
+    phase === 'guide' && (guideStep === 'reading' || guideCoverOpening)
 
-  const musicPhase =
-    phase === 'shelf' || phase === 'cover' || isClosing
-      ? 'welcome'
-      : result
-        ? 'result'
-        : 'questions'
+  const isWelcomeAtmosphere =
+    phase === 'shelf' ||
+    (phase === 'guide' && !guideInBook) ||
+    phase === 'cover' ||
+    isClosing
 
-  const skyIntensity =
-    phase === 'shelf' || phase === 'cover' || isClosing ? 'welcome' : 'journey'
+  const treeVariant = isWelcomeAtmosphere
+    ? 'welcome'
+    : result
+      ? 'complete'
+      : 'explore'
+
+  const musicPhase = isWelcomeAtmosphere
+    ? 'welcome'
+    : result
+      ? 'result'
+      : 'questions'
+
+  const skyIntensity = isWelcomeAtmosphere ? 'welcome' : 'journey'
 
   const skyAwakeningLevel =
     phase === 'questions' ? treeRevealStage : result ? activeBook?.meta.treeProgressMax ?? 6 : 0
 
   const visualTierPreferred: VisualTier = 'balanced'
   const visualTier = useVisualTier(visualTierPreferred)
-  const readingFocus = phase === 'questions' && !isClosing
+  const readingFocus = (phase === 'questions' || guideInBook) && !isClosing
 
   const completedBookIds = useMemo(
     () => journeySnapshot?.assessments.map((a) => a.bookId) ?? [],
     [journeySnapshot],
   )
+
+  const guideShelfState = useMemo(
+    () => getGuideShelfState(),
+    [guideRevision, phase],
+  )
+
+  const showGuideFirstVisitHint = useMemo(
+    () => shouldShowGuideFirstVisitHint(),
+    [guideRevision, phase],
+  )
+
+  const guideVolumeHandoff = useMemo(
+    () => isGuideVolumeHandoffPending(),
+    [guideRevision, phase],
+  )
+
+  const openGuide = useCallback(() => {
+    clearTransitionTimers()
+    markGuideOpened()
+    setGuideRevision((n) => n + 1)
+    setGuideStep('cover')
+    setGuideCoverOpening(false)
+    setGuideJourneyMode('pickup')
+    setPhase('guide')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    pickupTimer.current = window.setTimeout(() => {
+      setGuideJourneyMode('expanded')
+      pickupTimer.current = null
+    }, BOOK_PICKUP_MS)
+  }, [])
+
+  const openGuideReading = useCallback(() => {
+    if (guideCoverOpening) return
+    setGuideCoverOpening(true)
+    setGuideJourneyMode('expanding')
+    transitionTimer.current = window.setTimeout(() => {
+      setGuideStep('reading')
+    }, 480)
+    window.setTimeout(() => {
+      setGuideCoverOpening(false)
+      setGuideJourneyMode('expanded')
+    }, BOOK_EXPAND_MS)
+  }, [guideCoverOpening])
+
+  const closeGuide = useCallback(() => {
+    clearTransitionTimers()
+    setPhase('shelf')
+    setGuideStep('cover')
+    setGuideCoverOpening(false)
+    setGuideJourneyMode('expanded')
+    setGuideRevision((n) => n + 1)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [])
 
   return (
     <LocaleContext.Provider value={{ locale, setLocale }}>
@@ -352,8 +431,13 @@ function App() {
       />
       <AmbientPhraseLayer
         locale={locale}
-        active={phase === 'shelf' || phase === 'cover' || phase === 'questions'}
-        subdued={phase === 'questions' && !isClosing}
+        active={
+          phase === 'shelf' ||
+          phase === 'guide' ||
+          phase === 'cover' ||
+          phase === 'questions'
+        }
+        subdued={readingFocus}
       />
       <TreeOfLifeBackground
         revealStage={treeRevealStage}
@@ -366,6 +450,11 @@ function App() {
         intensity={skyIntensity}
         awakeningLevel={skyAwakeningLevel}
         isComplete={Boolean(result)}
+        visualTier={visualTier}
+        readingFocus={readingFocus}
+      />
+      <ShoreZenAmbience
+        intensity={skyIntensity}
         visualTier={visualTier}
         readingFocus={readingFocus}
       />
@@ -389,6 +478,10 @@ function App() {
             locale={locale}
             onLocaleChange={setLocale}
             onSelect={selectBook}
+            onOpenGuide={openGuide}
+            guideShelfState={guideShelfState}
+            showGuideFirstVisitHint={showGuideFirstVisitHint}
+            guideVolumeHandoff={guideVolumeHandoff}
             completedBookIds={completedBookIds}
             journeySnapshot={journeySnapshot}
             holisticFlashSignal={holisticFlashSignal}
@@ -396,6 +489,36 @@ function App() {
               void refreshJourneySnapshot()
             }}
           />
+        )}
+
+        {phase === 'guide' && (
+          <BookJourneyStage mode={guideJourneyMode}>
+            {(guideStep === 'reading' || guideCoverOpening) && (
+              <div
+                className={`book-interior-layer${guideCoverOpening ? ' book-interior-layer--opening' : ''}`}
+              >
+                <GuideReader
+                  locale={locale}
+                  onLocaleChange={setLocale}
+                  onClose={closeGuide}
+                  onCompleted={() => setGuideRevision((n) => n + 1)}
+                  enterFromCover={guideCoverOpening}
+                />
+              </div>
+            )}
+
+            {guideStep === 'cover' && !guideCoverOpening && (
+              <div className="book-cover-layer">
+                <GuideCover
+                  locale={locale}
+                  onLocaleChange={setLocale}
+                  onOpen={openGuideReading}
+                  onBack={closeGuide}
+                  opening={guideCoverOpening}
+                />
+              </div>
+            )}
+          </BookJourneyStage>
         )}
 
         {inBookSession && (

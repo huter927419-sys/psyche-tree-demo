@@ -53,7 +53,7 @@ export function BookShell({
 
   return (
     <div
-      className={`book-scene px-3 py-6 md:py-10${enterAnimation ? ' book-scene-enter' : ''}`}
+      className={`book-scene px-3 py-4 md:py-7${enterAnimation ? ' book-scene-enter' : ''}`}
     >
       {chapterLabel && (
         <p className="text-center text-[10px] tracking-[0.35em] uppercase text-[rgba(255,255,255,0.45)] mb-4">
@@ -61,7 +61,7 @@ export function BookShell({
         </p>
       )}
 
-      <div className="book-perspective mx-auto max-w-[920px]">
+      <div className="book-perspective mx-auto w-full">
         <div
           className={`book-open book-flip-stage${isFlipping ? ' book-flip-stage--active' : ''}`}
         >
@@ -124,7 +124,7 @@ export function BookShell({
         </span>
       </div>
 
-      {footer && <div className="mt-6 max-w-[920px] mx-auto">{footer}</div>}
+      {footer && <div className="mt-5 max-w-[var(--book-open-max,780px)] mx-auto">{footer}</div>}
     </div>
   )
 }

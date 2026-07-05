@@ -25,6 +25,32 @@ const ui = {
     shelfProseSeal: '六卷齐时，整象神谕自现',
     shelfFooter: (n: number) => `${n} 卷 · 悬浮于雾`,
     shelfCompletedMark: '已照见',
+    guideCoverTitle: '同观',
+    guideCoverSubtitle: '序卷',
+    guideCoverTagline: '知所照为何，再入六卷',
+    guideCoverShelfTagline: '照见同观先',
+    guideCoverOpen: '展卷同观',
+    guideCoverOpenHint: '光柱渐弱，同观展开——此卷不留痕，只为照见六卷所为何。',
+    guideCoverHint: '不求分数，不生成神谕；读完再择六卷而入。',
+    guideFirstVisitHint: '若不悉六卷照什么，可先展读此卷',
+    guideBackToShelf: '返回书架',
+    guideChapterLabel: '同观 · 序卷',
+    guideEnterShore: '进入雾岸',
+    guideEnterHint: '同观已足——回岸择卷',
+    guideVolumeHandoffHint: '六卷在雾下，择一可入',
+    guideSectionTongguan: '同观',
+    guideSectionShoreView: '雾岸观',
+    guideSectionShoreAsk: '雾岸问',
+    guideSectionHook: '起',
+    guideSectionPhenomenon: '现象',
+    guideSectionTurn: '转问',
+    guideSectionBreath: '此息停',
+    guideSectionVolumeMeaning: '入卷义',
+    guideSectionClose: '收束',
+    guideSectionPreface: '序',
+    guideSectionGuide: '引导',
+    guideAxisEast: '东方',
+    guideAxisModern: '现代',
     backToShore: '← 返回雾岸',
     coverOpenHint: '光柱渐弱，记忆展开——这是一次与自己的温柔对话。',
     coverOpening: '正在展开…',
@@ -149,6 +175,33 @@ const ui = {
     shelfProseSeal: 'When all six stand aligned, the whole oracle speaks.',
     shelfFooter: (n: number) => `${n} volumes · held in mist`,
     shelfCompletedMark: 'Mirrored',
+    guideCoverTitle: 'Shared View',
+    guideCoverSubtitle: 'Prologue',
+    guideCoverTagline: 'Know what is mirrored, then enter',
+    guideCoverShelfTagline: 'Mirror shared view',
+    guideCoverOpen: 'Unfold shared view',
+    guideCoverOpenHint:
+      'The beam softens; shared view unfolds—no trace kept, only why the six volumes mirror.',
+    guideCoverHint: 'No score, no oracle—read first, then choose a volume below.',
+    guideFirstVisitHint: 'Unsure what the six volumes mirror? Open this first',
+    guideBackToShelf: 'Back to shelf',
+    guideChapterLabel: 'Shared View · Prologue',
+    guideEnterShore: 'Enter the mist shore',
+    guideEnterHint: 'Shared view is enough—return and choose a volume',
+    guideVolumeHandoffHint: 'Six volumes below the mist—choose one to enter',
+    guideSectionTongguan: 'Shared view',
+    guideSectionShoreView: 'Shore view',
+    guideSectionShoreAsk: 'Shore questions',
+    guideSectionHook: 'Opening',
+    guideSectionPhenomenon: 'Phenomenon',
+    guideSectionTurn: 'Turn',
+    guideSectionBreath: 'Pause',
+    guideSectionVolumeMeaning: 'Why this volume',
+    guideSectionClose: 'Close',
+    guideSectionPreface: 'Preface',
+    guideSectionGuide: 'Guide',
+    guideAxisEast: 'East',
+    guideAxisModern: 'Modern',
     backToShore: '← Back to shore',
     coverOpenHint: 'The beam softens, memory unfolds—a gentle dialogue with yourself.',
     coverOpening: 'Opening…',
@@ -273,6 +326,33 @@ const ui = {
     shelfProseSeal: '六巻揃えば、整象神託自ら現る',
     shelfFooter: (n: number) => `${n} 巻 · 霧に浮かぶ`,
     shelfCompletedMark: '照見済',
+    guideCoverTitle: '同観',
+    guideCoverSubtitle: '序巻',
+    guideCoverTagline: '何を映すか知り、六巻へ',
+    guideCoverShelfTagline: '同観を映す',
+    guideCoverOpen: '同観を展ず',
+    guideCoverOpenHint:
+      '光柱が弱まり、同観が開く——此巻は痕を残さず、六巻が何を映すかを照すため。',
+    guideCoverHint: '点数も神託もなし——読み終えてから、下の六巻を選ぶ。',
+    guideFirstVisitHint: '六巻が何を映すか、まだ分からなければ——先に此巻を',
+    guideBackToShelf: '書架へ戻る',
+    guideChapterLabel: '同観 · 序巻',
+    guideEnterShore: '霧岸へ入る',
+    guideEnterHint: '同観足る——岸へ戻り巻を選ぶ',
+    guideVolumeHandoffHint: '六巻は霧の下——一巻を選べば入れる',
+    guideSectionTongguan: '同観',
+    guideSectionShoreView: '霧岸観',
+    guideSectionShoreAsk: '霧岸問',
+    guideSectionHook: '起',
+    guideSectionPhenomenon: '現象',
+    guideSectionTurn: '転問',
+    guideSectionBreath: '此息停',
+    guideSectionVolumeMeaning: '入巻義',
+    guideSectionClose: '収束',
+    guideSectionPreface: '序',
+    guideSectionGuide: '導き',
+    guideAxisEast: '東方',
+    guideAxisModern: '現代',
     backToShore: '← 霧岸へ戻る',
     coverOpenHint: '光柱が弱まり、記憶が開く——これは自分とのやさしい対話です。',
     coverOpening: '開いています…',
@@ -386,6 +466,32 @@ export type UiStrings = {
   shelfProseSeal: string
   shelfFooter: (n: number) => string
   shelfCompletedMark: string
+  guideCoverTitle: string
+  guideCoverSubtitle: string
+  guideCoverTagline: string
+  guideCoverShelfTagline: string
+  guideCoverOpen: string
+  guideCoverOpenHint: string
+  guideCoverHint: string
+  guideFirstVisitHint: string
+  guideBackToShelf: string
+  guideChapterLabel: string
+  guideEnterShore: string
+  guideEnterHint: string
+  guideVolumeHandoffHint: string
+  guideSectionTongguan: string
+  guideSectionShoreView: string
+  guideSectionShoreAsk: string
+  guideSectionHook: string
+  guideSectionPhenomenon: string
+  guideSectionTurn: string
+  guideSectionBreath: string
+  guideSectionVolumeMeaning: string
+  guideSectionClose: string
+  guideSectionPreface: string
+  guideSectionGuide: string
+  guideAxisEast: string
+  guideAxisModern: string
   backToShore: string
   coverOpenHint: string
   coverOpening: string
