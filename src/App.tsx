@@ -342,12 +342,11 @@ function App() {
   const inBookSession =
     activeBookId !== null && phase !== 'shelf' && phase !== 'guide'
 
-  const guideInBook =
-    phase === 'guide' && (guideStep === 'reading' || guideCoverOpening)
+  const guideInBook = phase === 'guide' && guideStep === 'reading'
 
   const isWelcomeAtmosphere =
     phase === 'shelf' ||
-    (phase === 'guide' && !guideInBook) ||
+    phase === 'guide' ||
     phase === 'cover' ||
     isClosing
 
@@ -372,8 +371,10 @@ function App() {
   const visualTier = useVisualTier(visualTierPreferred)
   const readingFocus = (phase === 'questions' || guideInBook) && !isClosing
   const hasPhotoBackdrop = availableBackgroundScenes().length > 0
+  /** Ink-wash photos stay on shelf, cover, guide, and in-book reading — not replaced by black scrim. */
   const showPhotoBackdrop =
-    hasPhotoBackdrop && isWelcomeAtmosphere && !readingFocus
+    hasPhotoBackdrop &&
+    (isWelcomeAtmosphere || phase === 'questions' || guideInBook)
 
   const completedBookIds = useMemo(
     () => journeySnapshot?.assessments.map((a) => a.bookId) ?? [],
@@ -440,24 +441,25 @@ function App() {
       return
     }
     setGuideCoverOpening(true)
-    setGuideJourneyMode('expanding')
     transitionTimer.current = window.setTimeout(() => {
       setGuideStep('reading')
-    }, 480)
-    window.setTimeout(() => {
       setGuideCoverOpening(false)
-      setGuideJourneyMode('expanded')
-    }, BOOK_EXPAND_MS)
+      transitionTimer.current = null
+    }, 480)
   }, [guideCoverOpening])
 
   const closeGuide = useCallback(() => {
     clearTransitionTimers()
-    setPhase('shelf')
-    setGuideStep('cover')
-    setGuideCoverOpening(false)
-    setGuideJourneyMode('expanded')
-    setGuideRevision((n) => n + 1)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    setGuideJourneyMode('closing')
+    transitionTimer.current = window.setTimeout(() => {
+      setPhase('shelf')
+      setGuideStep('cover')
+      setGuideCoverOpening(false)
+      setGuideJourneyMode('expanded')
+      setGuideRevision((n) => n + 1)
+      transitionTimer.current = null
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }, BOOK_CLOSE_MS)
   }, [])
 
   return (
@@ -487,7 +489,7 @@ function App() {
         }
         subdued={readingFocus}
       />
-      <HomeBackgroundSlideshow active={showPhotoBackdrop} />
+      <HomeBackgroundSlideshow active={showPhotoBackdrop} subdued={readingFocus} />
       <TreeOfLifeBackground
         revealStage={treeRevealStage}
         variant={treeVariant}
@@ -499,7 +501,7 @@ function App() {
       <div
         className="ambient-atmosphere-stack"
         style={{
-          opacity: showPhotoBackdrop ? 0.38 : 1,
+          opacity: showPhotoBackdrop ? (readingFocus ? 0.28 : 0.38) : 1,
           transition: 'opacity 1.8s ease',
         }}
       >
@@ -516,7 +518,12 @@ function App() {
           readingFocus={readingFocus}
         />
       </div>
-      {readingFocus && <div className="reading-focus-scrim" aria-hidden />}
+      {readingFocus && (
+        <div
+          className={`reading-focus-scrim${showPhotoBackdrop ? ' reading-focus-scrim--photo' : ''}`}
+          aria-hidden
+        />
+      )}
       <TreeAwakeningOverlay
         stage={awakeningStage}
         bookId={activeBook?.meta.id ?? null}
@@ -551,7 +558,11 @@ function App() {
         )}
 
         {phase === 'guide' && (
-          <BookJourneyStage mode={guideJourneyMode}>
+          <BookJourneyStage
+            mode={guideJourneyMode}
+            variant="guide"
+            keepCentered
+          >
             {(guideStep === 'reading' || guideCoverOpening) && (
               <div
                 className={`book-interior-layer${guideCoverOpening ? ' book-interior-layer--opening' : ''}`}
@@ -561,7 +572,6 @@ function App() {
                   onLocaleChange={setLocale}
                   onClose={closeGuide}
                   onCompleted={() => setGuideRevision((n) => n + 1)}
-                  enterFromCover={guideCoverOpening}
                 />
               </div>
             )}

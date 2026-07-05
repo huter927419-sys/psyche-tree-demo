@@ -24,7 +24,7 @@ export function GuideCover({
   const book = getGuideCoverBook(locale)
 
   return (
-    <div className="book-cover-scene book-scene flex flex-col items-center justify-center min-h-[min(88vh,920px)] px-4 py-6 md:py-8">
+    <div className="guide-book-scene book-cover-scene book-scene flex flex-col items-center min-h-[min(88vh,920px)] px-4 py-6 md:py-8">
       <header className="book-cover-header">
         <button
           type="button"
@@ -62,7 +62,7 @@ export function GuideCover({
         )}
       </p>
 
-      <div className="book-cover-book-wrap">
+      <div className="guide-book-anchor book-cover-book-wrap">
         <BookClosedVisual
           book={book}
           locale={locale}

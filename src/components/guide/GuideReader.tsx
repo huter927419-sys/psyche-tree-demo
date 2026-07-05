@@ -1,10 +1,23 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+// Auto turn (展息) is scoped to 序卷《同观》 only — BookReader is manual + card-select flip.
 import {
   getGuideSpreadIndex,
   getLocalizedGuideContent,
   markGuideCompleted,
   saveGuideSpreadIndex,
 } from '../../books/guide'
+import {
+  estimateGuideSpreadDwellMs,
+  getGuideAutoTurnEnabled,
+  getSpreadIllustrationId,
+  saveGuideAutoTurnEnabled,
+  spreadHasIllustration,
+} from '../../books/guide/guideAutoTurn'
+import {
+  getGuideIllustrationDurationMs,
+  getGuideIllustrationHoldMs,
+} from '../../books/guide/illustrationMotion'
+import { prefetchGuideIllustrations } from '../../books/guide/illustrations'
 import type { Locale } from '../../i18n/locale'
 import { getUi } from '../../i18n/ui'
 import { LanguageToggle } from '../i18n/LanguageToggle'
@@ -17,7 +30,11 @@ interface GuideReaderProps {
   onLocaleChange: (locale: Locale) => void
   onClose: () => void
   onCompleted?: () => void
-  enterFromCover?: boolean
+}
+
+function prefersReducedMotion(): boolean {
+  if (typeof window === 'undefined') return false
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
 export function GuideReader({
@@ -25,7 +42,6 @@ export function GuideReader({
   onLocaleChange,
   onClose,
   onCompleted,
-  enterFromCover = false,
 }: GuideReaderProps) {
   const ui = getUi(locale)
   const guide = useMemo(() => getLocalizedGuideContent(locale), [locale])
@@ -33,10 +49,18 @@ export function GuideReader({
   const [pageIndex, setPageIndex] = useState(() =>
     Math.min(getGuideSpreadIndex(), totalSpreads - 1),
   )
+  const [autoTurn, setAutoTurn] = useState(() => getGuideAutoTurnEnabled())
+
+  const autoTimerRef = useRef<number | null>(null)
+  const illustrationAdvanceRef = useRef(false)
 
   useEffect(() => {
     setPageIndex(Math.min(getGuideSpreadIndex(), totalSpreads - 1))
   }, [locale, totalSpreads])
+
+  useEffect(() => {
+    prefetchGuideIllustrations()
+  }, [])
 
   const handleIndexChange = useCallback((index: number) => {
     setPageIndex(index)
@@ -48,14 +72,110 @@ export function GuideReader({
 
   const isEnterSpread = pageIndex === guide.enterSpreadIndex
   const isLastSpread = pageIndex >= totalSpreads - 1
+  const illustrationReady = !flipping
+
+  const clearAutoTimer = useCallback(() => {
+    if (autoTimerRef.current !== null) {
+      window.clearTimeout(autoTimerRef.current)
+      autoTimerRef.current = null
+    }
+  }, [])
 
   const scheduleFlip = useCallback(
     (direction: 'next' | 'prev', targetIndex: number) => {
       if (targetIndex < 0 || targetIndex >= totalSpreads) return
+      clearAutoTimer()
       runFlip(direction, targetIndex)
     },
-    [runFlip, totalSpreads],
+    [clearAutoTimer, runFlip, totalSpreads],
   )
+
+  const scheduleAutoAdvance = useCallback(
+    (delayMs: number) => {
+      clearAutoTimer()
+      if (!autoTurn || flipping || isEnterSpread || isLastSpread) return
+
+      autoTimerRef.current = window.setTimeout(() => {
+        autoTimerRef.current = null
+        scheduleFlip('next', pageIndex + 1)
+      }, delayMs)
+    },
+    [
+      autoTurn,
+      clearAutoTimer,
+      flipping,
+      isEnterSpread,
+      isLastSpread,
+      pageIndex,
+      scheduleFlip,
+    ],
+  )
+
+  const handleIllustrationMotionComplete = useCallback(() => {
+    illustrationAdvanceRef.current = true
+    if (!autoTurn || flipping || isEnterSpread || isLastSpread) return
+    clearAutoTimer()
+    const spread = guide.spreads[pageIndex]
+    const illustrationId = getSpreadIllustrationId(spread)
+    const holdMs = illustrationId
+      ? getGuideIllustrationHoldMs(illustrationId)
+      : 2000
+    scheduleAutoAdvance(holdMs)
+  }, [
+    autoTurn,
+    clearAutoTimer,
+    flipping,
+    guide.spreads,
+    isEnterSpread,
+    isLastSpread,
+    pageIndex,
+    scheduleAutoAdvance,
+  ])
+
+  useEffect(() => {
+    if (!autoTurn || flipping || isEnterSpread || isLastSpread) {
+      clearAutoTimer()
+      return undefined
+    }
+
+    illustrationAdvanceRef.current = false
+    const spread = guide.spreads[pageIndex]
+
+    if (spreadHasIllustration(spread)) {
+      const illustrationId = getSpreadIllustrationId(spread)
+      const durationMs = illustrationId
+        ? getGuideIllustrationDurationMs(illustrationId)
+        : 5500
+      const fallbackMs = prefersReducedMotion() ? 3200 : durationMs + 2500
+
+      autoTimerRef.current = window.setTimeout(() => {
+        autoTimerRef.current = null
+        if (!illustrationAdvanceRef.current) {
+          const holdMs = illustrationId
+            ? getGuideIllustrationHoldMs(illustrationId)
+            : 2000
+          scheduleAutoAdvance(holdMs)
+        }
+      }, fallbackMs)
+
+      return () => clearAutoTimer()
+    }
+
+    const dwell = estimateGuideSpreadDwellMs(spread, {
+      reducedMotion: prefersReducedMotion(),
+    })
+    scheduleAutoAdvance(dwell)
+    return () => clearAutoTimer()
+  }, [
+    autoTurn,
+    clearAutoTimer,
+    flipping,
+    guide.spreads,
+    isEnterSpread,
+    isLastSpread,
+    pageIndex,
+    scheduleAutoAdvance,
+  ])
 
   const handleBack = useCallback(() => {
     if (flipping || pageIndex === 0) return
@@ -80,25 +200,56 @@ export function GuideReader({
 
   const handleRestart = useCallback(() => {
     if (flipping || pageIndex === 0) return
+    clearAutoTimer()
     setPageIndex(0)
     saveGuideSpreadIndex(0)
-  }, [flipping, pageIndex])
+  }, [clearAutoTimer, flipping, pageIndex])
+
+  const handleToggleAutoTurn = useCallback(() => {
+    setAutoTurn((current) => {
+      const next = !current
+      saveGuideAutoTurnEnabled(next)
+      return next
+    })
+  }, [])
 
   const handleEnterShore = useCallback(() => {
+    clearAutoTimer()
     markGuideCompleted()
     onCompleted?.()
     onClose()
-  }, [onClose, onCompleted])
+  }, [clearAutoTimer, onClose, onCompleted])
+
+  const pageContentProps = useMemo(
+    () => ({
+      locale,
+      illustrationReady,
+      onIllustrationMotionComplete: handleIllustrationMotionComplete,
+    }),
+    [handleIllustrationMotionComplete, illustrationReady, locale],
+  )
 
   const buildSpread = useCallback(
     (index: number) => {
       const spread = guide.spreads[index]
       return {
-        left: <GuidePageContent blocks={spread.left} locale={locale} />,
-        right: <GuidePageContent blocks={spread.right} locale={locale} />,
+        left: (
+          <GuidePageContent
+            blocks={spread.left}
+            spreadIndex={index}
+            {...pageContentProps}
+          />
+        ),
+        right: (
+          <GuidePageContent
+            blocks={spread.right}
+            spreadIndex={index}
+            {...pageContentProps}
+          />
+        ),
       }
     },
-    [guide.spreads, locale],
+    [guide.spreads, pageContentProps],
   )
 
   const current = buildSpread(pageIndex)
@@ -128,9 +279,79 @@ export function GuideReader({
     showRestart: pageIndex > 0,
   }
 
+  const autoTurnToggle = (
+    <div className="guide-auto-turn-row">
+      <button
+        type="button"
+        onClick={handleToggleAutoTurn}
+        disabled={flipping || isEnterSpread}
+        className={`guide-auto-turn-toggle${autoTurn ? ' guide-auto-turn-toggle--on' : ''}`}
+        aria-pressed={autoTurn}
+      >
+        {autoTurn ? ui.guideAutoTurnOn : ui.guideAutoTurnOff}
+      </button>
+      {autoTurn && !isEnterSpread && !isLastSpread && (
+        <span className="guide-auto-turn-hint">{ui.guideAutoTurnHint}</span>
+      )}
+    </div>
+  )
+
+  const footerBlock =
+    isEnterSpread ? (
+      <div className="flex flex-col gap-4">
+        {autoTurnToggle}
+        <BookNav
+          {...navProps}
+          showNext={false}
+          selectOneHint={ui.guideEnterHint}
+        />
+        <button
+          type="button"
+          onClick={handleEnterShore}
+          className="book-nav-btn book-nav-btn-primary w-full"
+        >
+          {ui.guideEnterShore}
+        </button>
+      </div>
+    ) : (
+      <div className="flex flex-col gap-3">
+        {autoTurnToggle}
+        <BookNav
+          {...navProps}
+          onNext={handleNext}
+          nextDisabled={flipping || isLastSpread}
+          nextLabel={ui.guideTurnNext}
+        />
+      </div>
+    )
+
+  const bookShell = (
+    <BookShell
+      left={current.left}
+      right={current.right}
+      incomingLeft={incoming?.left}
+      incomingRight={incoming?.right}
+      pageNumber={displayPageNumber}
+      totalPages={totalSpreads}
+      chapterLabel={chapterLabel}
+      flipping={flipping}
+      flipDirection={flipDirection}
+      flipSerial={flipSerial}
+      onFlipComplete={completeFlip}
+      locale={locale}
+      coverArtId="guide"
+      pageClickEnabled={!flipping}
+      onPageClick={handlePageClick}
+      pageTurnPrevLabel={ui.guidePageTurnPrevAria}
+      pageTurnNextLabel={ui.guidePageTurnNextAria}
+      pageTurnLeftDisabled={pageIndex === 0 || flipping}
+      pageTurnRightDisabled={flipping || isLastSpread}
+    />
+  )
+
   return (
-    <div className="book-reader-stack">
-      <header className="book-reader-header">
+    <div className="guide-book-scene book-cover-scene book-scene flex flex-col items-center min-h-[min(88vh,920px)] px-4 py-6 md:py-8">
+      <header className="book-cover-header">
         <button
           type="button"
           onClick={onClose}
@@ -147,53 +368,11 @@ export function GuideReader({
         />
       </header>
 
-      <BookShell
-        left={current.left}
-        right={current.right}
-        incomingLeft={incoming?.left}
-        incomingRight={incoming?.right}
-        pageNumber={displayPageNumber}
-        totalPages={totalSpreads}
-        chapterLabel={chapterLabel}
-        flipping={flipping}
-        flipDirection={flipDirection}
-        flipSerial={flipSerial}
-        enterAnimation={enterFromCover}
-        onFlipComplete={completeFlip}
-        locale={locale}
-        coverArtId="guide"
-        pageClickEnabled={!flipping}
-        onPageClick={handlePageClick}
-        pageTurnPrevLabel={ui.guidePageTurnPrevAria}
-        pageTurnNextLabel={ui.guidePageTurnNextAria}
-        pageTurnLeftDisabled={pageIndex === 0 || flipping}
-        pageTurnRightDisabled={flipping || isLastSpread}
-        footer={
-          isEnterSpread ? (
-            <div className="flex flex-col gap-4">
-              <BookNav
-                {...navProps}
-                showNext={false}
-                selectOneHint={ui.guideEnterHint}
-              />
-              <button
-                type="button"
-                onClick={handleEnterShore}
-                className="book-nav-btn book-nav-btn-primary w-full"
-              >
-                {ui.guideEnterShore}
-              </button>
-            </div>
-          ) : (
-            <BookNav
-              {...navProps}
-              onNext={handleNext}
-              nextDisabled={flipping || isLastSpread}
-              nextLabel={ui.guideTurnNext}
-            />
-          )
-        }
-      />
+      <div className="guide-book-eyebrow-spacer" aria-hidden />
+
+      <div className="guide-book-anchor book-cover-book-wrap">{bookShell}</div>
+
+      <div className="guide-book-controls">{footerBlock}</div>
     </div>
   )
 }

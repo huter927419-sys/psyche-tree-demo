@@ -54,7 +54,7 @@ Read **01–06** for meaning; read **implement/01–08** before changing flow, r
 `AppPhase`: `shelf` | **`guide`** | `cover` | `questions`
 
 ```
-shelf → click 同观 → guide (GuideCover) → 展卷 → guide reading (GuideReader)
+shelf → click 同观 → **in-place on mist shelf** (no pickup / center zoom) → cover copy under same slot book → 展卷 → reader opens in guide block above six volumes
   → 进入雾岸 on last spread → back to shelf + volume handoff beacon on six books
 ```
 
@@ -98,6 +98,10 @@ Each chapter (`chapterTemplate.ts`) → **9 spreads**:
 
 Right pages often `pause` (rest: 息 glyph + void mist). Block kinds: `hook`, `phenomenon`, `turn`, `tongguanEast` / `tongguanModern`, `shoreView`, `shoreQuestion`, `breath`, `volumeMeaning`, `close`, `lines`, `part`, `pause`, `illustration`.
 
+**Guide illustrations** (`GuideIllustration.tsx`): all five ids (`01-shore-near` … `05-enter-mist`) share one walk-in — scale + drift, white mist lifts, image clears from blur; starts after page turn rests (`ready={!flipping}`) and image load. Prefetch via `prefetchGuideIllustrations()`. Timing: `illustrationMotion.ts` (`22s` + `2.6s` hold).
+
+**Guide auto turn** (`GuideReader.tsx`, `guideAutoTurn.ts`): **同观序卷 only** — six volumes (`BookReader`) have no reading auto-turn; their ~420ms flip is card-selection only. Default **on** for guide (`psyche-guide-auto-turn`); illustration spreads wait for walk-in + hold, text spreads use estimated reading dwell; last enter spread stops auto. Toggle: 自动展息 / 手动展息. Manual 溯息/展息 always works.
+
 ### Guide red lines
 
 | Do | Don't |
@@ -131,7 +135,7 @@ Six ink-wash **photo backdrops** crossfade on welcome phases (`shelf`, guide cov
 | Import | `node scripts/import-background-image.mjs <id> <path>` |
 | UI | `HomeBackgroundSlideshow` — ~9s hold, ~3.2s crossfade, Ken Burns drift |
 | Layering | Slideshow z-0 → `TreeOfLifeBackground` (`photoBackdrop` dims base/crown) → `SkyAtmosphere` + `ShoreZenAmbience` in `.ambient-atmosphere-stack` (~38% opacity when photos active) |
-| When active | `showPhotoBackdrop` in `App.tsx` — welcome atmosphere && !readingFocus |
+| When active | `showPhotoBackdrop` in `App.tsx` — shelf, cover, guide, **and in-book reading**; `subdued` + lighter scrim when `readingFocus` |
 
 **Tree on photo backdrop:** SVG ~36% opacity, soft blur — mist sigil, not foreground. CSS: `.tree-bg-root--photo-backdrop`.
 

@@ -80,9 +80,15 @@ function GuideSpreadPanel({
 export function GuidePageContent({
   blocks,
   locale,
+  spreadIndex,
+  illustrationReady = true,
+  onIllustrationMotionComplete,
 }: {
   blocks: readonly GuidePageBlock[]
   locale: Locale
+  spreadIndex: number
+  illustrationReady?: boolean
+  onIllustrationMotionComplete?: () => void
 }) {
   const ui = getUi(locale)
   const solePartLabel =
@@ -232,7 +238,12 @@ export function GuidePageContent({
         if (block.kind === 'illustration') {
           return (
             <div key={key} className="guide-spread-illustration-wrap">
-              <GuideIllustration id={block.id} />
+              <GuideIllustration
+                id={block.id}
+                spreadIndex={spreadIndex}
+                ready={illustrationReady}
+                onMotionComplete={onIllustrationMotionComplete}
+              />
             </div>
           )
         }

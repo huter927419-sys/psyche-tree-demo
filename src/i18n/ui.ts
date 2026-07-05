@@ -42,6 +42,9 @@ const ui = {
     guideRestartReading: '归序首',
     guidePageTurnPrevAria: '溯息，回看上一展',
     guidePageTurnNextAria: '展息，展开下一展',
+    guideAutoTurnOn: '自动展息',
+    guideAutoTurnOff: '手动展息',
+    guideAutoTurnHint: '息尽自展，亦可随时手动翻页',
     guideVolumeHandoffHint: '六卷在雾下，择一可入',
     guideSectionTongguan: '同观',
     guideSectionShoreView: '雾岸观',
@@ -199,6 +202,9 @@ const ui = {
     guideRestartReading: 'Return to opening',
     guidePageTurnPrevAria: 'Turn back one spread',
     guidePageTurnNextAria: 'Turn forward one spread',
+    guideAutoTurnOn: 'Auto turn',
+    guideAutoTurnOff: 'Manual turn',
+    guideAutoTurnHint: 'Turns when the breath rests—you may still turn by hand',
     guideVolumeHandoffHint: 'Six volumes below the mist—choose one to enter',
     guideSectionTongguan: 'Shared view',
     guideSectionShoreView: 'Shore view',
@@ -356,6 +362,9 @@ const ui = {
     guideRestartReading: '序首に還る',
     guidePageTurnPrevAria: '前の展へ戻る',
     guidePageTurnNextAria: '次の展へ進む',
+    guideAutoTurnOn: '自動めくり',
+    guideAutoTurnOff: '手動めくり',
+    guideAutoTurnHint: '息尽きて自ずめくる——手でもめくれます',
     guideVolumeHandoffHint: '六巻は霧の下——一巻を選べば入れる',
     guideSectionTongguan: '同観',
     guideSectionShoreView: '霧岸観',
@@ -501,6 +510,9 @@ export type UiStrings = {
   guideRestartReading: string
   guidePageTurnPrevAria: string
   guidePageTurnNextAria: string
+  guideAutoTurnOn: string
+  guideAutoTurnOff: string
+  guideAutoTurnHint: string
   guideVolumeHandoffHint: string
   guideSectionTongguan: string
   guideSectionShoreView: string

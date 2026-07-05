@@ -11,10 +11,13 @@ const FADE_MS = 3200
 
 interface HomeBackgroundSlideshowProps {
   active?: boolean
+  /** Softer photo during in-book reading focus */
+  subdued?: boolean
 }
 
 export const HomeBackgroundSlideshow = memo(function HomeBackgroundSlideshow({
   active = true,
+  subdued = false,
 }: HomeBackgroundSlideshowProps) {
   const scenes = useMemo(() => availableBackgroundScenes(), [])
   const [activeIndex, setActiveIndex] = useState(0)
@@ -51,7 +54,7 @@ export const HomeBackgroundSlideshow = memo(function HomeBackgroundSlideshow({
 
   return (
     <div
-      className={`home-bg-slideshow${active ? ' home-bg-slideshow--active' : ''}`}
+      className={`home-bg-slideshow${active ? ' home-bg-slideshow--active' : ''}${subdued ? ' home-bg-slideshow--subdued' : ''}`}
       aria-hidden
     >
       {scenes.map((id, index) => (

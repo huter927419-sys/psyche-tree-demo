@@ -16,3 +16,12 @@ export function guideIllustrationSrc(id: string): string {
 export function hasGuideIllustration(id: string): boolean {
   return GUIDE_ILLUSTRATION_IDS.has(id)
 }
+
+/** Warm the cache so walk-in animations start on load, not mid-reveal. */
+export function prefetchGuideIllustrations(): void {
+  for (const id of GUIDE_ILLUSTRATION_IDS) {
+    const img = new Image()
+    img.decoding = 'async'
+    img.src = guideIllustrationSrc(id)
+  }
+}
