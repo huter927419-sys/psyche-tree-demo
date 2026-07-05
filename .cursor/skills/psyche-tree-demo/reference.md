@@ -38,6 +38,36 @@ Migration: `server/db/migrations/007_locale_zh_tw.sql`
 
 Built by `buildBookQuestionFlow()` in `books/shared/questionFlow.ts`.
 
+## 序卷《同观》· guide volume
+
+| Item | Detail |
+|------|--------|
+| Role | Read-only prologue on shelf; explains what six volumes mirror |
+| Not in | `BookId`, `BOOK_IDS`, journey assessments, tree progress, DeepSeek |
+| Spreads | 39 — see `buildGuideContent()` in `content.ts` |
+| Resume | `psyche-guide-spread-index`, `psyche-guide-opened`, `psyche-guide-completed` |
+| Handoff | `psyche-guide-volume-handoff` → beacon on six books until one opens |
+
+### localStorage keys (`storage.ts`)
+
+| Key | Purpose |
+|-----|---------|
+| `psyche-guide-opened` | User opened guide at least once |
+| `psyche-guide-spread-index` | Last spread index (0-based) |
+| `psyche-guide-completed` | Reached「进入雾岸」 |
+| `psyche-guide-volume-handoff` | Post-complete nudge toward six volumes |
+
+### Guide UI CSS (`index.css`)
+
+- `.guide-spread-panel`, `.guide-spread-rite`, `.guide-spread-verse`, `.guide-spread-body`
+- `.guide-spread-panel--breath` → `@keyframes guide-breath-cycle` (verse fade cycle)
+- `.guide-spread-panel--rest` → `.guide-spread-void`, glyph 息
+- `.shore-zen-*` — atmospheric layer (after `SkyAtmosphere` in `App.tsx`)
+
+### Guide i18n keys (`ui.ts`)
+
+`guideCover*`, `guideSection*`, `guideAxisEast` / `guideAxisModern`, `guideEnterShore`, `guideVolumeHandoffHint`, `guideFirstVisitHint` — zh source; zhTw OpenCC; en/ja tables in `ui.ts`.
+
 ## Documentation map · 文档索引
 
 | Doc | 说明 |
@@ -103,14 +133,18 @@ Built by `buildBookQuestionFlow()` in `books/shared/questionFlow.ts`.
 ## Client paths
 
 ```
-src/App.tsx                         # phase: shelf | cover | questions | result
+src/App.tsx                         # phase: shelf | guide | cover | questions
+src/books/guide/                    # 序卷 content, template, storage (local only)
 src/books/registry.ts
 src/books/{id}/content.ts
 src/books/shared/createBook.ts
-src/components/bookshelf/           # Bookshelf, HolisticOracleOverlay, UltimateOracle, ReturnToTreeOverlay
+src/components/bookshelf/           # Bookshelf, BookshelfGuideSlot, BookshelfVolumeCover,
+                                    # HolisticOracleOverlay, UltimateOracle, ReturnToTreeOverlay
+src/components/guide/               # GuideCover, GuideReader, GuidePageContent
+src/components/ambient/ShoreZenAmbience.tsx
 src/components/book/BookReader.tsx  # save assessment, fetch mystical reading, volume rites
 src/components/book/VolumeRiteOverlay.tsx
-src/i18n/ui.ts                      # UI strings zh (+ zhTw via OpenCC), en, ja
+src/i18n/ui.ts                      # UI strings + guideSection* / guideCover* keys
 src/i18n/traditionalChinese.ts      # OpenCC + convertStringsDeep (incl. functions)
 src/i18n/questionGuide.ts           # + questionGuide.ja.ts
 src/i18n/openingGuide.ts           # brief field tags (legacy flash; rites in volumeRite.ts)

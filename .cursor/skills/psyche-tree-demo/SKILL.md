@@ -1,11 +1,12 @@
 ---
 name: psyche-tree-demo
 description: >-
-  Develop the 雾岸六卷 demo (React 19 / Vite 8 / SQLite): six mystical books,
-  quad-lingual UI (zh / zhTw / en / ja), bookshelf + flip-book flow, volume rite
-  cycle (entry / exit / Return to Tree), Tree progress, DeepSeek per-book and
-  holistic readings, QA test-fallback for verify scripts. Use when editing
-  psyche-tree-demo, books, i18n, volumeRite, server API, assessments, or card art.
+  Develop the 雾岸六卷 demo (React 19 / Vite 8 / SQLite): six mystical books +
+  序卷《同观》guide, quad-lingual UI (zh / zhTw / en / ja), bookshelf + flip-book
+  flow, volume rite cycle (entry / exit / Return to Tree), Tree progress, DeepSeek
+  per-book and holistic readings, QA test-fallback for verify scripts. Use when editing
+  psyche-tree-demo, books, guide volume, i18n, volumeRite, server API, assessments,
+  or card art.
 ---
 
 # 雾岸六卷 · psyche-tree-demo
@@ -22,6 +23,7 @@ The product follows a full mystical **system**, not only symbols:
 | **Mirroring & rites** 照见与修持 | [02 观照](../../../docs/theory/02-观照.md) [03 流动](../../../docs/theory/03-流动.md) [06 向光](../../../docs/theory/06-向光.md) ↔ [volume-rite-copy](../../../docs/volume-rite-copy.md) |
 | **Meditation · Prayer · Reflection** | Opening rite, one seal/page, dialogue check, portrait + oracle |
 | **Symbol + revelation** | Six facets → volume oracle → holistic oracle (shelf only) |
+| **序卷《同观》** | Pre-volume guide on shelf—mirror before six books; read-only, no assessment/oracle |
 
 Docs: [README](../../../README.md) · [theory 01–06](../../../docs/theory/README.md) · [appendix](../../../docs/theory/appendix-现代对应.md) · [rite copy](../../../docs/volume-rite-copy.md).
 
@@ -33,6 +35,66 @@ Read **01–06** for meaning; read **implement/01–08** before changing flow, r
 |-------|-------|
 | Read态 + 世界观 | [appendix](../../../docs/theory/appendix-现代对应.md) · [01–06](../../../docs/theory/01-本源.md) |
 | **Practice layer** | [implement/01–08](../../../docs/theory/implement/README.md) — seven-section template; read before flow/rite/oracle changes |
+
+## 序卷《同观》· guide volume (homepage)
+
+**Not** a seventh `BookId`—a read-only prologue before the six volumes. Shelf slot sits **above** the six-book row (`BookshelfGuideSlot`).
+
+| Aspect | Detail |
+|--------|--------|
+| Title | 同观 · 序卷 (`guideCoverTitle` / `guideCoverSubtitle`) |
+| Shelf tagline | 照见同观先 (`guideCoverShelfTagline`; cover uses full `guideCoverTagline`) |
+| Spreads | **39** total: 序 2 + 肆章×9 + 封底 1 |
+| Enter CTA | Last spread →「进入雾岸」(`enterSpreadIndex` = final spread) |
+| Persistence | `localStorage` only—no server row, no journey assessment |
+| UI state | **No**「已读过」badge; progress dot only while `inProgress` |
+
+### App phase
+
+`AppPhase`: `shelf` | **`guide`** | `cover` | `questions`
+
+```
+shelf → click 同观 → guide (GuideCover) → 展卷 → guide reading (GuideReader)
+  → 进入雾岸 on last spread → back to shelf + volume handoff beacon on six books
+```
+
+- `guideStep`: `cover` | `reading`; reuses `BookJourneyStage` + `BookShell` like six volumes
+- `readingFocus` true during guide reading (dims tree/sky; `ShoreZenAmbience` subdued)
+- `isWelcomeAtmosphere` on shelf and guide cover; `journey` intensity once guide reading opens
+
+### Chapter spread template (×4)
+
+Each chapter (`chapterTemplate.ts`) → **9 spreads**:
+
+```
+起 → 现象 → 转问 → 同观(东/现代) → 雾岸观 → 雾岸问(现实+内观) → 此息停 → 入卷义 → 收束
+```
+
+Right pages often `pause` (rest: 息 glyph + void mist). Block kinds: `hook`, `phenomenon`, `turn`, `tongguanEast` / `tongguanModern`, `shoreView`, `shoreQuestion`, `breath`, `volumeMeaning`, `close`, `lines`, `part`, `pause`.
+
+Rendered by `GuidePageContent` → unified `GuideSpreadPanel` (`.guide-spread-*` in `index.css`). **此息停** body uses CSS breath cycle (fade out / pause / fade in).
+
+### Guide red lines
+
+| Do | Don't |
+|----|-------|
+| Mirror-only copy; 同观 quotes; two 雾岸问 per chapter | Scores, per-book oracle, holistic oracle |
+| Fixed section labels via `ui.guideSection*` | Assessment save, `BookId`, tree `revealStage` from guide |
+| Resume spread index locally |「已读过」shelf badge or completion mark text |
+
+### Key paths
+
+```
+src/books/guide/content.ts       # zh / en / ja source; zhTw via OpenCC
+src/books/guide/chapterTemplate.ts
+src/books/guide/storage.ts       # psyche-guide-* localStorage keys
+src/books/guide/meta.ts          # getGuideCoverBook() — cover stub only
+src/components/guide/GuideCover.tsx | GuideReader.tsx | GuidePageContent.tsx
+src/components/bookshelf/BookshelfGuideSlot.tsx | BookshelfVolumeCover.tsx
+src/components/ambient/ShoreZenAmbience.tsx   # mist / cloud / wind (atmospheric only)
+```
+
+Handoff: `markGuideCompleted()` sets `psyche-guide-volume-handoff` → six volumes get `bookshelf-book--beacon` until first volume opened (`clearGuideVolumeHandoff` in `App.tsx`).
 
 ## Six books (one facet each)
 
@@ -144,7 +206,7 @@ DB path: `data/psyche-tree.sqlite` (or `SQLITE_PATH`). Reset: `node scripts/rese
 
 - One card per page, auto flip ~420ms, no scores shown
 - Question seal reveal for scenario prompt
-- `useVisualTier`: shelf full / cover balanced / quiz minimal
+- `useVisualTier`: shelf full / cover balanced / quiz minimal; guide reading uses `readingFocus`
 - Psychology copy: `【title】desc`; integration last
 - Locale switch reads cached readings; does not re-score
 
