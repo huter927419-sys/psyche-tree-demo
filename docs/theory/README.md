@@ -9,6 +9,7 @@
 | **世界观** | [01–06](./01-本源.md) | 变、照、流、应、连、向——人如何存在于世 |
 | **实践** | [implement/01–08](./implement/README.md) | 态、觉、续、接、应、生、向、整——体验如何践行 |
 | **第二语言** | [附录 · U](./appendix-现代对应.md) | 六脉读态符号、工程对照（非第一叙事） |
+| **交叉读** | [cross/](./cross/README.md) | 与外部文献并读（如 [Taves et al. 2018](./cross/Taves2018-雾岸交叉读.md)）· PDF：[references/](../references/) |
 
 修持文案（不改）：[volume-rite-copy.md](../volume-rite-copy.md) · 产品概览：[README §三](../../README.md#三理论栈)
 
