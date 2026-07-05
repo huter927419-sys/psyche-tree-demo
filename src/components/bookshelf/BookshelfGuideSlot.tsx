@@ -19,7 +19,6 @@ export function BookshelfGuideSlot({
 }: BookshelfGuideSlotProps) {
   const ui = getUi(locale)
   const unread = shelfState === 'unread'
-  const inProgress = shelfState === 'inProgress'
 
   return (
     <div className="bookshelf-guide-block animate-fade-in">
@@ -36,9 +35,6 @@ export function BookshelfGuideSlot({
         onClick={onOpen}
         aria-label={ui.guideCoverTitle}
       >
-        {inProgress && (
-          <span className="bookshelf-book-progress-mark" aria-hidden />
-        )}
         <div className="bookshelf-book-glow" aria-hidden />
         <div className="bookshelf-book-volume">
           <div className="bookshelf-book-spine-face" aria-hidden />

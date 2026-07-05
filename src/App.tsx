@@ -87,6 +87,7 @@ function App() {
   const prevTreeStage = useRef(0)
   const pickupTimer = useRef<number | null>(null)
   const transitionTimer = useRef<number | null>(null)
+  const emailGateActionRef = useRef<'book' | 'guide'>('book')
 
   const clearTransitionTimers = () => {
     if (pickupTimer.current !== null) {
@@ -229,6 +230,7 @@ function App() {
 
     const { journeyId, email } = getJourneySession()
     if (!journeyId && !email) {
+      emailGateActionRef.current = 'book'
       setEmailGateOpen(true)
       return
     }
@@ -243,6 +245,7 @@ function App() {
     if (!journey) {
       setUserEmail(null)
       setUserId(null)
+      emailGateActionRef.current = 'book'
       setEmailGateOpen(true)
       return
     }
@@ -274,7 +277,16 @@ function App() {
     setEmailGateOpen(false)
     setUserEmail(email)
     setUserId(uid)
-    void prepareAndOpenBook()
+    const action = emailGateActionRef.current
+    void (async () => {
+      const journey = await refreshJourneySnapshot()
+      if (journey) setJourneySnapshot(journey)
+      if (action === 'guide') {
+        proceedOpenGuide()
+      } else {
+        await prepareAndOpenBook()
+      }
+    })()
   }
 
   const closeBookToShelf = () => {
@@ -318,6 +330,9 @@ function App() {
     setJourneyMode('expanded')
     setAwakeningStage(null)
     setSavedBookSession(null)
+    setGuideStep('cover')
+    setGuideCoverOpening(false)
+    setGuideRevision((n) => n + 1)
     prevTreeStage.current = 0
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [])
@@ -375,7 +390,7 @@ function App() {
     [guideRevision, phase],
   )
 
-  const openGuide = useCallback(() => {
+  const proceedOpenGuide = useCallback(() => {
     clearTransitionTimers()
     markGuideOpened()
     setGuideRevision((n) => n + 1)
@@ -390,8 +405,35 @@ function App() {
     }, BOOK_PICKUP_MS)
   }, [])
 
+  const openGuide = useCallback(() => {
+    const { journeyId, email } = getJourneySession()
+    if (!journeyId && !email) {
+      emailGateActionRef.current = 'guide'
+      setEmailGateOpen(true)
+      return
+    }
+    void (async () => {
+      const journey = await refreshJourneySnapshot()
+      if (!journey) {
+        setUserEmail(null)
+        setUserId(null)
+        emailGateActionRef.current = 'guide'
+        setEmailGateOpen(true)
+        return
+      }
+      setJourneySnapshot(journey)
+      proceedOpenGuide()
+    })()
+  }, [proceedOpenGuide, refreshJourneySnapshot])
+
   const openGuideReading = useCallback(() => {
     if (guideCoverOpening) return
+    const { journeyId, email } = getJourneySession()
+    if (!journeyId && !email) {
+      emailGateActionRef.current = 'guide'
+      setEmailGateOpen(true)
+      return
+    }
     setGuideCoverOpening(true)
     setGuideJourneyMode('expanding')
     transitionTimer.current = window.setTimeout(() => {

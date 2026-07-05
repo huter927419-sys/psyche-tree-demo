@@ -1,8 +1,14 @@
 import type { Locale } from '../i18n/locale'
+import { clearGuideProgress } from '../books/guide/storage'
 
 const JOURNEY_ID_KEY = 'psyche-journey-id'
 const JOURNEY_EMAIL_KEY = 'psyche-user-email'
 const USER_ID_KEY = 'psyche-user-id'
+
+const LEGACY_LOCAL_KEYS = [
+  'psyche-shore-opening-full-seen',
+  'psyche-shore-opening-unrolled',
+] as const
 
 export interface JourneySession {
   journeyId: string | null
@@ -49,9 +55,34 @@ export function clearJourneySession() {
   sessionStorage.removeItem(USER_ID_KEY)
 }
 
+function clearPsycheSessionStorage() {
+  if (typeof window === 'undefined') return
+  const keys: string[] = []
+  for (let i = 0; i < sessionStorage.length; i++) {
+    const key = sessionStorage.key(i)
+    if (key?.startsWith('psyche-')) keys.push(key)
+  }
+  for (const key of keys) sessionStorage.removeItem(key)
+}
+
+function clearLegacyLocalKeys() {
+  if (typeof window === 'undefined') return
+  for (const key of LEGACY_LOCAL_KEYS) {
+    localStorage.removeItem(key)
+  }
+}
+
+/** Clear all client-side psyche-* session data for this browser profile. */
+export function clearLocalUserCache() {
+  clearJourneySession()
+  clearGuideProgress()
+  clearPsycheSessionStorage()
+  clearLegacyLocalKeys()
+}
+
 /** Clear local session so another user can sign in on this device. */
 export function logoutUser() {
-  clearJourneySession()
+  clearLocalUserCache()
 }
 
 export interface StoredAssessmentSummary {

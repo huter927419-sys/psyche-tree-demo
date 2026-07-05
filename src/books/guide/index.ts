@@ -5,9 +5,11 @@ import type { GuideContent } from './types'
 
 export type { GuideContent, GuidePageBlock, GuideSpread } from './types'
 export {
+  clearGuideProgress,
   clearGuideVolumeHandoff,
   getGuideShelfState,
   getGuideSpreadIndex,
+  hasGuideSession,
   isGuideVolumeHandoffPending,
   markGuideCompleted,
   markGuideOpened,
