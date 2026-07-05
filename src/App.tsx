@@ -21,6 +21,7 @@ import { EmailGateDialog } from './components/user/EmailGateDialog'
 import { AmbientPhraseLayer } from './components/i18n/AmbientPhraseLayer'
 import { TreeAwakeningOverlay } from './components/tree/TreeAwakeningOverlay'
 import { AmbientMusicControl } from './components/AmbientMusicControl'
+import { GithubFooterLink } from './components/GithubFooterLink'
 import { SkyAtmosphere } from './components/SkyAtmosphere'
 import { ShoreZenAmbience } from './components/ambient/ShoreZenAmbience'
 import { useVisualTier, type VisualTier } from './hooks/useVisualTier'
@@ -471,6 +472,7 @@ function App() {
         bootstrap={musicBootstrap}
         locale={locale}
       />
+      <GithubFooterLink locale={locale} />
       <main className="relative z-[2] pb-16">
         {phase === 'shelf' && !isClosing && (
           <Bookshelf

@@ -81,6 +81,7 @@ const ui = {
     cardLight: '光',
     musicEnable: '开启音乐',
     musicAriaOn: '关闭背景音乐',
+    githubLinkAria: '在 GitHub 查看本项目',
     musicAriaOff: '开启背景音乐',
     questionHint:
       '请在右页择一与你此刻感受共鸣的意象——心流之中，一印一页，选定后记忆将自行翻过。',
@@ -235,6 +236,7 @@ const ui = {
     cardLight: 'Light',
     musicEnable: 'Enable music',
     musicAriaOn: 'Turn off background music',
+    githubLinkAria: 'View project on GitHub',
     musicAriaOff: 'Turn on background music',
     questionHint:
       'Choose an image that resonates—in flow, one seal per page; memory turns itself.',
@@ -386,6 +388,7 @@ const ui = {
     cardLight: '光',
     musicEnable: '音楽をオン',
     musicAriaOn: '背景音楽をオフ',
+    githubLinkAria: 'GitHub でプロジェクトを見る',
     musicAriaOff: '背景音楽をオン',
     questionHint:
       '右頁から、今の感覚と共鳴する意象を一つ——心流の中、一印一ページ。選べば記憶は自らめくる。',
@@ -522,6 +525,7 @@ export type UiStrings = {
   cardLight: string
   musicEnable: string
   musicAriaOn: string
+  githubLinkAria: string
   musicAriaOff: string
   questionHint: string
   reviewModeHint: string

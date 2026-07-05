@@ -1217,6 +1217,39 @@ html[lang="ja"] {
   text-transform: uppercase;
 }
 
+.github-footer-link {
+  position: fixed;
+  left: 50%;
+  bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  color: rgba(200, 200, 200, 0.38);
+  background: rgba(10, 10, 10, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  transition:
+    color 0.3s ease,
+    border-color 0.3s ease,
+    background 0.3s ease;
+}
+
+.github-footer-link:hover {
+  color: rgba(240, 240, 240, 0.78);
+  border-color: rgba(255, 255, 255, 0.28);
+  background: rgba(16, 16, 16, 0.55);
+}
+
+.github-footer-icon {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
 /* ── Bookshelf ── */
 
 .bookshelf-scene {
