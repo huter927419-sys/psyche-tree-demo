@@ -247,7 +247,7 @@ six books complete → journey.status = completed
 
 ## Scoring
 
-`computeResults()` in `scoring.ts`. Attention decoys via `getAttentionCheckCards(q, book)` scoped to current book.
+`computeResults()` in `scoring.ts`. Attention decoys via `getAttentionCheckCards(q, book)` — **shuffle once per question** in `BookReader.resolvePageCards` (ref cache); never call on every render or cards jump after select/flip.
 
 ## Background music (Mixkit)
 

@@ -396,12 +396,18 @@ html[lang="ja"] {
   object-position: center;
   opacity: 0.62;
   filter: saturate(0) contrast(1.08);
-  transform: scale(1.04);
+  transform: scale(1.02) translate3d(0, 0, 0);
   will-change: transform, opacity;
 }
 
 .home-bg-slide--active img {
-  animation: home-bg-drift var(--home-bg-drift-duration, 12s) ease-out forwards;
+  animation: home-bg-drift var(--home-bg-drift-duration, 9s) ease-out forwards;
+}
+
+/* Hold Ken Burns end pose while crossfading out — avoids snap to scale(1.02) */
+.home-bg-slide--rest img {
+  animation: none;
+  transform: scale(1.09) translate3d(var(--home-bg-drift-x, -1%), -0.55%, 0);
 }
 
 @keyframes home-bg-drift {
@@ -494,6 +500,10 @@ html[lang="ja"] {
 
   .home-bg-slide--active img {
     animation: none;
+    transform: none;
+  }
+
+  .home-bg-slide--rest img {
     transform: none;
   }
 }
@@ -4341,11 +4351,8 @@ html[lang="ja"] .bookshelf-guide-first-hint {
 
 @keyframes overlay-fade-out {
   0%,
-  35% {
+  45% {
     opacity: 1;
-  }
-  85% {
-    opacity: 0.4;
   }
   100% {
     opacity: 0;

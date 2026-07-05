@@ -122,7 +122,7 @@ export function BookShell({
                   <BookPage side="right" coverArtId={resolvedCoverId}>{right}</BookPage>
                 </div>
                 <div className="book-turn-face book-turn-back">
-                  <BookPage side="left" coverArtId={resolvedCoverId}>{incomingLeft}</BookPage>
+                  <BookPage side="right" coverArtId={resolvedCoverId}>{incomingRight}</BookPage>
                 </div>
                 <div className="book-turn-edge" aria-hidden />
               </div>
@@ -143,7 +143,7 @@ export function BookShell({
                   <BookPage side="left" coverArtId={resolvedCoverId}>{left}</BookPage>
                 </div>
                 <div className="book-turn-face book-turn-back">
-                  <BookPage side="right" coverArtId={resolvedCoverId}>{incomingRight}</BookPage>
+                  <BookPage side="left" coverArtId={resolvedCoverId}>{incomingLeft}</BookPage>
                 </div>
                 <div className="book-turn-edge book-turn-edge-left" aria-hidden />
               </div>

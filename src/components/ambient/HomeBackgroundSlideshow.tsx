@@ -82,20 +82,35 @@ function SlideLayer({
   fadeMs: number
   driftLeft: boolean
 }) {
+  const [driftKey, setDriftKey] = useState(0)
+  const [holdRestPose, setHoldRestPose] = useState(false)
+
+  useEffect(() => {
+    if (!isActive) return
+    setDriftKey((k) => k + 1)
+    setHoldRestPose(true)
+  }, [isActive])
+
   return (
     <div
-      className={`home-bg-slide${isActive ? ' home-bg-slide--active' : ''}`}
+      className={`home-bg-slide${isActive ? ' home-bg-slide--active' : ''}${holdRestPose && !isActive ? ' home-bg-slide--rest' : ''}`}
       style={
         {
           transitionDuration: `${fadeMs}ms`,
           zIndex: isActive ? 2 : 1,
           ['--home-bg-drift-x' as string]: driftLeft ? '-1.4%' : '1.4%',
-          ['--home-bg-drift-duration' as string]: `${SLIDE_HOLD_MS + fadeMs}ms`,
+          ['--home-bg-drift-duration' as string]: `${SLIDE_HOLD_MS}ms`,
         } as CSSProperties
       }
       data-scene-index={index}
     >
-      <img src={backgroundSceneSrc(id)} alt="" decoding="async" draggable={false} />
+      <img
+        key={driftKey}
+        src={backgroundSceneSrc(id)}
+        alt=""
+        decoding="async"
+        draggable={false}
+      />
     </div>
   )
 }

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import type { AssessmentResult, CardOption } from '../../types'
+import type { AssessmentResult, CardOption, QuestionItem } from '../../types'
 import type { BookDefinition } from '../../books/types'
 import { computeResults, getAttentionCheckCards } from '../../data/scoring'
 import { QuestionCard } from '../QuestionCard'
@@ -33,6 +33,23 @@ export function BookQuestionFlow({
   const [answers, setAnswers] = useState<Record<string, string[]>>({})
   const [isAdvancing, setIsAdvancing] = useState(false)
   const advanceTimer = useRef<number | null>(null)
+  const attentionCardLayoutsRef = useRef<Record<string, CardOption[]>>({})
+
+  useEffect(() => {
+    attentionCardLayoutsRef.current = {}
+  }, [book.meta.id])
+
+  const resolvePageCards = useCallback(
+    (q: QuestionItem): CardOption[] => {
+      if (q.type === 'dimension') return q.cards
+      const cached = attentionCardLayoutsRef.current[q.id]
+      if (cached) return cached
+      const layout = getAttentionCheckCards(q, book)
+      attentionCardLayoutsRef.current[q.id] = layout
+      return layout
+    },
+    [book],
+  )
 
   const { flipping, flipDirection, pendingIndex, runFlip, completeFlip } =
     useBookFlip(setCurrentIndex)
@@ -118,8 +135,7 @@ export function BookQuestionFlow({
     (index: number, interactive: boolean) => {
       const q = questions[index]
       const ids = answers[q.id] ?? []
-      const pageCards: CardOption[] =
-        q.type === 'dimension' ? q.cards : getAttentionCheckCards(q, book)
+      const pageCards = resolvePageCards(q)
       const locked = !interactive || flipping || isAdvancing
 
       return (
@@ -138,7 +154,7 @@ export function BookQuestionFlow({
         </div>
       )
     },
-    [answers, flipping, isAdvancing, questions, selectCard],
+    [answers, flipping, isAdvancing, questions, resolvePageCards, selectCard],
   )
 
   const handleBack = () => {

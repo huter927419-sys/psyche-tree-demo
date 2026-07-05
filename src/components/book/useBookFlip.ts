@@ -38,7 +38,7 @@ export function useBookFlip(onIndexChange: (index: number) => void) {
 
   useEffect(() => {
     if (!flipping) return
-    const t = window.setTimeout(completeFlip, FLIP_DURATION_MS + 120)
+    const t = window.setTimeout(completeFlip, FLIP_DURATION_MS + 80)
     return () => window.clearTimeout(t)
   }, [flipping, flipSerial, completeFlip])
 

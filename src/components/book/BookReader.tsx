@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import type { AssessmentResult, CardOption } from '../../types'
+import type { AssessmentResult, CardOption, QuestionItem } from '../../types'
 import type { BookDefinition } from '../../books/types'
 import { getBookResultLabels } from '../../books/types'
 import { computeResults, getAttentionCheckCards } from '../../data/scoring'
@@ -131,6 +131,24 @@ export function BookReader({
     Partial<Record<Locale, { reading: string; fallback: boolean }>>
   >({})
   const hydratedRef = useRef(false)
+  /** Attention-check card order — shuffle once per question per volume session. */
+  const attentionCardLayoutsRef = useRef<Record<string, CardOption[]>>({})
+
+  useEffect(() => {
+    attentionCardLayoutsRef.current = {}
+  }, [book.meta.id])
+
+  const resolvePageCards = useCallback(
+    (q: QuestionItem): CardOption[] => {
+      if (q.type === 'dimension') return q.cards
+      const cached = attentionCardLayoutsRef.current[q.id]
+      if (cached) return cached
+      const layout = getAttentionCheckCards(q, book)
+      attentionCardLayoutsRef.current[q.id] = layout
+      return layout
+    },
+    [book],
+  )
 
   const isQuestionSpread = pageIndex < questionCount
   const resultPageIndex = pageIndex - questionCount
@@ -466,8 +484,7 @@ export function BookReader({
     (index: number, interactive: boolean) => {
       const q = questions[index]
       const ids = answers[q.id] ?? []
-      const pageCards: CardOption[] =
-        q.type === 'dimension' ? q.cards : getAttentionCheckCards(q, book)
+      const pageCards = resolvePageCards(q)
       const locked = readOnly || !interactive || flipping || isAdvancing
 
       return (
@@ -486,7 +503,7 @@ export function BookReader({
         </div>
       )
     },
-    [answers, flipping, isAdvancing, questions, readOnly, selectCard],
+    [answers, flipping, isAdvancing, questions, readOnly, resolvePageCards, selectCard],
   )
 
   const buildResultLeft = useCallback(
