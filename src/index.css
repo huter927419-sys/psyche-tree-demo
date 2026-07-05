@@ -2182,7 +2182,7 @@ html[lang="ja"] .bookshelf-guide-first-hint {
   position: relative;
   pointer-events: auto;
   width: min(96vw, 560px);
-  max-height: min(72vh, 620px);
+  max-height: min(78vh, 680px);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -2292,6 +2292,9 @@ html[lang="ja"] .bookshelf-guide-first-hint {
 .holistic-oracle-reading-wrap {
   flex: 1;
   min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   opacity: 0;
   transform: translateY(10px);
   transition:
@@ -2323,50 +2326,56 @@ html[lang="ja"] .bookshelf-guide-first-hint {
   margin-inline: auto;
 }
 
-.holistic-oracle-panel--zh .holistic-oracle-title,
-.holistic-oracle-panel--zh .holistic-oracle-reading {
-  font-family: var(--font-mystic-zh);
-  letter-spacing: 0.06em;
-}
-
 .holistic-oracle-panel--zh .holistic-oracle-title {
+  font-family: var(--font-mystic-zh);
   letter-spacing: 0.32em;
 }
 
-.holistic-oracle-panel--en .holistic-oracle-title,
-.holistic-oracle-panel--en .holistic-oracle-reading {
-  font-family: var(--font-mystic-en);
-  letter-spacing: 0.04em;
-}
-
 .holistic-oracle-panel--en .holistic-oracle-title {
+  font-family: var(--font-mystic-en);
   letter-spacing: 0.22em;
   text-transform: uppercase;
   font-size: 0.82rem;
 }
 
-.holistic-oracle-panel--ja .holistic-oracle-title,
-.holistic-oracle-panel--ja .holistic-oracle-reading {
-  font-family: var(--font-mystic-ja);
-  letter-spacing: 0.08em;
-}
-
 .holistic-oracle-panel--ja .holistic-oracle-title {
+  font-family: var(--font-mystic-ja);
   letter-spacing: 0.24em;
 }
 
-.holistic-oracle-reading {
-  max-height: min(42vh, 360px);
+.holistic-oracle-panel--zhTw .holistic-oracle-title {
+  font-family: var(--font-mystic-zh-tw);
+  letter-spacing: 0.32em;
+}
+
+.holistic-oracle-reading-scroll {
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
-  font-size: 0.95rem;
-  line-height: 1.95;
-  color: rgba(225, 225, 225, 0.88);
-  text-align: center;
-  padding-right: 0.25rem;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding-right: 0.35rem;
+  margin-top: 0.15rem;
+}
+
+.holistic-oracle-reading-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.holistic-oracle-reading-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.22);
+  border-radius: 3px;
+}
+
+.holistic-oracle-reading {
+  font-size: 0.85rem;
+  line-height: 1.85;
+  color: rgba(230, 230, 230, 0.78);
+  text-align: left;
 }
 
 .holistic-oracle-panel--en .holistic-oracle-reading {
-  font-size: 0.92rem;
+  font-size: 0.85rem;
   line-height: 1.85;
 }
 
@@ -3598,6 +3607,10 @@ html[lang="ja"] .bookshelf-guide-first-hint {
   .book-page-inner {
     padding: 1.5rem 1.7rem;
   }
+
+  .book-page-inner:has(.book-scroll-content) {
+    max-height: min(58vh, 520px);
+  }
 }
 
 .book-page--with-cover {
@@ -3942,20 +3955,40 @@ html[lang="ja"] .bookshelf-guide-first-hint {
   color: rgba(230, 230, 230, 0.78);
 }
 
+/* Oracle reading body — same prose face as psychology profile, not mystic/italic */
+.book-oracle-text {
+  font-style: normal;
+  text-align: left;
+}
+
 .book-scroll-content {
   flex: 1;
+  min-height: 0;
+  padding-right: 6px;
+  overscroll-behavior: contain;
+}
+
+.book-page-inner:has(.book-scroll-content) {
   overflow-y: auto;
-  max-height: 380px;
-  padding-right: 4px;
+  max-height: min(56vh, 480px);
+  -webkit-overflow-scrolling: touch;
 }
 
-.book-scroll-content::-webkit-scrollbar {
-  width: 3px;
+.book-page-inner:has(.book-scroll-content) .book-scroll-content {
+  overflow: visible;
+  max-height: none;
 }
 
+.book-page-inner:has(.book-scroll-content)::-webkit-scrollbar,
+.book-scroll-content::-webkit-scrollbar,
+.holistic-oracle-reading-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.book-page-inner:has(.book-scroll-content)::-webkit-scrollbar-thumb,
 .book-scroll-content::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.22);
+  border-radius: 3px;
 }
 
 .book-dimension-table {
@@ -5807,8 +5840,20 @@ html[lang="zh-CN"] .book-chapter-tag {
   color: rgba(255, 255, 255, 0.32);
 }
 
-html[lang="zh-CN"] .book-body-text {
+html[lang="zh-CN"] .book-body-text,
+html[lang="zh-CN"] .book-oracle-text,
+html[lang="zh-CN"] .holistic-oracle-reading {
   font-family: var(--font-prose-zh);
+  font-weight: 400;
+  line-height: 2;
+  letter-spacing: 0.08em;
+  color: rgba(238, 236, 230, 0.88);
+}
+
+html[lang="zh-Hant"] .book-body-text,
+html[lang="zh-Hant"] .book-oracle-text,
+html[lang="zh-Hant"] .holistic-oracle-reading {
+  font-family: var(--font-prose-zh-tw);
   font-weight: 400;
   line-height: 2;
   letter-spacing: 0.08em;
@@ -6000,11 +6045,23 @@ html[lang="ja"] .book-chapter-tag {
   color: rgba(255, 255, 255, 0.32);
 }
 
-html[lang="ja"] .book-body-text {
+html[lang="ja"] .book-body-text,
+html[lang="ja"] .book-oracle-text,
+html[lang="ja"] .holistic-oracle-reading {
   font-family: var(--font-prose-ja);
   font-weight: 400;
   line-height: 2;
   letter-spacing: 0.08em;
+  color: rgba(238, 236, 230, 0.88);
+}
+
+html[lang="en"] .book-body-text,
+html[lang="en"] .book-oracle-text,
+html[lang="en"] .holistic-oracle-reading {
+  font-family: var(--font-serif-en);
+  font-weight: 400;
+  line-height: 1.85;
+  letter-spacing: 0.02em;
   color: rgba(238, 236, 230, 0.88);
 }
 

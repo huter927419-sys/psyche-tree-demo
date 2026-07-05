@@ -607,7 +607,7 @@ export function BookReader({
                     )}
                   </>
                 )}
-                <p className="book-body-text italic whitespace-pre-line">
+                <p className="book-body-text book-oracle-text whitespace-pre-line">
                   {mysticalReading}
                 </p>
               </>

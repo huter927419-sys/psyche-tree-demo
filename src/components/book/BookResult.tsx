@@ -120,7 +120,7 @@ export function BookResult({ book, result, onRestart }: BookResultProps) {
               Remote oracle unavailable; showing a local reading instead.
             </p>
           )}
-          <p className="book-body-text italic whitespace-pre-line">
+          <p className="book-body-text book-oracle-text whitespace-pre-line">
             {mysticalReading}
           </p>
         </>
