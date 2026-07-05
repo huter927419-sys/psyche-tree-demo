@@ -24,6 +24,8 @@ import { AmbientMusicControl } from './components/AmbientMusicControl'
 import { GithubFooterLink } from './components/GithubFooterLink'
 import { SkyAtmosphere } from './components/SkyAtmosphere'
 import { ShoreZenAmbience } from './components/ambient/ShoreZenAmbience'
+import { HomeBackgroundSlideshow } from './components/ambient/HomeBackgroundSlideshow'
+import { availableBackgroundScenes } from './books/backgroundScenes'
 import { useVisualTier, type VisualTier } from './hooks/useVisualTier'
 import { LocaleContext, type Locale } from './i18n/locale'
 import { getUi } from './i18n/ui'
@@ -369,6 +371,9 @@ function App() {
   const visualTierPreferred: VisualTier = 'balanced'
   const visualTier = useVisualTier(visualTierPreferred)
   const readingFocus = (phase === 'questions' || guideInBook) && !isClosing
+  const hasPhotoBackdrop = availableBackgroundScenes().length > 0
+  const showPhotoBackdrop =
+    hasPhotoBackdrop && isWelcomeAtmosphere && !readingFocus
 
   const completedBookIds = useMemo(
     () => journeySnapshot?.assessments.map((a) => a.bookId) ?? [],
@@ -458,7 +463,7 @@ function App() {
   return (
     <LocaleContext.Provider value={{ locale, setLocale }}>
     <div
-      className={`relative min-h-screen${readingFocus ? ' app-reading-focus' : ''}${userEmail ? ' app-has-user-email' : ''}`}
+      className={`relative min-h-screen${readingFocus ? ' app-reading-focus' : ''}${userEmail ? ' app-has-user-email' : ''}${showPhotoBackdrop ? ' app-photo-backdrop' : ''}`}
     >
       <UserEmailCorner
         email={userEmail}
@@ -482,25 +487,35 @@ function App() {
         }
         subdued={readingFocus}
       />
+      <HomeBackgroundSlideshow active={showPhotoBackdrop} />
       <TreeOfLifeBackground
         revealStage={treeRevealStage}
         variant={treeVariant}
         recoilKey={treeRecoilKey}
         visualTier={visualTier}
         readingFocus={readingFocus}
+        photoBackdrop={showPhotoBackdrop}
       />
-      <SkyAtmosphere
-        intensity={skyIntensity}
-        awakeningLevel={skyAwakeningLevel}
-        isComplete={Boolean(result)}
-        visualTier={visualTier}
-        readingFocus={readingFocus}
-      />
-      <ShoreZenAmbience
-        intensity={skyIntensity}
-        visualTier={visualTier}
-        readingFocus={readingFocus}
-      />
+      <div
+        className="ambient-atmosphere-stack"
+        style={{
+          opacity: showPhotoBackdrop ? 0.38 : 1,
+          transition: 'opacity 1.8s ease',
+        }}
+      >
+        <SkyAtmosphere
+          intensity={skyIntensity}
+          awakeningLevel={skyAwakeningLevel}
+          isComplete={Boolean(result)}
+          visualTier={visualTier}
+          readingFocus={readingFocus}
+        />
+        <ShoreZenAmbience
+          intensity={skyIntensity}
+          visualTier={visualTier}
+          readingFocus={readingFocus}
+        />
+      </div>
       {readingFocus && <div className="reading-focus-scrim" aria-hidden />}
       <TreeAwakeningOverlay
         stage={awakeningStage}

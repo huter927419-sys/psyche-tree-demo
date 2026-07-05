@@ -60,7 +60,28 @@ shelf → click 同观 → guide (GuideCover) → 展卷 → guide reading (Guid
 
 - `guideStep`: `cover` | `reading`; reuses `BookJourneyStage` + `BookShell` like six volumes
 - `readingFocus` true during guide reading (dims tree/sky; `ShoreZenAmbience` subdued)
-- `isWelcomeAtmosphere` on shelf and guide cover; `journey` intensity once guide reading opens
+- `isWelcomeAtmosphere` on shelf and guide cover; photo backdrop + crossfade on shelf/guide cover
+
+### Guide navigation (序卷 UX)
+
+| Action | 简体 label | Implementation |
+|--------|------------|----------------|
+| Previous spread | **溯息** | `ui.guideTurnPrev` — footer `BookNav` + click **left page** |
+| Next spread | **展息** | `ui.guideTurnNext` — footer + click **right page** |
+| Restart from opening | **归序首** | `ui.guideRestartReading` — resets spread to 0 via `saveGuideSpreadIndex(0)`; shown when `pageIndex > 0` |
+
+- `BookShell` optional `pageClickEnabled` + `onPageClick('left'|'right')` — **guide only**; six-volume quiz keeps card selection on right page
+- Do **not** use generic `prevPage` / `nextPage` on guide footer
+
+### Guide typography (zh / zhTw)
+
+Section rites (`起`, `序`, 同观, …) use `.guide-spread-rite`. Single-character labels get `.guide-spread-rite--sigil` (auto when `rite.length <= 1` in `GuidePageContent`).
+
+| Locale | Normal rite | Sigil (起/序) |
+|--------|-------------|---------------|
+| zh-CN / zh-Hant | ~0.72rem mystic | ~1.02rem |
+
+Tune in `index.css` under `html[lang="zh-CN"]` / `html[lang="zh-Hant"]` — avoid reverting to ~0.62rem (too small).
 
 ### Chapter spread template (×4)
 
@@ -70,9 +91,7 @@ Each chapter (`chapterTemplate.ts`) → **9 spreads**:
 起 → 现象 → 转问 → 同观(东/现代) → 雾岸观 → 雾岸问(现实+内观) → 此息停 → 入卷义 → 收束
 ```
 
-Right pages often `pause` (rest: 息 glyph + void mist). Block kinds: `hook`, `phenomenon`, `turn`, `tongguanEast` / `tongguanModern`, `shoreView`, `shoreQuestion`, `breath`, `volumeMeaning`, `close`, `lines`, `part`, `pause`.
-
-Rendered by `GuidePageContent` → unified `GuideSpreadPanel` (`.guide-spread-*` in `index.css`). **此息停** body uses CSS breath cycle (fade out / pause / fade in).
+Right pages often `pause` (rest: 息 glyph + void mist). Block kinds: `hook`, `phenomenon`, `turn`, `tongguanEast` / `tongguanModern`, `shoreView`, `shoreQuestion`, `breath`, `volumeMeaning`, `close`, `lines`, `part`, `pause`, `illustration`.
 
 ### Guide red lines
 
@@ -95,6 +114,23 @@ src/components/ambient/ShoreZenAmbience.tsx   # mist / cloud / wind (atmospheric
 ```
 
 Handoff: `markGuideCompleted()` sets `psyche-guide-volume-handoff` → six volumes get `bookshelf-book--beacon` until first volume opened (`clearGuideVolumeHandoff` in `App.tsx`).
+
+## Homepage atmosphere (书架背景)
+
+Six ink-wash **photo backdrops** crossfade on welcome phases (`shelf`, guide cover, volume cover, closing).
+
+| Item | Detail |
+|------|--------|
+| Assets | `public/backgrounds/01-mist-arrival.png` … `06-night-shore.png` (2560×1440) |
+| Registry | `src/books/backgroundScenes.ts` — `BACKGROUND_SCENE_ORDER`, bump `BACKGROUND_SCENE_VERSION` on cache bust |
+| Import | `node scripts/import-background-image.mjs <id> <path>` |
+| UI | `HomeBackgroundSlideshow` — ~9s hold, ~3.2s crossfade, Ken Burns drift |
+| Layering | Slideshow z-0 → `TreeOfLifeBackground` (`photoBackdrop` dims base/crown) → `SkyAtmosphere` + `ShoreZenAmbience` in `.ambient-atmosphere-stack` (~38% opacity when photos active) |
+| When active | `showPhotoBackdrop` in `App.tsx` — welcome atmosphere && !readingFocus |
+
+**Tree on photo backdrop:** SVG ~36% opacity, soft blur — mist sigil, not foreground. CSS: `.tree-bg-root--photo-backdrop`.
+
+**Cover typography:** hero closed book titles `.book-cover-title-mystic` + `.book-page-title` bumped for readability (zh mystic fonts).
 
 ## Six books (one facet each)
 
@@ -209,6 +245,8 @@ DB path: `data/psyche-tree.sqlite` (or `SQLITE_PATH`). Reset: `node scripts/rese
 - `useVisualTier`: shelf full / cover balanced / quiz minimal; guide reading uses `readingFocus`
 - Psychology copy: `【title】desc`; integration last
 - Locale switch reads cached readings; does not re-score
+- Guide: click left/right page **or** footer 溯息/展息; 归序首 resets spread only (not logout)
+- Homepage: photo slideshow only when `availableBackgroundScenes().length > 0`
 
 ## Verify
 

@@ -32,6 +32,7 @@ interface TreeOfLifeBackgroundProps {
   recoilKey?: number
   visualTier?: VisualTier
   readingFocus?: boolean
+  photoBackdrop?: boolean
 }
 
 export const TreeOfLifeBackground = memo(function TreeOfLifeBackground({
@@ -40,6 +41,7 @@ export const TreeOfLifeBackground = memo(function TreeOfLifeBackground({
   recoilKey = 0,
   visualTier = 'balanced',
   readingFocus = false,
+  photoBackdrop = false,
 }: TreeOfLifeBackgroundProps) {
   const isWelcome = variant === 'welcome'
   const isComplete = variant === 'complete'
@@ -59,12 +61,18 @@ export const TreeOfLifeBackground = memo(function TreeOfLifeBackground({
   const focusDim = readingFocus ? 0.24 : 1
 
   return (
-    <div className={`fixed inset-0 overflow-hidden pointer-events-none z-0 tree-bg-root tree-bg-root--${visualTier}${isWelcome ? ' tree-bg-root--welcome' : ''}${readingFocus ? ' tree-bg-root--reading-focus' : ''}`}>
-      <div className="tree-bg-base" />
+    <div className={`fixed inset-0 overflow-hidden pointer-events-none z-0 tree-bg-root tree-bg-root--${visualTier}${isWelcome ? ' tree-bg-root--welcome' : ''}${photoBackdrop ? ' tree-bg-root--photo-backdrop' : ''}${readingFocus ? ' tree-bg-root--reading-focus' : ''}`}>
+      <div
+        className="tree-bg-base"
+        style={{ opacity: photoBackdrop ? 0.04 : 1 }}
+      />
       <div
         className="tree-bg-depth"
         style={{
-          opacity: (isWelcome ? 0.95 : isComplete ? 1 : 0.82 + revealStage * 0.025) * focusDim,
+          opacity:
+            (isWelcome ? 0.95 : isComplete ? 1 : 0.82 + revealStage * 0.025) *
+            focusDim *
+            (photoBackdrop ? 0.12 : 1),
         }}
       />
 
@@ -73,7 +81,9 @@ export const TreeOfLifeBackground = memo(function TreeOfLifeBackground({
         style={{
           opacity:
             (isWelcome
-              ? 0.22
+              ? photoBackdrop
+                ? 0.07
+                : 0.14
               : isComplete
                 ? 0.85
                 : 0.18 + (revealStage / 7) * 0.55) * focusDim,
@@ -90,7 +100,7 @@ export const TreeOfLifeBackground = memo(function TreeOfLifeBackground({
       <div
         className="absolute inset-0 transition-opacity duration-1000"
         style={{
-          opacity: focusDim,
+          opacity: photoBackdrop ? focusDim * 0.35 : focusDim,
           background: isComplete
             ? 'radial-gradient(ellipse 78% 68% at 50% 22%, rgba(255,255,255,0.16) 0%, transparent 58%)'
             : isWelcome
@@ -105,11 +115,13 @@ export const TreeOfLifeBackground = memo(function TreeOfLifeBackground({
           readingFocus
             ? 'opacity-28'
             : isWelcome
-              ? 'opacity-[0.72] scale-[1.06] tree-bg-svg--welcome'
+              ? photoBackdrop
+                ? 'opacity-[0.36] scale-[1.03] tree-bg-svg--welcome tree-bg-svg--photo-mist'
+                : 'opacity-[0.54] scale-[1.05] tree-bg-svg--welcome'
               : isComplete
                 ? 'opacity-90'
                 : 'opacity-85'
-        } ${isWelcome && visualTier === 'full' ? 'animate-breathe' : isComplete ? 'animate-breathe' : ''}${showEnergyFlow ? ' tree-bg-svg--flowing' : ''}${readingFocus ? ' tree-bg-svg--muted' : ''}`}
+        } ${isWelcome && visualTier === 'full' && !photoBackdrop ? 'animate-breathe' : isComplete ? 'animate-breathe' : ''}${showEnergyFlow ? ' tree-bg-svg--flowing' : ''}${readingFocus ? ' tree-bg-svg--muted' : ''}`}
         viewBox="0 0 800 900"
         preserveAspectRatio="xMidYMid slice"
         fill="none"
@@ -370,7 +382,7 @@ export const TreeOfLifeBackground = memo(function TreeOfLifeBackground({
             cy="440"
             rx="320"
             ry="380"
-            stroke="rgba(255,255,255,0.12)"
+            stroke={`rgba(255,255,255,${photoBackdrop ? 0.05 : 0.1})`}
             strokeWidth="0.6"
             strokeDasharray="4 10"
           />

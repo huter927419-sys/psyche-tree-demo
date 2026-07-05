@@ -60,13 +60,17 @@ Built by `buildBookQuestionFlow()` in `books/shared/questionFlow.ts`.
 ### Guide UI CSS (`index.css`)
 
 - `.guide-spread-panel`, `.guide-spread-rite`, `.guide-spread-verse`, `.guide-spread-body`
+- `.guide-spread-rite--sigil` — single-char section labels (起/序); zh ~1.02rem, other rites ~0.72rem
 - `.guide-spread-panel--breath` → `@keyframes guide-breath-cycle` (verse fade cycle)
 - `.guide-spread-panel--rest` → `.guide-spread-void`, glyph 息
-- `.shore-zen-*` — atmospheric layer (after `SkyAtmosphere` in `App.tsx`)
+- `.book-page--interactive` — guide click-to-turn (left=溯息, right=展息)
+- `.home-bg-slideshow`, `.home-bg-slide` — homepage photo crossfade
+- `.tree-bg-root--photo-backdrop` — faint tree over ink-wash backgrounds
+- `.shore-zen-*` — atmospheric layer (wrapped in `.ambient-atmosphere-stack` in `App.tsx`)
 
 ### Guide i18n keys (`ui.ts`)
 
-`guideCover*`, `guideSection*`, `guideAxisEast` / `guideAxisModern`, `guideEnterShore`, `guideVolumeHandoffHint`, `guideFirstVisitHint` — zh source; zhTw OpenCC; en/ja tables in `ui.ts`.
+`guideCover*`, `guideSection*`, `guideAxisEast` / `guideAxisModern`, `guideEnterShore`, `guideTurnPrev` (溯息), `guideTurnNext` (展息), `guideRestartReading` (归序首), `guidePageTurnPrevAria`, `guidePageTurnNextAria`, `guideVolumeHandoffHint`, `guideFirstVisitHint` — zh source; zhTw OpenCC; en/ja tables in `ui.ts`.
 
 ## Documentation map · 文档索引
 
@@ -133,17 +137,24 @@ Built by `buildBookQuestionFlow()` in `books/shared/questionFlow.ts`.
 ## Client paths
 
 ```
-src/App.tsx                         # phase: shelf | guide | cover | questions
+src/App.tsx                         # phase: shelf | guide | cover | questions; showPhotoBackdrop
+src/books/backgroundScenes.ts       # homepage slideshow ids + version
+src/books/volumeCovers.ts           # cover art ids (guide + six volumes)
 src/books/guide/                    # 序卷 content, template, storage (local only)
 src/books/registry.ts
 src/books/{id}/content.ts
 src/books/shared/createBook.ts
+src/components/ambient/HomeBackgroundSlideshow.tsx
 src/components/bookshelf/           # Bookshelf, BookshelfGuideSlot, BookshelfVolumeCover,
                                     # HolisticOracleOverlay, UltimateOracle, ReturnToTreeOverlay
-src/components/guide/               # GuideCover, GuideReader, GuidePageContent
+src/components/book/BookCoverArt.tsx
+src/components/guide/               # GuideCover, GuideReader, GuidePageContent, GuideIllustration
 src/components/ambient/ShoreZenAmbience.tsx
+src/components/book/BookShell.tsx   # flip + optional pageClickEnabled (guide)
 src/components/book/BookReader.tsx  # save assessment, fetch mystical reading, volume rites
+src/components/book/BookClosedVisual.tsx
 src/components/book/VolumeRiteOverlay.tsx
+src/components/TreeOfLifeBackground.tsx  # photoBackdrop prop
 src/i18n/ui.ts                      # UI strings + guideSection* / guideCover* keys
 src/i18n/traditionalChinese.ts      # OpenCC + convertStringsDeep (incl. functions)
 src/i18n/questionGuide.ts           # + questionGuide.ja.ts
@@ -247,6 +258,20 @@ six books complete → journey.status = completed
 
 **Expected green runs (dev up):** `verify-full-flow` 39/39 with test-fallback header; `verify-rite-flow` 14/14 with Playwright + Chrome.
 
-## Card images
+## Visual assets & import scripts
 
-`public/cards/{pattern}.png` — `npm run generate:cards` (`scripts/generate-card-images.mjs`)
+| Asset | Path | Import script |
+|-------|------|---------------|
+| Card art (runtime) | `public/cards/{pattern}.png` | `scripts/import-card-image.mjs` |
+| Card art (legacy SVG) | `public/cards-procedural/` | `scripts/generate-card-images.mjs` (not in build) |
+| Volume covers | `public/covers/{id}.png` (1280×1680) | `scripts/import-cover-image.mjs` |
+| Guide illustrations | `public/guide/01-shore-near.png` … `05-enter-mist.png` | `scripts/import-guide-illustration.mjs` |
+| Homepage backgrounds | `public/backgrounds/01-mist-arrival.png` … `06-night-shore.png` | `scripts/import-background-image.mjs` |
+
+Registry files: `src/books/volumeCovers.ts`, `src/books/guide/illustrations.ts`, `src/books/backgroundScenes.ts`. Bump `?v=` version constants after re-import.
+
+Card prompts: `scripts/card-prompts.mjs` (ink-wash style prefix for AI generation).
+
+## Card images (legacy note)
+
+Runtime cards are **imported ink-wash PNGs** in `public/cards/`. Do not re-enable `generate:cards` in production build unless switching back to procedural art.

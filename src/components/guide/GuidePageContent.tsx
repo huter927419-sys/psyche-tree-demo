@@ -43,7 +43,13 @@ function GuideSpreadPanel({
 
   return (
     <div className={`guide-spread-panel guide-spread-panel--${panelTone}`}>
-      {rite && <p className="guide-spread-rite">{rite}</p>}
+      {rite && (
+        <p
+          className={`guide-spread-rite${rite.length <= 1 ? ' guide-spread-rite--sigil' : ''}`}
+        >
+          {rite}
+        </p>
+      )}
       {axis && <p className="guide-spread-axis">{axis}</p>}
       {source && <p className="guide-spread-source">{source}</p>}
       {quote && (

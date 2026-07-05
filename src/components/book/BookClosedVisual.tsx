@@ -47,7 +47,7 @@ export function BookClosedVisual({
             <h2
               className={
                 locale === 'en'
-                  ? 'font-serif text-[#f0f0f0] text-center leading-snug mb-1 px-1 text-lg sm:text-xl tracking-[0.04em]'
+                  ? 'font-serif text-[#f0f0f0] text-center leading-snug mb-1 px-1 text-xl sm:text-2xl tracking-[0.04em]'
                   : 'book-cover-title-mystic'
               }
               style={

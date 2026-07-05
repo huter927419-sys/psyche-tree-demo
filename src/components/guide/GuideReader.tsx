@@ -67,6 +67,23 @@ export function GuideReader({
     scheduleFlip('next', pageIndex + 1)
   }, [flipping, isLastSpread, pageIndex, scheduleFlip])
 
+  const handlePageClick = useCallback(
+    (side: 'left' | 'right') => {
+      if (side === 'left') {
+        handleBack()
+        return
+      }
+      handleNext()
+    },
+    [handleBack, handleNext],
+  )
+
+  const handleRestart = useCallback(() => {
+    if (flipping || pageIndex === 0) return
+    setPageIndex(0)
+    saveGuideSpreadIndex(0)
+  }, [flipping, pageIndex])
+
   const handleEnterShore = useCallback(() => {
     markGuideCompleted()
     onCompleted?.()
@@ -100,6 +117,16 @@ export function GuideReader({
     }
     return ui.guideChapterLabel
   }, [guide.spreads, pageIndex, ui.guideChapterLabel])
+
+  const navProps = {
+    onBack: handleBack,
+    backDisabled: pageIndex === 0 || flipping,
+    backLabel: ui.guideTurnPrev,
+    onRestart: handleRestart,
+    restartDisabled: flipping || pageIndex === 0,
+    restartLabel: ui.guideRestartReading,
+    showRestart: pageIndex > 0,
+  }
 
   return (
     <div className="book-reader-stack">
@@ -135,13 +162,17 @@ export function GuideReader({
         onFlipComplete={completeFlip}
         locale={locale}
         coverArtId="guide"
+        pageClickEnabled={!flipping}
+        onPageClick={handlePageClick}
+        pageTurnPrevLabel={ui.guidePageTurnPrevAria}
+        pageTurnNextLabel={ui.guidePageTurnNextAria}
+        pageTurnLeftDisabled={pageIndex === 0 || flipping}
+        pageTurnRightDisabled={flipping || isLastSpread}
         footer={
           isEnterSpread ? (
             <div className="flex flex-col gap-4">
               <BookNav
-                onBack={handleBack}
-                backDisabled={pageIndex === 0 || flipping}
-                backLabel={ui.prevPage}
+                {...navProps}
                 showNext={false}
                 selectOneHint={ui.guideEnterHint}
               />
@@ -155,12 +186,10 @@ export function GuideReader({
             </div>
           ) : (
             <BookNav
-              onBack={handleBack}
+              {...navProps}
               onNext={handleNext}
-              backDisabled={pageIndex === 0 || flipping}
               nextDisabled={flipping || isLastSpread}
-              backLabel={ui.prevPage}
-              nextLabel={ui.nextPage}
+              nextLabel={ui.guideTurnNext}
             />
           )
         }

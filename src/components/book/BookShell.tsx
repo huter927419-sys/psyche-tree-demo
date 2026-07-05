@@ -22,6 +22,13 @@ interface BookShellProps {
   locale?: Locale
   /** book id or `guide` — uses public/covers/{id}.png when available */
   coverArtId?: string
+  /** Click left/right page to turn (e.g. guide prologue) */
+  pageClickEnabled?: boolean
+  onPageClick?: (side: 'left' | 'right') => void
+  pageTurnPrevLabel?: string
+  pageTurnNextLabel?: string
+  pageTurnLeftDisabled?: boolean
+  pageTurnRightDisabled?: boolean
 }
 
 export function BookShell({
@@ -40,11 +47,28 @@ export function BookShell({
   flipSerial = 0,
   locale = 'zh',
   coverArtId,
+  pageClickEnabled = false,
+  onPageClick,
+  pageTurnPrevLabel,
+  pageTurnNextLabel,
+  pageTurnLeftDisabled = false,
+  pageTurnRightDisabled = false,
 }: BookShellProps) {
   const ui = getUi(locale)
   const resolvedCoverId = coverArtId ? volumeCoverArtId(coverArtId) : undefined
   const isFlipping =
     flipping && incomingLeft !== undefined && incomingRight !== undefined
+
+  const spreadPageProps = {
+    ghostLabel: ui.ghostMemory,
+    coverArtId: resolvedCoverId,
+    pageClickEnabled: pageClickEnabled && !isFlipping,
+    onPageClick,
+    pageTurnPrevLabel,
+    pageTurnNextLabel,
+    pageTurnLeftDisabled,
+    pageTurnRightDisabled,
+  }
 
   const handleTurnAnimationEnd = (e: React.AnimationEvent<HTMLDivElement>) => {
     if (e.target !== e.currentTarget) return
@@ -76,16 +100,11 @@ export function BookShell({
               <SpreadPages
                 left={incomingLeft!}
                 right={incomingRight!}
-                ghostLabel={ui.ghostMemory}
-                coverArtId={resolvedCoverId}
+                {...spreadPageProps}
+                pageClickEnabled={false}
               />
             ) : (
-              <SpreadPages
-                left={left}
-                right={right}
-                ghostLabel={ui.ghostMemory}
-                coverArtId={resolvedCoverId}
-              />
+              <SpreadPages left={left} right={right} {...spreadPageProps} />
             )}
           </div>
 
@@ -150,19 +169,53 @@ function SpreadPages({
   right,
   ghostLabel,
   coverArtId,
+  pageClickEnabled = false,
+  onPageClick,
+  pageTurnPrevLabel,
+  pageTurnNextLabel,
+  pageTurnLeftDisabled = false,
+  pageTurnRightDisabled = false,
 }: {
   left: ReactNode
   right: ReactNode
   ghostLabel: string
   coverArtId?: string
+  pageClickEnabled?: boolean
+  onPageClick?: (side: 'left' | 'right') => void
+  pageTurnPrevLabel?: string
+  pageTurnNextLabel?: string
+  pageTurnLeftDisabled?: boolean
+  pageTurnRightDisabled?: boolean
 }) {
   return (
     <>
-      <BookPage side="left" ghostLabel={ghostLabel} coverArtId={coverArtId}>
+      <BookPage
+        side="left"
+        ghostLabel={ghostLabel}
+        coverArtId={coverArtId}
+        interactive={pageClickEnabled && !pageTurnLeftDisabled}
+        onActivate={
+          pageClickEnabled && !pageTurnLeftDisabled
+            ? () => onPageClick?.('left')
+            : undefined
+        }
+        activateLabel={pageTurnPrevLabel}
+      >
         {left}
       </BookPage>
       <div className="book-spine" aria-hidden />
-      <BookPage side="right" ghostLabel={ghostLabel} coverArtId={coverArtId}>
+      <BookPage
+        side="right"
+        ghostLabel={ghostLabel}
+        coverArtId={coverArtId}
+        interactive={pageClickEnabled && !pageTurnRightDisabled}
+        onActivate={
+          pageClickEnabled && !pageTurnRightDisabled
+            ? () => onPageClick?.('right')
+            : undefined
+        }
+        activateLabel={pageTurnNextLabel}
+      >
         {right}
       </BookPage>
     </>
@@ -175,16 +228,35 @@ function BookPage({
   back = false,
   ghostLabel = '',
   coverArtId,
+  interactive = false,
+  onActivate,
+  activateLabel,
 }: {
   side: 'left' | 'right'
   children: ReactNode
   back?: boolean
   ghostLabel?: string
   coverArtId?: string
+  interactive?: boolean
+  onActivate?: () => void
+  activateLabel?: string
 }) {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (!onActivate) return
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      onActivate()
+    }
+  }
+
   return (
     <div
-      className={`book-page book-page-${side}${back ? ' book-page-back' : ''}${coverArtId ? ' book-page--with-cover' : ''}`}
+      className={`book-page book-page-${side}${back ? ' book-page-back' : ''}${coverArtId ? ' book-page--with-cover' : ''}${interactive ? ' book-page--interactive' : ''}`}
+      onClick={onActivate}
+      onKeyDown={handleKeyDown}
+      role={interactive ? 'button' : undefined}
+      tabIndex={interactive ? 0 : undefined}
+      aria-label={interactive ? activateLabel : undefined}
     >
       {!back && coverArtId && (
         <BookPageCoverWatermark coverId={coverArtId} side={side} />
@@ -206,47 +278,69 @@ function BookPage({
 interface BookNavProps {
   onBack?: () => void
   onNext?: () => void
+  onRestart?: () => void
   backLabel?: string
   nextLabel?: string
+  restartLabel?: string
   backDisabled?: boolean
   nextDisabled?: boolean
+  restartDisabled?: boolean
   showNext?: boolean
+  showRestart?: boolean
   selectOneHint?: string
 }
 
 export function BookNav({
   onBack,
   onNext,
+  onRestart,
   backLabel = '上一页',
   nextLabel = '翻页',
+  restartLabel = '归序首',
   backDisabled,
   nextDisabled,
+  restartDisabled,
   showNext = true,
+  showRestart = false,
   selectOneHint = '择一即翻页',
 }: BookNavProps) {
   return (
-    <div className="flex justify-between items-center gap-4">
-      <button
-        type="button"
-        onClick={onBack}
-        disabled={backDisabled}
-        className="book-nav-btn book-nav-btn-ghost disabled:opacity-30"
-      >
-        ← {backLabel}
-      </button>
-      {showNext ? (
+    <div className="book-nav-stack">
+      <div className="flex justify-between items-center gap-4">
         <button
           type="button"
-          onClick={onNext}
-          disabled={nextDisabled}
-          className="book-nav-btn book-nav-btn-primary disabled:opacity-30"
+          onClick={onBack}
+          disabled={backDisabled}
+          className="book-nav-btn book-nav-btn-ghost disabled:opacity-30"
         >
-          {nextLabel} →
+          ← {backLabel}
         </button>
-      ) : (
-        <span className="text-[10px] tracking-[0.2em] text-[rgba(200,200,200,0.35)]">
-          {selectOneHint}
-        </span>
+        {showNext ? (
+          <button
+            type="button"
+            onClick={onNext}
+            disabled={nextDisabled}
+            className="book-nav-btn book-nav-btn-primary disabled:opacity-30"
+          >
+            {nextLabel} →
+          </button>
+        ) : (
+          <span className="text-[10px] tracking-[0.2em] text-[rgba(200,200,200,0.35)]">
+            {selectOneHint}
+          </span>
+        )}
+      </div>
+      {showRestart && onRestart && (
+        <div className="flex justify-center pt-2">
+          <button
+            type="button"
+            onClick={onRestart}
+            disabled={restartDisabled}
+            className="book-nav-btn book-nav-btn-ghost book-nav-btn-restart disabled:opacity-30"
+          >
+            {restartLabel}
+          </button>
+        </div>
       )}
     </div>
   )
