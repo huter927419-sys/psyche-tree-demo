@@ -5,4 +5,4 @@
 | 文档 | 对照 |
 |------|------|
 | [Taves2018-雾岸交叉读](./Taves2018-雾岸交叉读.md) | Taves, Asprem & Ihm (2018) 世界观 / meaning making ↔ [01–06 世界观](../01-本源.md) · [implement](../implement/README.md) |
-| 文献 PDF | [../../references/TavesAspremIhm2018.pdf](../../references/TavesAspremIhm2018.pdf) |
+| 正式文献 | [DOI 10.1037/rel0000201](https://doi.org/10.1037/rel0000201) · [书目](../../references/README.md) |
