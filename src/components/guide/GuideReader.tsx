@@ -134,6 +134,7 @@ export function GuideReader({
         enterAnimation={enterFromCover}
         onFlipComplete={completeFlip}
         locale={locale}
+        coverArtId="guide"
         footer={
           isEnterSpread ? (
             <div className="flex flex-col gap-4">

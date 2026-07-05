@@ -4,6 +4,7 @@ import { getUi } from '../../i18n/ui'
 import { BilingualCrossfadeText } from '../i18n/BilingualCrossfadeText'
 import { LanguageToggle } from '../i18n/LanguageToggle'
 import { BookClosedVisual } from './BookClosedVisual'
+import { volumeCoverArtId } from '../../books/volumeCovers'
 
 interface BookCoverProps {
   book: BookDefinition
@@ -70,6 +71,7 @@ export function BookCover({
           book={book}
           locale={locale}
           size="hero"
+          coverArtId={volumeCoverArtId(book.meta.id)}
           motion={opening ? 'opening' : 'idle'}
         />
       </div>

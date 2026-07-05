@@ -1,6 +1,8 @@
 import type { ReactNode } from 'react'
 import type { Locale } from '../../i18n/locale'
+import { volumeCoverArtId } from '../../books/volumeCovers'
 import { getUi } from '../../i18n/ui'
+import { BookPageCoverWatermark } from './BookCoverArt'
 import { formatPageLabel } from './bookUtils'
 
 interface BookShellProps {
@@ -18,6 +20,8 @@ interface BookShellProps {
   enterAnimation?: boolean
   flipSerial?: number
   locale?: Locale
+  /** book id or `guide` — uses public/covers/{id}.png when available */
+  coverArtId?: string
 }
 
 export function BookShell({
@@ -35,8 +39,10 @@ export function BookShell({
   enterAnimation = false,
   flipSerial = 0,
   locale = 'zh',
+  coverArtId,
 }: BookShellProps) {
   const ui = getUi(locale)
+  const resolvedCoverId = coverArtId ? volumeCoverArtId(coverArtId) : undefined
   const isFlipping =
     flipping && incomingLeft !== undefined && incomingRight !== undefined
 
@@ -67,16 +73,26 @@ export function BookShell({
         >
           <div className="book-spread-layer book-spread-base">
             {isFlipping ? (
-              <SpreadPages left={incomingLeft!} right={incomingRight!} ghostLabel={ui.ghostMemory} />
+              <SpreadPages
+                left={incomingLeft!}
+                right={incomingRight!}
+                ghostLabel={ui.ghostMemory}
+                coverArtId={resolvedCoverId}
+              />
             ) : (
-              <SpreadPages left={left} right={right} ghostLabel={ui.ghostMemory} />
+              <SpreadPages
+                left={left}
+                right={right}
+                ghostLabel={ui.ghostMemory}
+                coverArtId={resolvedCoverId}
+              />
             )}
           </div>
 
           {isFlipping && flipDirection === 'next' && (
             <>
               <div className="book-turn-overlay book-turn-overlay-left">
-                <BookPage side="left">{left}</BookPage>
+                <BookPage side="left" coverArtId={resolvedCoverId}>{left}</BookPage>
               </div>
               <div
                 key={`turn-next-${flipSerial}`}
@@ -84,10 +100,10 @@ export function BookShell({
                 onAnimationEnd={handleTurnAnimationEnd}
               >
                 <div className="book-turn-face book-turn-front">
-                  <BookPage side="right">{right}</BookPage>
+                  <BookPage side="right" coverArtId={resolvedCoverId}>{right}</BookPage>
                 </div>
                 <div className="book-turn-face book-turn-back">
-                  <BookPage side="left">{incomingLeft}</BookPage>
+                  <BookPage side="left" coverArtId={resolvedCoverId}>{incomingLeft}</BookPage>
                 </div>
                 <div className="book-turn-edge" aria-hidden />
               </div>
@@ -97,7 +113,7 @@ export function BookShell({
           {isFlipping && flipDirection === 'prev' && (
             <>
               <div className="book-turn-overlay book-turn-overlay-right">
-                <BookPage side="right">{right}</BookPage>
+                <BookPage side="right" coverArtId={resolvedCoverId}>{right}</BookPage>
               </div>
               <div
                 key={`turn-prev-${flipSerial}`}
@@ -105,10 +121,10 @@ export function BookShell({
                 onAnimationEnd={handleTurnAnimationEnd}
               >
                 <div className="book-turn-face book-turn-front">
-                  <BookPage side="left">{left}</BookPage>
+                  <BookPage side="left" coverArtId={resolvedCoverId}>{left}</BookPage>
                 </div>
                 <div className="book-turn-face book-turn-back">
-                  <BookPage side="right">{incomingRight}</BookPage>
+                  <BookPage side="right" coverArtId={resolvedCoverId}>{incomingRight}</BookPage>
                 </div>
                 <div className="book-turn-edge book-turn-edge-left" aria-hidden />
               </div>
@@ -133,16 +149,22 @@ function SpreadPages({
   left,
   right,
   ghostLabel,
+  coverArtId,
 }: {
   left: ReactNode
   right: ReactNode
   ghostLabel: string
+  coverArtId?: string
 }) {
   return (
     <>
-      <BookPage side="left" ghostLabel={ghostLabel}>{left}</BookPage>
+      <BookPage side="left" ghostLabel={ghostLabel} coverArtId={coverArtId}>
+        {left}
+      </BookPage>
       <div className="book-spine" aria-hidden />
-      <BookPage side="right" ghostLabel={ghostLabel}>{right}</BookPage>
+      <BookPage side="right" ghostLabel={ghostLabel} coverArtId={coverArtId}>
+        {right}
+      </BookPage>
     </>
   )
 }
@@ -152,16 +174,21 @@ function BookPage({
   children,
   back = false,
   ghostLabel = '',
+  coverArtId,
 }: {
   side: 'left' | 'right'
   children: ReactNode
   back?: boolean
   ghostLabel?: string
+  coverArtId?: string
 }) {
   return (
     <div
-      className={`book-page book-page-${side}${back ? ' book-page-back' : ''}`}
+      className={`book-page book-page-${side}${back ? ' book-page-back' : ''}${coverArtId ? ' book-page--with-cover' : ''}`}
     >
+      {!back && coverArtId && (
+        <BookPageCoverWatermark coverId={coverArtId} side={side} />
+      )}
       <div className="book-page-texture" aria-hidden />
       {back ? (
         <div className="book-page-back-content" aria-hidden>

@@ -16,7 +16,9 @@ export function chapterToSpreads(chapter: GuideChapterDef): GuideSpread[] {
     },
     {
       left: [{ kind: 'turn', lines: chapter.turn }],
-      right: [{ kind: 'pause', text: '……' }],
+      right: chapter.turnIllustrationId
+        ? [{ kind: 'illustration', id: chapter.turnIllustrationId }]
+        : [{ kind: 'pause', text: '……' }],
     },
     {
       left: [
@@ -75,7 +77,9 @@ export function chapterToSpreads(chapter: GuideChapterDef): GuideSpread[] {
     },
     {
       left: [{ kind: 'close', lines: chapter.close }],
-      right: [{ kind: 'pause', text: '……' }],
+      right: chapter.closeIllustrationId
+        ? [{ kind: 'illustration', id: chapter.closeIllustrationId }]
+        : [{ kind: 'pause', text: '……' }],
     },
   ]
 }

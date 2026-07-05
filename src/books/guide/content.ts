@@ -3,7 +3,7 @@ import type { GuideChapterDef, GuideContent, GuideSpread } from './types'
 
 const zhPreface: GuideSpread[] = [
   {
-    left: [{ kind: 'part', text: '序' }],
+    left: [{ kind: 'illustration', id: '01-shore-near' }],
     right: [
       {
         kind: 'lines',
@@ -16,7 +16,7 @@ const zhPreface: GuideSpread[] = [
     ],
   },
   {
-    left: [{ kind: 'part', text: '引导' }],
+    left: [{ kind: 'illustration', id: '02-six-facets' }],
     right: [
       {
         kind: 'phenomenon',
@@ -84,6 +84,7 @@ const zhChapter1: GuideChapterDef = {
     lines: ['因为，', '识己不是积累答案，', '而是允许被照见。'],
   },
   close: ['照见未完。', '下一章。'],
+  turnIllustrationId: '03-still-pause',
 }
 
 const zhChapter2: GuideChapterDef = {
@@ -138,6 +139,7 @@ const zhChapter2: GuideChapterDef = {
     lines: ['因为，', '人不是固定名词，', '而是正在发生的应答。'],
   },
   close: ['照见未完。', '下一章。'],
+  turnIllustrationId: '04-name-in-flow',
 }
 
 const zhChapter3: GuideChapterDef = {
@@ -247,6 +249,7 @@ const zhChapter4: GuideChapterDef = {
     lines: ['因为，', '入卷不是被定义，', '而是择一面向，', '与己相照。'],
   },
   close: ['若愿，', '便入雾。'],
+  closeIllustrationId: '05-enter-mist',
 }
 
 const zhEpilogue: GuideSpread[] = [
@@ -268,14 +271,14 @@ const zhEpilogue: GuideSpread[] = [
 
 const enPreface: GuideSpread[] = [
   {
-    left: [{ kind: 'part', text: 'Preface' }],
+    left: [{ kind: 'illustration', id: '01-shore-near' }],
     right: [
       { kind: 'lines', lines: ['Shared View', 'Prologue'] },
       { kind: 'hook', lines: ['The shore is near;', 'the mist not yet deep.'] },
     ],
   },
   {
-    left: [{ kind: 'part', text: 'Guide' }],
+    left: [{ kind: 'illustration', id: '02-six-facets' }],
     right: [
       {
         kind: 'phenomenon',
@@ -338,6 +341,7 @@ const enChapter1: GuideChapterDef = {
     lines: ['Because knowing yourself', 'is not hoarding answers—', 'but allowing mirror-light.'],
   },
   close: ['Mirroring continues.', 'Next chapter.'],
+  turnIllustrationId: '03-still-pause',
 }
 
 const enChapter2: GuideChapterDef = {
@@ -390,6 +394,7 @@ const enChapter2: GuideChapterDef = {
     lines: ['Because a person is not a fixed noun—', 'but a response still happening.'],
   },
   close: ['Mirroring continues.', 'Next chapter.'],
+  turnIllustrationId: '04-name-in-flow',
 }
 
 const enChapter3: GuideChapterDef = {
@@ -496,6 +501,7 @@ const enChapter4: GuideChapterDef = {
     lines: ['Because entering is not being defined—', 'but choosing one facet to mirror with.'],
   },
   close: ['If you wish,', 'enter the mist.'],
+  closeIllustrationId: '05-enter-mist',
 }
 
 const enEpilogue: GuideSpread[] = [
@@ -517,14 +523,14 @@ const enEpilogue: GuideSpread[] = [
 
 const jaPreface: GuideSpread[] = [
   {
-    left: [{ kind: 'part', text: '序' }],
+    left: [{ kind: 'illustration', id: '01-shore-near' }],
     right: [
       { kind: 'lines', lines: ['同観', '序巻'] },
       { kind: 'hook', lines: ['岸は未だ遠からず、', '霧は未だ深からず。'] },
     ],
   },
   {
-    left: [{ kind: 'part', text: '導き' }],
+    left: [{ kind: 'illustration', id: '02-six-facets' }],
     right: [
       {
         kind: 'phenomenon',
@@ -587,6 +593,7 @@ const jaChapter1: GuideChapterDef = {
     lines: ['なぜなら、', '識己は答を積むことに非ず、', '照されることを許すこと。'],
   },
   close: ['照見未だ尽せず。', '次章へ。'],
+  turnIllustrationId: '03-still-pause',
 }
 
 const jaChapter2: GuideChapterDef = {
@@ -637,6 +644,7 @@ const jaChapter2: GuideChapterDef = {
     lines: ['なぜなら、', '人は固定の名詞に非ず、', '今起こる応答なり。'],
   },
   close: ['照見未だ尽せず。', '次章へ。'],
+  turnIllustrationId: '04-name-in-flow',
 }
 
 const jaChapter3: GuideChapterDef = {
@@ -737,6 +745,7 @@ const jaChapter4: GuideChapterDef = {
     lines: ['なぜなら、', '入巻は定義されることに非ず、', '一面を選び、己と相照すること。'],
   },
   close: ['若くば、', '霧に入れ。'],
+  closeIllustrationId: '05-enter-mist',
 }
 
 const jaEpilogue: GuideSpread[] = [

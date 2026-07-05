@@ -188,6 +188,7 @@ export function BookQuestionFlow({
         flipDirection={flipDirection}
         enterAnimation={enterFromCover}
         onFlipComplete={completeFlip}
+        coverArtId={book.meta.id}
         footer={
           <BookNav
             onBack={handleBack}

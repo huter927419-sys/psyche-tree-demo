@@ -1,6 +1,7 @@
 import type { GuidePageBlock } from '../../books/guide/types'
 import type { Locale } from '../../i18n/locale'
 import { getUi } from '../../i18n/ui'
+import { GuideIllustration } from './GuideIllustration'
 
 type GuidePanelTone = 'default' | 'hook' | 'breath' | 'close' | 'quote' | 'rest'
 
@@ -220,6 +221,14 @@ export function GuidePageContent({
 
         if (block.kind === 'pause') {
           return <GuideSpreadPanel key={key} locale={locale} tone="rest" />
+        }
+
+        if (block.kind === 'illustration') {
+          return (
+            <div key={key} className="guide-spread-illustration-wrap">
+              <GuideIllustration id={block.id} />
+            </div>
+          )
         }
 
         if (block.kind === 'lines') {

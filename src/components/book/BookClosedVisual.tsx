@@ -1,10 +1,13 @@
 import type { BookDefinition } from '../../books/types'
 import type { Locale } from '../../i18n/locale'
+import { BookCoverArt } from './BookCoverArt'
 
 interface BookClosedVisualProps {
   book: BookDefinition
   locale?: Locale
   size?: 'default' | 'hero'
+  /** When set, renders photographic cover art under title text */
+  coverArtId?: string
   /** opening = cover swings open; closing = cover folds shut */
   motion?: 'idle' | 'opening' | 'closing'
   compact?: boolean
@@ -14,6 +17,7 @@ export function BookClosedVisual({
   book,
   locale = 'zh',
   size = 'default',
+  coverArtId,
   motion = 'idle',
   compact = false,
 }: BookClosedVisualProps) {
@@ -34,7 +38,10 @@ export function BookClosedVisual({
       <div className="book-perspective mx-auto">
         <div className={`book-closed ${motionClass} ${accentClass}`}>
           <div className="book-cover-spine-side" aria-hidden />
-          <div className="book-cover-face">
+          <div className={`book-cover-face${coverArtId ? ' book-cover-face--art' : ''}`}>
+            {coverArtId && (
+              <BookCoverArt coverId={coverArtId} variant="hero" />
+            )}
             <div className="book-cover-texture" aria-hidden />
             <div className="book-cover-ornament top" aria-hidden />
             <h2

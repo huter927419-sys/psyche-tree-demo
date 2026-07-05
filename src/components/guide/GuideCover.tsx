@@ -67,6 +67,7 @@ export function GuideCover({
           book={book}
           locale={locale}
           size="hero"
+          coverArtId="guide"
           motion={opening ? 'opening' : 'idle'}
         />
       </div>

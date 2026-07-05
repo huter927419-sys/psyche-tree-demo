@@ -747,6 +747,7 @@ export function BookReader({
         enterAnimation={enterFromCover}
         onFlipComplete={completeFlip}
         locale={locale}
+        coverArtId={book.meta.id}
         footer={
           isQuestionSpread ? (
             readOnly ? (

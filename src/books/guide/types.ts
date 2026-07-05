@@ -38,6 +38,7 @@ export type GuidePageBlock =
   | { kind: 'close'; lines: readonly string[] }
   | { kind: 'lines'; lines: readonly string[] }
   | { kind: 'pause'; text: string }
+  | { kind: 'illustration'; id: string }
 
 export interface GuideSpread {
   left: readonly GuidePageBlock[]
@@ -60,6 +61,10 @@ export interface GuideChapterDef {
   breath: { label: string; lines: readonly string[] }
   volumeMeaning: GuideVolumeMeaning
   close: readonly string[]
+  /** Optional ink illustration on the turn-spread pause page (right) */
+  turnIllustrationId?: string
+  /** Optional ink illustration on the close-spread pause page (right) */
+  closeIllustrationId?: string
 }
 
 export interface GuideContent {

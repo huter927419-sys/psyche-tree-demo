@@ -8,6 +8,8 @@ import { BookshelfGuideSlot } from './BookshelfGuideSlot'
 import { BookshelfHeroProse } from './BookshelfHeroProse'
 import { BookshelfUltimateOracle } from './BookshelfUltimateOracle'
 import { BookshelfVolumeCover } from './BookshelfVolumeCover'
+import { BookCoverArt } from '../book/BookCoverArt'
+import { volumeCoverArtId } from '../../books/volumeCovers'
 import type { JourneyDto } from '../../services/journeyApi'
 
 interface BookshelfProps {
@@ -108,6 +110,7 @@ export function Bookshelf({
             const completed = completedBookIds.includes(book.meta.id)
             const beacon = beaconActive[i] === true
             const handoff = guideVolumeHandoff && !completed
+            const coverArtId = volumeCoverArtId(book.meta.id)
             return (
             <button
               key={book.meta.id}
@@ -132,8 +135,9 @@ export function Bookshelf({
               <div className="bookshelf-book-volume">
                 <div className="bookshelf-book-spine-face" aria-hidden />
                 <div
-                  className={`bookshelf-book-cover${locale === 'en' ? ' bookshelf-book-cover--en' : ''}`}
+                  className={`bookshelf-book-cover${coverArtId ? ' bookshelf-book-cover--art' : ''}${locale === 'en' ? ' bookshelf-book-cover--en' : ''}`}
                 >
+                  {coverArtId && <BookCoverArt coverId={coverArtId} variant="shelf" />}
                   <div className="bookshelf-book-texture" aria-hidden />
                   <div className="bookshelf-book-cover-sheen" aria-hidden />
                   <BookshelfVolumeCover

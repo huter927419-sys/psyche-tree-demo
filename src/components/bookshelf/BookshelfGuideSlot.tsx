@@ -3,6 +3,7 @@ import type { GuideShelfState } from '../../books/guide'
 import type { Locale } from '../../i18n/locale'
 import { getUi } from '../../i18n/ui'
 import { BookshelfVolumeCover } from './BookshelfVolumeCover'
+import { BookCoverArt } from '../book/BookCoverArt'
 
 interface BookshelfGuideSlotProps {
   locale: Locale
@@ -39,8 +40,9 @@ export function BookshelfGuideSlot({
         <div className="bookshelf-book-volume">
           <div className="bookshelf-book-spine-face" aria-hidden />
           <div
-            className={`bookshelf-book-cover${locale === 'en' ? ' bookshelf-book-cover--en' : ''}`}
+            className={`bookshelf-book-cover bookshelf-book-cover--art${locale === 'en' ? ' bookshelf-book-cover--en' : ''}`}
           >
+            <BookCoverArt coverId="guide" variant="shelf" />
             <div className="bookshelf-book-texture" aria-hidden />
             <div className="bookshelf-book-cover-sheen" aria-hidden />
             <BookshelfVolumeCover

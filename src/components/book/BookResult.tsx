@@ -163,6 +163,7 @@ export function BookResult({ book, result, onRestart }: BookResultProps) {
       flipping={flipping}
       flipDirection={flipDirection}
       onFlipComplete={completeFlip}
+      coverArtId={book.meta.id}
       footer={
         pageIndex < RESULT_PAGES - 1 ? (
           <BookNav
