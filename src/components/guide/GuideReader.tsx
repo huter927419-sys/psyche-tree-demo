@@ -10,6 +10,8 @@ import {
   estimateGuideSpreadDwellMs,
   getGuideAutoTurnEnabled,
   getSpreadIllustrationId,
+  GUIDE_POST_FLIP_SETTLE_MS,
+  GUIDE_POST_FLIP_SETTLE_REDUCED_MS,
   saveGuideAutoTurnEnabled,
   spreadHasIllustration,
 } from '../../books/guide/guideAutoTurn'
@@ -52,7 +54,10 @@ export function GuideReader({
   const [autoTurn, setAutoTurn] = useState(() => getGuideAutoTurnEnabled())
 
   const autoTimerRef = useRef<number | null>(null)
+  const settleTimerRef = useRef<number | null>(null)
   const illustrationAdvanceRef = useRef(false)
+  const prevPageIndexRef = useRef(pageIndex)
+  const [spreadSettled, setSpreadSettled] = useState(true)
 
   useEffect(() => {
     setPageIndex(Math.min(getGuideSpreadIndex(), totalSpreads - 1))
@@ -72,7 +77,15 @@ export function GuideReader({
 
   const isEnterSpread = pageIndex === guide.enterSpreadIndex
   const isLastSpread = pageIndex >= totalSpreads - 1
-  const illustrationReady = !flipping
+  const contentVisible = !flipping
+  const illustrationReady = !flipping && spreadSettled
+
+  const clearSettleTimer = useCallback(() => {
+    if (settleTimerRef.current !== null) {
+      window.clearTimeout(settleTimerRef.current)
+      settleTimerRef.current = null
+    }
+  }, [])
 
   const clearAutoTimer = useCallback(() => {
     if (autoTimerRef.current !== null) {
@@ -80,6 +93,36 @@ export function GuideReader({
       autoTimerRef.current = null
     }
   }, [])
+
+  useEffect(() => {
+    if (flipping) {
+      setSpreadSettled(false)
+      clearSettleTimer()
+    }
+  }, [clearSettleTimer, flipping])
+
+  useEffect(() => {
+    if (flipping) return undefined
+
+    if (prevPageIndexRef.current === pageIndex) {
+      return undefined
+    }
+
+    prevPageIndexRef.current = pageIndex
+    setSpreadSettled(false)
+    clearSettleTimer()
+
+    const settleMs = prefersReducedMotion()
+      ? GUIDE_POST_FLIP_SETTLE_REDUCED_MS
+      : GUIDE_POST_FLIP_SETTLE_MS
+
+    settleTimerRef.current = window.setTimeout(() => {
+      settleTimerRef.current = null
+      setSpreadSettled(true)
+    }, settleMs)
+
+    return () => clearSettleTimer()
+  }, [clearSettleTimer, flipping, pageIndex])
 
   const scheduleFlip = useCallback(
     (direction: 'next' | 'prev', targetIndex: number) => {
@@ -133,7 +176,7 @@ export function GuideReader({
   ])
 
   useEffect(() => {
-    if (!autoTurn || flipping || isEnterSpread || isLastSpread) {
+    if (!autoTurn || flipping || !spreadSettled || isEnterSpread || isLastSpread) {
       clearAutoTimer()
       return undefined
     }
@@ -175,6 +218,7 @@ export function GuideReader({
     isLastSpread,
     pageIndex,
     scheduleAutoAdvance,
+    spreadSettled,
   ])
 
   const handleBack = useCallback(() => {
@@ -201,9 +245,12 @@ export function GuideReader({
   const handleRestart = useCallback(() => {
     if (flipping || pageIndex === 0) return
     clearAutoTimer()
+    clearSettleTimer()
+    prevPageIndexRef.current = 0
+    setSpreadSettled(true)
     setPageIndex(0)
     saveGuideSpreadIndex(0)
-  }, [clearAutoTimer, flipping, pageIndex])
+  }, [clearAutoTimer, clearSettleTimer, flipping, pageIndex])
 
   const handleToggleAutoTurn = useCallback(() => {
     setAutoTurn((current) => {
@@ -215,18 +262,25 @@ export function GuideReader({
 
   const handleEnterShore = useCallback(() => {
     clearAutoTimer()
+    clearSettleTimer()
     markGuideCompleted()
     onCompleted?.()
     onClose()
-  }, [clearAutoTimer, onClose, onCompleted])
+  }, [clearAutoTimer, clearSettleTimer, onClose, onCompleted])
 
   const pageContentProps = useMemo(
     () => ({
       locale,
+      contentVisible,
       illustrationReady,
       onIllustrationMotionComplete: handleIllustrationMotionComplete,
     }),
-    [handleIllustrationMotionComplete, illustrationReady, locale],
+    [
+      contentVisible,
+      handleIllustrationMotionComplete,
+      illustrationReady,
+      locale,
+    ],
   )
 
   const buildSpread = useCallback(
@@ -370,7 +424,7 @@ export function GuideReader({
 
       <div className="guide-book-eyebrow-spacer" aria-hidden />
 
-      <div className="guide-book-anchor book-cover-book-wrap">{bookShell}</div>
+      <div className="guide-book-anchor guide-book-anchor--open">{bookShell}</div>
 
       <div className="guide-book-controls">{footerBlock}</div>
     </div>

@@ -8,6 +8,10 @@ import type { GuidePageBlock, GuideSpread } from './types'
 
 const GUIDE_AUTO_TURN_KEY = 'psyche-guide-auto-turn'
 
+/** Pause after page turn before auto-turn dwell (content shows when flip ends). */
+export const GUIDE_POST_FLIP_SETTLE_MS = 520
+export const GUIDE_POST_FLIP_SETTLE_REDUCED_MS = 240
+
 export function getGuideAutoTurnEnabled(): boolean {
   if (typeof localStorage === 'undefined') return true
   return localStorage.getItem(GUIDE_AUTO_TURN_KEY) !== 'off'

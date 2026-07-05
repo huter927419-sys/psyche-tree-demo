@@ -62,7 +62,7 @@ export function GuideCover({
         )}
       </p>
 
-      <div className="guide-book-anchor book-cover-book-wrap">
+      <div className="guide-book-anchor guide-book-anchor--closed book-cover-book-wrap">
         <BookClosedVisual
           book={book}
           locale={locale}

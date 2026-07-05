@@ -81,12 +81,14 @@ export function GuidePageContent({
   blocks,
   locale,
   spreadIndex,
+  contentVisible = true,
   illustrationReady = true,
   onIllustrationMotionComplete,
 }: {
   blocks: readonly GuidePageBlock[]
   locale: Locale
   spreadIndex: number
+  contentVisible?: boolean
   illustrationReady?: boolean
   onIllustrationMotionComplete?: () => void
 }) {
@@ -95,7 +97,9 @@ export function GuidePageContent({
     blocks.length === 1 && blocks[0]?.kind === 'part' ? blocks[0].text : null
 
   return (
-    <div className="guide-page-stack">
+    <div
+      className={`guide-page-stack${contentVisible ? '' : ' guide-page-stack--hidden'}`}
+    >
       {blocks.map((block, index) => {
         const key = `${block.kind}-${index}`
 

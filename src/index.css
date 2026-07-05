@@ -1738,6 +1738,26 @@ html[lang="ja"] {
   min-height: 100%;
   justify-content: center;
   gap: 0.5rem;
+  opacity: 1;
+  transition: opacity 0.32s ease;
+}
+
+.guide-page-stack--hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .guide-page-stack,
+  .guide-page-stack--hidden {
+    opacity: 1;
+    transition: none;
+    pointer-events: auto;
+  }
+}
+
+.book-journey-scaler--guide .guide-spread-panel {
+  transform: none;
 }
 
 .guide-spread-panel {
@@ -3805,23 +3825,32 @@ html[lang="ja"] .bookshelf-guide-first-hint {
 }
 
 .book-journey-scaler--guide {
-  --guide-book-box-w: min(420px, calc(100vw - 2.5rem));
-  --guide-book-box-h: calc(var(--guide-book-box-w) * 42 / 32);
-  --book-open-max: var(--guide-book-box-w);
-  --book-open-min-h: var(--guide-book-box-h);
+  --guide-closed-w: min(420px, calc(100vw - 2.5rem));
+  --guide-closed-h: calc(var(--guide-closed-w) * 42 / 32);
+  --guide-open-w: min(calc(var(--guide-closed-w) * 2), calc(100vw - 1.5rem));
+  --book-open-max: var(--guide-open-w);
+  --book-open-min-h: var(--guide-closed-h);
+  --book-page-min-h: calc(var(--guide-closed-h) * 0.94);
+  width: 100%;
+  max-width: var(--guide-open-w);
   min-height: min(88vh, 920px);
 }
 
 .book-journey-scaler--guide .guide-book-scene {
   width: 100%;
-  max-width: 920px;
+  max-width: var(--guide-open-w);
   margin-inline: auto;
   justify-content: flex-start;
 }
 
-.book-journey-scaler--guide .guide-book-anchor,
-.book-journey-scaler--guide .book-cover-book-wrap {
-  width: var(--guide-book-box-w);
+.book-journey-scaler--guide .guide-book-anchor--closed {
+  width: var(--guide-closed-w);
+  flex-shrink: 0;
+}
+
+.book-journey-scaler--guide .guide-book-anchor--open {
+  width: var(--guide-open-w);
+  max-width: var(--guide-open-w);
   flex-shrink: 0;
 }
 
@@ -3835,23 +3864,32 @@ html[lang="ja"] .bookshelf-guide-first-hint {
   pointer-events: none;
 }
 
-.book-journey-scaler--guide .guide-book-anchor .book-scene {
+.book-journey-scaler--guide .guide-book-anchor--open .book-scene {
   padding: 0;
 }
 
-.book-journey-scaler--guide .guide-book-anchor .book-perspective {
+.book-journey-scaler--guide .guide-book-anchor--open .book-perspective {
   width: 100%;
-  max-width: var(--guide-book-box-w);
+  max-width: var(--guide-open-w);
   margin-inline: auto;
 }
 
-.book-journey-scaler--guide .guide-book-anchor .book-open {
-  min-height: var(--guide-book-box-h);
+.book-journey-scaler--guide .guide-book-anchor--open .book-open {
+  min-height: var(--guide-closed-h);
+}
+
+.book-journey-scaler--guide .guide-book-anchor--open .book-spread-layer,
+.book-journey-scaler--guide .guide-book-anchor--open .book-page {
+  min-height: var(--guide-closed-h);
+}
+
+.book-journey-scaler--guide .guide-book-anchor--open .book-flip-stage {
+  min-height: var(--guide-closed-h);
 }
 
 .book-journey-scaler--guide .guide-book-controls {
   width: 100%;
-  max-width: var(--guide-book-box-w);
+  max-width: var(--guide-open-w);
   margin-top: 1.25rem;
   min-height: 7.5rem;
 }
@@ -3866,12 +3904,26 @@ html[lang="ja"] .bookshelf-guide-first-hint {
 
 @media (max-width: 767px) {
   .book-journey-scaler--guide {
-    --guide-book-box-w: min(380px, calc(100vw - 2rem));
+    --guide-closed-w: min(380px, calc(100vw - 2rem));
   }
 
   .book-journey-scaler--guide .guide-book-eyebrow-spacer {
     margin-top: 3.25rem;
     padding-inline: 0.5rem;
+  }
+
+  .book-journey-scaler--guide .guide-book-anchor--open .book-perspective {
+    max-width: var(--guide-open-w);
+  }
+
+  .book-journey-scaler--guide .guide-book-anchor--open .book-open,
+  .book-journey-scaler--guide .guide-book-anchor--open .book-spread-layer {
+    flex-direction: row;
+    min-height: var(--guide-closed-h);
+  }
+
+  .book-journey-scaler--guide .guide-book-anchor--open .book-page {
+    min-height: var(--guide-closed-h);
   }
 }
 
