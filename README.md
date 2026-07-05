@@ -4,6 +4,8 @@
 
 网页 Demo：**六卷翻书留痕**，背景是一棵随六痕亮起的生命之树。理论以叙事为第一语言（[docs/theory/](docs/theory/) **简体 · English · 日本語**）；本文是**项目入口**——产品怎么走、文档去哪读、代码怎么跑。
 
+**序 · 为何有这套体系：** [《为什么会有〈雾岸六卷〉》](docs/为什么会有雾岸六卷.md) —— 一次关于心理学、东方思想与现代认知的交叉讨论（非论文，七章 + 诸家互照）。
+
 ---
 
 ## 目录
@@ -19,7 +21,7 @@
 | [七、界面预览](#七界面预览) | 书架截图 |
 | [八、开发与运维](#八开发与运维) | 安装、脚本、约定 |
 
-长文：[理论栈索引](docs/theory/README.md) · [实践篇索引](docs/theory/implement/README.md) · 改代码：[SKILL.md](.cursor/skills/psyche-tree-demo/SKILL.md)  
+长文：[为什么会有〈雾岸六卷〉](docs/为什么会有雾岸六卷.md) · [理论栈索引](docs/theory/README.md) · [实践篇索引](docs/theory/implement/README.md) · 改代码：[SKILL.md](.cursor/skills/psyche-tree-demo/SKILL.md)  
 修持文案源：`src/i18n/volumeRite.ts` · 导出 MD：`npm run generate:rite-docs`
 
 ---
