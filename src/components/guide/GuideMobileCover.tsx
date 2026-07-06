@@ -2,6 +2,7 @@ import type { Locale } from '../../i18n/locale'
 import { getUi } from '../../i18n/ui'
 import { LanguageToggle } from '../i18n/LanguageToggle'
 import { BookCoverArt } from '../book/BookCoverArt'
+import { MysticTitle } from '../bookshelf/MysticTitle'
 
 interface GuideMobileCoverProps {
   locale: Locale
@@ -53,15 +54,17 @@ export function GuideMobileCover({
           <BookCoverArt coverId="guide" variant="hero" />
           <div className="guide-mobile-cover-frame" aria-hidden />
           <div className="book-mobile-cover-titles">
-            <h2
-              className={
-                locale === 'en'
-                  ? 'bookshelf-book-cover-title-en book-mobile-cover-title-en'
-                  : 'bookshelf-book-cover-title--zh bookshelf-book-cover-title--mystic book-mobile-cover-title-zh'
-              }
-            >
-              {title}
-            </h2>
+            {locale === 'en' ? (
+              <h2 className="bookshelf-book-cover-title-en book-mobile-cover-title-en">
+                {title}
+              </h2>
+            ) : (
+              <MysticTitle
+                as="h2"
+                text={title}
+                className="bookshelf-book-cover-title--zh bookshelf-book-cover-title--mystic book-mobile-cover-title-zh"
+              />
+            )}
             <p
               className={
                 locale === 'en'

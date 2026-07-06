@@ -8,7 +8,7 @@
   --font-serif-en: "Cormorant Garamond", Georgia, serif;
   --font-mystic-zh: "Zhi Mang Xing", "Ma Shan Zheng", "Long Cang", cursive;
   --font-prose-zh: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
-  --font-mystic-zh-tw: "Ma Shan Zheng", "Long Cang", cursive;
+  --font-mystic-zh-tw: "Long Cang", "Ma Shan Zheng", "Zhi Mang Xing", cursive;
   --font-prose-zh-tw: "Noto Serif TC", "PingFang TC", "Heiti TC", "Songti TC", serif;
   --font-mystic-en: "Cinzel", "Cormorant Garamond", "Palatino Linotype", serif;
   --font-mystic-ja: "New Tegomin", "Zen Old Mincho", "Hiragino Mincho ProN", serif;
@@ -4297,6 +4297,25 @@ html[lang="ja"] .bookshelf-guide-first-hint {
   text-shadow:
     0 0 28px rgba(255, 235, 200, 0.18),
     0 0 8px rgba(255, 255, 255, 0.08);
+  font-synthesis: none;
+}
+
+.mystic-title-char {
+  font-family: inherit;
+  font-synthesis: none;
+  display: inline-block;
+}
+
+html[lang="zh-Hant"] .mystic-title-char {
+  font-family: var(--font-mystic-zh-tw);
+}
+
+html[lang="zh-CN"] .mystic-title-char {
+  font-family: var(--font-mystic-zh);
+}
+
+html[lang="ja"] .mystic-title-char {
+  font-family: var(--font-mystic-ja);
 }
 
 .bookshelf-book-cover--art .bookshelf-book-cover-title--mystic {
@@ -4344,6 +4363,7 @@ html[lang="ja"] .bookshelf-guide-first-hint {
   font-size: clamp(2rem, 5vw, 2.75rem);
   line-height: 1.15;
   letter-spacing: 0.18em;
+  font-synthesis: none;
   text-indent: 0.18em;
   color: rgba(252, 248, 238, 0.96);
   text-align: center;
