@@ -8,7 +8,7 @@
   --font-serif-en: "Cormorant Garamond", Georgia, serif;
   --font-mystic-zh: "Zhi Mang Xing", "Ma Shan Zheng", "Long Cang", cursive;
   --font-prose-zh: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
-  --font-mystic-zh-tw: "Long Cang", "Ma Shan Zheng", "Zhi Mang Xing", cursive;
+  --font-mystic-zh-tw: "Ma Shan Zheng", "Long Cang", cursive;
   --font-prose-zh-tw: "Noto Serif TC", "PingFang TC", "Heiti TC", "Songti TC", serif;
   --font-mystic-en: "Cinzel", "Cormorant Garamond", "Palatino Linotype", serif;
   --font-mystic-ja: "New Tegomin", "Zen Old Mincho", "Hiragino Mincho ProN", serif;
@@ -3324,6 +3324,8 @@ picture:has(> .book-page-cover-watermark) {
   .bookshelf-book-cover-title--mystic {
     writing-mode: vertical-rl;
     text-orientation: upright;
+    font-family: var(--font-mystic-zh);
+    font-synthesis: none;
     font-size: clamp(1.2rem, 4.8vw, 1.65rem);
     margin: 0.1rem auto 0;
     letter-spacing: 0.1em;
@@ -4301,6 +4303,13 @@ html[lang="ja"] .bookshelf-guide-first-hint {
   text-shadow:
     0 1px 10px rgba(0, 0, 0, 0.72),
     0 0 24px rgba(255, 235, 200, 0.2),
+    0 0 8px rgba(255, 255, 255, 0.1);
+}
+
+.bookshelf-book-gold .bookshelf-book-cover--art .bookshelf-book-cover-title--mystic {
+  text-shadow:
+    0 1px 10px rgba(0, 0, 0, 0.72),
+    0 0 24px rgba(255, 235, 200, 0.22),
     0 0 8px rgba(255, 255, 255, 0.1);
 }
 
@@ -7731,6 +7740,7 @@ html[lang="zh-Hant"] .bookshelf-book-cover-title--mystic,
 html[lang="zh-Hant"] .book-cover-title-mystic,
 html[lang="zh-Hant"] .book-mobile-cover-title-zh.bookshelf-book-cover-title--mystic {
   font-family: var(--font-mystic-zh-tw);
+  font-synthesis: none;
 }
 
 html[lang="zh-Hant"] .bookshelf-book-cover-title--mystic {
