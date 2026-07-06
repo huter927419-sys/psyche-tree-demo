@@ -3005,34 +3005,29 @@ picture:has(> .book-page-cover-watermark) {
   }
 
   .book-mobile-cover-title-zh {
+    writing-mode: horizontal-tb;
+    text-orientation: mixed;
     margin: 0 0 0.35rem;
-    font-family: var(--font-mystic);
-    font-size: clamp(1.35rem, 6vw, 1.65rem);
-    letter-spacing: 0.28em;
-    text-indent: 0.28em;
-    color: rgba(245, 245, 245, 0.92);
+    font-size: clamp(1.55rem, 6.5vw, 1.95rem);
+    letter-spacing: 0.14em;
+    text-indent: 0;
+    line-height: 1.1;
   }
 
   .book-mobile-cover-title-en {
     margin: 0 0 0.35rem;
-    font-family: var(--font-serif-en);
     font-size: clamp(1.1rem, 4.8vw, 1.35rem);
     letter-spacing: 0.06em;
     line-height: 1.35;
-    color: rgba(245, 245, 245, 0.9);
   }
 
   .book-mobile-cover-sub {
     margin: 0;
-    font-family: var(--font-serif);
-    font-size: 0.78rem;
-    letter-spacing: 0.18em;
-    color: rgba(220, 220, 220, 0.55);
   }
 
   .book-mobile-cover--silver .book-mobile-cover-title-zh,
-  .book-mobile-cover--silver .book-mobile-cover-title-en {
-    color: rgba(235, 240, 245, 0.9);
+  .book-mobile-cover--silver .bookshelf-book-cover-title--mystic.book-mobile-cover-title-zh {
+    color: rgba(236, 244, 255, 0.94);
   }
 
   /* ── 六卷阅读：与同观一致的顶栏/底栏浮层处理 ── */
@@ -7743,6 +7738,11 @@ html[lang="zh-CN"] .bookshelf-book-cover-title--mystic {
   letter-spacing: 0.14em;
 }
 
+html[lang="zh-CN"] .book-mobile-cover-title-zh.bookshelf-book-cover-title--mystic {
+  font-size: clamp(1.6rem, 6.5vw, 1.95rem);
+  letter-spacing: 0.14em;
+}
+
 html[lang="zh-CN"] .bookshelf-book-cover-sub--zh {
   font-family: var(--font-prose-zh);
   font-size: 0.58rem;
@@ -7951,7 +7951,8 @@ html[lang="ja"] .bookshelf-hero-seal {
 }
 
 html[lang="ja"] .bookshelf-book-cover-title--mystic,
-html[lang="ja"] .book-cover-title-mystic {
+html[lang="ja"] .book-cover-title-mystic,
+html[lang="ja"] .book-mobile-cover-title-zh.bookshelf-book-cover-title--mystic {
   font-family: var(--font-mystic-ja);
 }
 
@@ -7960,7 +7961,12 @@ html[lang="ja"] .bookshelf-book-cover-title--mystic {
   letter-spacing: 0.14em;
 }
 
-html[lang="ja"] .bookshelf-book-cover-sub--zh {
+html[lang="ja"] .book-mobile-cover-title-zh.bookshelf-book-cover-title--mystic {
+  font-size: clamp(1.6rem, 6.5vw, 1.95rem);
+}
+
+html[lang="ja"] .bookshelf-book-cover-sub--zh,
+html[lang="ja"] .book-mobile-cover-sub.bookshelf-book-cover-sub--zh {
   font-family: var(--font-prose-ja);
   font-size: 0.58rem;
   font-weight: 400;

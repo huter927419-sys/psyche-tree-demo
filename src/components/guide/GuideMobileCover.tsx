@@ -56,13 +56,21 @@ export function GuideMobileCover({
             <h2
               className={
                 locale === 'en'
-                  ? 'book-mobile-cover-title-en'
-                  : 'book-mobile-cover-title-zh'
+                  ? 'bookshelf-book-cover-title-en book-mobile-cover-title-en'
+                  : 'bookshelf-book-cover-title--zh bookshelf-book-cover-title--mystic book-mobile-cover-title-zh'
               }
             >
               {title}
             </h2>
-            <p className="book-mobile-cover-sub">{subtitle}</p>
+            <p
+              className={
+                locale === 'en'
+                  ? 'bookshelf-book-cover-sub-en book-mobile-cover-sub'
+                  : 'bookshelf-book-cover-sub--zh book-mobile-cover-sub'
+              }
+            >
+              {subtitle}
+            </p>
           </div>
         </div>
 
