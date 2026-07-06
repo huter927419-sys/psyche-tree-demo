@@ -173,6 +173,47 @@ Dim 1–3 → attention check → Dim 4–6 → integration (dimensionIndex 7)
 - Holistic prompt = six sections × (底层画像 `psychology_prompt_input` + **已示神谕** `mystical_reading_{locale}`); response ends with **`【整树之微行】`**
 - Before holistic generation, server ensures all six volume mystical readings exist
 
+## API auth (Bearer access token)
+
+Journey reads/writes require **`Authorization: Bearer <psk_…>`** — not bare `journeyId` or email lookup.
+
+| Topic | Detail |
+|-------|--------|
+| Issue token | `POST /api/journeys` `{ email, locale }` → `accessToken` (`psk_` prefix) |
+| Resume | Same `POST` with `{ email, locale, accessToken }` when client still has token |
+| Bootstrap | Existing users without token: one-time `POST` with email only issues token |
+| Storage | Client `localStorage`: `psyche-access-token` (+ `psyche-journey-id`, email, user id) |
+| Deprecated | `GET /api/journeys?email=` → **410**; `X-Journey-Id` header → ignored |
+| Legacy | `POST /api/mystical-reading` → **410** unless `PSYCHE_ALLOW_LEGACY_MYSTICAL=1` |
+
+Server: `server/auth/token.ts`, `server/api/auth.ts`, migration `008_journey_access_token.sql` (`access_token_hash` SHA-256).
+
+**QA scripts** share `scripts/lib/apiClient.mjs` — `createApiClient()`, `createJourney()`, auto Bearer + optional `X-Psyche-Reading-Test-Fallback`.
+
+**Mobile typography:** shelf covers use `aspect-ratio: 2/3`, mystic title stack; zh-Hant uses `Ma Shan Zheng` + `Long Cang` via `html[lang="zh-Hant"]` rules in `index.css`.
+
+## Production deploy (`sixfacets.com`)
+
+| Item | Value |
+|------|-------|
+| SSH | `ssh remote-177` → `root@177.3.32.202` |
+| App dir | `/mydata/psyche-tree-demo` |
+| Static | nginx serves `dist/` |
+| API | systemd `psyche-tree-demo` → `npm run start:api` (`server/production.ts` on `127.0.0.1:5173`) |
+| DB | `SQLITE_PATH=/mydata/psyche-tree-demo/data/psyche-tree.sqlite` in `.env.local` |
+
+```bash
+ssh remote-177 'cd /mydata/psyche-tree-demo && git fetch origin && git reset --hard origin/main && npm install && npm run build && systemctl restart psyche-tree-demo'
+```
+
+Clear test data (production only):
+
+```bash
+ssh remote-177 'node -e "const Database=require(\"better-sqlite3\");const db=new Database(\"/mydata/psyche-tree-demo/data/psyche-tree.sqlite\");db.exec(\"DELETE FROM book_assessments; DELETE FROM journeys; DELETE FROM users;\");db.close();"'
+```
+
+Verify against prod: `BASE_URL=https://www.sixfacets.com node scripts/verify-full-flow.mjs`
+
 ## Volume rite cycle (修持环)
 
 | Phase | Component | Copy |
@@ -235,10 +276,13 @@ Implementation: `server/readingTestFallback.ts` → early return in `mysticalRea
 
 Shared: `books/shared/createBook.ts`, `questionFlow.ts`, `card.ts`, `profileHelpers.ts`, `findCard.ts`
 
-## Server (Vite middleware)
+## Server (Vite middleware + production API)
 
 ```
 server/api/router.ts          # REST: journeys, assessments, readings, holistic
+server/api/auth.ts            # Bearer token verify + journey ownership
+server/auth/token.ts          # psk_ issue / hash / verify
+server/production.ts          # standalone API for nginx /api proxy (prod)
 server/db/                    # SQLite schema + migrations + repositories
 server/services/              # mysticalReadingService, holisticReadingService
 server/readingTestFallback.ts # QA instant readings (env / header)
@@ -247,6 +291,18 @@ server/deepseek.ts            # DeepSeek chat calls
 ```
 
 DB path: `data/psyche-tree.sqlite` (or `SQLITE_PATH`). Reset: `node scripts/reset-db.mjs`.
+
+### API surface (auth required unless noted)
+
+| Method | Path | Auth |
+|--------|------|------|
+| `POST` | `/api/journeys` | Public (returns `accessToken`) |
+| `GET` | `/api/journeys/:id` | Bearer |
+| `GET` | `/api/journeys?email=` | **410** deprecated |
+| `POST` | `/api/journeys/:id/assessments` | Bearer |
+| `GET` | `/api/assessments/:id` | Bearer (owner only) |
+| `POST` | `/api/assessments/:id/mystical-reading` | Bearer |
+| `POST` | `/api/journeys/:id/holistic-reading` | Bearer |
 
 ## Non-negotiable UX
 
@@ -264,13 +320,16 @@ DB path: `data/psyche-tree.sqlite` (or `SQLITE_PATH`). Reset: `node scripts/rese
 ```bash
 npm run dev                    # needs .env.local DEEPSEEK_API_KEY (optional PSYCHE_READING_TEST_FALLBACK=1)
 npm run build
-node scripts/verify-full-flow.mjs      # 39 checks; default test-fallback header; polls 202
+node scripts/verify-full-flow.mjs      # A–F + auth + UI; Bearer via apiClient; test-fallback header
 node scripts/verify-rite-flow.mjs      # Playwright: entry/exit rites + 归树 + holistic (needs Chrome)
+node scripts/verify-e2e.mjs            # API smoke zh/en
 node scripts/test-locale-switch.mjs
 node scripts/complete-user-journey.mjs [email]
+node scripts/log-cross-access-404.mjs  # verbose cross-user Bearer isolation log
+node scripts/export-oracle-report.mjs [email]
 node scripts/capture-homepage-screenshots.mjs   # docs/screenshots/homepage/*.png
 ```
 
-Optional env for scripts: `READING_POLL_MS=90000`, `BASE_URL`, `SQLITE_PATH`.
+Optional env for scripts: `READING_POLL_MS=90000`, `BASE_URL`, `SQLITE_PATH`. Shared client: `scripts/lib/apiClient.mjs`.
 
 See [reference.md](reference.md) for file index and data flow.

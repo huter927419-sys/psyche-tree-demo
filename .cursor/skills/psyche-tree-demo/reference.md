@@ -175,8 +175,8 @@ src/i18n/questionGuide.ts           # + questionGuide.ja.ts
 src/i18n/openingGuide.ts           # brief field tags (legacy flash; rites in volumeRite.ts)
 src/i18n/volumeRite.ts              # entry / exit / return-to-tree / core proposition
 src/i18n/treeLabels.ts
-src/services/assessmentApi.ts
-src/services/journeyApi.ts
+src/services/assessmentApi.ts         # Bearer on assessment/oracle calls
+src/services/journeyApi.ts            # psyche-access-token, buildAuthHeaders()
 src/audio/backgroundMusic.ts        # welcome / questions / result tracks
 ```
 
@@ -184,14 +184,31 @@ src/audio/backgroundMusic.ts        # welcome / questions / result tracks
 
 ```
 server/api/router.ts
+server/api/auth.ts
+server/auth/token.ts
+server/production.ts                # prod: npm run start:api (nginx /api → :5173)
 server/readingTestFallback.ts       # PSYCHE_READING_TEST_FALLBACK + X-Psyche-Reading-Test-Fallback
+server/db/migrations/008_journey_access_token.sql
 server/db/schema.sql
-server/db/repositories/journeys.ts    # BOOK_IDS, buildHolisticPromptInput, completion
+server/db/repositories/journeys.ts    # BOOK_IDS, buildHolisticPromptInput, completion, access_token_hash
 server/db/repositories/assessments.ts # save, mystical reading cache columns
 server/services/mysticalReadingService.ts
 server/services/holisticReadingService.ts
 server/bookPrompts.ts                 # volume + holistic prompts; appends 雾中一步 / 整树之微行 guidance
 ```
+
+### Journey API auth
+
+| Client key | Purpose |
+|------------|---------|
+| `psyche-access-token` | Bearer `psk_…` from `POST /api/journeys` |
+| `psyche-journey-id` | Active journey UUID |
+| `psyche-journey-email` | Resume email |
+| `psyche-user-id` | User row id |
+
+`GET /api/journeys?email=` removed (410). Cross-user reads return 404; wrong token on journey path → 401.
+
+QA: `scripts/lib/apiClient.mjs` — `createApiClient(BASE)`, `createJourney(email, locale)`, per-journey token map.
 
 ## QA reading test fallback
 
@@ -262,15 +279,18 @@ six books complete → journey.status = completed
 | Script | Purpose |
 |--------|---------|
 | `scripts/reset-db.mjs` | Wipe SQLite |
-| `scripts/verify-full-flow.mjs` | API + reading poll + test fallback header |
-| `scripts/verify-rite-flow.mjs` | Playwright UI: entry/exit rites + Return to Tree |
-| `scripts/verify-e2e.mjs` | Browser-oriented checks |
+| `scripts/lib/apiClient.mjs` | Shared Bearer + test-fallback for all QA scripts |
+| `scripts/verify-full-flow.mjs` | API + auth + reading poll + test fallback header |
+| `scripts/verify-rite-flow.mjs` | Playwright UI: entry/exit rites + Return to Tree (+ `psyche-access-token`) |
+| `scripts/verify-e2e.mjs` | API smoke zh/en |
 | `scripts/test-locale-switch.mjs` | zh / zhTw / en / ja reading cache |
+| `scripts/log-cross-access-404.mjs` | Verbose cross-user isolation log |
+| `scripts/export-oracle-report.mjs` | Six-book oracle markdown report |
 | `scripts/capture-homepage-screenshots.mjs` | Four homepage PNGs for README |
 | `scripts/complete-user-journey.mjs` | Fill 6 books for an email |
 | `scripts/test-multi-user-concurrent.mjs` | Isolation |
 
-**Expected green runs (dev up):** `verify-full-flow` 39/39 with test-fallback header; `verify-rite-flow` 14/14 with Playwright + Chrome.
+**Expected green runs (dev up):** `verify-full-flow` with test-fallback header; `verify-rite-flow` 14/14 with Playwright + Chrome. Prod: `BASE_URL=https://www.sixfacets.com`.
 
 ## Visual assets & import scripts
 
