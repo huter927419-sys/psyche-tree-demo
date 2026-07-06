@@ -1,7 +1,6 @@
 import type { BookDefinition } from '../../books/types'
 import type { Locale } from '../../i18n/locale'
 import { BookCoverArt } from './BookCoverArt'
-import { MysticTitle } from '../bookshelf/MysticTitle'
 
 interface BookClosedVisualProps {
   book: BookDefinition
@@ -57,11 +56,9 @@ export function BookClosedVisual({
                 ))}
               </h2>
             ) : (
-              <MysticTitle
-                as="h2"
-                text={book.meta.coverTitle}
-                className="book-cover-title-mystic"
-              />
+              <h2 dir="ltr" className="book-cover-title-mystic">
+                {book.meta.coverTitle}
+              </h2>
             )}
             <p
               className="font-serif text-sm text-[rgba(240,240,240,0.55)] text-center mb-3 px-1"

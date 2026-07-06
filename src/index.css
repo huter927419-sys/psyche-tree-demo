@@ -3325,6 +3325,7 @@ picture:has(> .book-page-cover-watermark) {
     writing-mode: horizontal-tb;
     text-orientation: mixed;
     direction: ltr;
+    unicode-bidi: isolate;
     font-family: var(--font-mystic-zh);
     font-synthesis: none;
     font-size: clamp(1rem, 4vw, 1.35rem);
@@ -4310,23 +4311,7 @@ html[lang="ja"] .bookshelf-guide-first-hint {
     0 0 28px rgba(255, 235, 200, 0.18),
     0 0 8px rgba(255, 255, 255, 0.08);
   font-synthesis: none;
-}
-
-.mystic-title-glyph {
-  font-family: inherit;
-  font-synthesis: none;
-}
-
-html[lang="zh-Hant"] .mystic-title-glyph {
-  font-family: var(--font-mystic-zh-tw);
-}
-
-html[lang="zh-CN"] .mystic-title-glyph {
-  font-family: var(--font-mystic-zh);
-}
-
-html[lang="ja"] .mystic-title-glyph {
-  font-family: var(--font-mystic-ja);
+  unicode-bidi: isolate;
 }
 
 .bookshelf-book-cover--art .bookshelf-book-cover-title--mystic {
@@ -4377,6 +4362,7 @@ html[lang="ja"] .mystic-title-glyph {
   line-height: 1.15;
   letter-spacing: 0.18em;
   font-synthesis: none;
+  unicode-bidi: isolate;
   text-indent: 0;
   text-align: center;
   white-space: nowrap;
