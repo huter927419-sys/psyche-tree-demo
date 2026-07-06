@@ -36,8 +36,8 @@ function runMigrations(database: Database.Database) {
     const schemaPath = path.join(import.meta.dirname, 'schema.sql')
     database.exec(fs.readFileSync(schemaPath, 'utf8'))
     // Fresh DBs use consolidated schema.sql (v7 incl. zhTw); skip incremental migrations.
-    database.prepare('INSERT INTO schema_migrations (version) VALUES (7)').run()
-    version = 7
+    database.prepare('INSERT INTO schema_migrations (version) VALUES (8)').run()
+    version = 8
   }
 
   if (version < 2) {
@@ -62,6 +62,10 @@ function runMigrations(database: Database.Database) {
 
   if (version < 7) {
     applyMigration(database, 7, '007_locale_zh_tw.sql')
+  }
+
+  if (version < 8) {
+    applyMigration(database, 8, '008_journey_access_token.sql')
   }
 }
 

@@ -4,6 +4,11 @@ import type { BookAssessmentRow, JourneyRow, Locale, ReadingSource } from '../ty
 import { findUserByEmail, upsertUserByEmail } from './users.js'
 import { getMysticalReadingForLocale } from './assessments.js'
 import {
+  generateAccessToken,
+  hashAccessToken,
+  verifyAccessTokenHash,
+} from '../../auth/token.js'
+import {
   allReadingsComplete,
   holisticReadingColumn,
 } from '../readingLocales.js'
@@ -71,10 +76,51 @@ export function findLatestJourneyForUser(userId: string): JourneyRow | undefined
     .get(userId) as JourneyRow | undefined
 }
 
-export function createJourney(email: string, locale: Locale): JourneyRow {
+export function findJourneyByAccessTokenHash(hash: string): JourneyRow | undefined {
+  return getDb()
+    .prepare('SELECT * FROM journeys WHERE access_token_hash = ?')
+    .get(hash) as JourneyRow | undefined
+}
+
+export function issueAccessTokenForJourney(journeyId: string): string {
+  const token = generateAccessToken()
+  const hash = hashAccessToken(token)
+  getDb()
+    .prepare(
+      `UPDATE journeys SET access_token_hash = ?, updated_at = datetime('now') WHERE id = ?`,
+    )
+    .run(hash, journeyId)
+  return token
+}
+
+export function verifyJourneyAccessToken(
+  journeyId: string,
+  token: string,
+): boolean {
+  const journey = findJourneyById(journeyId)
+  if (!journey) return false
+  return verifyAccessTokenHash(token, journey.access_token_hash)
+}
+
+export function createJourney(
+  email: string,
+  locale: Locale,
+  options?: { accessToken?: string },
+): { journey: JourneyRow; accessToken: string; resumed: boolean } {
   const user = upsertUserByEmail(email)
   const existing = findLatestJourneyForUser(user.id)
-  if (existing) return existing
+  if (existing) {
+    const isLegacy = !existing.access_token_hash
+    if (!isLegacy) {
+      const token = options?.accessToken?.trim()
+      if (!token || !verifyJourneyAccessToken(existing.id, token)) {
+        throw new Error('INVALID_ACCESS_TOKEN')
+      }
+    }
+    const accessToken = issueAccessTokenForJourney(existing.id)
+    const journey = findJourneyById(existing.id)!
+    return { journey, accessToken, resumed: true }
+  }
 
   const db = getDb()
   const id = randomUUID()
@@ -85,10 +131,22 @@ export function createJourney(email: string, locale: Locale): JourneyRow {
       user.id,
       locale,
     )
-    return db.prepare('SELECT * FROM journeys WHERE id = ?').get(id) as JourneyRow
+    const accessToken = issueAccessTokenForJourney(id)
+    const journey = db.prepare('SELECT * FROM journeys WHERE id = ?').get(id) as JourneyRow
+    return { journey, accessToken, resumed: false }
   } catch (error) {
     const retry = findLatestJourneyForUser(user.id)
-    if (retry) return retry
+    if (retry) {
+      const isLegacy = !retry.access_token_hash
+      if (!isLegacy) {
+        const token = options?.accessToken?.trim()
+        if (!token || !verifyJourneyAccessToken(retry.id, token)) {
+          throw new Error('INVALID_ACCESS_TOKEN')
+        }
+      }
+      const accessToken = issueAccessTokenForJourney(retry.id)
+      return { journey: retry, accessToken, resumed: true }
+    }
     throw error
   }
 }

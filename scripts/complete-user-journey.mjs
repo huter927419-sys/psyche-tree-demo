@@ -4,11 +4,14 @@
  * Usage: node scripts/complete-user-journey.mjs [email]
  */
 import { execSync } from 'node:child_process'
+import { createApiClient } from './lib/apiClient.mjs'
 
 const BASE = process.env.BASE_URL ?? 'http://localhost:5173'
 const DB = process.env.SQLITE_PATH ?? '/Users/wanglei/Projects/psyche-tree-demo/data/psyche-tree.sqlite'
-const PRIMARY_EMAIL = process.argv[2] ?? 'lanegg110@126.com'
+const PRIMARY_EMAIL = process.argv[2] ?? `qa-complete-${Date.now()}@example.com`
 const SWITCH_EMAIL = process.argv[3] ?? `qa-switch-${Date.now()}@example.com`
+
+const { req, createJourney, getToken } = createApiClient(BASE)
 
 const BOOKS = [
   'psyche-tree',
@@ -92,18 +95,6 @@ const BOOK_LABELS = {
   'direction-light': '向光',
 }
 
-async function req(method, path, { body, journeyId } = {}) {
-  const headers = { 'Content-Type': 'application/json' }
-  if (journeyId) headers['X-Journey-Id'] = journeyId
-  const res = await fetch(`${BASE}${path}`, {
-    method,
-    headers,
-    body: body ? JSON.stringify(body) : undefined,
-  })
-  const data = await res.json().catch(() => null)
-  return { status: res.status, data }
-}
-
 function sql(q) {
   return execSync(`sqlite3 "${DB}" "${q}"`, { encoding: 'utf8' }).trim()
 }
@@ -133,9 +124,8 @@ function buildPayload(bookId, locale) {
 }
 
 async function resumeJourney(email, locale = 'zh') {
-  const r = await req('POST', '/api/journeys', { body: { email, locale } })
-  if (r.status !== 201) throw new Error(`journey: ${r.status} ${JSON.stringify(r.data)}`)
-  return r.data.journeyId
+  const data = await createJourney(email, locale)
+  return data.journeyId
 }
 
 async function completeSixBooks(email) {
@@ -242,19 +232,21 @@ async function multiUserSwitchTest(primaryEmail, switchEmail) {
   const resumeB2 = await resumeJourney(switchEmail)
   record('M6', resumeB2 === journeyB, 'B 重新登录续同一 journey', resumeB2 === journeyB ? 'match' : 'MISMATCH')
 
-  // GET by email 隔离
-  const getA = await req('GET', `/api/journeys?email=${encodeURIComponent(primaryEmail)}`)
-  const getB = await req('GET', `/api/journeys?email=${encodeURIComponent(switchEmail)}`)
+  // Bearer 查询各自 journey
+  const getA = await req('GET', `/api/journeys/${journeyA}`, { journeyId: journeyA })
+  const getB = await req('GET', `/api/journeys/${journeyB}`, { journeyId: journeyB })
   record(
     'M7',
     getA.data?.journeyId === journeyA && getB.data?.journeyId === journeyB,
-    '按 email 查询互不串 journey',
+    'Bearer 查询互不串 journey',
     `A books=${getA.data?.assessments?.length} B books=${getB.data?.assessments?.length}`,
   )
 
-  // 跨 journey 访问 assessment → 应 404/错误
+  // 跨 journey 访问 assessment → 应 404
   const aidA = sql(`SELECT id FROM book_assessments WHERE journey_id='${journeyA}' LIMIT 1`)
-  const cross = await req('GET', `/api/assessments/${aidA}`, { journeyId: journeyB })
+  const cross = await req('GET', `/api/assessments/${aidA}`, {
+    accessToken: getToken(journeyB),
+  })
   record(
     'M8',
     cross.status === 404 || cross.data?.error,

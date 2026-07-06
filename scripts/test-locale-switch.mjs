@@ -4,10 +4,13 @@
  * Requires npm run dev on BASE_URL.
  */
 import { execSync } from 'node:child_process'
+import { createApiClient } from './lib/apiClient.mjs'
 
 const BASE = process.env.BASE_URL ?? 'http://localhost:5173'
 const DB = process.env.SQLITE_PATH ?? '/Users/wanglei/Projects/psyche-tree-demo/data/psyche-tree.sqlite'
 const TS = Date.now()
+
+const { req, createJourney } = createApiClient(BASE)
 
 /** @type {{ id: string; ok: boolean; detail: string }[]} */
 const results = []
@@ -15,18 +18,6 @@ const results = []
 function record(id, ok, detail) {
   results.push({ id, ok, detail })
   console.log(`  ${ok ? '✓' : '✗'} [${id}] ${detail}`)
-}
-
-async function req(method, path, { body, journeyId } = {}) {
-  const headers = { 'Content-Type': 'application/json' }
-  if (journeyId) headers['X-Journey-Id'] = journeyId
-  const res = await fetch(`${BASE}${path}`, {
-    method,
-    headers,
-    body: body ? JSON.stringify(body) : undefined,
-  })
-  const data = await res.json().catch(() => null)
-  return { status: res.status, data }
 }
 
 function sql(q) {
@@ -116,10 +107,8 @@ async function testMysticalLocaleSwitch() {
   console.log('\n=== 1 · 单卷神谕语言切换 ===')
   const email = `locale-myst-${TS}@example.com`
 
-  const create = await req('POST', '/api/journeys', {
-    body: { email, locale: 'en' },
-  })
-  const journeyId = create.data.journeyId
+  const created = await createJourney(email, 'en')
+  const journeyId = created.journeyId
 
   const save = await saveBook(journeyId, 'psyche-tree', 'en')
   const aid = save.data.assessment.id
@@ -199,10 +188,8 @@ async function testHolisticLocaleSwitch() {
   console.log('\n=== 2 · 整象神谕语言切换 ===')
   const email = `locale-hol-${TS}@example.com`
 
-  const create = await req('POST', '/api/journeys', {
-    body: { email, locale: 'zh' },
-  })
-  const journeyId = create.data.journeyId
+  const created = await createJourney(email, 'zh')
+  const journeyId = created.journeyId
 
   for (const bookId of BOOKS) {
     const s = await saveBook(journeyId, bookId, 'zh')
@@ -277,11 +264,9 @@ async function testRegisterLocaleVsUiSwitch() {
   const email = `locale-reg-${TS}@example.com`
 
   // 英文界面注册
-  const create = await req('POST', '/api/journeys', {
-    body: { email, locale: 'en' },
-  })
-  const journeyId = create.data.journeyId
-  record('R1', create.data.locale === 'en', `journey.locale=en (${journeyId.slice(0, 8)})`)
+  const created = await createJourney(email, 'en')
+  const journeyId = created.journeyId
+  record('R1', created.locale === 'en', `journey.locale=en (${journeyId.slice(0, 8)})`)
 
   // 中文 UI 下答题保存
   const save = await req('POST', `/api/journeys/${journeyId}/assessments`, {
@@ -321,10 +306,10 @@ async function testMultiUserLocaleIsolation() {
   const emailA = `locale-a-${TS}@example.com`
   const emailB = `locale-b-${TS}@example.com`
 
-  const jA = (await req('POST', '/api/journeys', { body: { email: emailA, locale: 'zh' } }))
-    .data.journeyId
-  const jB = (await req('POST', '/api/journeys', { body: { email: emailB, locale: 'en' } }))
-    .data.journeyId
+  const createdA = await createJourney(emailA, 'zh')
+  const createdB = await createJourney(emailB, 'en')
+  const jA = createdA.journeyId
+  const jB = createdB.journeyId
 
   const sA = await saveBook(jA, 'psyche-tree', 'zh')
   const sB = await saveBook(jB, 'psyche-tree', 'en')
@@ -340,11 +325,13 @@ async function testMultiUserLocaleIsolation() {
     journeyId: jB,
   })
 
-  const cross = await req('GET', `/api/assessments/${aidA}`, { journeyId: jB })
+  const cross = await req('GET', `/api/assessments/${aidA}`, {
+    accessToken: createdB.accessToken,
+  })
   record('I1', cross.status === 404, `用户 B 无法读 A 的 assessment (${cross.status})`)
 
-  const getA = await req('GET', `/api/journeys?email=${encodeURIComponent(emailA)}`)
-  const getB = await req('GET', `/api/journeys?email=${encodeURIComponent(emailB)}`)
+  const getA = await req('GET', `/api/journeys/${jA}`, { journeyId: jA })
+  const getB = await req('GET', `/api/journeys/${jB}`, { journeyId: jB })
   record(
     'I2',
     getA.data.assessments[0]?.locale === 'zh' &&
@@ -364,10 +351,8 @@ async function testMultiUserLocaleIsolation() {
 async function testFallbackLocale() {
   console.log('\n=== 5 · Fallback 语言标记 ===')
   const email = `locale-fb-${TS}@example.com`
-  const create = await req('POST', '/api/journeys', {
-    body: { email, locale: 'zh' },
-  })
-  const journeyId = create.data.journeyId
+  const created = await createJourney(email, 'zh')
+  const journeyId = created.journeyId
 
   for (const bookId of BOOKS) {
     await saveBook(journeyId, bookId, 'zh')

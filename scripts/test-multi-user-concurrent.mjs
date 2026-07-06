@@ -4,11 +4,14 @@
  * Simulates parallel sign-ups, saves, cross-access, and duplicate writes.
  */
 import { execSync } from 'node:child_process'
+import { createApiClient } from './lib/apiClient.mjs'
 
 const BASE = process.env.BASE_URL ?? 'http://localhost:5173'
 const DB = process.env.SQLITE_PATH ?? '/Users/wanglei/Projects/psyche-tree-demo/data/psyche-tree.sqlite'
 const USER_COUNT = Number(process.env.USER_COUNT ?? 12)
 const TS = Date.now()
+
+const { req, createJourney, getToken } = createApiClient(BASE)
 
 const BOOKS = [
   'psyche-tree',
@@ -25,18 +28,6 @@ const results = []
 function record(id, ok, detail) {
   results.push({ id, ok, detail })
   console.log(`  ${ok ? '✓' : '✗'} [${id}] ${detail}`)
-}
-
-async function req(method, path, { body, journeyId } = {}) {
-  const headers = { 'Content-Type': 'application/json' }
-  if (journeyId) headers['X-Journey-Id'] = journeyId
-  const res = await fetch(`${BASE}${path}`, {
-    method,
-    headers,
-    body: body ? JSON.stringify(body) : undefined,
-  })
-  const data = await res.json().catch(() => null)
-  return { status: res.status, data }
 }
 
 function sql(q) {
@@ -72,15 +63,11 @@ async function testParallelSignUp() {
   )
 
   const creates = await Promise.all(
-    emails.map((email, i) =>
-      req('POST', '/api/journeys', {
-        body: { email, locale: i % 2 === 0 ? 'zh' : 'en' },
-      }),
-    ),
+    emails.map((email, i) => createJourney(email, i % 2 === 0 ? 'zh' : 'en')),
   )
 
-  const journeyIds = creates.map((c) => c.data?.journeyId)
-  const all201 = creates.every((c) => c.status === 201)
+  const journeyIds = creates.map((c) => c.journeyId)
+  const all201 = creates.every((c) => c.journeyId && c.accessToken)
   const uniqueJ = new Set(journeyIds).size === journeyIds.length
   record('P1', all201, `全部 201 (${creates.length} 用户)`)
   record('P2', uniqueJ, `journeyId 互不重复 (${uniqueJ ? journeyIds.length : 'dup'})`)
@@ -138,19 +125,19 @@ async function testCrossAccess(users) {
   const b = users[1]
 
   const cross = await req('GET', `/api/assessments/${a.assessmentId}`, {
-    journeyId: b.journeyId,
+    accessToken: getToken(b.journeyId),
   })
   record('X1', cross.status === 404, `B 读 A 的 assessment → ${cross.status}`)
 
   const wrongHeader = await req('POST', `/api/journeys/${a.journeyId}/assessments`, {
     body: savePayload(a.email, 'emotional-flow'),
-    journeyId: b.journeyId,
+    accessToken: getToken(b.journeyId),
   })
-  record('X2', wrongHeader.status === 401, `错 header 保存 → ${wrongHeader.status}`)
+  record('X2', wrongHeader.status === 401, `错 token 保存 → ${wrongHeader.status}`)
 
   const crossMyst = await req('POST', `/api/assessments/${a.assessmentId}/mystical-reading`, {
     body: { locale: 'zh' },
-    journeyId: b.journeyId,
+    accessToken: getToken(b.journeyId),
   })
   record('X3', crossMyst.status === 404, `B 触发 A 神谕 → ${crossMyst.status}`)
 }
@@ -185,16 +172,14 @@ async function testConcurrentResumeSameEmail() {
   console.log('\n=== 5 · 同邮箱并发续接 ===')
   const email = `concurrent-resume-${TS}@example.com`
   const parallel = await Promise.all(
-    Array.from({ length: 10 }, () =>
-      req('POST', '/api/journeys', { body: { email, locale: 'zh' } }),
-    ),
+    Array.from({ length: 10 }, () => createJourney(email, 'zh')),
   )
 
-  const ids = parallel.map((p) => p.data?.journeyId)
+  const ids = parallel.map((p) => p.journeyId)
   const unique = new Set(ids).size
   record(
     'R1',
-    unique === 1 && parallel.every((p) => p.status === 201),
+    unique === 1 && parallel.every((p) => p.accessToken),
     `10 次并发注册 → 1 个 journeyId (${ids[0]?.slice(0, 8)}…)`,
   )
 
@@ -204,11 +189,11 @@ async function testConcurrentResumeSameEmail() {
   record('R2', journeyCount === '1', `DB 仅 1 journey (count=${journeyCount})`)
 }
 
-async function testEmailLookupIsolation(users) {
-  console.log('\n=== 6 · 按邮箱查询隔离 ===')
+async function testBearerJourneyLookup(users) {
+  console.log('\n=== 6 · Bearer 查询隔离 ===')
   const checks = await Promise.all(
     users.slice(0, 5).map(async ({ email, journeyId, bookId }) => {
-      const r = await req('GET', `/api/journeys?email=${encodeURIComponent(email)}`)
+      const r = await req('GET', `/api/journeys/${journeyId}`, { journeyId })
       const expected = `PROFILE:${email}:${bookId}`
       return (
         r.status === 200 &&
@@ -219,7 +204,7 @@ async function testEmailLookupIsolation(users) {
       )
     }),
   )
-  record('E1', checks.every(Boolean), `5 用户 email 查询各归各 (${checks.filter(Boolean).length}/5)`)
+  record('E1', checks.every(Boolean), `5 用户 Bearer 查询各归各 (${checks.filter(Boolean).length}/5)`)
 }
 
 async function testParallelMystical(users) {
@@ -265,7 +250,7 @@ async function main() {
   await testCrossAccess(withIds)
   await testDuplicateConcurrentSave(withIds)
   await testConcurrentResumeSameEmail()
-  await testEmailLookupIsolation(withIds)
+  await testBearerJourneyLookup(withIds)
   await testParallelMystical(withIds)
 
   const failed = results.filter((r) => !r.ok)

@@ -48,6 +48,9 @@ export function errorMessage(code: string): string {
     BOOK_ALREADY_COMPLETED: '此卷已照见，不可重复答题',
     ASSESSMENT_NOT_FOUND: '解读记录不存在',
     MISSING_JOURNEY_HEADER: '缺少 X-Journey-Id',
+    MISSING_ACCESS_TOKEN: '缺少访问凭证',
+    INVALID_ACCESS_TOKEN: '访问凭证无效或已失效',
+    LEGACY_ENDPOINT_DISABLED: '此接口已停用',
     READING_LOCK_FAILED: '神谕生成未能启动，请稍后重试',
   }
   return map[code] ?? code
@@ -61,6 +64,9 @@ export function statusForError(code: string): number {
   if (code === 'JOURNEY_INCOMPLETE' || code === 'BOOK_ALREADY_COMPLETED') {
     return 409
   }
-  if (code === 'MISSING_JOURNEY_HEADER') return 401
+  if (code === 'MISSING_JOURNEY_HEADER' || code === 'MISSING_ACCESS_TOKEN' || code === 'INVALID_ACCESS_TOKEN') {
+    return 401
+  }
+  if (code === 'LEGACY_ENDPOINT_DISABLED') return 410
   return 500
 }

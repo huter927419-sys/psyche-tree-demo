@@ -1,7 +1,7 @@
 import type { AssessmentResult } from '../types'
 import type { BookId } from '../books/types'
 import type { Locale } from '../i18n/locale'
-import { getJourneySession } from './journeyApi'
+import { getJourneySession, buildAuthHeaders } from './journeyApi'
 
 export interface SavedAssessment {
   id: string
@@ -9,13 +9,6 @@ export interface SavedAssessment {
   mysticalReadingStatus: string
   journeyStatus: string
   assessmentsCompleted: number
-}
-
-function journeyHeaders(journeyId: string) {
-  return {
-    'Content-Type': 'application/json',
-    'X-Journey-Id': journeyId,
-  }
 }
 
 export async function saveBookAssessmentWithAnswers(
@@ -28,7 +21,7 @@ export async function saveBookAssessmentWithAnswers(
 ): Promise<SavedAssessment> {
   const response = await fetch(`/api/journeys/${journeyId}/assessments`, {
     method: 'POST',
-    headers: journeyHeaders(journeyId),
+    headers: buildAuthHeaders(),
     body: JSON.stringify({
       bookId,
       locale,
@@ -90,7 +83,7 @@ export async function fetchMysticalReadingForAssessment(
       `/api/assessments/${assessmentId}/mystical-reading`,
       {
         method: 'POST',
-        headers: journeyHeaders(journeyId),
+        headers: buildAuthHeaders(),
         body: JSON.stringify({ locale }),
       },
     )
@@ -140,7 +133,7 @@ export async function saveFallbackReading(
 
   await fetch(`/api/assessments/${assessmentId}/mystical-reading/fallback`, {
     method: 'POST',
-    headers: journeyHeaders(journeyId),
+    headers: buildAuthHeaders(),
     body: JSON.stringify({ reading, locale }),
   })
 }

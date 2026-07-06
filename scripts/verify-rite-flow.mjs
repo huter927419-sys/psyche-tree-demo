@@ -111,7 +111,12 @@ async function completeSixBooksViaApi() {
   const created = await create.json()
   if (!create.ok) throw new Error(`create journey: ${created.error ?? create.status}`)
 
-  const { journeyId, userId } = created
+  const { journeyId, userId, accessToken } = created
+  const authHeaders = {
+    'Content-Type': 'application/json',
+    'X-Psyche-Reading-Test-Fallback': '1',
+    Authorization: `Bearer ${accessToken}`,
+  }
   const answers = {
     'psyche-boundary': ['card-boundary-stone'],
     'psyche-wave': ['card-still-lake'],
@@ -144,10 +149,7 @@ async function completeSixBooksViaApi() {
     }
     const res = await fetch(`${BASE}/api/journeys/${journeyId}/assessments`, {
       method: 'POST',
-      headers: {
-        ...readingHeaders,
-        'X-Journey-Id': journeyId,
-      },
+      headers: authHeaders,
       body: JSON.stringify(payload),
     })
     if (!res.ok && res.status !== 409) {
@@ -161,7 +163,7 @@ async function completeSixBooksViaApi() {
     { encoding: 'utf8' },
   ).trim()
 
-  return { journeyId, userId, email: EMAIL, status }
+  return { journeyId, userId, email: EMAIL, status, accessToken }
 }
 
 async function main() {
@@ -272,10 +274,11 @@ async function main() {
 
   if (session) {
     await page.evaluate(
-      ({ journeyId, email, userId }) => {
+      ({ journeyId, email, userId, accessToken }) => {
         localStorage.setItem('psyche-journey-id', journeyId)
         localStorage.setItem('psyche-journey-email', email)
         localStorage.setItem('psyche-user-id', userId)
+        localStorage.setItem('psyche-access-token', accessToken)
         sessionStorage.removeItem('psyche-return-tree-' + journeyId)
       },
       session,

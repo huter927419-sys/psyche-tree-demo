@@ -56,11 +56,13 @@ CREATE TABLE IF NOT EXISTS journeys (
   holistic_prompt_input_zh TEXT,
   holistic_prompt_input_en TEXT,
   holistic_prompt_input_ja TEXT,
-  holistic_prompt_input_zh_tw TEXT
+  holistic_prompt_input_zh_tw TEXT,
+  access_token_hash TEXT
 );
 
 CREATE INDEX IF NOT EXISTS idx_journeys_user ON journeys(user_id);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_journeys_user_unique ON journeys(user_id);
+CREATE INDEX IF NOT EXISTS idx_journeys_access_token_hash ON journeys(access_token_hash);
 
 CREATE TABLE IF NOT EXISTS book_assessments (
   id TEXT PRIMARY KEY,

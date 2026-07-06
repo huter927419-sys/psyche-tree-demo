@@ -5,6 +5,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { execSync } from 'node:child_process'
+import { createApiClient } from './lib/apiClient.mjs'
 
 const BASE = process.env.BASE_URL ?? 'http://localhost:5173'
 const DB = process.env.SQLITE_PATH ?? '/Users/wanglei/Projects/psyche-tree-demo/data/psyche-tree.sqlite'
@@ -12,6 +13,8 @@ const USER_COUNT = Number(process.env.USER_COUNT ?? 12)
 const TS = Date.now()
 const LOG_DIR = path.resolve(process.cwd(), 'logs')
 const LOG_FILE = path.join(LOG_DIR, `concurrent-test-${TS}.log`)
+
+const { req, createJourney, getToken } = createApiClient(BASE)
 
 const lines = []
 const results = []
@@ -30,19 +33,13 @@ function record(id, ok, detail) {
   log(ok ? 'PASS' : 'FAIL', `[${id}] ${detail}`)
 }
 
-async function req(method, urlPath, { body, journeyId, label } = {}) {
-  const headers = { 'Content-Type': 'application/json' }
-  if (journeyId) headers['X-Journey-Id'] = journeyId
-  log('REQ', `${label ?? ''} ${method} ${urlPath}`, { journeyId: journeyId ?? null })
+async function loggedReq(method, urlPath, { body, journeyId, accessToken, label } = {}) {
+  const token = accessToken ?? (journeyId ? getToken(journeyId) : undefined)
+  log('REQ', `${label ?? ''} ${method} ${urlPath}`, { auth: token ? 'Bearer ***' : '(none)' })
 
-  const res = await fetch(`${BASE}${urlPath}`, {
-    method,
-    headers,
-    body: body ? JSON.stringify(body) : undefined,
-  })
-  const data = await res.json().catch(() => null)
-  log('RES', `${label ?? ''} HTTP ${res.status}`, data?.error ?? data?.journeyId ?? data?.assessment?.id ?? 'ok')
-  return { status: res.status, data }
+  const res = await req(method, urlPath, { body, journeyId, accessToken })
+  log('RES', `${label ?? ''} HTTP ${res.status}`, res.data?.error ?? res.data?.journeyId ?? res.data?.assessment?.id ?? 'ok')
+  return res
 }
 
 function sql(q) {
@@ -73,20 +70,21 @@ async function main() {
   log('STEP', `1. ${USER_COUNT} 用户并发注册`)
   const creates = await Promise.all(
     emails.map((email, i) =>
-      req('POST', '/api/journeys', {
-        body: { email, locale: i % 2 ? 'en' : 'zh' },
-        label: `reg-${i}`,
+      createJourney(email, i % 2 ? 'en' : 'zh').then((data) => {
+        log('REQ', `reg-${i} POST /api/journeys`, { email })
+        log('RES', `reg-${i} HTTP 201`, data.journeyId)
+        return data
       }),
     ),
   )
   const users = emails.map((email, i) => ({
     email,
-    journeyId: creates[i].data.journeyId,
-    userId: creates[i].data.userId,
+    journeyId: creates[i].journeyId,
+    userId: creates[i].userId,
     bookId: BOOKS[i % BOOKS.length],
   }))
 
-  record('P1', creates.every((c) => c.status === 201), `注册 ${creates.filter((c) => c.status === 201).length}/${USER_COUNT}`)
+  record('P1', creates.every((c) => c.journeyId), `注册 ${creates.length}/${USER_COUNT}`)
   record(
     'P2',
     new Set(users.map((u) => u.journeyId)).size === users.length,
@@ -101,7 +99,7 @@ async function main() {
   log('STEP', `2. ${USER_COUNT} 用户并发保存`)
   const saves = await Promise.all(
     users.map((u, i) =>
-      req('POST', `/api/journeys/${u.journeyId}/assessments`, {
+      loggedReq('POST', `/api/journeys/${u.journeyId}/assessments`, {
         body: savePayload(u.email, u.bookId),
         journeyId: u.journeyId,
         label: `save-${i}`,
@@ -123,25 +121,25 @@ async function main() {
   const b = users[1]
 
   log('STEP', '3. 跨用户访问（预期 404/401）')
-  const x1 = await req('GET', `/api/assessments/${a.assessmentId}`, {
-    journeyId: b.journeyId,
+  const x1 = await loggedReq('GET', `/api/assessments/${a.assessmentId}`, {
+    accessToken: getToken(b.journeyId),
     label: 'B-read-A',
   })
   record('X1', x1.status === 404, `B读A → ${x1.status} (预期404)`)
 
-  const x2 = await req('POST', `/api/journeys/${a.journeyId}/assessments`, {
+  const x2 = await loggedReq('POST', `/api/journeys/${a.journeyId}/assessments`, {
     body: savePayload(a.email, 'emotional-flow'),
-    journeyId: b.journeyId,
-    label: 'wrong-header',
+    accessToken: getToken(b.journeyId),
+    label: 'wrong-token',
   })
-  record('X2', x2.status === 401, `错header → ${x2.status} (预期401)`)
+  record('X2', x2.status === 401, `错token → ${x2.status} (预期401)`)
 
   log('STEP', '4. 同卷 8 路并发重复保存')
   const u2 = users[2]
   const freshBook = BOOKS.find((b) => b !== u2.bookId) ?? 'direction-light'
   const dups = await Promise.all(
     Array.from({ length: 8 }, (_, i) =>
-      req('POST', `/api/journeys/${u2.journeyId}/assessments`, {
+      loggedReq('POST', `/api/journeys/${u2.journeyId}/assessments`, {
         body: savePayload(u2.email, freshBook),
         journeyId: u2.journeyId,
         label: `dup-${i}`,
@@ -155,11 +153,9 @@ async function main() {
   log('STEP', '5. 同邮箱 10 路并发续接')
   const resumeEmail = `resume-${TS}@example.com`
   const resumes = await Promise.all(
-    Array.from({ length: 10 }, () =>
-      req('POST', '/api/journeys', { body: { email: resumeEmail, locale: 'zh' }, label: 'resume' }),
-    ),
+    Array.from({ length: 10 }, () => createJourney(resumeEmail, 'zh')),
   )
-  record('R1', new Set(resumes.map((r) => r.data?.journeyId)).size === 1, '10并发→1 journeyId')
+  record('R1', new Set(resumes.map((r) => r.journeyId)).size === 1, '10并发→1 journeyId')
 
   const failed = results.filter((r) => !r.ok)
   log('SUMMARY', `Total ${results.length} Passed ${results.length - failed.length} Failed ${failed.length}`)

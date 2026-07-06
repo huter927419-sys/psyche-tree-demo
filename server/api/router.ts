@@ -12,9 +12,8 @@ import {
   findJourneyById,
   getHolisticReadingForLocale,
   getJourneyWithAssessments,
-  getJourneyWithAssessmentsByEmail,
 } from '../db/repositories/journeys.js'
-import { isValidEmail, normalizeEmail } from '../db/repositories/users.js'
+import { isValidEmail } from '../db/repositories/users.js'
 import type { Locale, SaveAssessmentInput, StoredDimensionResult } from '../db/types.js'
 import { callDeepSeekMysticalReading } from '../deepseek.js'
 import {
@@ -27,7 +26,6 @@ import {
 } from '../services/holisticReadingService.js'
 import {
   errorMessage,
-  getHeader,
   parseRequestUrl,
   readJson,
   sendJson,
@@ -35,6 +33,7 @@ import {
 } from './http.js'
 import { saveHolisticFallback } from '../db/repositories/journeys.js'
 import { isReadingTestFallbackEnabled } from '../readingTestFallback.js'
+import { resolveJourneyFromRequest } from './auth.js'
 
 interface ApiContext {
   apiKey: string
@@ -81,14 +80,12 @@ async function route(
   parsed: NonNullable<ReturnType<typeof parseRequestUrl>>,
   ctx: ApiContext,
 ) {
-  const { pathname, searchParams } = parsed
+  const { pathname } = parsed
 
   if (pathname === '/api/journeys' && req.method === 'GET') {
-    const email = searchParams.get('email')
-    if (email) {
-      return handleGetJourneyByEmail(res, email)
-    }
-    sendJson(res, 400, { error: '缺少 email 参数' })
+    sendJson(res, 410, {
+      error: '请使用 POST /api/journeys 并在请求头携带 Authorization: Bearer <accessToken> 访问档案',
+    })
     return
   }
 
@@ -98,7 +95,7 @@ async function route(
 
   const journeyMatch = pathname.match(/^\/api\/journeys\/([^/]+)$/)
   if (journeyMatch && req.method === 'GET') {
-    return handleGetJourney(res, journeyMatch[1]!)
+    return handleGetJourney(req, res, journeyMatch[1]!)
   }
 
   const holisticMatch = pathname.match(
@@ -141,8 +138,12 @@ async function route(
     return handleFallbackReading(req, res, fallbackMatch[1]!)
   }
 
-  // Legacy endpoint — still accepts body psychologyInput for backward compat
+  // Legacy endpoint — disabled unless explicitly enabled (no journey auth)
   if (pathname === '/api/mystical-reading' && req.method === 'POST') {
+    if (process.env.PSYCHE_ALLOW_LEGACY_MYSTICAL !== '1') {
+      sendJson(res, 410, { error: errorMessage('LEGACY_ENDPOINT_DISABLED') })
+      return
+    }
     return handleLegacyMysticalReading(req, res, ctx)
   }
 
@@ -161,7 +162,7 @@ function parseRequestedLocale(
 }
 
 async function handleCreateJourney(req: IncomingMessage, res: ServerResponse) {
-  const body = await readJson<{ email?: string; locale?: Locale }>(req)
+  const body = await readJson<{ email?: string; locale?: Locale; accessToken?: string }>(req)
   if (!body.email || !isValidEmail(body.email)) {
     sendJson(res, 400, { error: errorMessage('INVALID_EMAIL') })
     return
@@ -175,38 +176,51 @@ async function handleCreateJourney(req: IncomingMessage, res: ServerResponse) {
         : body.locale === 'zhTw'
           ? 'zhTw'
           : 'zh'
-  const journey = createJourney(body.email, locale)
-  const user = getJourneyWithAssessments(journey.id)
+
+  let created
+  try {
+    created = createJourney(body.email, locale, {
+      accessToken: body.accessToken,
+    })
+  } catch (error) {
+    const code = error instanceof Error ? error.message : 'INTERNAL_ERROR'
+    if (code === 'INVALID_ACCESS_TOKEN') {
+      sendJson(res, 401, { error: errorMessage('INVALID_ACCESS_TOKEN') })
+      return
+    }
+    throw error
+  }
+
+  const user = getJourneyWithAssessments(created.journey.id)
 
   sendJson(res, 201, {
-    journeyId: journey.id,
-    userId: journey.user_id,
-    locale: journey.locale,
-    status: journey.status,
+    journeyId: created.journey.id,
+    userId: created.journey.user_id,
+    locale: created.journey.locale,
+    status: created.journey.status,
     email: body.email.trim().toLowerCase(),
+    accessToken: created.accessToken,
+    resumed: created.resumed,
     assessments: user?.assessments.map(toAssessmentDto) ?? [],
   })
 }
 
-function handleGetJourney(res: ServerResponse, journeyId: string) {
+function handleGetJourney(
+  req: IncomingMessage,
+  res: ServerResponse,
+  journeyId: string,
+) {
+  try {
+    resolveJourneyFromRequest(req, journeyId)
+  } catch (error) {
+    const code = error instanceof Error ? error.message : 'INTERNAL_ERROR'
+    sendJson(res, statusForError(code), { error: errorMessage(code) })
+    return
+  }
+
   const data = getJourneyWithAssessments(journeyId)
   if (!data) {
     console.warn('[psyche-api] JOURNEY_NOT_FOUND GET /api/journeys/%s', journeyId)
-    sendJson(res, 404, { error: errorMessage('JOURNEY_NOT_FOUND') })
-    return
-  }
-
-  sendJourneyPayload(res, 200, data)
-}
-
-function handleGetJourneyByEmail(res: ServerResponse, email: string) {
-  if (!isValidEmail(email)) {
-    sendJson(res, 400, { error: errorMessage('INVALID_EMAIL') })
-    return
-  }
-
-  const data = getJourneyWithAssessmentsByEmail(normalizeEmail(email))
-  if (!data) {
     sendJson(res, 404, { error: errorMessage('JOURNEY_NOT_FOUND') })
     return
   }
@@ -236,9 +250,11 @@ async function handleSaveAssessment(
   journeyId: string,
   ctx: ApiContext,
 ) {
-  const journeyHeader = getHeader(req, 'x-journey-id')
-  if (journeyHeader !== journeyId) {
-    sendJson(res, 401, { error: errorMessage('MISSING_JOURNEY_HEADER') })
+  try {
+    resolveJourneyFromRequest(req, journeyId)
+  } catch (error) {
+    const code = error instanceof Error ? error.message : 'INTERNAL_ERROR'
+    sendJson(res, statusForError(code), { error: errorMessage(code) })
     return
   }
 
@@ -323,13 +339,16 @@ function handleGetAssessment(
   res: ServerResponse,
   assessmentId: string,
 ) {
-  const journeyId = getHeader(req, 'x-journey-id')
-  if (!journeyId) {
-    sendJson(res, 401, { error: errorMessage('MISSING_JOURNEY_HEADER') })
+  let journey
+  try {
+    journey = resolveJourneyFromRequest(req)
+  } catch (error) {
+    const code = error instanceof Error ? error.message : 'INTERNAL_ERROR'
+    sendJson(res, statusForError(code), { error: errorMessage(code) })
     return
   }
 
-  const row = assertAssessmentBelongsToJourney(assessmentId, journeyId)
+  const row = assertAssessmentBelongsToJourney(assessmentId, journey.id)
   sendJson(res, 200, { assessment: toAssessmentDto(row) })
 }
 
@@ -339,13 +358,16 @@ async function handleMysticalReading(
   assessmentId: string,
   ctx: ApiContext,
 ) {
-  const journeyId = getHeader(req, 'x-journey-id')
-  if (!journeyId) {
-    sendJson(res, 401, { error: errorMessage('MISSING_JOURNEY_HEADER') })
+  let journey
+  try {
+    journey = resolveJourneyFromRequest(req)
+  } catch (error) {
+    const code = error instanceof Error ? error.message : 'INTERNAL_ERROR'
+    sendJson(res, statusForError(code), { error: errorMessage(code) })
     return
   }
 
-  const row = assertAssessmentBelongsToJourney(assessmentId, journeyId)
+  const row = assertAssessmentBelongsToJourney(assessmentId, journey.id)
   const body = await readJson<{ locale?: Locale }>(req).catch(() => ({ locale: undefined }))
   const requestedLocale = parseRequestedLocale(body.locale, row.locale)
 
@@ -384,14 +406,16 @@ async function handleFallbackReading(
   res: ServerResponse,
   assessmentId: string,
 ) {
-  const journeyId = getHeader(req, 'x-journey-id')
-  if (!journeyId) {
-    sendJson(res, 401, { error: errorMessage('MISSING_JOURNEY_HEADER') })
+  let journey
+  try {
+    journey = resolveJourneyFromRequest(req)
+  } catch (error) {
+    const code = error instanceof Error ? error.message : 'INTERNAL_ERROR'
+    sendJson(res, statusForError(code), { error: errorMessage(code) })
     return
   }
 
-  assertAssessmentBelongsToJourney(assessmentId, journeyId)
-  const row = assertAssessmentBelongsToJourney(assessmentId, journeyId)
+  const row = assertAssessmentBelongsToJourney(assessmentId, journey.id)
   const body = await readJson<{ reading?: string; locale?: Locale }>(req)
   if (!body.reading?.trim()) {
     sendJson(res, 400, { error: '缺少 reading' })
@@ -409,9 +433,11 @@ async function handleHolisticReading(
   journeyId: string,
   ctx: ApiContext,
 ) {
-  const header = getHeader(req, 'x-journey-id')
-  if (header !== journeyId) {
-    sendJson(res, 401, { error: errorMessage('MISSING_JOURNEY_HEADER') })
+  try {
+    resolveJourneyFromRequest(req, journeyId)
+  } catch (error) {
+    const code = error instanceof Error ? error.message : 'INTERNAL_ERROR'
+    sendJson(res, statusForError(code), { error: errorMessage(code) })
     return
   }
 
@@ -459,9 +485,11 @@ async function handleHolisticFallback(
   res: ServerResponse,
   journeyId: string,
 ) {
-  const header = getHeader(req, 'x-journey-id')
-  if (header !== journeyId) {
-    sendJson(res, 401, { error: errorMessage('MISSING_JOURNEY_HEADER') })
+  try {
+    resolveJourneyFromRequest(req, journeyId)
+  } catch (error) {
+    const code = error instanceof Error ? error.message : 'INTERNAL_ERROR'
+    sendJson(res, statusForError(code), { error: errorMessage(code) })
     return
   }
 

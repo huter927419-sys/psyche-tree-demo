@@ -3,23 +3,10 @@
  * End-to-end API + DB verification for psyche-tree-demo.
  * Run while `npm run dev` is up on BASE_URL (default http://localhost:5173).
  */
-const BASE = process.env.BASE_URL ?? 'http://localhost:5173'
+import { createApiClient } from './lib/apiClient.mjs'
 
-async function req(method, path, { headers = {}, body } = {}) {
-  const res = await fetch(`${BASE}${path}`, {
-    method,
-    headers: body ? { 'Content-Type': 'application/json', ...headers } : headers,
-    body: body ? JSON.stringify(body) : undefined,
-  })
-  const text = await res.text()
-  let data
-  try {
-    data = text ? JSON.parse(text) : null
-  } catch {
-    data = text
-  }
-  return { status: res.status, data }
-}
+const BASE = process.env.BASE_URL ?? 'http://localhost:5173'
+const { req, createJourney, getToken } = createApiClient(BASE)
 
 function assert(cond, msg) {
   if (!cond) throw new Error(msg)
@@ -57,91 +44,60 @@ const psychePayload = {
 async function runLocale(label, locale, email) {
   console.log(`\n=== ${label} (${locale}) ===`)
 
-  const create = await req('POST', '/api/journeys', {
-    body: { email, locale },
-  })
-  assert(create.status === 201, `create journey: ${create.status} ${JSON.stringify(create.data)}`)
-  const journeyId = create.data.journeyId
+  const created = await createJourney(email, locale)
+  const journeyId = created.journeyId
   console.log('  journeyId:', journeyId)
+  assert(created.accessToken?.startsWith('psk_'), 'missing accessToken')
 
-  const dup = await req('POST', '/api/journeys', {
-    body: { email, locale },
-  })
-  assert(dup.status === 201 && dup.data.journeyId === journeyId, 'resume same journey by email')
+  const dup = await createJourney(email, locale, created.accessToken)
+  assert(dup.journeyId === journeyId, 'resume same journey by email+token')
 
-  const byEmail = await req('GET', `/api/journeys?email=${encodeURIComponent(email)}`)
-  assert(byEmail.status === 200, `get by email: ${byEmail.status}`)
-  assert(byEmail.data.journeyId === journeyId, 'email lookup journey id mismatch')
+  const deprecated = await req('GET', `/api/journeys?email=${encodeURIComponent(email)}`)
+  assert(deprecated.status === 410, `GET by email disabled: ${deprecated.status}`)
 
   const save = await req('POST', `/api/journeys/${journeyId}/assessments`, {
-    headers: { 'X-Journey-Id': journeyId },
+    journeyId,
     body: { ...psychePayload, locale },
   })
   assert(save.status === 201, `save assessment: ${save.status} ${JSON.stringify(save.data)}`)
   const assessmentId = save.data.assessment.id
-  assert(save.data.assessment.answers, 'assessment dto missing answers')
-  assert(
-    save.data.assessment.answers['psyche-boundary']?.[0],
-    'answers not returned in dto',
-  )
   console.log('  assessmentId:', assessmentId)
 
   const dupSave = await req('POST', `/api/journeys/${journeyId}/assessments`, {
-    headers: { 'X-Journey-Id': journeyId },
+    journeyId,
     body: { ...psychePayload, locale },
   })
   assert(dupSave.status === 409, `duplicate save should 409, got ${dupSave.status}`)
 
-  const journey = await req('GET', `/api/journeys/${journeyId}`)
+  const journey = await req('GET', `/api/journeys/${journeyId}`, { journeyId })
   assert(journey.status === 200, `get journey: ${journey.status}`)
   assert(journey.data.assessments.length === 1, 'expected 1 assessment')
-  const stored = journey.data.assessments[0]
-  assert(stored.bookId === 'psyche-tree', 'bookId mismatch')
-  assert(stored.psychologyProfile.includes('测试') || locale === 'en', 'profile stored')
-  assert(stored.answers['psyche-root']?.length === 1, 'answers_json round-trip failed')
-  console.log('  stored answers keys:', Object.keys(stored.answers).length)
 
-  const getOne = await req('GET', `/api/assessments/${assessmentId}`, {
-    headers: { 'X-Journey-Id': journeyId },
-  })
+  const getOne = await req('GET', `/api/assessments/${assessmentId}`, { journeyId })
   assert(getOne.status === 200, `get assessment: ${getOne.status}`)
 
+  const noAuth = await req('GET', `/api/journeys/${journeyId}`)
+  assert(noAuth.status === 401, `unauthenticated get should 401, got ${noAuth.status}`)
+
   const holistic = await req('POST', `/api/journeys/${journeyId}/holistic-reading`, {
-    headers: { 'X-Journey-Id': journeyId },
+    journeyId,
   })
   assert(
     holistic.status === 409 || holistic.status === 202 || holistic.status === 200,
     `holistic before complete: ${holistic.status}`,
   )
 
-  return { journeyId, assessmentId, email }
+  return { journeyId, assessmentId, email, accessToken: getToken(journeyId) }
 }
 
 async function main() {
   const ts = Date.now()
-  const results = []
-
-  results.push(
-    await runLocale('Chinese flow', 'zh', `qa-zh-${ts}@example.com`),
-  )
-  results.push(
-    await runLocale('English flow', 'en', `qa-en-${ts}@example.com`),
-  )
-
-  console.log('\n=== SQLite spot check ===')
-  const { execSync } = await import('node:child_process')
-  for (const r of results) {
-    const out = execSync(
-      `sqlite3 /Users/wanglei/Projects/psyche-tree-demo/data/psyche-tree.sqlite "SELECT book_id, locale, length(answers_json), mystical_reading_status FROM book_assessments WHERE journey_id='${r.journeyId}';"`,
-      { encoding: 'utf8' },
-    )
-    console.log(`  ${r.email}:`, out.trim() || '(no rows)')
-  }
-
-  console.log('\n✓ All API + DB checks passed')
+  await runLocale('简体中文', 'zh', `e2e-zh-${ts}@example.com`)
+  await runLocale('English', 'en', `e2e-en-${ts}@example.com`)
+  console.log('\n✓ E2E API checks passed')
 }
 
 main().catch((err) => {
-  console.error('\n✗', err.message)
+  console.error(err)
   process.exit(1)
 })

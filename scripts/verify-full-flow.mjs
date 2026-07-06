@@ -4,16 +4,17 @@
  * Scenarios A–F from QA plan. Requires `npm run dev` on BASE_URL.
  */
 import { execSync } from 'node:child_process'
+import { createApiClient } from './lib/apiClient.mjs'
 
 const BASE = process.env.BASE_URL ?? 'http://localhost:5173'
 const DB = process.env.SQLITE_PATH ?? '/Users/wanglei/Projects/psyche-tree-demo/data/psyche-tree.sqlite'
-/** Send X-Psyche-Reading-Test-Fallback unless explicitly disabled */
-const USE_TEST_READING_FALLBACK = process.env.PSYCHE_READING_TEST_FALLBACK !== '0'
 const READING_POLL_MS = Number(process.env.READING_POLL_MS ?? 90_000)
 const TS = Date.now()
 const EMAIL_ZH = `qa-flow-zh-${TS}@example.com`
 const EMAIL_EN = `qa-flow-en-${TS}@example.com`
 const EMAIL_ZH2 = `qa-flow-zh2-${TS}@example.com`
+
+const { req, createJourney, getToken } = createApiClient(BASE)
 
 const BOOKS = [
   'psyche-tree',
@@ -43,23 +44,9 @@ function record(id, name, ok, detail) {
   console.log(`  ${mark} [${id}] ${name}${detail ? ` — ${detail}` : ''}`)
 }
 
-async function req(method, path, { body, journeyId, testFallback = USE_TEST_READING_FALLBACK } = {}) {
-  const headers = { 'Content-Type': 'application/json' }
-  if (journeyId) headers['X-Journey-Id'] = journeyId
-  if (testFallback) headers['X-Psyche-Reading-Test-Fallback'] = '1'
-  const res = await fetch(`${BASE}${path}`, {
-    method,
-    headers,
-    body: body ? JSON.stringify(body) : undefined,
-  })
-  const text = await res.text()
-  let data
-  try {
-    data = text ? JSON.parse(text) : null
-  } catch {
-    data = text
-  }
-  return { status: res.status, data }
+async function createJourneyId(email, locale, priorToken) {
+  const data = await createJourney(email, locale, priorToken)
+  return data.journeyId
 }
 
 function sleep(ms) {
@@ -117,12 +104,6 @@ function assessmentPayload(bookId, locale, profileSuffix = '') {
   }
 }
 
-async function createJourney(email, locale) {
-  const r = await req('POST', '/api/journeys', { body: { email, locale } })
-  if (r.status !== 201) throw new Error(`create journey: ${r.status}`)
-  return r.data.journeyId
-}
-
 async function saveAssessment(journeyId, bookId, locale) {
   return req('POST', `/api/journeys/${journeyId}/assessments`, {
     body: assessmentPayload(bookId, locale),
@@ -132,10 +113,16 @@ async function saveAssessment(journeyId, bookId, locale) {
 
 async function scenarioA() {
   console.log('\n=== A · 中文新用户 · 单卷 ===')
-  const journeyId = await createJourney(EMAIL_ZH, 'zh')
+  const journeyId = await createJourneyId(EMAIL_ZH, 'zh')
   record('A3', '邮箱注册创建 journey', true, journeyId.slice(0, 8))
 
-  const resume = await req('POST', '/api/journeys', { body: { email: EMAIL_ZH, locale: 'zh' } })
+  const resume = await req('POST', '/api/journeys', {
+    body: {
+      email: EMAIL_ZH,
+      locale: 'zh',
+      accessToken: getToken(journeyId),
+    },
+  })
   record(
     'A3b',
     '同邮箱续接同一 journey',
@@ -200,7 +187,16 @@ async function scenarioB(journeyId) {
 
 async function scenarioE(journeyId) {
   console.log('\n=== E · 换用户 / 续接 ===')
-  const resume = await req('POST', '/api/journeys', { body: { email: EMAIL_ZH, locale: 'zh' } })
+  const resume = await req('POST', '/api/journeys', {
+    body: {
+      email: EMAIL_ZH,
+      locale: 'zh',
+      accessToken: getToken(journeyId),
+    },
+  })
+  if (resume.status === 201) {
+    tokens.set(journeyId, resume.data.accessToken)
+  }
   record(
     'E3',
     '原邮箱重新登录续 journey',
@@ -208,7 +204,7 @@ async function scenarioE(journeyId) {
     resume.data.journeyId,
   )
 
-  const newJ = await createJourney(EMAIL_ZH2, 'zh')
+  const newJ = await createJourneyId(EMAIL_ZH2, 'zh')
   record('E4', '新邮箱创建新 journey', newJ !== journeyId, newJ.slice(0, 8))
 
   const oldCount = sql(`SELECT COUNT(*) FROM book_assessments WHERE journey_id='${journeyId}'`)
@@ -217,7 +213,7 @@ async function scenarioE(journeyId) {
 
 async function scenarioD() {
   console.log('\n=== D · 英文单卷 ===')
-  const journeyId = await createJourney(EMAIL_EN, 'en')
+  const journeyId = await createJourneyId(EMAIL_EN, 'en')
   const save = await saveAssessment(journeyId, 'psyche-tree', 'en')
   record('D3', '英文 assessment 保存', save.status === 201, `locale=en`)
 
@@ -270,7 +266,7 @@ async function scenarioC(journeyId) {
 async function scenarioF(journeyId) {
   console.log('\n=== F · 异常边界 ===')
   const incompleteEmail = `qa-incomplete-${TS}@example.com`
-  const incJ = await createJourney(incompleteEmail, 'zh')
+  const incJ = await createJourneyId(incompleteEmail, 'zh')
   await saveAssessment(incJ, 'psyche-tree', 'zh')
 
   const hol = await req('POST', `/api/journeys/${incJ}/holistic-reading`, { journeyId: incJ })
@@ -322,14 +318,11 @@ async function scenarioUI() {
     record('UI5', '含退出/登出文案', uiSrc.includes('退出') || uiSrc.includes('Sign out'), 'logout')
     record('UI6', '含回顾模式', uiSrc.includes('回顾'), 'readOnly zh')
     record('UI6b', '含英文 Whole-image oracle', uiSrc.includes('Whole-image oracle'), 'i18n en')
-  } else {
-    const cssMatch = html.match(/href="(\/assets\/index-[^"]+\.css)"/)
-    if (cssMatch) {
-      const jsBundle = prodJs ? await (await fetch(`${BASE}${prodJs[1]}`)).text() : ''
-      record('UI4', '含整象神谕文案', jsBundle.includes('整象神谕'), 'bundle')
-      record('UI5', '含登出文案', jsBundle.includes('登出'), 'bundle')
-      record('UI6', '含回顾模式', jsBundle.includes('回顾'), 'bundle')
-    }
+  } else if (prodJs) {
+    const jsBundle = await (await fetch(`${BASE}${prodJs[1]}`)).text()
+    record('UI4', '含 accessToken 存储键', jsBundle.includes('psyche-access-token'), 'bundle')
+    record('UI5', '含 Bearer 鉴权', jsBundle.includes('Authorization'), 'bundle')
+    record('UI6', '含建档 API', jsBundle.includes('/api/journeys'), 'bundle')
   }
 
   const cssPath =
@@ -352,33 +345,30 @@ async function scenarioUI() {
   const heroRes = await fetch(`${BASE}/src/components/bookshelf/BookshelfHeroProse.tsx`)
   record(
     'UI10',
-    '书架 intro 组件可达',
+    '书架 intro 组件可达（dev）',
     heroRes.status === 200,
     `status=${heroRes.status}`,
   )
 
-  const api404 = await req('GET', '/api/journeys/not-a-real-id')
-  record('UI9', '无效 journey → 404', api404.status === 404, `status=${api404.status}`)
+  const noAuth = await req('GET', '/api/journeys/not-a-real-id')
+  record('UI9', '无 token 读 journey → 401', noAuth.status === 401, `status=${noAuth.status}`)
 }
 
-async function scenarioRealUser() {
-  console.log('\n=== 回归 · lanegg110@126.com ===')
-  const r = await req('GET', '/api/journeys?email=lanegg110%40126.com')
-  if (r.status !== 200) {
-    record('R1', '查询已有用户', false, `status=${r.status}`)
-    return
-  }
-  record('R1', '查询已有用户 journey', true, r.data.journeyId?.slice(0, 8))
+async function scenarioAuth() {
+  console.log('\n=== 鉴权 · Bearer token ===')
+  const deprecated = await req('GET', '/api/journeys?email=test%40example.com')
+  record('AUTH1', 'GET email 已禁用 → 410', deprecated.status === 410, `status=${deprecated.status}`)
 
-  const count = sql(
-    `SELECT COUNT(*) FROM book_assessments ba JOIN journeys j ON j.id=ba.journey_id JOIN users u ON u.id=j.user_id WHERE u.email='lanegg110@126.com'`,
-  )
-  record(
-    'R2',
-    '当前 assessment 数量',
-    true,
-    `${count} 条（未完成任一卷则为 0，属用户行为非 bug）`,
-  )
+  const created = await createJourney(`qa-auth-${TS}@example.com`, 'zh')
+  const badResume = await req('POST', '/api/journeys', {
+    body: { email: `qa-auth-${TS}@example.com`, locale: 'zh' },
+  })
+  record('AUTH2', '续接无 token → 401', badResume.status === 401, `status=${badResume.status}`)
+
+  const ok = await req('GET', `/api/journeys/${created.journeyId}`, {
+    journeyId: created.journeyId,
+  })
+  record('AUTH3', 'Bearer 读 journey → 200', ok.status === 200, `status=${ok.status}`)
 }
 
 async function main() {
@@ -389,7 +379,7 @@ async function main() {
   console.log('EN email:', EMAIL_EN)
   console.log(
     'Reading test fallback header:',
-    USE_TEST_READING_FALLBACK ? 'on (instant QA readings)' : 'off',
+    process.env.PSYCHE_READING_TEST_FALLBACK !== '0' ? 'on (instant QA readings)' : 'off',
   )
 
   let journeyId
@@ -401,7 +391,7 @@ async function main() {
     await scenarioC(journeyId)
     await scenarioF(journeyId)
     await scenarioUI()
-    await scenarioRealUser()
+    await scenarioAuth()
   } catch (err) {
     console.error('\nFatal:', err.message)
     process.exit(1)

@@ -37,6 +37,7 @@ export interface JourneyRow {
   holistic_reading_zh_tw: string | null
   holistic_reading_source_zh_tw: ReadingSource | null
   holistic_prompt_input_zh_tw: string | null
+  access_token_hash: string | null
 }
 
 export interface BookAssessmentRow {

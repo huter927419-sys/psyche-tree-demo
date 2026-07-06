@@ -4,6 +4,7 @@ import { clearGuideProgress } from '../books/guide/storage'
 const JOURNEY_ID_KEY = 'psyche-journey-id'
 const JOURNEY_EMAIL_KEY = 'psyche-user-email'
 const USER_ID_KEY = 'psyche-user-id'
+const ACCESS_TOKEN_KEY = 'psyche-access-token'
 
 const LEGACY_LOCAL_KEYS = [
   'psyche-shore-opening-full-seen',
@@ -14,6 +15,7 @@ export interface JourneySession {
   journeyId: string | null
   email: string | null
   userId: string | null
+  accessToken: string | null
 }
 
 function readPersisted(key: string): string | null {
@@ -33,26 +35,36 @@ export function getJourneySession(): JourneySession {
     journeyId: readPersisted(JOURNEY_ID_KEY),
     email: readPersisted(JOURNEY_EMAIL_KEY),
     userId: readPersisted(USER_ID_KEY),
+    accessToken: readPersisted(ACCESS_TOKEN_KEY),
   }
 }
 
-export function setJourneySession(journeyId: string, email: string, userId: string) {
+export function setJourneySession(
+  journeyId: string,
+  email: string,
+  userId: string,
+  accessToken: string,
+) {
   const normalizedEmail = email.trim().toLowerCase()
   localStorage.setItem(JOURNEY_ID_KEY, journeyId)
   localStorage.setItem(JOURNEY_EMAIL_KEY, normalizedEmail)
   localStorage.setItem(USER_ID_KEY, userId)
+  localStorage.setItem(ACCESS_TOKEN_KEY, accessToken)
   sessionStorage.removeItem(JOURNEY_ID_KEY)
   sessionStorage.removeItem(JOURNEY_EMAIL_KEY)
   sessionStorage.removeItem(USER_ID_KEY)
+  sessionStorage.removeItem(ACCESS_TOKEN_KEY)
 }
 
 export function clearJourneySession() {
   localStorage.removeItem(JOURNEY_ID_KEY)
   localStorage.removeItem(JOURNEY_EMAIL_KEY)
   localStorage.removeItem(USER_ID_KEY)
+  localStorage.removeItem(ACCESS_TOKEN_KEY)
   sessionStorage.removeItem(JOURNEY_ID_KEY)
   sessionStorage.removeItem(JOURNEY_EMAIL_KEY)
   sessionStorage.removeItem(USER_ID_KEY)
+  sessionStorage.removeItem(ACCESS_TOKEN_KEY)
 }
 
 function clearPsycheSessionStorage() {
@@ -152,11 +164,28 @@ export interface CreateJourneyResponse {
   email: string
   locale: Locale
   status: string
+  accessToken: string
+  resumed?: boolean
   assessments: StoredAssessmentSummary[]
 }
 
+export function buildAuthHeaders(
+  accessToken?: string | null,
+): Record<string, string> {
+  const token = accessToken ?? getJourneySession().accessToken
+  if (!token) {
+    throw new Error('缺少访问凭证，请重新输入邮箱登录')
+  }
+  return {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`,
+  }
+}
+
 export async function fetchJourney(journeyId: string): Promise<JourneyDto> {
-  const response = await fetch(`/api/journeys/${journeyId}`)
+  const response = await fetch(`/api/journeys/${journeyId}`, {
+    headers: buildAuthHeaders(),
+  })
   const data = (await response.json()) as JourneyDto & { error?: string }
   if (!response.ok) {
     throw new Error(data.error ?? '读取档案失败')
@@ -164,38 +193,48 @@ export async function fetchJourney(journeyId: string): Promise<JourneyDto> {
   return data
 }
 
-export async function fetchJourneyByEmail(email: string): Promise<JourneyDto> {
+/** Resume journey via email + stored access token. */
+export async function resumeJourneyByEmail(email: string): Promise<JourneyDto> {
   const normalized = email.trim().toLowerCase()
-  const response = await fetch(
-    `/api/journeys?email=${encodeURIComponent(normalized)}`,
-  )
-  const data = (await response.json()) as JourneyDto & { error?: string }
+  const { accessToken } = getJourneySession()
+  const response = await fetch('/api/journeys', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      email: normalized,
+      locale: 'zh',
+      accessToken: accessToken ?? undefined,
+    }),
+  })
+  const data = (await response.json()) as CreateJourneyResponse & {
+    error?: string
+  }
   if (!response.ok) {
     throw new Error(data.error ?? '读取档案失败')
   }
-  setJourneySession(data.journeyId, normalized, data.userId)
-  return data
+  setJourneySession(data.journeyId, data.email, data.userId, data.accessToken)
+  return fetchJourney(data.journeyId)
 }
 
-/** Load the user's journey from SQLite via stored id or email. */
+/** Load the user's journey from SQLite via stored credentials. */
 export async function restoreJourneyFromStorage(): Promise<JourneyDto | null> {
-  const { journeyId, email } = getJourneySession()
+  const { journeyId, email, accessToken } = getJourneySession()
 
-  if (journeyId) {
+  if (journeyId && accessToken) {
     try {
       const journey = await fetchJourney(journeyId)
       if (email) {
-        setJourneySession(journey.journeyId, email, journey.userId)
+        setJourneySession(journey.journeyId, email, journey.userId, accessToken)
       }
       return journey
     } catch {
-      /* stale journey id — try email lookup below */
+      /* stale credentials — try email resume below */
     }
   }
 
-  if (email) {
+  if (email && accessToken) {
     try {
-      return await fetchJourneyByEmail(email)
+      return await resumeJourneyByEmail(email)
     } catch {
       clearJourneySession()
       return null
@@ -207,17 +246,37 @@ export async function restoreJourneyFromStorage(): Promise<JourneyDto | null> {
 }
 
 export function isStaleJourneyError(message: string): boolean {
-  return message.includes('档案不存在') || message.includes('JOURNEY_NOT_FOUND')
+  return (
+    message.includes('档案不存在') ||
+    message.includes('JOURNEY_NOT_FOUND') ||
+    message.includes('访问凭证无效') ||
+    message.includes('INVALID_ACCESS_TOKEN')
+  )
+}
+
+export function isAuthError(message: string): boolean {
+  return (
+    message.includes('缺少访问凭证') ||
+    message.includes('访问凭证无效') ||
+    message.includes('MISSING_ACCESS_TOKEN') ||
+    message.includes('INVALID_ACCESS_TOKEN')
+  )
 }
 
 export async function createJourney(
   email: string,
   locale: Locale,
 ): Promise<CreateJourneyResponse> {
+  const normalized = email.trim().toLowerCase()
+  const { accessToken } = getJourneySession()
   const response = await fetch('/api/journeys', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, locale }),
+    body: JSON.stringify({
+      email: normalized,
+      locale,
+      accessToken: accessToken ?? undefined,
+    }),
   })
 
   const data = (await response.json()) as CreateJourneyResponse & { error?: string }
@@ -225,7 +284,7 @@ export async function createJourney(
     throw new Error(data.error ?? '创建档案失败')
   }
 
-  setJourneySession(data.journeyId, data.email, data.userId)
+  setJourneySession(data.journeyId, data.email, data.userId, data.accessToken)
   return data
 }
 
@@ -238,13 +297,6 @@ export function findAssessmentForBook(
 
 const POLL_MS = 1200
 const MAX_POLLS = 90
-
-function journeyHeaders(journeyId: string) {
-  return {
-    'Content-Type': 'application/json',
-    'X-Journey-Id': journeyId,
-  }
-}
 
 export async function fetchHolisticReading(
   journeyId: string,
@@ -260,7 +312,7 @@ export async function fetchHolisticReading(
   for (let attempt = 0; attempt < MAX_POLLS; attempt++) {
     const response = await fetch(`/api/journeys/${journeyId}/holistic-reading`, {
       method: 'POST',
-      headers: journeyHeaders(journeyId),
+      headers: buildAuthHeaders(),
       body: JSON.stringify({ locale }),
     })
 
@@ -306,7 +358,7 @@ export async function saveHolisticFallbackReading(
 ): Promise<void> {
   await fetch(`/api/journeys/${journeyId}/holistic-reading/fallback`, {
     method: 'POST',
-    headers: journeyHeaders(journeyId),
+    headers: buildAuthHeaders(),
     body: JSON.stringify({ reading, locale }),
   })
 }
