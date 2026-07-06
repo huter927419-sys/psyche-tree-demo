@@ -2592,8 +2592,6 @@ picture:has(> .book-page-cover-watermark) {
     display: flex;
     flex-direction: column;
     width: 100%;
-    min-height: 100dvh;
-    min-height: 100svh;
     padding:
       max(0.5rem, env(safe-area-inset-top, 0px))
       max(0.85rem, env(safe-area-inset-right, 0px))
@@ -2601,7 +2599,12 @@ picture:has(> .book-page-cover-watermark) {
       max(0.85rem, env(safe-area-inset-left, 0px));
   }
 
-  .app-has-user-email .guide-mobile {
+  .guide-mobile:not(.guide-mobile--cover) {
+    min-height: 100dvh;
+    min-height: 100svh;
+  }
+
+  .app-has-user-email .guide-mobile:not(.guide-mobile--cover) {
     padding-top: calc(2.35rem + env(safe-area-inset-top, 0px));
   }
 
@@ -2846,15 +2849,17 @@ picture:has(> .book-page-cover-watermark) {
   }
 
   .guide-mobile--cover {
+    min-height: auto;
+    height: auto;
     justify-content: flex-start;
   }
 
   .guide-mobile-cover-main {
-    flex: 1;
+    flex: 0 1 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     text-align: center;
     padding: 0.5rem 0 1rem;
   }
@@ -4741,6 +4746,17 @@ html[lang="ja"] .bookshelf-guide-first-hint {
     overscroll-behavior-y: contain;
   }
 
+  .book-journey-viewport:has(.book-cover-layer),
+  .book-journey-viewport:has(.guide-mobile--cover) {
+    min-height: 0;
+    height: auto;
+    align-items: stretch;
+    justify-content: flex-start;
+    overflow: visible;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
   .guide-book-scene.book-cover-scene,
   .book-cover-scene.book-scene {
     min-height: auto;
@@ -4829,11 +4845,21 @@ html[lang="ja"] .bookshelf-guide-first-hint {
     margin-bottom: 0.55rem;
   }
 
-  /* ── 同观 / Android: 底部留白给 guide-mobile-footer ── */
+  /* ── 同观 / Android: 阅读态占满视口，封面态自然高度 ── */
 
-  .app-in-guide .book-journey-viewport {
+  .app-in-guide .book-journey-viewport:has(.guide-mobile:not(.guide-mobile--cover)) {
     min-height: 100dvh;
     min-height: 100svh;
+    padding-bottom: 0;
+  }
+
+  .app-in-guide .book-journey-viewport:has(.guide-mobile--cover),
+  .app-in-guide .book-journey-viewport:has(.book-cover-layer) {
+    min-height: 0;
+    height: auto;
+    align-items: stretch;
+    overflow: visible;
+    padding-top: 0;
     padding-bottom: 0;
   }
 

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import type { AssessmentResult } from './types'
 import type { BookDefinition, BookId } from './books/types'
 import { getBook, getBooks } from './books/registry'
@@ -140,6 +140,11 @@ function App() {
     }
   }, [phase])
 
+  useLayoutEffect(() => {
+    if (phase === 'shelf') return
+    window.scrollTo(0, 0)
+  }, [phase, activeBookId, guideStep])
+
   const refreshJourneySnapshot = useCallback(async () => {
     const journey = await restoreJourneyFromStorage()
     setJourneySnapshot(journey)
@@ -241,6 +246,8 @@ function App() {
         pickupTimer.current = null
       }, BOOK_PICKUP_MS)
     }
+
+    window.scrollTo(0, 0)
   }
 
   const backToShelf = () => {
