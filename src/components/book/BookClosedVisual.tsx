@@ -1,7 +1,6 @@
 import type { BookDefinition } from '../../books/types'
 import type { Locale } from '../../i18n/locale'
 import { BookCoverArt } from './BookCoverArt'
-import { MysticTitle } from '../bookshelf/MysticTitle'
 
 interface BookClosedVisualProps {
   book: BookDefinition
@@ -45,24 +44,24 @@ export function BookClosedVisual({
             )}
             <div className="book-cover-texture" aria-hidden />
             <div className="book-cover-ornament top" aria-hidden />
-            {locale === 'en' ? (
-              <h2
-                className="font-serif text-[#f0f0f0] text-center leading-snug mb-1 px-1 text-xl sm:text-2xl tracking-[0.04em]"
-                style={{ fontFamily: 'var(--font-serif)' }}
-              >
-                {book.meta.coverTitle.split(/\s+/).map((word) => (
-                  <span key={word} className="block">
-                    {word}
-                  </span>
-                ))}
-              </h2>
-            ) : (
-              <MysticTitle
-                as="h2"
-                text={book.meta.coverTitle}
-                className="book-cover-title-mystic"
-              />
-            )}
+            <h2
+              className={
+                locale === 'en'
+                  ? 'font-serif text-[#f0f0f0] text-center leading-snug mb-1 px-1 text-xl sm:text-2xl tracking-[0.04em]'
+                  : 'book-cover-title-mystic'
+              }
+              style={
+                locale === 'en' ? { fontFamily: 'var(--font-serif)' } : undefined
+              }
+            >
+              {locale === 'en'
+                ? book.meta.coverTitle.split(/\s+/).map((word) => (
+                    <span key={word} className="block">
+                      {word}
+                    </span>
+                  ))
+                : book.meta.coverTitle}
+            </h2>
             <p
               className="font-serif text-sm text-[rgba(240,240,240,0.55)] text-center mb-3 px-1"
               style={{ fontFamily: 'var(--font-serif)' }}

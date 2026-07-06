@@ -4300,24 +4300,6 @@ html[lang="ja"] .bookshelf-guide-first-hint {
   font-synthesis: none;
 }
 
-.mystic-title-char {
-  font-family: inherit;
-  font-synthesis: none;
-  display: inline-block;
-}
-
-html[lang="zh-Hant"] .mystic-title-char {
-  font-family: var(--font-mystic-zh-tw);
-}
-
-html[lang="zh-CN"] .mystic-title-char {
-  font-family: var(--font-mystic-zh);
-}
-
-html[lang="ja"] .mystic-title-char {
-  font-family: var(--font-mystic-ja);
-}
-
 .bookshelf-book-cover--art .bookshelf-book-cover-title--mystic {
   text-shadow:
     0 1px 10px rgba(0, 0, 0, 0.72),
