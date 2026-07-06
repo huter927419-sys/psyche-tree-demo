@@ -6,6 +6,7 @@ interface UserEmailCornerProps {
   userId: string | null
   locale: Locale
   onLogout: () => void
+  className?: string
 }
 
 export function UserEmailCorner({
@@ -13,13 +14,14 @@ export function UserEmailCorner({
   userId,
   locale,
   onLogout,
+  className = '',
 }: UserEmailCornerProps) {
   if (!email) return null
 
   const ui = getUi(locale)
 
   return (
-    <div className="app-user-email">
+    <div className={`app-user-email${className ? ` ${className}` : ''}`}>
       <span className="app-user-email-label">{ui.userEmailLabel}</span>
       <span className="app-user-email-value" title={email}>
         {email}

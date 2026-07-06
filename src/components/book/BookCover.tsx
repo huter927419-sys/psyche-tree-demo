@@ -4,7 +4,9 @@ import { getUi } from '../../i18n/ui'
 import { BilingualCrossfadeText } from '../i18n/BilingualCrossfadeText'
 import { LanguageToggle } from '../i18n/LanguageToggle'
 import { BookClosedVisual } from './BookClosedVisual'
+import { BookMobileCover } from './BookMobileCover'
 import { volumeCoverArtId } from '../../books/volumeCovers'
+import { GUIDE_MOBILE_QUERY, useMediaQuery } from '../../hooks/useMediaQuery'
 
 interface BookCoverProps {
   book: BookDefinition
@@ -26,6 +28,21 @@ export function BookCover({
   reviewMode = false,
 }: BookCoverProps) {
   const ui = getUi(locale)
+  const isMobile = useMediaQuery(GUIDE_MOBILE_QUERY)
+
+  if (isMobile) {
+    return (
+      <BookMobileCover
+        book={book}
+        locale={locale}
+        onLocaleChange={onLocaleChange}
+        onOpen={onOpen}
+        onBack={onBack}
+        opening={opening}
+        reviewMode={reviewMode}
+      />
+    )
+  }
 
   return (
     <div className="book-cover-scene book-scene flex flex-col items-center justify-center px-4 py-6 md:py-8 md:min-h-[min(88vh,920px)]">

@@ -27,6 +27,11 @@ import { ShoreZenAmbience } from './components/ambient/ShoreZenAmbience'
 import { HomeBackgroundSlideshow } from './components/ambient/HomeBackgroundSlideshow'
 import { availableBackgroundScenes } from './books/backgroundScenes'
 import { useVisualTier, type VisualTier } from './hooks/useVisualTier'
+import {
+  GUIDE_MOBILE_QUERY,
+  isGuideMobileViewport,
+  useMediaQuery,
+} from './hooks/useMediaQuery'
 import { LocaleContext, type Locale } from './i18n/locale'
 import { getUi } from './i18n/ui'
 import {
@@ -86,6 +91,7 @@ function App() {
   const [guideCoverOpening, setGuideCoverOpening] = useState(false)
   const [guideJourneyMode, setGuideJourneyMode] =
     useState<BookJourneyMode>('pickup')
+  const guideIsMobile = useMediaQuery(GUIDE_MOBILE_QUERY)
   const prevTreeStage = useRef(0)
   const pickupTimer = useRef<number | null>(null)
   const transitionTimer = useRef<number | null>(null)
@@ -123,6 +129,16 @@ function App() {
     document.addEventListener('visibilitychange', syncHidden)
     return () => document.removeEventListener('visibilitychange', syncHidden)
   }, [])
+
+  useEffect(() => {
+    const onShelf = phase === 'shelf'
+    document.documentElement.classList.toggle('app-on-shelf-html', onShelf)
+    document.body.classList.toggle('app-on-shelf-html', onShelf)
+    return () => {
+      document.documentElement.classList.remove('app-on-shelf-html')
+      document.body.classList.remove('app-on-shelf-html')
+    }
+  }, [phase])
 
   const refreshJourneySnapshot = useCallback(async () => {
     const journey = await restoreJourneyFromStorage()
@@ -216,10 +232,15 @@ function App() {
       applyJourneyForBook(journey, book)
     }
 
-    pickupTimer.current = window.setTimeout(() => {
+    if (isGuideMobileViewport()) {
       setJourneyMode('expanded')
-      pickupTimer.current = null
-    }, BOOK_PICKUP_MS)
+    } else {
+      setJourneyMode('pickup')
+      pickupTimer.current = window.setTimeout(() => {
+        setJourneyMode('expanded')
+        pickupTimer.current = null
+      }, BOOK_PICKUP_MS)
+    }
   }
 
   const backToShelf = () => {
@@ -255,8 +276,6 @@ function App() {
     applyJourneyForBook(journey, activeBook)
 
     setMusicBootstrap((n) => n + 1)
-    setCoverOpening(true)
-    setJourneyMode('expanding')
 
     const stored = journey
       ? findAssessmentForBook(journey, activeBook.meta.id)
@@ -264,6 +283,16 @@ function App() {
     if (stored) {
       setResult(buildAssessmentFromStored(stored, activeBook))
     }
+
+    if (isGuideMobileViewport()) {
+      setCoverOpening(false)
+      setJourneyMode('expanded')
+      setPhase('questions')
+      return
+    }
+
+    setCoverOpening(true)
+    setJourneyMode('expanding')
 
     transitionTimer.current = window.setTimeout(() => {
       setPhase('questions')
@@ -440,6 +469,11 @@ function App() {
       setEmailGateOpen(true)
       return
     }
+    if (isGuideMobileViewport()) {
+      setGuideStep('reading')
+      setGuideCoverOpening(false)
+      return
+    }
     setGuideCoverOpening(true)
     transitionTimer.current = window.setTimeout(() => {
       setGuideStep('reading')
@@ -465,13 +499,14 @@ function App() {
   return (
     <LocaleContext.Provider value={{ locale, setLocale }}>
     <div
-      className={`relative min-h-screen${phase === 'guide' ? ' app-in-guide' : ''}${readingFocus ? ' app-reading-focus' : ''}${userEmail ? ' app-has-user-email' : ''}${showPhotoBackdrop ? ' app-photo-backdrop' : ''}`}
+      className={`relative min-h-0 md:min-h-screen${phase === 'shelf' ? ' app-on-shelf' : ''}${phase === 'guide' ? ' app-in-guide' : ''}${inBookSession ? ' app-in-book' : ''}${readingFocus ? ' app-reading-focus' : ''}${userEmail ? ' app-has-user-email' : ''}${showPhotoBackdrop ? ' app-photo-backdrop' : ''}`}
     >
       <UserEmailCorner
         email={userEmail}
         userId={userId}
         locale={locale}
         onLogout={handleLogout}
+        className="app-user-email--shelf-desktop"
       />
       <EmailGateDialog
         open={emailGateOpen}
@@ -537,7 +572,7 @@ function App() {
         locale={locale}
       />
       <GithubFooterLink locale={locale} />
-      <main className="relative z-[2] pb-16">
+      <main className="relative z-[2] pb-16 md:pb-16">
         {phase === 'shelf' && !isClosing && (
           <Bookshelf
             books={getBooks(locale)}
@@ -554,6 +589,8 @@ function App() {
             onJourneyUpdated={() => {
               void refreshJourneySnapshot()
             }}
+            userEmail={userEmail}
+            onLogout={handleLogout}
           />
         )}
 
@@ -561,12 +598,31 @@ function App() {
           <BookJourneyStage
             mode={guideJourneyMode}
             variant="guide"
-            keepCentered
+            keepCentered={!guideIsMobile}
           >
-            {(guideStep === 'reading' || guideCoverOpening) && (
-              <div
-                className={`book-interior-layer${guideCoverOpening ? ' book-interior-layer--opening' : ''}`}
-              >
+            {guideStep === 'reading' &&
+              (guideIsMobile ? (
+                <GuideReader
+                  locale={locale}
+                  onLocaleChange={setLocale}
+                  onClose={closeGuide}
+                  onCompleted={() => setGuideRevision((n) => n + 1)}
+                />
+              ) : (
+                <div
+                  className={`book-interior-layer${guideCoverOpening ? ' book-interior-layer--opening' : ''}`}
+                >
+                  <GuideReader
+                    locale={locale}
+                    onLocaleChange={setLocale}
+                    onClose={closeGuide}
+                    onCompleted={() => setGuideRevision((n) => n + 1)}
+                  />
+                </div>
+              ))}
+
+            {!guideIsMobile && guideCoverOpening && guideStep === 'cover' && (
+              <div className="book-interior-layer book-interior-layer--opening">
                 <GuideReader
                   locale={locale}
                   onLocaleChange={setLocale}

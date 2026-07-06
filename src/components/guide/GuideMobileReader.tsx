@@ -96,9 +96,10 @@ export function GuideMobileReader({
         onTouchEnd={handleTouchEnd}
       >
         <article className="guide-mobile-sheet">
-          <section className="guide-mobile-pane guide-mobile-pane--left">{left}</section>
-          <div className="guide-mobile-crease" aria-hidden />
-          <section className="guide-mobile-pane guide-mobile-pane--right">{right}</section>
+          <div className="guide-mobile-flow">
+            {left}
+            {right}
+          </div>
         </article>
 
         <button

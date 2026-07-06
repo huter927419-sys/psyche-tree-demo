@@ -25,6 +25,8 @@ interface BookshelfProps {
   journeySnapshot?: JourneyDto | null
   holisticFlashSignal?: number
   onJourneyUpdated?: () => void
+  userEmail?: string | null
+  onLogout?: () => void
 }
 
 function bookshelfSceneClass(locale: Locale): string {
@@ -47,6 +49,8 @@ export function Bookshelf({
   journeySnapshot = null,
   holisticFlashSignal = 0,
   onJourneyUpdated,
+  userEmail = null,
+  onLogout,
 }: BookshelfProps) {
   const ui = getUi(locale)
   const [beaconActive, setBeaconActive] = useState<Record<number, boolean>>({})
@@ -74,13 +78,29 @@ export function Bookshelf({
   return (
     <>
     <div
-      className={`bookshelf-scene min-h-screen flex flex-col items-center justify-center px-4 py-12${bookshelfSceneClass(locale)}`}
+      className={`bookshelf-scene flex flex-col items-center justify-start md:justify-center px-4 py-6 md:min-h-screen md:py-12${bookshelfSceneClass(locale)}`}
     >
-      <div className="absolute top-4 right-4 z-10">
+      <div className="bookshelf-scene-toolbar w-full max-w-[980px] flex items-center justify-between gap-2 shrink-0 mb-1 md:mb-0">
+        {userEmail && onLogout && (
+          <div className="bookshelf-session-chip md:hidden">
+            <span className="bookshelf-session-email" title={userEmail}>
+              {userEmail}
+            </span>
+            <button
+              type="button"
+              className="bookshelf-session-logout"
+              onClick={onLogout}
+              aria-label={ui.userLogoutHint}
+            >
+              {ui.userLogout}
+            </button>
+          </div>
+        )}
         <LanguageToggle
           locale={locale}
           onChange={onLocaleChange}
           label={ui.languageLabel}
+          compact
         />
       </div>
 

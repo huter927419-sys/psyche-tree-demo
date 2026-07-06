@@ -2571,6 +2571,23 @@ picture:has(> .book-page-cover-watermark) {
     opacity: 1 !important;
   }
 
+  .app-in-guide .book-interior-layer,
+  .app-in-guide .book-interior-layer--opening {
+    animation: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+  }
+
+  .app-in-guide .book-cover-layer {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+
+  .guide-mobile-sheet {
+    display: flex;
+    flex-direction: column;
+  }
+
   .guide-mobile {
     display: flex;
     flex-direction: column;
@@ -2585,7 +2602,57 @@ picture:has(> .book-page-cover-watermark) {
   }
 
   .app-has-user-email .guide-mobile {
-    padding-top: 3.15rem;
+    padding-top: calc(2.35rem + env(safe-area-inset-top, 0px));
+  }
+
+  /* 同观阅读：左上角用户信息收成单行，避免压住返回/语言栏 */
+  .app-in-guide .app-user-email {
+    top: max(0.35rem, env(safe-area-inset-top, 0px));
+    left: max(0.65rem, env(safe-area-inset-left, 0px));
+    right: max(0.65rem, env(safe-area-inset-right, 0px));
+    max-width: none;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.2rem 0;
+    z-index: 35;
+    background: linear-gradient(
+      180deg,
+      rgba(5, 5, 5, 0.94) 0%,
+      rgba(5, 5, 5, 0.72) 70%,
+      transparent 100%
+    );
+  }
+
+  .app-in-guide .app-user-email-label,
+  .app-in-guide .app-user-email-id {
+    display: none;
+  }
+
+  .app-in-guide .app-user-email-value {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: 10px;
+    letter-spacing: 0.02em;
+  }
+
+  .app-in-guide .app-user-email-logout {
+    margin-top: 0;
+    flex-shrink: 0;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-indent: 0;
+  }
+
+  /* 同观阅读：底部导航已占满，隐藏右下角音乐/GitHub 浮层 */
+  .app-in-guide .ambient-music-control,
+  .app-in-guide .github-footer-link {
+    display: none !important;
+  }
+
+  .guide-mobile-footer {
+    padding-bottom: max(0.35rem, env(safe-area-inset-bottom, 0px));
   }
 
   .guide-mobile-header {
@@ -2640,52 +2707,94 @@ picture:has(> .book-page-cover-watermark) {
       0 18px 48px rgba(0, 0, 0, 0.42);
   }
 
-  .guide-mobile-pane {
-    width: 100%;
+  .guide-mobile-sheet {
+    display: flex;
+    flex-direction: column;
   }
 
-  .guide-mobile-pane .guide-page-stack {
-    min-height: auto;
+  .guide-mobile-flow {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.65rem;
+  }
+
+  .guide-mobile-flow .guide-page-stack {
+    flex: 0 0 auto;
+    min-height: 0;
     justify-content: flex-start;
-    gap: 0.35rem;
+    gap: 0.45rem;
   }
 
-  .guide-mobile-pane .guide-spread-panel {
+  .guide-mobile-flow .guide-spread-panel {
+    flex: 0 0 auto;
+    min-height: 0;
+    justify-content: flex-start;
     transform: none;
-    padding: 0.35rem 0.15rem 0.55rem;
-    flex: 0 1 auto;
-    min-height: auto;
+    padding: 0.2rem 0.1rem 0.35rem;
   }
 
-  .guide-mobile-pane .guide-spread-body,
-  .guide-mobile-pane .guide-spread-body--emphasis,
-  .guide-mobile-pane .guide-spread-verse,
-  .guide-mobile-pane .guide-spread-footer {
+  .guide-mobile-flow .guide-spread-body,
+  .guide-mobile-flow .guide-spread-body--emphasis,
+  .guide-mobile-flow .guide-spread-verse,
+  .guide-mobile-flow .guide-spread-footer {
     max-width: 100%;
   }
 
-  .guide-mobile-pane .guide-spread-body {
+  .guide-mobile-flow .guide-spread-body {
     font-size: 0.9rem;
     letter-spacing: 0.06em;
     text-indent: 0;
     line-height: 1.72;
   }
 
-  .guide-mobile-pane .guide-spread-illustration {
-    max-width: min(260px, 78vw);
+  .guide-mobile-flow .guide-spread-illustration-wrap {
+    flex: 0 0 auto;
+    min-height: 0;
+    display: block;
+    width: 100%;
+    padding: 0.15rem 0 0.35rem;
+  }
+
+  /* 手机端插图统一占位，避免翻页时上下块忽大忽小 */
+  .guide-mobile-flow .guide-spread-illustration {
+    width: min(200px, 68vw);
+    max-width: 200px;
+    height: min(150px, 51vw);
+    max-height: 150px;
+    aspect-ratio: auto;
     margin-inline: auto;
   }
 
-  .guide-mobile-crease {
-    height: 1px;
-    margin: 0.85rem 0.5rem;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.14),
-      transparent
-    );
-    flex-shrink: 0;
+  .guide-mobile-flow .guide-spread-illustration-img {
+    object-fit: cover;
+    object-position: center center;
+  }
+
+  .guide-mobile-flow
+    .guide-spread-illustration--revealing
+    .guide-spread-illustration-img {
+    animation: guide-illustration-mobile-reveal var(--guide-illustration-duration, 4.5s)
+      cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  @keyframes guide-illustration-mobile-reveal {
+    0% {
+      opacity: 0.08;
+      filter: grayscale(1) contrast(0.78) blur(3px);
+      transform: scale(0.98);
+    }
+    100% {
+      opacity: 1;
+      filter: grayscale(1) contrast(1.02) blur(0);
+      transform: scale(1);
+    }
+  }
+
+  .guide-mobile-flow .guide-spread-illustration-veil,
+  .guide-mobile-flow .guide-spread-illustration-mist {
+    animation: none !important;
+    opacity: 0 !important;
   }
 
   .guide-mobile-edge {
@@ -2809,13 +2918,358 @@ picture:has(> .book-page-cover-watermark) {
     width: min(280px, 100%);
   }
 
-  .app-in-guide .ambient-music-control {
-    bottom: 1rem;
-    right: 0.65rem;
+  /* ── 六卷 · 手机封面（扁平卡，无 3D 书壳） ── */
+
+  .book-mobile-cover-art {
+    position: relative;
   }
 
-  .app-in-guide .github-footer-link {
-    bottom: 1rem;
+  .book-mobile-cover-titles {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 0.85rem;
+    text-align: center;
+    pointer-events: none;
+    background: linear-gradient(
+      180deg,
+      rgba(5, 5, 5, 0.12) 0%,
+      rgba(5, 5, 5, 0.38) 45%,
+      rgba(5, 5, 5, 0.55) 100%
+    );
+  }
+
+  .book-mobile-cover-title-zh {
+    margin: 0 0 0.35rem;
+    font-family: var(--font-mystic);
+    font-size: clamp(1.35rem, 6vw, 1.65rem);
+    letter-spacing: 0.28em;
+    text-indent: 0.28em;
+    color: rgba(245, 245, 245, 0.92);
+  }
+
+  .book-mobile-cover-title-en {
+    margin: 0 0 0.35rem;
+    font-family: var(--font-serif-en);
+    font-size: clamp(1.1rem, 4.8vw, 1.35rem);
+    letter-spacing: 0.06em;
+    line-height: 1.35;
+    color: rgba(245, 245, 245, 0.9);
+  }
+
+  .book-mobile-cover-sub {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    color: rgba(220, 220, 220, 0.55);
+  }
+
+  .book-mobile-cover--silver .book-mobile-cover-title-zh,
+  .book-mobile-cover--silver .book-mobile-cover-title-en {
+    color: rgba(235, 240, 245, 0.9);
+  }
+
+  /* ── 六卷阅读：与同观一致的顶栏/底栏浮层处理 ── */
+
+  .app-in-book .book-journey-viewport {
+    padding: 0;
+    overflow: visible;
+    min-height: auto;
+    align-items: stretch;
+  }
+
+  .app-in-book .book-journey-scaler:not(.book-journey-scaler--guide) {
+    width: 100%;
+    max-width: 100%;
+    min-height: auto;
+    transform: none !important;
+    animation: none !important;
+    opacity: 1 !important;
+  }
+
+  .app-in-book .book-interior-layer,
+  .app-in-book .book-interior-layer--opening,
+  .app-in-book .book-cover-layer {
+    animation: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+  }
+
+  .app-in-book .app-user-email {
+    top: max(0.35rem, env(safe-area-inset-top, 0px));
+    left: max(0.65rem, env(safe-area-inset-left, 0px));
+    right: max(0.65rem, env(safe-area-inset-right, 0px));
+    max-width: none;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.2rem 0;
+    z-index: 35;
+    background: linear-gradient(
+      180deg,
+      rgba(5, 5, 5, 0.94) 0%,
+      rgba(5, 5, 5, 0.72) 70%,
+      transparent 100%
+    );
+  }
+
+  .app-in-book .app-user-email-label,
+  .app-in-book .app-user-email-id {
+    display: none;
+  }
+
+  .app-in-book .app-user-email-value {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: 10px;
+    letter-spacing: 0.02em;
+  }
+
+  .app-in-book .app-user-email-logout {
+    margin-top: 0;
+    flex-shrink: 0;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-indent: 0;
+  }
+
+  .app-in-book .ambient-music-control,
+  .app-in-book .github-footer-link {
+    display: none !important;
+  }
+
+  .app-has-user-email .book-mobile-cover {
+    padding-top: calc(2.35rem + env(safe-area-inset-top, 0px));
+  }
+
+  /* 六卷封面：不要撑满视口再垂直居中，改为自上而下自然流式排版 */
+  .app-in-book .book-mobile-cover.guide-mobile {
+    min-height: auto;
+    height: auto;
+  }
+
+  .app-in-book .book-mobile-cover .guide-mobile-cover-main {
+    flex: 0 1 auto;
+    justify-content: flex-start;
+    min-height: 0;
+    overflow: visible;
+    padding-bottom: max(1.25rem, env(safe-area-inset-bottom, 0px));
+  }
+
+  html:has(.app-in-book),
+  body:has(.app-in-book) {
+    height: auto;
+    min-height: 100dvh;
+    min-height: 100svh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+  }
+
+  .app-in-book {
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .app-in-book main {
+    overflow: visible;
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0px));
+  }
+
+  .app-in-book .book-journey-viewport {
+    overflow: visible;
+    min-height: 0;
+    height: auto;
+    padding-bottom: 0;
+  }
+
+  .app-in-book .book-cover-layer {
+    width: 100%;
+  }
+
+  /* ── 雾岸书架 · 手机布局（整页可滚动、扁平书卷、统一比例） ── */
+
+  html:has(.app-on-shelf),
+  body:has(.app-on-shelf),
+  html.app-on-shelf-html,
+  body.app-on-shelf-html {
+    height: auto;
+    min-height: 100dvh;
+    min-height: 100svh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+  }
+
+  .app-on-shelf {
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .app-on-shelf main {
+    overflow: visible;
+    padding-bottom: max(5.5rem, env(safe-area-inset-bottom, 0px));
+  }
+
+  .bookshelf-scene {
+    justify-content: flex-start;
+    min-height: 0;
+    height: auto;
+    padding-top: max(0.35rem, env(safe-area-inset-top, 0px));
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0px));
+    overflow: visible;
+  }
+
+  .app-on-shelf .app-user-email,
+  .app-on-shelf .app-user-email--shelf-desktop {
+    display: none !important;
+  }
+
+  .bookshelf-session-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-width: 0;
+    flex: 1 1 auto;
+    padding-right: 0.35rem;
+  }
+
+  .bookshelf-session-email {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: 10px;
+    letter-spacing: 0.02em;
+    color: rgba(240, 240, 240, 0.58);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .bookshelf-session-logout {
+    flex-shrink: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font: inherit;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: rgba(255, 255, 255, 0.38);
+  }
+
+  .bookshelf-scene-toolbar {
+    padding-inline: 0.15rem;
+  }
+
+  .bookshelf-scene-toolbar .language-toggle {
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+
+  .bookshelf-hero-eyebrow {
+    margin-bottom: 0.45rem;
+    margin-top: 0.15rem;
+  }
+
+  .bookshelf-hero-title {
+    margin-bottom: 0.65rem;
+    font-size: clamp(1.45rem, 5.2vw, 1.85rem);
+  }
+
+  .bookshelf-hero-prose {
+    margin-bottom: 1rem;
+    gap: 0.65rem;
+    padding-inline: 0.25rem;
+  }
+
+  .bookshelf-guide-block {
+    margin-bottom: 1rem;
+    gap: 0.45rem;
+    padding-bottom: 0.65rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    overflow: hidden;
+  }
+
+  .bookshelf-guide-block .bookshelf-book {
+    max-width: min(108px, 30vw);
+  }
+
+  .bookshelf-unit {
+    perspective: none;
+    padding-bottom: 0.75rem;
+  }
+
+  .bookshelf-row {
+    max-width: min(340px, 100%);
+    gap: 0.55rem 0.4rem;
+    min-height: auto;
+    padding-bottom: 0.5rem;
+    transform-style: flat;
+  }
+
+  .bookshelf-book {
+    max-width: min(96px, 27vw);
+    transform: none !important;
+    transform-style: flat;
+    filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.42));
+  }
+
+  .bookshelf-book:hover {
+    transform: translateY(-3px) !important;
+    filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.48));
+  }
+
+  .bookshelf-book-top-face,
+  .bookshelf-book-cast-shadow {
+    display: none;
+  }
+
+  .bookshelf-book-cover {
+    height: auto;
+    aspect-ratio: 32 / 42;
+    min-height: 108px;
+    max-height: 118px;
+    padding: 0.55rem 0.4rem 0.45rem;
+  }
+
+  .bookshelf-book-cover--en {
+    max-height: 124px;
+    min-height: 112px;
+  }
+
+  .bookshelf-book-cover-title,
+  .bookshelf-book-cover-title--zh {
+    font-size: 0.82rem;
+    letter-spacing: 0.22em;
+    text-indent: 0.22em;
+  }
+
+  .bookshelf-ultimate-oracle {
+    margin-top: 0.85rem;
+    padding-bottom: 0.25rem;
+  }
+
+  .ambient-music-control {
+    bottom: max(0.65rem, env(safe-area-inset-bottom, 0px));
+    right: 0.65rem;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .ambient-music-btn {
+    padding: 0.38rem 0.6rem;
+    font-size: 0.58rem;
+  }
+
+  .github-footer-link {
+    bottom: max(0.65rem, env(safe-area-inset-bottom, 0px));
   }
 }
 
@@ -3992,57 +4446,64 @@ html[lang="ja"] .bookshelf-guide-first-hint {
 
 @media (max-width: 680px) {
   .bookshelf-row {
-    max-width: 360px;
-    gap: 1rem 0.65rem;
+    max-width: min(340px, 100%);
+    gap: 0.65rem 0.45rem;
     min-height: auto;
   }
 
   .bookshelf-book {
-    max-width: 104px;
+    max-width: min(100px, 28vw);
   }
 
   .bookshelf-scene--en .bookshelf-row {
-    max-width: 440px;
+    max-width: min(360px, 100%);
   }
 
   .bookshelf-scene--en .bookshelf-book {
-    max-width: 148px;
+    max-width: min(108px, 30vw);
   }
 
   .bookshelf-book-cover {
-    height: 172px;
+    height: auto;
+    aspect-ratio: 32 / 42;
+    min-height: 118px;
+    max-height: 128px;
   }
 
   .bookshelf-book-cover--en {
-    height: 184px;
+    min-height: 122px;
+    max-height: 136px;
   }
 }
 
 @media (max-width: 400px) {
   .bookshelf-row {
-    max-width: 320px;
-    gap: 0.9rem 0.55rem;
-    padding-bottom: 0.5rem;
+    max-width: min(320px, 100%);
+    gap: 0.55rem 0.4rem;
+    padding-bottom: 0.35rem;
   }
 
   .bookshelf-book-cover {
-    height: 168px;
+    min-height: 112px;
+    max-height: 122px;
   }
 
   .bookshelf-book-cover--en {
-    height: 178px;
+    min-height: 116px;
+    max-height: 128px;
   }
 }
 
 @media (max-width: 340px) {
   .bookshelf-book-cover {
-    height: 162px;
-    padding: 0.8rem 0.45rem 0.6rem;
+    min-height: 108px;
+    max-height: 118px;
+    padding: 0.55rem 0.4rem 0.45rem;
   }
 
   .bookshelf-book-cover-title,
   .bookshelf-book-cover-title--zh {
-    font-size: 0.88rem;
+    font-size: 0.78rem;
   }
 }
 
@@ -4368,23 +4829,12 @@ html[lang="ja"] .bookshelf-guide-first-hint {
     margin-bottom: 0.55rem;
   }
 
-  /* ── 同观 / Android: clear fixed footer + music from nav ── */
+  /* ── 同观 / Android: 底部留白给 guide-mobile-footer ── */
 
   .app-in-guide .book-journey-viewport {
     min-height: 100dvh;
     min-height: 100svh;
-    padding-bottom: calc(5.25rem + env(safe-area-inset-bottom, 0px));
-  }
-
-  .app-in-guide .ambient-music-control {
-    bottom: calc(4.85rem + env(safe-area-inset-bottom, 0px));
-    right: 0.65rem;
-    z-index: 25;
-  }
-
-  .app-in-guide .github-footer-link {
-    bottom: calc(4.85rem + env(safe-area-inset-bottom, 0px));
-    z-index: 25;
+    padding-bottom: 0;
   }
 
   .app-in-guide .guide-book-controls {
@@ -4401,6 +4851,15 @@ html[lang="ja"] .bookshelf-guide-first-hint {
   .app-in-guide .book-journey-scaler--guide .guide-book-anchor--open .book-page-inner {
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
+  }
+
+  /* 六卷封面：避免 journey viewport 变成内部滚动容器 */
+  .app-in-book .book-journey-viewport {
+    overflow: visible;
+    min-height: 0;
+    height: auto;
+    padding-top: 0;
+    padding-bottom: 0;
   }
 }
 
@@ -4614,15 +5073,18 @@ html[lang="ja"] .bookshelf-guide-first-hint {
   margin-top: 1.75rem;
 }
 
-.book-cover-scene {
+.guide-book-scene.book-cover-scene,
+.book-cover-scene.book-scene:not(.guide-book-scene) {
   width: 100%;
   max-width: 920px;
   margin-inline: auto;
 }
 
-.guide-book-scene.book-cover-scene,
-.book-cover-scene.book-scene:not(.guide-book-scene) {
-  min-height: min(88vh, 920px);
+@media (min-width: 768px) {
+  .guide-book-scene.book-cover-scene,
+  .book-cover-scene.book-scene:not(.guide-book-scene) {
+    min-height: min(88vh, 920px);
+  }
 }
 
 .book-cover-header {
@@ -6297,8 +6759,14 @@ html[lang="ja"] .ambient-phrase-text {
   top: 4.5rem;
 }
 
-.app-has-user-email .bookshelf-scene {
-  padding-top: 3.25rem;
+@media (min-width: 768px) {
+  .app-has-user-email .bookshelf-scene {
+    padding-top: 3.25rem;
+  }
+
+  .app-user-email--shelf-desktop {
+    display: flex;
+  }
 }
 
 /* ── Opening guide (sacred intro toast) ── */

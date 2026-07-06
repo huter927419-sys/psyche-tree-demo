@@ -372,8 +372,11 @@ export function GuideReader({
   const incoming =
     pendingIndex !== null ? buildSpread(pendingIndex) : undefined
 
-  const displayPageNumber =
-    flipping && pendingIndex !== null ? pendingIndex + 1 : pageIndex + 1
+  const displayPageNumber = isMobile
+    ? pageIndex + 1
+    : flipping && pendingIndex !== null
+      ? pendingIndex + 1
+      : pageIndex + 1
 
   const chapterLabel = useMemo(() => {
     for (let i = pageIndex; i >= 0; i -= 1) {
