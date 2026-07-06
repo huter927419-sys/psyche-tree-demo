@@ -4,6 +4,7 @@ import { getUi } from '../../i18n/ui'
 import { volumeCoverArtId } from '../../books/volumeCovers'
 import { LanguageToggle } from '../i18n/LanguageToggle'
 import { BookCoverArt } from './BookCoverArt'
+import { MysticTitle } from '../bookshelf/MysticTitle'
 
 interface BookMobileCoverProps {
   book: BookDefinition
@@ -53,15 +54,17 @@ export function BookMobileCover({
           <BookCoverArt coverId={coverArtId} variant="hero" />
           <div className="guide-mobile-cover-frame" aria-hidden />
           <div className="book-mobile-cover-titles">
-            <h2
-              className={
-                locale === 'en'
-                  ? 'bookshelf-book-cover-title-en book-mobile-cover-title-en'
-                  : 'bookshelf-book-cover-title--zh bookshelf-book-cover-title--mystic book-mobile-cover-title-zh'
-              }
-            >
-              {book.meta.coverTitle}
-            </h2>
+            {locale === 'en' ? (
+              <h2 className="bookshelf-book-cover-title-en book-mobile-cover-title-en">
+                {book.meta.coverTitle}
+              </h2>
+            ) : (
+              <MysticTitle
+                as="h2"
+                text={book.meta.coverTitle}
+                className="bookshelf-book-cover-title--zh bookshelf-book-cover-title--mystic book-mobile-cover-title-zh"
+              />
+            )}
             <p
               className={
                 locale === 'en'

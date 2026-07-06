@@ -3322,22 +3322,31 @@ picture:has(> .book-page-cover-watermark) {
   }
 
   .bookshelf-book-cover-title--mystic {
-    writing-mode: vertical-rl;
-    text-orientation: upright;
+    writing-mode: horizontal-tb;
+    text-orientation: mixed;
+    direction: ltr;
     font-family: var(--font-mystic-zh);
     font-synthesis: none;
-    font-size: clamp(1.2rem, 4.8vw, 1.65rem);
+    font-size: clamp(1rem, 4vw, 1.35rem);
     margin: 0.1rem auto 0;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.14em;
     text-indent: 0;
-    line-height: 1;
-    padding-inline: 0.04em;
+    line-height: 1.15;
+    text-align: center;
+    white-space: nowrap;
   }
 
   .bookshelf-book-cover-body--zh .bookshelf-book-cover-rule {
     display: block;
-    height: 1rem;
-    margin: 0.2rem auto;
+    width: 1.25rem;
+    height: 1px;
+    margin: 0.25rem auto;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.42),
+      transparent
+    );
   }
 
   .bookshelf-book-cover-meta--zh {
@@ -4285,12 +4294,15 @@ html[lang="ja"] .bookshelf-guide-first-hint {
 .bookshelf-book-cover-title--mystic,
 .bookshelf-book-cover-title--zh.bookshelf-book-cover-title--mystic {
   font-family: var(--font-mystic-zh);
-  writing-mode: vertical-rl;
-  text-orientation: upright;
-  font-size: 1.85rem;
-  line-height: 1;
-  letter-spacing: 0.12em;
+  writing-mode: horizontal-tb;
+  text-orientation: mixed;
+  direction: ltr;
+  font-size: 1.55rem;
+  line-height: 1.15;
+  letter-spacing: 0.14em;
   text-indent: 0;
+  text-align: center;
+  white-space: nowrap;
   margin: 0.15rem auto 0;
   padding: 0.15rem 0;
   color: rgba(252, 248, 238, 0.96);
@@ -4298,6 +4310,23 @@ html[lang="ja"] .bookshelf-guide-first-hint {
     0 0 28px rgba(255, 235, 200, 0.18),
     0 0 8px rgba(255, 255, 255, 0.08);
   font-synthesis: none;
+}
+
+.mystic-title-glyph {
+  font-family: inherit;
+  font-synthesis: none;
+}
+
+html[lang="zh-Hant"] .mystic-title-glyph {
+  font-family: var(--font-mystic-zh-tw);
+}
+
+html[lang="zh-CN"] .mystic-title-glyph {
+  font-family: var(--font-mystic-zh);
+}
+
+html[lang="ja"] .mystic-title-glyph {
+  font-family: var(--font-mystic-ja);
 }
 
 .bookshelf-book-cover--art .bookshelf-book-cover-title--mystic {
@@ -4329,11 +4358,11 @@ html[lang="ja"] .bookshelf-guide-first-hint {
 }
 
 .bookshelf-book-cover-body--zh .bookshelf-book-cover-rule {
-  width: 1px;
-  height: 1.35rem;
-  margin: 0.35rem auto;
+  width: 1.5rem;
+  height: 1px;
+  margin: 0.3rem auto;
   background: linear-gradient(
-    180deg,
+    90deg,
     transparent,
     rgba(255, 255, 255, 0.42),
     transparent
@@ -4342,13 +4371,16 @@ html[lang="ja"] .bookshelf-guide-first-hint {
 
 .book-cover-title-mystic {
   font-family: var(--font-mystic-zh);
+  writing-mode: horizontal-tb;
+  direction: ltr;
   font-size: clamp(2rem, 5vw, 2.75rem);
   line-height: 1.15;
   letter-spacing: 0.18em;
   font-synthesis: none;
-  text-indent: 0.18em;
-  color: rgba(252, 248, 238, 0.96);
+  text-indent: 0;
   text-align: center;
+  white-space: nowrap;
+  color: rgba(252, 248, 238, 0.96);
   margin-bottom: 0.35rem;
   padding-inline: 0.25rem;
   text-shadow:
@@ -7729,7 +7761,7 @@ html[lang="zh-CN"] .bookshelf-hero-seal {
 }
 
 html[lang="zh-CN"] .bookshelf-book-cover-title--mystic {
-  font-size: 1.95rem;
+  font-size: 1.55rem;
   letter-spacing: 0.14em;
 }
 
@@ -7746,7 +7778,7 @@ html[lang="zh-Hant"] .book-mobile-cover-title-zh.bookshelf-book-cover-title--mys
 }
 
 html[lang="zh-Hant"] .bookshelf-book-cover-title--mystic {
-  font-size: 1.95rem;
+  font-size: 1.55rem;
   letter-spacing: 0.14em;
 }
 
@@ -7979,7 +8011,7 @@ html[lang="ja"] .book-mobile-cover-title-zh.bookshelf-book-cover-title--mystic {
 }
 
 html[lang="ja"] .bookshelf-book-cover-title--mystic {
-  font-size: 1.95rem;
+  font-size: 1.55rem;
   letter-spacing: 0.14em;
 }
 
