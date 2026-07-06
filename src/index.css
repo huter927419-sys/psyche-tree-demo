@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Long Cang";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/long-cang.woff2") format("woff2");
+}
+
 @theme {
   --color-sacred-black: #050505;
   --color-sacred-white: #f0f0f0;
@@ -8,7 +16,7 @@
   --font-serif-en: "Cormorant Garamond", Georgia, serif;
   --font-mystic-zh: "Zhi Mang Xing", "Ma Shan Zheng", "Long Cang", cursive;
   --font-prose-zh: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
-  --font-mystic-zh-tw: "Long Cang", "Ma Shan Zheng", "Zhi Mang Xing", cursive;
+  --font-mystic-zh-tw: "Long Cang", "Ma Shan Zheng", "Zhi Mang Xing";
   --font-prose-zh-tw: "Noto Serif TC", "PingFang TC", "Heiti TC", "Songti TC", serif;
   --font-mystic-en: "Cinzel", "Cormorant Garamond", "Palatino Linotype", serif;
   --font-mystic-ja: "New Tegomin", "Zen Old Mincho", "Hiragino Mincho ProN", serif;
@@ -4312,6 +4320,23 @@ html[lang="ja"] .bookshelf-guide-first-hint {
     0 0 8px rgba(255, 255, 255, 0.08);
   font-synthesis: none;
   unicode-bidi: isolate;
+}
+
+.mystic-title-glyph {
+  font-family: inherit;
+  font-synthesis: none;
+}
+
+html[lang="zh-Hant"] .mystic-title-glyph {
+  font-family: var(--font-mystic-zh-tw);
+}
+
+html[lang="zh-CN"] .mystic-title-glyph {
+  font-family: var(--font-mystic-zh);
+}
+
+html[lang="ja"] .mystic-title-glyph {
+  font-family: var(--font-mystic-ja);
 }
 
 .bookshelf-book-cover--art .bookshelf-book-cover-title--mystic {

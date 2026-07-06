@@ -4,6 +4,7 @@ import { getUi } from '../../i18n/ui'
 import { volumeCoverArtId } from '../../books/volumeCovers'
 import { LanguageToggle } from '../i18n/LanguageToggle'
 import { BookCoverArt } from './BookCoverArt'
+import { MysticTitle } from '../bookshelf/MysticTitle'
 
 interface BookMobileCoverProps {
   book: BookDefinition
@@ -58,12 +59,11 @@ export function BookMobileCover({
                 {book.meta.coverTitle}
               </h2>
             ) : (
-              <h2
-                dir="ltr"
+              <MysticTitle
+                as="h2"
+                text={book.meta.coverTitle}
                 className="bookshelf-book-cover-title--zh bookshelf-book-cover-title--mystic book-mobile-cover-title-zh"
-              >
-                {book.meta.coverTitle}
-              </h2>
+              />
             )}
             <p
               className={

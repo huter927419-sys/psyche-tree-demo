@@ -1,4 +1,5 @@
 import type { Locale } from '../../i18n/locale'
+import { MysticTitle } from './MysticTitle'
 
 interface BookshelfVolumeCoverProps {
   locale: Locale
@@ -16,12 +17,10 @@ export function BookshelfVolumeCover({
   if (locale === 'zh' || locale === 'zhTw' || locale === 'ja') {
     return (
       <div className="bookshelf-book-cover-body bookshelf-book-cover-body--zh">
-        <p
-          dir="ltr"
+        <MysticTitle
+          text={title}
           className="bookshelf-book-cover-title--zh bookshelf-book-cover-title--mystic"
-        >
-          {title}
-        </p>
+        />
         <span className="bookshelf-book-cover-rule" aria-hidden />
         <div className="bookshelf-book-cover-meta--zh">
           <p className="bookshelf-book-cover-sub--zh">{subtitle}</p>
