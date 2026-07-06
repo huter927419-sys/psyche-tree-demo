@@ -2800,6 +2800,62 @@ picture:has(> .book-page-cover-watermark) {
     opacity: 0 !important;
   }
 
+  /* ── 六卷阅读 · 手机单列流式（复用 guide-mobile 壳） ── */
+
+  .app-in-book .guide-mobile .tree-progress-hud {
+    margin: 0 0 0.55rem;
+    flex-shrink: 0;
+  }
+
+  .guide-mobile-flow .book-chapter-tag {
+    margin: 0 0 0.55rem;
+    text-align: center;
+    font-size: 10px;
+    letter-spacing: 0.38em;
+    text-indent: 0.38em;
+    color: rgba(255, 255, 255, 0.38);
+  }
+
+  .guide-mobile-flow .book-question-mystical {
+    margin-bottom: 0.75rem;
+    text-align: center;
+  }
+
+  .guide-mobile-flow .book-question-rite,
+  .guide-mobile-flow .book-question-guide,
+  .guide-mobile-flow .book-question-note {
+    max-width: 100%;
+  }
+
+  .guide-mobile-flow .book-question-divider {
+    margin: 0.65rem auto 0.85rem;
+  }
+
+  .guide-mobile-flow .book-page-title {
+    text-align: center;
+    margin-bottom: 0.65rem;
+  }
+
+  .guide-mobile-flow .book-page-hint,
+  .guide-mobile-flow .book-page-footer-note {
+    text-align: center;
+  }
+
+  .guide-mobile-flow .book-scroll-content {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .guide-mobile-flow .grid {
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+  }
+
+  .guide-mobile-flow .book-body-text {
+    font-size: 0.88rem;
+    line-height: 1.75;
+  }
+
   .guide-mobile-edge {
     position: absolute;
     top: 0;
@@ -3096,6 +3152,15 @@ picture:has(> .book-page-cover-watermark) {
 
   .app-in-book .book-cover-layer {
     width: 100%;
+  }
+
+  .app-in-book .book-journey-viewport:has(.book-interior-layer) {
+    min-height: 0;
+    height: auto;
+    overflow: visible;
+    align-items: stretch;
+    padding-top: 0;
+    padding-bottom: 0;
   }
 
   /* ── 雾岸书架 · 手机布局（整页可滚动、扁平书卷、统一比例） ── */
@@ -8200,6 +8265,38 @@ html[lang="ja"] .app-user-email-value {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (max-width: 767px) {
+  .volume-rite-overlay {
+    align-items: stretch;
+    justify-content: flex-start;
+    padding:
+      max(3.15rem, calc(2.1rem + env(safe-area-inset-top, 0px)))
+      max(0.85rem, env(safe-area-inset-right, 0px))
+      max(1rem, env(safe-area-inset-bottom, 0px))
+      max(0.85rem, env(safe-area-inset-left, 0px));
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+  }
+
+  .app-has-user-email .volume-rite-overlay {
+    padding-top: max(3.55rem, calc(2.55rem + env(safe-area-inset-top, 0px)));
+  }
+
+  .volume-rite-panel {
+    width: 100%;
+    max-width: none;
+    max-height: none;
+    flex: 0 0 auto;
+    margin: 0;
+  }
+
+  .volume-rite-body {
+    flex: 0 1 auto;
+    overflow: visible;
   }
 }
 

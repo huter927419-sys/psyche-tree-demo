@@ -20,6 +20,8 @@ import { buildAssessmentFromStored } from '../../services/storedAssessment'
 import type { Locale } from '../../i18n/locale'
 import { getUi } from '../../i18n/ui'
 import { getQuestionGuide } from '../../i18n/questionGuide'
+import { GUIDE_MOBILE_QUERY, useMediaQuery } from '../../hooks/useMediaQuery'
+import { GuideMobileReader } from '../guide/GuideMobileReader'
 import { LanguageToggle } from '../i18n/LanguageToggle'
 import { QuestionCard } from '../QuestionCard'
 import { TreeProgress } from '../tree/TreeProgress'
@@ -127,6 +129,8 @@ export function BookReader({
   const [saveError, setSaveError] = useState<string | null>(null)
   const [entryRiteComplete, setEntryRiteComplete] = useState(readOnly)
   const [exitRiteOpen, setExitRiteOpen] = useState(false)
+  const [mobileFading, setMobileFading] = useState(false)
+  const isMobile = useMediaQuery(GUIDE_MOBILE_QUERY)
   const [mysticalCache, setMysticalCache] = useState<
     Partial<Record<Locale, { reading: string; fallback: boolean }>>
   >({})
@@ -152,6 +156,10 @@ export function BookReader({
 
   const isQuestionSpread = pageIndex < questionCount
   const resultPageIndex = pageIndex - questionCount
+  const busy = isMobile ? mobileFading || isAdvancing : flipping || isAdvancing
+  const contentVisible = isMobile
+    ? !mobileFading && !isAdvancing
+    : !flipping && !isAdvancing
 
   useEffect(
     () => () => {
@@ -354,16 +362,42 @@ export function BookReader({
       setIsAdvancing(true)
       advanceTimer.current = window.setTimeout(() => {
         advanceTimer.current = null
+        if (isMobile) {
+          setMobileFading(true)
+          window.setTimeout(() => {
+            setPageIndex(target)
+            setMobileFading(false)
+            setIsAdvancing(false)
+          }, 220)
+          return
+        }
         const flipped = runFlip(direction, target)
         if (!flipped) setIsAdvancing(false)
       }, delay)
     },
-    [runFlip],
+    [isMobile, runFlip],
+  )
+
+  const goToPage = useCallback(
+    (target: number, direction: 'next' | 'prev') => {
+      if (target < 0 || target >= totalSpreads) return
+      if (isMobile) {
+        if (mobileFading || isAdvancing) return
+        setMobileFading(true)
+        window.setTimeout(() => {
+          setPageIndex(target)
+          setMobileFading(false)
+        }, 220)
+        return
+      }
+      runFlip(direction, target)
+    },
+    [isAdvancing, isMobile, mobileFading, runFlip, totalSpreads],
   )
 
   const selectCard = useCallback(
     (questionId: string, cardId: string) => {
-      if (readOnly || flipping || isAdvancing || !isQuestionSpread) return
+      if (readOnly || busy || !isQuestionSpread) return
 
       const qIndex = pageIndex
       const nextAnswers = { ...answers, [questionId]: [cardId] }
@@ -423,6 +457,7 @@ export function BookReader({
       book,
       flipping,
       isAdvancing,
+      busy,
       isQuestionSpread,
       onAssessmentDone,
       pageIndex,
@@ -485,7 +520,7 @@ export function BookReader({
       const q = questions[index]
       const ids = answers[q.id] ?? []
       const pageCards = resolvePageCards(q)
-      const locked = readOnly || !interactive || flipping || isAdvancing
+      const locked = readOnly || !interactive || busy
 
       return (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 md:gap-3 flex-1 content-start">
@@ -503,7 +538,7 @@ export function BookReader({
         </div>
       )
     },
-    [answers, flipping, isAdvancing, questions, readOnly, resolvePageCards, selectCard],
+    [answers, busy, questions, readOnly, resolvePageCards, selectCard],
   )
 
   const buildResultLeft = useCallback(
@@ -665,21 +700,21 @@ export function BookReader({
   )
 
   const handleBack = () => {
-    if (pageIndex === 0 || flipping || isAdvancing) return
+    if (pageIndex === 0 || busy) return
     if (advanceTimer.current !== null) {
       window.clearTimeout(advanceTimer.current)
       advanceTimer.current = null
       setIsAdvancing(false)
     }
-    runFlip('prev', pageIndex - 1)
+    goToPage(pageIndex - 1, 'prev')
   }
 
   const handleNext = () => {
-    if (pageIndex >= totalSpreads - 1 || flipping || isAdvancing) return
+    if (pageIndex >= totalSpreads - 1 || busy) return
     if (pageIndex >= questionCount + 1 && loadingReading) {
       return
     }
-    runFlip('next', pageIndex + 1)
+    goToPage(pageIndex + 1, 'next')
   }
 
   const completedDimensions = questions
@@ -714,24 +749,52 @@ export function BookReader({
     ? treeRevealStage
     : book.meta.treeProgressMax
 
-  return (
-    <div className="book-reader-stack">
-      <header className="book-reader-header">
-        <button
-          type="button"
-          onClick={onClose}
-          disabled={flipping || isAdvancing}
-          className="book-nav-btn book-nav-btn-ghost text-xs shrink-0 disabled:opacity-30"
-        >
-          {ui.backToShore}
-        </button>
-        <LanguageToggle
-          locale={locale}
-          onChange={onLocaleChange}
-          label={ui.languageLabel}
-          compact
-        />
-      </header>
+  const footerBlock = isQuestionSpread ? (
+    readOnly ? (
+      <BookNav
+        onBack={handleBack}
+        onNext={handleNext}
+        backDisabled={pageIndex === 0 || busy}
+        nextDisabled={busy || pageIndex >= totalSpreads - 1}
+        backLabel={ui.guideTurnPrev}
+        nextLabel={ui.guideTurnNext}
+        selectOneHint={ui.reviewModeHint}
+      />
+    ) : (
+      <BookNav
+        onBack={handleBack}
+        backDisabled={pageIndex === 0 || busy}
+        backLabel={ui.guideTurnPrev}
+        selectOneHint={ui.selectOneHint}
+        showNext={false}
+      />
+    )
+  ) : resultPageIndex < RESULT_PAGES - 1 ? (
+    <BookNav
+      onBack={handleBack}
+      onNext={handleNext}
+      backDisabled={pageIndex === 0 || busy}
+      nextDisabled={
+        busy || (pageIndex === questionCount + 1 && loadingReading)
+      }
+      backLabel={ui.guideTurnPrev}
+      nextLabel={ui.guideTurnNext}
+    />
+  ) : (
+    <div className="flex justify-center">
+      <button
+        type="button"
+        onClick={() => goToPage(pageIndex - 1, 'prev')}
+        disabled={busy}
+        className="book-nav-btn book-nav-btn-ghost disabled:opacity-30"
+      >
+        {ui.backToLabel(labels.mysticalTitle)}
+      </button>
+    </div>
+  )
+
+  const riteOverlays = (
+    <>
       <VolumeRiteOverlay
         open={!readOnly && !entryRiteComplete}
         locale={locale}
@@ -746,12 +809,76 @@ export function BookReader({
         mode="exit"
         onComplete={handleExitRiteComplete}
       />
+    </>
+  )
+
+  if (isMobile) {
+    return (
+      <>
+        {riteOverlays}
+        <GuideMobileReader
+          locale={locale}
+          onLocaleChange={onLocaleChange}
+          onClose={onClose}
+          backLabel={ui.backToShore}
+          chapterLabel={chapterLabel}
+          pageNumber={pageIndex + 1}
+          totalPages={displayTotal}
+          contentVisible={contentVisible}
+          left={buildLeft(pageIndex)}
+          right={buildRight(
+            pageIndex,
+            isQuestionSpread && contentVisible && !readOnly,
+          )}
+          footer={footerBlock}
+          onPrev={handleBack}
+          onNext={handleNext}
+          prevDisabled={pageIndex === 0 || busy}
+          nextDisabled={
+            busy ||
+            pageIndex >= totalSpreads - 1 ||
+            (pageIndex === questionCount + 1 && loadingReading)
+          }
+          prevAria={ui.guideTurnPrev}
+          nextAria={ui.guideTurnNext}
+          busy={busy}
+          hud={
+            <TreeProgress
+              revealStage={treeStage}
+              bookId={book.meta.id}
+              locale={locale}
+            />
+          }
+        />
+      </>
+    )
+  }
+
+  return (
+    <div className="book-reader-stack">
+      <header className="book-reader-header">
+        <button
+          type="button"
+          onClick={onClose}
+          disabled={busy}
+          className="book-nav-btn book-nav-btn-ghost text-xs shrink-0 disabled:opacity-30"
+        >
+          {ui.backToShore}
+        </button>
+        <LanguageToggle
+          locale={locale}
+          onChange={onLocaleChange}
+          label={ui.languageLabel}
+          compact
+        />
+      </header>
+      {riteOverlays}
       <TreeProgress revealStage={treeStage} bookId={book.meta.id} locale={locale} />
       <BookShell
         left={buildLeft(pageIndex)}
         right={buildRight(
           pageIndex,
-          isQuestionSpread && !flipping && !isAdvancing && !readOnly,
+          isQuestionSpread && contentVisible && !readOnly,
         )}
         incomingLeft={incomingSpread?.left}
         incomingRight={incomingSpread?.right}
@@ -765,55 +892,7 @@ export function BookReader({
         onFlipComplete={completeFlip}
         locale={locale}
         coverArtId={book.meta.id}
-        footer={
-          isQuestionSpread ? (
-            readOnly ? (
-              <BookNav
-                onBack={handleBack}
-                onNext={handleNext}
-                backDisabled={pageIndex === 0 || flipping || isAdvancing}
-                nextDisabled={
-                  flipping || isAdvancing || pageIndex >= totalSpreads - 1
-                }
-                backLabel={ui.guideTurnPrev}
-                nextLabel={ui.guideTurnNext}
-                selectOneHint={ui.reviewModeHint}
-              />
-            ) : (
-              <BookNav
-                onBack={handleBack}
-                backDisabled={pageIndex === 0 || flipping || isAdvancing}
-                backLabel={ui.guideTurnPrev}
-                selectOneHint={ui.selectOneHint}
-                showNext={false}
-              />
-            )
-          ) : resultPageIndex < RESULT_PAGES - 1 ? (
-            <BookNav
-              onBack={handleBack}
-              onNext={handleNext}
-              backDisabled={pageIndex === 0 || flipping || isAdvancing}
-              nextDisabled={
-                flipping ||
-                isAdvancing ||
-                (pageIndex === questionCount + 1 && loadingReading)
-              }
-              backLabel={ui.guideTurnPrev}
-              nextLabel={ui.guideTurnNext}
-            />
-          ) : (
-            <div className="flex justify-center">
-              <button
-                type="button"
-                onClick={() => runFlip('prev', pageIndex - 1)}
-                disabled={flipping || isAdvancing}
-                className="book-nav-btn book-nav-btn-ghost disabled:opacity-30"
-              >
-                {ui.backToLabel(labels.mysticalTitle)}
-              </button>
-            </div>
-          )
-        }
+        footer={footerBlock}
       />
     </div>
   )

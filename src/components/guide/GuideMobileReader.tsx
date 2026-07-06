@@ -22,6 +22,7 @@ interface GuideMobileReaderProps {
   prevAria: string
   nextAria: string
   busy: boolean
+  hud?: ReactNode
 }
 
 const SWIPE_THRESHOLD_PX = 48
@@ -45,6 +46,7 @@ export function GuideMobileReader({
   prevAria,
   nextAria,
   busy,
+  hud,
 }: GuideMobileReaderProps) {
   const touchStartX = useRef<number | null>(null)
   const touchStartY = useRef<number | null>(null)
@@ -89,6 +91,8 @@ export function GuideMobileReader({
       {chapterLabel && (
         <p className="guide-mobile-chapter">{chapterLabel}</p>
       )}
+
+      {hud}
 
       <div
         className={`guide-mobile-body${contentVisible ? '' : ' guide-mobile-body--fading'}`}
