@@ -1,4 +1,4 @@
-/** Homepage ambient background ids in public/backgrounds/{id}.png */
+/** Homepage ambient background ids in public/backgrounds/{id}.png + .webp */
 export const BACKGROUND_SCENE_ORDER = [
   '01-mist-arrival',
   '02-far-peaks',
@@ -15,12 +15,41 @@ export const BACKGROUND_SCENES_AVAILABLE: BackgroundSceneId[] = [
   ...BACKGROUND_SCENE_ORDER,
 ]
 
-const BACKGROUND_SCENE_VERSION = 3
+const BACKGROUND_SCENE_VERSION = 4
+
+export function backgroundSceneBase(id: BackgroundSceneId): string {
+  return `/backgrounds/${id}`
+}
 
 export function backgroundSceneSrc(id: BackgroundSceneId): string {
-  return `/backgrounds/${id}.png?v=${BACKGROUND_SCENE_VERSION}`
+  return `${backgroundSceneBase(id)}.png?v=${BACKGROUND_SCENE_VERSION}`
 }
 
 export function availableBackgroundScenes(): BackgroundSceneId[] {
   return BACKGROUND_SCENES_AVAILABLE
+}
+
+export function prefetchBackgroundScene(id: BackgroundSceneId): void {
+  if (typeof window === 'undefined') return
+  const query = `?v=${BACKGROUND_SCENE_VERSION}`
+  const img = new Image()
+  img.decoding = 'async'
+  img.src = `${backgroundSceneBase(id)}.webp${query}`
+  img.onerror = () => {
+    const fallback = new Image()
+    fallback.decoding = 'async'
+    fallback.src = `${backgroundSceneBase(id)}.png${query}`
+  }
+}
+
+export function prefetchBackgroundScenesIdle(ids: BackgroundSceneId[]): void {
+  if (typeof window === 'undefined' || ids.length === 0) return
+  const run = () => {
+    for (const id of ids) prefetchBackgroundScene(id)
+  }
+  if (typeof window.requestIdleCallback === 'function') {
+    window.requestIdleCallback(run, { timeout: 5000 })
+  } else {
+    window.setTimeout(run, 300)
+  }
 }

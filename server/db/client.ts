@@ -35,9 +35,9 @@ function runMigrations(database: Database.Database) {
   if (version < 1) {
     const schemaPath = path.join(import.meta.dirname, 'schema.sql')
     database.exec(fs.readFileSync(schemaPath, 'utf8'))
-    // Fresh DBs use consolidated schema.sql (v6 incl. ja); skip incremental migrations.
-    database.prepare('INSERT INTO schema_migrations (version) VALUES (6)').run()
-    version = 6
+    // Fresh DBs use consolidated schema.sql (v7 incl. zhTw); skip incremental migrations.
+    database.prepare('INSERT INTO schema_migrations (version) VALUES (7)').run()
+    version = 7
   }
 
   if (version < 2) {

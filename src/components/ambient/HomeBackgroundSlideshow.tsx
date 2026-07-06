@@ -1,13 +1,17 @@
 import { memo, useEffect, useMemo, useState, type CSSProperties } from 'react'
 import {
   availableBackgroundScenes,
-  backgroundSceneSrc,
+  backgroundSceneBase,
+  prefetchBackgroundScene,
+  prefetchBackgroundScenesIdle,
   type BackgroundSceneId,
 } from '../../books/backgroundScenes'
+import { PictureImage } from '../media/PictureImage'
 
 /** Visible hold before the next crossfade begins */
 const SLIDE_HOLD_MS = 9000
 const FADE_MS = 3200
+const BACKGROUND_VERSION = 4
 
 interface HomeBackgroundSlideshowProps {
   active?: boolean
@@ -23,10 +27,9 @@ export const HomeBackgroundSlideshow = memo(function HomeBackgroundSlideshow({
   const [activeIndex, setActiveIndex] = useState(0)
 
   useEffect(() => {
-    scenes.forEach((id) => {
-      const img = new Image()
-      img.src = backgroundSceneSrc(id)
-    })
+    if (scenes.length === 0) return
+    prefetchBackgroundScene(scenes[0])
+    prefetchBackgroundScenesIdle(scenes.slice(1))
   }, [scenes])
 
   useEffect(() => {
@@ -49,6 +52,12 @@ export const HomeBackgroundSlideshow = memo(function HomeBackgroundSlideshow({
       window.clearTimeout(timer)
     }
   }, [active, scenes])
+
+  useEffect(() => {
+    if (scenes.length === 0) return
+    const next = scenes[(activeIndex + 1) % scenes.length]
+    prefetchBackgroundScene(next)
+  }, [activeIndex, scenes])
 
   if (scenes.length === 0) return null
 
@@ -107,11 +116,14 @@ function SlideLayer({
       }
       data-scene-index={index}
     >
-      <img
+      <PictureImage
         key={driftKey}
-        src={backgroundSceneSrc(id)}
+        base={backgroundSceneBase(id)}
+        version={BACKGROUND_VERSION}
         alt=""
+        className="home-bg-slide-img"
         decoding="async"
+        fetchPriority={isActive ? 'high' : 'low'}
         draggable={false}
       />
     </div>

@@ -3,7 +3,8 @@ import {
   getGuideIllustrationMotion,
   GUIDE_ILLUSTRATION_IMG_ANIMATIONS,
 } from '../../books/guide/illustrationMotion'
-import { guideIllustrationSrc } from '../../books/guide/illustrations'
+import { PictureImage } from '../media/PictureImage'
+import { guideIllustrationBase } from '../../books/guide/illustrations'
 
 interface GuideIllustrationProps {
   id: string
@@ -87,14 +88,16 @@ export function GuideIllustration({
       className={`guide-spread-illustration ${variantClass}${noMistClass}${revealed ? ' guide-spread-illustration--revealing' : ''}`}
       style={motionStyle}
     >
-      <img
+      <PictureImage
         ref={imgRef}
         key={motionKey}
-        src={guideIllustrationSrc(id)}
+        base={guideIllustrationBase(id)}
+        version={6}
         alt=""
         className="guide-spread-illustration-img"
         loading="eager"
         decoding="async"
+        fetchPriority="high"
         draggable={false}
         onLoad={handleLoad}
         onAnimationEnd={handleAnimationEnd}

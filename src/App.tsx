@@ -465,7 +465,7 @@ function App() {
   return (
     <LocaleContext.Provider value={{ locale, setLocale }}>
     <div
-      className={`relative min-h-screen${readingFocus ? ' app-reading-focus' : ''}${userEmail ? ' app-has-user-email' : ''}${showPhotoBackdrop ? ' app-photo-backdrop' : ''}`}
+      className={`relative min-h-screen${phase === 'guide' ? ' app-in-guide' : ''}${readingFocus ? ' app-reading-focus' : ''}${userEmail ? ' app-has-user-email' : ''}${showPhotoBackdrop ? ' app-photo-backdrop' : ''}`}
     >
       <UserEmailCorner
         email={userEmail}

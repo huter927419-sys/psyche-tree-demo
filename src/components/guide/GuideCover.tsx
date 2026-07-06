@@ -1,9 +1,13 @@
+import { useEffect } from 'react'
 import { getGuideCoverBook } from '../../books/guide/meta'
+import { prefetchGuideIllustrations } from '../../books/guide/illustrations'
 import type { Locale } from '../../i18n/locale'
 import { getUi } from '../../i18n/ui'
+import { GUIDE_MOBILE_QUERY, useMediaQuery } from '../../hooks/useMediaQuery'
 import { BilingualCrossfadeText } from '../i18n/BilingualCrossfadeText'
 import { LanguageToggle } from '../i18n/LanguageToggle'
 import { BookClosedVisual } from '../book/BookClosedVisual'
+import { GuideMobileCover } from './GuideMobileCover'
 
 interface GuideCoverProps {
   locale: Locale
@@ -22,9 +26,30 @@ export function GuideCover({
 }: GuideCoverProps) {
   const ui = getUi(locale)
   const book = getGuideCoverBook(locale)
+  const isMobile = useMediaQuery(GUIDE_MOBILE_QUERY)
+
+  useEffect(() => {
+    prefetchGuideIllustrations(['01-shore-near', '02-six-facets'])
+  }, [])
+
+  if (isMobile) {
+    return (
+      <GuideMobileCover
+        locale={locale}
+        onLocaleChange={onLocaleChange}
+        onOpen={onOpen}
+        onBack={onBack}
+        opening={opening}
+        subtitle={book.meta.coverSubtitle}
+        tagline={book.meta.coverTagline}
+        hint={book.meta.coverHint}
+        lead={ui.guideCoverOpenHint}
+      />
+    )
+  }
 
   return (
-    <div className="guide-book-scene book-cover-scene book-scene flex flex-col items-center min-h-[min(88vh,920px)] px-4 py-6 md:py-8">
+    <div className="guide-book-scene book-cover-scene book-scene flex flex-col items-center px-4 py-6 md:py-8">
       <header className="book-cover-header">
         <button
           type="button"

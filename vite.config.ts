@@ -14,6 +14,9 @@ export default defineConfig(({ mode }) => {
   const apiMiddleware = createApiMiddleware({ apiKey, model, testReadingFallback })
 
   return {
+    preview: {
+      allowedHosts: ['www.sixfacets.com', 'sixfacets.com'],
+    },
     plugins: [
       react(),
       tailwindcss(),

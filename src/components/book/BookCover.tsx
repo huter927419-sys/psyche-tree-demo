@@ -28,7 +28,7 @@ export function BookCover({
   const ui = getUi(locale)
 
   return (
-    <div className="book-cover-scene book-scene flex flex-col items-center justify-center min-h-[min(88vh,920px)] px-4 py-6 md:py-8">
+    <div className="book-cover-scene book-scene flex flex-col items-center justify-center px-4 py-6 md:py-8 md:min-h-[min(88vh,920px)]">
       <header className="book-cover-header">
         <button
           type="button"

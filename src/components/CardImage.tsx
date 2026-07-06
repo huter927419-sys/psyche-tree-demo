@@ -1,16 +1,22 @@
+import { PictureImage } from './media/PictureImage'
+
 interface CardImageProps {
   pattern: string
   className?: string
 }
 
+const CARD_IMAGE_VERSION = 6
+
 export function CardImage({ pattern, className = '' }: CardImageProps) {
   return (
     <div className={`relative w-full h-full overflow-hidden bg-[#050505] ${className}`}>
-      <img
-        src={`/cards/${pattern}.png?v=5`}
+      <PictureImage
+        base={`/cards/${pattern}`}
+        version={CARD_IMAGE_VERSION}
         alt=""
         className="w-full h-full object-cover block"
         loading="lazy"
+        decoding="async"
         draggable={false}
       />
       <div

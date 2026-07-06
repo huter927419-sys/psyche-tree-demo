@@ -27,6 +27,7 @@ html,
 body,
 #root {
   min-height: 100vh;
+  min-height: 100dvh;
   margin: 0;
 }
 
@@ -35,6 +36,11 @@ body {
   color: var(--color-sacred-white);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 html[lang="en"] {
@@ -2057,6 +2063,21 @@ html[lang="ja"] {
   background: rgba(6, 6, 6, 0.92);
 }
 
+.guide-spread-illustration picture,
+.home-bg-slide picture,
+picture:has(> .book-cover-art-img),
+picture:has(> .book-page-cover-watermark) {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+picture:has(> .book-cover-art-img),
+picture:has(> .book-page-cover-watermark) {
+  position: absolute;
+  inset: 0;
+}
+
 .guide-spread-illustration-img {
   display: block;
   width: 100%;
@@ -2529,6 +2550,273 @@ html[lang="ja"] {
   letter-spacing: 0.16em;
   color: rgba(255, 255, 255, 0.28);
   text-align: center;
+}
+
+/* ── 同观 · 手机专用布局（与桌面双页书壳分离） ── */
+
+@media (max-width: 767px) {
+  .app-in-guide .book-journey-viewport {
+    padding: 0;
+    overflow: visible;
+    min-height: auto;
+    align-items: stretch;
+  }
+
+  .app-in-guide .book-journey-scaler--guide {
+    width: 100%;
+    max-width: 100%;
+    min-height: auto;
+    transform: none !important;
+    animation: none !important;
+    opacity: 1 !important;
+  }
+
+  .guide-mobile {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100dvh;
+    min-height: 100svh;
+    padding:
+      max(0.5rem, env(safe-area-inset-top, 0px))
+      max(0.85rem, env(safe-area-inset-right, 0px))
+      max(0.75rem, env(safe-area-inset-bottom, 0px))
+      max(0.85rem, env(safe-area-inset-left, 0px));
+  }
+
+  .app-has-user-email .guide-mobile {
+    padding-top: 3.15rem;
+  }
+
+  .guide-mobile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-shrink: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  .guide-mobile-chapter {
+    flex-shrink: 0;
+    margin: 0 0 0.65rem;
+    text-align: center;
+    font-size: 10px;
+    letter-spacing: 0.38em;
+    text-indent: 0.38em;
+    color: rgba(255, 255, 255, 0.38);
+  }
+
+  .guide-mobile-body {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    transition: opacity 0.22s ease;
+  }
+
+  .guide-mobile-body--fading {
+    opacity: 0.35;
+  }
+
+  .guide-mobile-sheet {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    padding: 1rem 0.85rem 1.15rem;
+    border-radius: 4px;
+    background: linear-gradient(
+      165deg,
+      rgba(34, 34, 34, 0.96) 0%,
+      rgba(18, 18, 18, 0.98) 50%,
+      rgba(12, 12, 12, 0.99) 100%
+    );
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+      0 18px 48px rgba(0, 0, 0, 0.42);
+  }
+
+  .guide-mobile-pane {
+    width: 100%;
+  }
+
+  .guide-mobile-pane .guide-page-stack {
+    min-height: auto;
+    justify-content: flex-start;
+    gap: 0.35rem;
+  }
+
+  .guide-mobile-pane .guide-spread-panel {
+    transform: none;
+    padding: 0.35rem 0.15rem 0.55rem;
+    flex: 0 1 auto;
+    min-height: auto;
+  }
+
+  .guide-mobile-pane .guide-spread-body,
+  .guide-mobile-pane .guide-spread-body--emphasis,
+  .guide-mobile-pane .guide-spread-verse,
+  .guide-mobile-pane .guide-spread-footer {
+    max-width: 100%;
+  }
+
+  .guide-mobile-pane .guide-spread-body {
+    font-size: 0.9rem;
+    letter-spacing: 0.06em;
+    text-indent: 0;
+    line-height: 1.72;
+  }
+
+  .guide-mobile-pane .guide-spread-illustration {
+    max-width: min(260px, 78vw);
+    margin-inline: auto;
+  }
+
+  .guide-mobile-crease {
+    height: 1px;
+    margin: 0.85rem 0.5rem;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.14),
+      transparent
+    );
+    flex-shrink: 0;
+  }
+
+  .guide-mobile-edge {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 28%;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    z-index: 2;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .guide-mobile-edge--prev {
+    left: 0;
+  }
+
+  .guide-mobile-edge--next {
+    right: 0;
+  }
+
+  .guide-mobile-edge:disabled {
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .guide-mobile-footer {
+    flex-shrink: 0;
+    margin-top: 0.75rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .guide-mobile-page-label {
+    margin: 0 0 0.65rem;
+    text-align: center;
+    font-family: var(--font-serif);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: rgba(255, 255, 255, 0.42);
+  }
+
+  .guide-mobile-footer .book-nav-btn {
+    min-height: 2.75rem;
+    touch-action: manipulation;
+  }
+
+  .guide-mobile--cover {
+    justify-content: flex-start;
+  }
+
+  .guide-mobile-cover-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0.5rem 0 1rem;
+  }
+
+  .guide-mobile-cover-eyebrow {
+    margin: 0 0 1.1rem;
+    font-size: 10px;
+    letter-spacing: 0.42em;
+    text-indent: 0.42em;
+    color: rgba(255, 255, 255, 0.38);
+    line-height: 1.75;
+  }
+
+  .guide-mobile-cover-tag {
+    display: block;
+    margin-top: 0.35rem;
+    letter-spacing: 0.14em;
+    text-indent: 0;
+    color: rgba(255, 255, 255, 0.28);
+  }
+
+  .guide-mobile-cover-art {
+    position: relative;
+    width: min(200px, 56vw);
+    aspect-ratio: 3 / 4;
+    margin-bottom: 1.15rem;
+    border-radius: 3px;
+    overflow: hidden;
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.1),
+      0 20px 50px rgba(0, 0, 0, 0.5);
+  }
+
+  .guide-mobile-cover-frame {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+
+  .guide-mobile-cover-copy {
+    max-width: 18rem;
+    margin-bottom: 1.15rem;
+  }
+
+  .guide-mobile-cover-lead {
+    margin: 0 0 0.5rem;
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: rgba(240, 240, 240, 0.58);
+  }
+
+  .guide-mobile-cover-detail {
+    margin: 0;
+    font-size: 0.75rem;
+    line-height: 1.65;
+    color: rgba(200, 200, 200, 0.36);
+  }
+
+  .guide-mobile-cover-open {
+    width: min(280px, 100%);
+  }
+
+  .app-in-guide .ambient-music-control {
+    bottom: 1rem;
+    right: 0.65rem;
+  }
+
+  .app-in-guide .github-footer-link {
+    bottom: 1rem;
+  }
 }
 
 html[lang="en"] .guide-spread-rite {
@@ -3904,11 +4192,17 @@ html[lang="ja"] .bookshelf-guide-first-hint {
 
 @media (max-width: 767px) {
   .book-journey-scaler--guide {
-    --guide-closed-w: min(380px, calc(100vw - 2rem));
+    --guide-closed-w: min(340px, calc(100vw - 2rem));
+    --guide-open-w: min(340px, calc(100vw - 2rem));
+    --book-open-min-h: auto;
+    --book-page-min-h: min(200px, 30vh);
+    min-height: auto;
   }
 
   .book-journey-scaler--guide .guide-book-eyebrow-spacer {
-    margin-top: 3.25rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    min-height: 1rem;
     padding-inline: 0.5rem;
   }
 
@@ -3918,12 +4212,214 @@ html[lang="ja"] .bookshelf-guide-first-hint {
 
   .book-journey-scaler--guide .guide-book-anchor--open .book-open,
   .book-journey-scaler--guide .guide-book-anchor--open .book-spread-layer {
-    flex-direction: row;
-    min-height: var(--guide-closed-h);
+    flex-direction: column;
+    min-height: auto;
+  }
+
+  .book-journey-scaler--guide .guide-book-anchor--open .book-flip-stage {
+    min-height: auto;
   }
 
   .book-journey-scaler--guide .guide-book-anchor--open .book-page {
-    min-height: var(--guide-closed-h);
+    width: 100%;
+    flex: 0 0 auto;
+  }
+
+  .book-journey-scaler--guide .guide-book-anchor--open .book-page-left {
+    box-shadow: inset 0 -12px 24px rgba(0, 0, 0, 0.22);
+  }
+
+  .book-journey-scaler--guide .guide-book-anchor--open .book-page-right {
+    box-shadow: inset 0 12px 24px rgba(0, 0, 0, 0.15);
+  }
+
+  .book-journey-scaler--guide .guide-spread-panel {
+    transform: none;
+    flex: 0 1 auto;
+    min-height: auto;
+    padding-inline: 0.4rem;
+  }
+
+  .book-journey-scaler--guide .guide-spread-body,
+  .book-journey-scaler--guide .guide-spread-body--emphasis,
+  .book-journey-scaler--guide .guide-spread-verse,
+  .book-journey-scaler--guide .guide-spread-footer {
+    max-width: 100%;
+  }
+
+  .book-journey-scaler--guide .guide-spread-body {
+    font-size: 0.84rem;
+    letter-spacing: 0.05em;
+    text-indent: 0;
+    line-height: 1.65;
+  }
+
+  .book-journey-scaler--guide .guide-spread-rite {
+    font-size: 0.56rem;
+    letter-spacing: 0.32em;
+    text-indent: 0.32em;
+  }
+
+  .book-journey-scaler--guide .guide-page-stack {
+    min-height: 0;
+    flex: 1 1 auto;
+  }
+
+  /* ── Small screens: scrollable flow, no header/book overlap ── */
+
+  .book-journey-viewport,
+  .book-journey-viewport--keep-center,
+  .book-journey-viewport--keep-center:has(.book-interior-layer),
+  .book-journey-viewport:has(.book-interior-layer) {
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding-top: 0.35rem;
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0px));
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+  }
+
+  .guide-book-scene.book-cover-scene,
+  .book-cover-scene.book-scene {
+    min-height: auto;
+    justify-content: flex-start;
+    width: 100%;
+    padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+  }
+
+  .app-has-user-email .guide-book-scene.book-cover-scene {
+    padding-top: 3.25rem;
+  }
+
+  .guide-book-scene .book-cover-header,
+  .book-reader-stack .book-reader-header {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    width: 100%;
+    margin-bottom: 0.65rem;
+    flex-shrink: 0;
+  }
+
+  .app-has-user-email .guide-book-scene .book-cover-header,
+  .app-has-user-email .book-reader-stack .book-reader-header {
+    top: auto;
+  }
+
+  .guide-book-eyebrow-spacer {
+    display: none;
+  }
+
+  .book-reader-stack {
+    padding-top: 0.35rem;
+  }
+
+  .app-has-user-email .book-reader-stack {
+    padding-top: 3.25rem;
+  }
+
+  .book-journey-scaler--guide .guide-book-controls {
+    min-height: auto;
+    margin-top: 0.85rem;
+    flex-shrink: 0;
+  }
+
+  .book-journey-scaler--guide .guide-book-anchor--open .book-page {
+    min-height: min(156px, 24vh);
+    max-height: none;
+  }
+
+  .book-journey-scaler--guide .guide-book-anchor--open .book-page-inner,
+  .book-page-inner {
+    padding: 0.8rem 0.85rem;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .book-page {
+    min-height: min(160px, 25vh);
+    max-height: none;
+  }
+
+  .book-page-right {
+    min-height: min(176px, 27vh);
+  }
+
+  .book-page-edge-left {
+    width: 10px;
+  }
+
+  .book-page-edge-right {
+    width: 8px;
+  }
+
+  .book-scene {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .book-flip-stage {
+    isolation: isolate;
+  }
+
+  .tree-progress-hud {
+    margin-bottom: 0.55rem;
+  }
+
+  /* ── 同观 / Android: clear fixed footer + music from nav ── */
+
+  .app-in-guide .book-journey-viewport {
+    min-height: 100dvh;
+    min-height: 100svh;
+    padding-bottom: calc(5.25rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .app-in-guide .ambient-music-control {
+    bottom: calc(4.85rem + env(safe-area-inset-bottom, 0px));
+    right: 0.65rem;
+    z-index: 25;
+  }
+
+  .app-in-guide .github-footer-link {
+    bottom: calc(4.85rem + env(safe-area-inset-bottom, 0px));
+    z-index: 25;
+  }
+
+  .app-in-guide .guide-book-controls {
+    position: relative;
+    z-index: 2;
+    padding-bottom: 0.35rem;
+  }
+
+  .app-in-guide .guide-book-controls .book-nav-btn {
+    min-height: 2.75rem;
+    touch-action: manipulation;
+  }
+
+  .app-in-guide .book-journey-scaler--guide .guide-book-anchor--open .book-page-inner {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+}
+
+@media (max-width: 767px) and (max-height: 740px) {
+  .book-journey-scaler--guide .guide-book-anchor--open .book-page {
+    min-height: min(132px, 22vh);
+  }
+
+  .book-page {
+    min-height: min(140px, 22vh);
+  }
+
+  .book-page-right {
+    min-height: min(152px, 24vh);
+  }
+
+  .book-cover-eyebrow {
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
   }
 }
 
@@ -4124,6 +4620,11 @@ html[lang="ja"] .bookshelf-guide-first-hint {
   margin-inline: auto;
 }
 
+.guide-book-scene.book-cover-scene,
+.book-cover-scene.book-scene:not(.guide-book-scene) {
+  min-height: min(88vh, 920px);
+}
+
 .book-cover-header {
   position: absolute;
   top: 1rem;
@@ -4284,9 +4785,38 @@ html[lang="ja"] .bookshelf-guide-first-hint {
   }
 }
 
+@media (max-width: 767px) {
+  .book-page {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: linear-gradient(
+      165deg,
+      rgba(30, 30, 30, 0.96) 0%,
+      rgba(20, 20, 20, 0.97) 42%,
+      rgba(14, 14, 14, 0.98) 100%
+    );
+  }
+
+  .book-interior-layer--opening {
+    animation: book-interior-unfold-mobile 1.4s cubic-bezier(0.33, 1, 0.68, 1) forwards;
+  }
+}
+
+@keyframes book-interior-unfold-mobile {
+  0%,
+  42% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .book-page {
   flex: 1;
   position: relative;
+  display: flex;
+  flex-direction: column;
   min-height: var(--book-page-min-h);
   background: linear-gradient(
     165deg,
@@ -4363,7 +4893,8 @@ html[lang="ja"] .bookshelf-guide-first-hint {
 .book-page-inner {
   position: relative;
   z-index: 2;
-  height: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
   padding: 1.15rem 1.3rem;
   display: flex;
   flex-direction: column;
