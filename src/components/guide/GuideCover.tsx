@@ -42,6 +42,7 @@ export function GuideCover({
         opening={opening}
         subtitle={book.meta.coverSubtitle}
         tagline={book.meta.coverTagline}
+        title={book.meta.coverTitle}
         hint={book.meta.coverHint}
         lead={ui.guideCoverOpenHint}
       />

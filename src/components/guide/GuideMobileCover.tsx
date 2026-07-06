@@ -9,6 +9,7 @@ interface GuideMobileCoverProps {
   onOpen: () => void
   onBack: () => void
   opening?: boolean
+  title: string
   subtitle: string
   tagline: string
   hint: string
@@ -21,6 +22,7 @@ export function GuideMobileCover({
   onOpen,
   onBack,
   opening = false,
+  title,
   subtitle,
   tagline,
   hint,
@@ -47,9 +49,21 @@ export function GuideMobileCover({
           <span className="guide-mobile-cover-tag">{tagline}</span>
         </p>
 
-        <div className="guide-mobile-cover-art">
+        <div className="guide-mobile-cover-art book-mobile-cover-art">
           <BookCoverArt coverId="guide" variant="hero" />
           <div className="guide-mobile-cover-frame" aria-hidden />
+          <div className="book-mobile-cover-titles">
+            <h2
+              className={
+                locale === 'en'
+                  ? 'book-mobile-cover-title-en'
+                  : 'book-mobile-cover-title-zh'
+              }
+            >
+              {title}
+            </h2>
+            <p className="book-mobile-cover-sub">{subtitle}</p>
+          </div>
         </div>
 
         <div className="guide-mobile-cover-copy">
