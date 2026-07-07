@@ -5,6 +5,7 @@ export type GuideIllustrationVariant =
   | 'still-breathe'
   | 'flow-drift'
   | 'mist-embrace'
+  | 'photo-fade'
 
 export interface GuideIllustrationMotion {
   variant: GuideIllustrationVariant
@@ -14,6 +15,8 @@ export interface GuideIllustrationMotion {
   mistRatio: number
   /** Pause after motion before auto turn. */
   holdMs: number
+  /** Hero spread object-position override (e.g. subject low in frame). */
+  heroObjectPosition?: string
 }
 
 export const GUIDE_ILLUSTRATION_IMG_ANIMATIONS: Record<GuideIllustrationVariant, string> =
@@ -23,7 +26,16 @@ export const GUIDE_ILLUSTRATION_IMG_ANIMATIONS: Record<GuideIllustrationVariant,
     'still-breathe': 'guide-illustration-still-breathe',
     'flow-drift': 'guide-illustration-flow-drift',
     'mist-embrace': 'guide-illustration-mist-embrace',
+    'photo-fade': 'guide-illustration-photo-fade',
   }
+
+const VIGNETTE_PHOTO: GuideIllustrationMotion = {
+  variant: 'photo-fade',
+  durationS: 2.6,
+  durationMs: 2600,
+  mistRatio: 0.08,
+  holdMs: 1200,
+}
 
 const MOTIONS: Record<string, GuideIllustrationMotion> = {
   /** 岸尚未远 — step toward shore, mist lifts */
@@ -65,6 +77,24 @@ const MOTIONS: Record<string, GuideIllustrationMotion> = {
     durationMs: 6000,
     mistRatio: 0.82,
     holdMs: 2200,
+  },
+  'v-tongguan': VIGNETTE_PHOTO,
+  'v-liubai': {
+    ...VIGNETTE_PHOTO,
+    heroObjectPosition: 'center 72%',
+  },
+  'v-changye': VIGNETTE_PHOTO,
+  'v-menpai': VIGNETTE_PHOTO,
+  'v-huisheng': VIGNETTE_PHOTO,
+  'v-qingchen': VIGNETTE_PHOTO,
+  'v-yuanxing': VIGNETTE_PHOTO,
+  'v-liujuan': VIGNETTE_PHOTO,
+  'v-enter': {
+    variant: 'mist-embrace',
+    durationS: 5.5,
+    durationMs: 5500,
+    mistRatio: 0.75,
+    holdMs: 2400,
   },
 }
 

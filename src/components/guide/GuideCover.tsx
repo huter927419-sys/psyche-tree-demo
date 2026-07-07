@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { getGuideCoverBook } from '../../books/guide/meta'
-import { prefetchGuideIllustrations } from '../../books/guide/illustrations'
+import { prefetchGuideIllustrations, GUIDE_VIGNETTE_ILLUSTRATION_IDS } from '../../books/guide/illustrations'
 import type { Locale } from '../../i18n/locale'
 import { getUi } from '../../i18n/ui'
 import { GUIDE_MOBILE_QUERY, useMediaQuery } from '../../hooks/useMediaQuery'
@@ -29,7 +29,7 @@ export function GuideCover({
   const isMobile = useMediaQuery(GUIDE_MOBILE_QUERY)
 
   useEffect(() => {
-    prefetchGuideIllustrations(['01-shore-near', '02-six-facets'])
+    prefetchGuideIllustrations(GUIDE_VIGNETTE_ILLUSTRATION_IDS)
   }, [])
 
   if (isMobile) {

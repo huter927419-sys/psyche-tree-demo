@@ -13,6 +13,7 @@ interface GuideMobileReaderProps {
   totalPages: number
   contentVisible: boolean
   left: ReactNode
+  eyeCue?: ReactNode
   right: ReactNode
   footer: ReactNode
   onPrev: () => void
@@ -37,6 +38,7 @@ export function GuideMobileReader({
   totalPages,
   contentVisible,
   left,
+  eyeCue,
   right,
   footer,
   onPrev,
@@ -102,6 +104,7 @@ export function GuideMobileReader({
         <article className="guide-mobile-sheet">
           <div className="guide-mobile-flow">
             {left}
+            {eyeCue}
             {right}
           </div>
         </article>

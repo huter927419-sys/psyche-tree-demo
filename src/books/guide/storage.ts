@@ -4,6 +4,10 @@ const KEY_OPENED = 'opened'
 const KEY_INDEX = 'spread-index'
 const KEY_COMPLETED = 'completed'
 const KEY_HANDOFF = 'volume-handoff'
+const KEY_CONTENT_VERSION = 'content-version'
+
+/** Bump when 序卷 spread structure changes so resume index resets. */
+export const GUIDE_CONTENT_VERSION = 30
 
 /** Legacy unscoped keys (pre-login guide storage). */
 const LEGACY_KEYS = [
@@ -58,6 +62,15 @@ export function markGuideOpened(): void {
 export function getGuideSpreadIndex(): number {
   const key = guideStorageKey(KEY_INDEX)
   if (!key) return 0
+  const versionKey = guideStorageKey(KEY_CONTENT_VERSION)
+  if (versionKey) {
+    const storedVersion = localStorage.getItem(versionKey)
+    if (storedVersion !== String(GUIDE_CONTENT_VERSION)) {
+      localStorage.setItem(versionKey, String(GUIDE_CONTENT_VERSION))
+      localStorage.removeItem(key)
+      return 0
+    }
+  }
   const raw = localStorage.getItem(key)
   const n = raw ? Number.parseInt(raw, 10) : 0
   return Number.isFinite(n) && n >= 0 ? n : 0

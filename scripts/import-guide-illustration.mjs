@@ -19,6 +19,15 @@ export const GUIDE_ILLUSTRATION_IDS = [
   '03-still-pause',
   '04-name-in-flow',
   '05-enter-mist',
+  'v-tongguan',
+  'v-liubai',
+  'v-changye',
+  'v-menpai',
+  'v-huisheng',
+  'v-qingchen',
+  'v-yuanxing',
+  'v-liujuan',
+  'v-enter',
 ]
 
 async function postProcess(buffer) {

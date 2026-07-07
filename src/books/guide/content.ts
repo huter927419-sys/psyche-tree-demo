@@ -1,274 +1,9 @@
 import { buildGuideContent } from './chapterTemplate'
-import type { GuideChapterDef, GuideContent, GuideSpread } from './types'
+import { buildGuideFromSections } from './sectionTemplate'
+import { zhGuideEnterLines, zhGuidePreface, zhGuideSections } from './content.zh'
+import type { GuideChapterDef, GuideContent, GuideSource, GuideSpread } from './types'
 
-const zhPreface: GuideSpread[] = [
-  {
-    left: [{ kind: 'illustration', id: '01-shore-near' }],
-    right: [
-      {
-        kind: 'lines',
-        lines: ['同观', '序卷'],
-      },
-      {
-        kind: 'hook',
-        lines: ['岸尚未远，', '雾尚未深。'],
-      },
-    ],
-  },
-  {
-    left: [{ kind: 'illustration', id: '02-six-facets' }],
-    right: [
-      {
-        kind: 'phenomenon',
-        section: 'guide',
-        lines: [
-          '六卷在雾下，',
-          '各照一面。',
-          '读之前，',
-          '可先知：',
-          '雾岸在照什么。',
-        ],
-      },
-    ],
-  },
-]
-
-const zhChapter1: GuideChapterDef = {
-  part: '壹 · 起问',
-  hook: ['未入卷前，', '不急着照见自己。'],
-  phenomenon: {
-    left: [
-      '越来越多人',
-      '走向「认识自己」。',
-      '越来越多人',
-      '拥有很多答案。',
-    ],
-    right: ['可是，', '真正停下来的人，', '却越来越少。'],
-  },
-  turn: [
-    '于是，',
-    '问题或许不是：',
-    '答案够不够。',
-    '而是：',
-    '有没有真正看见。',
-  ],
-  tongguan: {
-    east: {
-      source: '《庄子》',
-      text: '吾生也有涯，而知也无涯。',
-    },
-    modern: {
-      source: 'William James',
-      text: '意识不是一块，而是流动的河。',
-    },
-    footer: [
-      '雾岸不以此证明自己。',
-      '只与诸家同席。',
-      '各自照见不同的一面。',
-    ],
-  },
-  shoreView: [
-    '因此，',
-    '雾岸不问：你是什么。',
-    '只问：这一息，',
-    '你怎样接。',
-  ],
-  shoreQuestions: {
-    reality: '最近一次，真正停下来，是什么时候？',
-    introspection: '如果今天没有任何名字，你会怎样认识自己？',
-  },
-  shoreQuestionLabels: { reality: '现实', introspection: '内观' },
-  breath: { label: '此息停', lines: ['此页，', '不必急着翻。'] },
-  volumeMeaning: {
-    label: '入卷义',
-    lines: ['因为，', '识己不是积累答案，', '而是允许被照见。'],
-  },
-  close: ['照见未完。', '下一章。'],
-  turnIllustrationId: '03-still-pause',
-}
-
-const zhChapter2: GuideChapterDef = {
-  part: '贰 · 观法',
-  hook: ['名可立，', '态难住。'],
-  phenomenon: {
-    left: [
-      '今日之我，',
-      '常与昨日不同。',
-      '同一张问卷，',
-      '两次作答，',
-    ],
-    right: ['未必相同。', '可标签一旦贴上，', '人便以为已说尽。'],
-  },
-  turn: [
-    '于是，',
-    '问题或许不是：',
-    '你是哪一类。',
-    '而是：',
-    '此刻，你如何应。',
-  ],
-  tongguan: {
-    east: {
-      source: '《道德经》',
-      text: '道可道，非常道；名可名，非常名。',
-    },
-    modern: {
-      source: '现象学',
-      text: '先描述如何显现，再谈它是什么。',
-    },
-    footer: [
-      '雾岸不以此证明自己。',
-      '只与诸家同席。',
-      '各自照见不同的一面。',
-    ],
-  },
-  shoreView: [
-    '故六卷者，',
-    '非六型名，',
-    '乃六向照——',
-    '各问一面，',
-    '合而为一象。',
-  ],
-  shoreQuestions: {
-    reality: '今日若有变故，你最先变的是做法，还是对自己的说法？',
-    introspection: '于汝而言，「照见」与「定义」，差在何处？',
-  },
-  shoreQuestionLabels: { reality: '现实', introspection: '内观' },
-  breath: { label: '此息停', lines: ['可停一息。'] },
-  volumeMeaning: {
-    label: '入卷义',
-    lines: ['因为，', '人不是固定名词，', '而是正在发生的应答。'],
-  },
-  close: ['照见未完。', '下一章。'],
-  turnIllustrationId: '04-name-in-flow',
-}
-
-const zhChapter3: GuideChapterDef = {
-  part: '叁 · 岸制',
-  hook: ['数可计，', '命难终。'],
-  phenomenon: {
-    left: [
-      '人们习惯',
-      '要一个总分，',
-      '要一张名签，',
-      '要一次说尽。',
-    ],
-    right: ['仿佛读完报告，', '便可毕业。', '仿佛有了分数，', '便已识己。'],
-  },
-  turn: [
-    '于是，',
-    '问题或许不是：',
-    '结果够不够准。',
-    '而是：',
-    '生命该不该被一次统计。',
-  ],
-  tongguan: {
-    east: {
-      source: '《中庸》',
-      text: '君子之道，造端必渐，及其至也，虽圣人亦有所不知。',
-    },
-    modern: {
-      source: 'Carl Rogers',
-      text: '人是一个过程，而非一件产品。',
-    },
-    footer: [
-      '雾岸不以此证明自己。',
-      '只与诸家同席。',
-      '各自照见不同的一面。',
-    ],
-  },
-  shoreView: [
-    '故不设总分——',
-    '数止于果，',
-    '命行于流；',
-    '许再入卷，',
-    '整象非六报。',
-  ],
-  shoreQuestions: {
-    reality: '若无分数与定论，你还愿在雾中花时间照见吗？',
-    introspection: '你信一次说尽，还是信分面向、慢慢相照？',
-  },
-  shoreQuestionLabels: { reality: '现实', introspection: '内观' },
-  breath: { label: '此息停', lines: ['此页，', '可停一息。'] },
-  volumeMeaning: {
-    label: '入卷义',
-    lines: [
-      '因为，',
-      '生命不是一次统计；',
-      '无人格可封，',
-      '无毕业可办——',
-      '归树在最后，',
-      '神谕非命令，',
-      '却有雾中一步。',
-    ],
-  },
-  close: ['照见未完。', '下一章。'],
-}
-
-const zhChapter4: GuideChapterDef = {
-  part: '肆 · 入雾',
-  hook: ['同观已足，', '入雾在你。'],
-  phenomenon: {
-    left: ['六卷在下，', '各照一面。', '择一可入，'],
-    right: ['不择，', '亦在岸。', '无卷催促，', '无岸驱逐。'],
-  },
-  turn: [
-    '于是，',
-    '问题或许不是：',
-    '先读哪一卷。',
-    '而是：',
-    '愿否此刻迈步。',
-  ],
-  tongguan: {
-    east: {
-      source: '《金刚经》',
-      text: '应无所住，而生其心。',
-    },
-    modern: {
-      source: 'ACT',
-      text: '与所感同在，仍向所重而行。',
-    },
-    footer: [
-      '雾岸不以此证明自己。',
-      '只与诸家同席。',
-      '各自照见不同的一面。',
-    ],
-  },
-  shoreView: [
-    '若愿入雾，',
-    '择卷即行；',
-    '若仍留岸，',
-    '同观亦足。',
-  ],
-  shoreQuestions: {
-    reality: '六向并看，你此刻最想先照哪一面向？',
-    introspection: '若只选一卷，是因为需要答案，还是需要一面镜子？',
-  },
-  shoreQuestionLabels: { reality: '现实', introspection: '内观' },
-  breath: { label: '此息停', lines: ['可停一息。'] },
-  volumeMeaning: {
-    label: '入卷义',
-    lines: ['因为，', '入卷不是被定义，', '而是择一面向，', '与己相照。'],
-  },
-  close: ['若愿，', '便入雾。'],
-  closeIllustrationId: '05-enter-mist',
-}
-
-const zhEpilogue: GuideSpread[] = [
-  {
-    left: [
-      {
-        kind: 'lines',
-        lines: ['同观已足。', '若愿入雾，', '六卷在下。'],
-      },
-    ],
-    right: [
-      {
-        kind: 'lines',
-        lines: ['择卷即行，', '或仍留岸。', '若愿，', '便入雾。'],
-      },
-    ],
-  },
-]
+export type { GuideSource } from './types'
 
 const enPreface: GuideSpread[] = [
   {
@@ -768,11 +503,33 @@ const jaEpilogue: GuideSpread[] = [
   },
 ]
 
+const sourceByLocale = {
+  zh: { preface: zhGuidePreface, sections: zhGuideSections },
+  en: { preface: zhGuidePreface, sections: [] },
+  ja: { preface: zhGuidePreface, sections: [] },
+} as const satisfies Record<'zh' | 'en' | 'ja', GuideSource>
+
 const contentByLocale = {
-  zh: buildGuideContent(zhPreface, [zhChapter1, zhChapter2, zhChapter3, zhChapter4], zhEpilogue),
-  en: buildGuideContent(enPreface, [enChapter1, enChapter2, enChapter3, enChapter4], enEpilogue),
-  ja: buildGuideContent(jaPreface, [jaChapter1, jaChapter2, jaChapter3, jaChapter4], jaEpilogue),
+  zh: buildGuideFromSections(
+    zhGuidePreface,
+    zhGuideSections,
+    zhGuideEnterLines,
+  ),
+  en: buildGuideContent(
+    enPreface,
+    [enChapter1, enChapter2, enChapter3, enChapter4],
+    enEpilogue,
+  ),
+  ja: buildGuideContent(
+    jaPreface,
+    [jaChapter1, jaChapter2, jaChapter3, jaChapter4],
+    jaEpilogue,
+  ),
 } as const
+
+export function getGuideSource(contentLocale: 'zh' | 'en' | 'ja'): GuideSource {
+  return sourceByLocale[contentLocale]
+}
 
 export function getGuideContent(contentLocale: 'zh' | 'en' | 'ja'): GuideContent {
   return contentByLocale[contentLocale]

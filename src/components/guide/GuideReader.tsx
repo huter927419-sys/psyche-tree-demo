@@ -7,18 +7,12 @@ import {
   saveGuideSpreadIndex,
 } from '../../books/guide'
 import {
-  estimateGuideSpreadDwellMs,
   getGuideAutoTurnEnabled,
-  getSpreadIllustrationId,
   GUIDE_POST_FLIP_SETTLE_MS,
   GUIDE_POST_FLIP_SETTLE_REDUCED_MS,
   saveGuideAutoTurnEnabled,
-  spreadHasIllustration,
 } from '../../books/guide/guideAutoTurn'
-import {
-  getGuideIllustrationDurationMs,
-  getGuideIllustrationHoldMs,
-} from '../../books/guide/illustrationMotion'
+import { getSpreadRestProfile } from '../../books/guide/guideSpreadRest'
 import {
   GUIDE_ILLUSTRATION_IDS,
   prefetchGuideIllustrations,
@@ -30,8 +24,10 @@ import { LanguageToggle } from '../i18n/LanguageToggle'
 import { GUIDE_MOBILE_QUERY, useMediaQuery } from '../../hooks/useMediaQuery'
 import { BookNav, BookShell } from '../book/BookShell'
 import { useBookFlip } from '../book/useBookFlip'
+import { useGuideSpreadRhythm } from './useGuideSpreadRhythm'
 import { GuideMobileReader } from './GuideMobileReader'
 import { GuidePageContent } from './GuidePageContent'
+import { GuideSpreadEyeCue } from './GuideSpreadEyeCue'
 
 interface GuideReaderProps {
   locale: Locale
@@ -63,7 +59,6 @@ export function GuideReader({
 
   const autoTimerRef = useRef<number | null>(null)
   const settleTimerRef = useRef<number | null>(null)
-  const illustrationAdvanceRef = useRef(false)
   const prevPageIndexRef = useRef(pageIndex)
   const [spreadSettled, setSpreadSettled] = useState(true)
 
@@ -213,73 +208,67 @@ export function GuideReader({
     ],
   )
 
-  const handleIllustrationMotionComplete = useCallback(() => {
-    illustrationAdvanceRef.current = true
-    if (!autoTurn || busy || isEnterSpread || isLastSpread) return
-    clearAutoTimer()
-    const spread = guide.spreads[pageIndex]
-    const illustrationId = getSpreadIllustrationId(spread)
-    const holdMs = illustrationId
-      ? getGuideIllustrationHoldMs(illustrationId)
-      : 2000
-    scheduleAutoAdvance(holdMs)
-  }, [
-    autoTurn,
-    clearAutoTimer,
-    busy,
-    guide.spreads,
-    isEnterSpread,
-    isLastSpread,
-    pageIndex,
-    scheduleAutoAdvance,
-  ])
-
   const spreadReady = isMobile ? !mobileFading : spreadSettled
+  const spread = guide.spreads[pageIndex]
+  const spreadRhythm = useGuideSpreadRhythm(
+    spread,
+    pageIndex,
+    spreadReady && contentVisible,
+  )
+  const spreadRest = useMemo(
+    () => getSpreadRestProfile(spread, prefersReducedMotion()),
+    [spread],
+  )
+  const awaitingRestHold =
+    autoTurn &&
+    !busy &&
+    spreadReady &&
+    contentVisible &&
+    !isEnterSpread &&
+    !isLastSpread &&
+    spreadRhythm.phase === 'done'
+
+  const spreadReflecting =
+    spreadRhythm.reflectActive && spreadReady && contentVisible && !flipping
 
   useEffect(() => {
-    if (!autoTurn || busy || !spreadReady || isEnterSpread || isLastSpread) {
+    if (
+      !autoTurn ||
+      busy ||
+      !spreadReady ||
+      !contentVisible ||
+      isEnterSpread ||
+      isLastSpread
+    ) {
       clearAutoTimer()
       return undefined
     }
 
-    illustrationAdvanceRef.current = false
-    const spread = guide.spreads[pageIndex]
+    const currentSpread = guide.spreads[pageIndex]
 
-    if (spreadHasIllustration(spread)) {
-      const illustrationId = getSpreadIllustrationId(spread)
-      const durationMs = illustrationId
-        ? getGuideIllustrationDurationMs(illustrationId)
-        : 5500
-      const fallbackMs = prefersReducedMotion() ? 3200 : durationMs + 2500
-
-      autoTimerRef.current = window.setTimeout(() => {
-        autoTimerRef.current = null
-        if (!illustrationAdvanceRef.current) {
-          const holdMs = illustrationId
-            ? getGuideIllustrationHoldMs(illustrationId)
-            : 2000
-          scheduleAutoAdvance(holdMs)
-        }
-      }, fallbackMs)
-
-      return () => clearAutoTimer()
+    if (spreadRhythm.phase !== 'done') {
+      clearAutoTimer()
+      return undefined
     }
 
-    const dwell = estimateGuideSpreadDwellMs(spread, {
-      reducedMotion: prefersReducedMotion(),
-    })
-    scheduleAutoAdvance(dwell)
+    const holdMs = getSpreadRestProfile(
+      currentSpread,
+      prefersReducedMotion(),
+    ).postHoldMs
+    scheduleAutoAdvance(holdMs)
     return () => clearAutoTimer()
   }, [
     autoTurn,
-    clearAutoTimer,
     busy,
+    clearAutoTimer,
+    contentVisible,
     guide.spreads,
     isEnterSpread,
     isLastSpread,
     pageIndex,
     scheduleAutoAdvance,
     spreadReady,
+    spreadRhythm.phase,
   ])
 
   const handleBack = useCallback(() => {
@@ -335,37 +324,74 @@ export function GuideReader({
       locale,
       contentVisible,
       illustrationReady,
-      onIllustrationMotionComplete: handleIllustrationMotionComplete,
     }),
-    [
-      contentVisible,
-      handleIllustrationMotionComplete,
-      illustrationReady,
-      locale,
-    ],
+    [contentVisible, illustrationReady, locale],
   )
 
   const buildSpread = useCallback(
     (index: number) => {
-      const spread = guide.spreads[index]
+      const spreadAt = guide.spreads[index]
+      const isCurrent = index === pageIndex
+      const isIncoming = pendingIndex === index
+      const useAutoReading = autoTurn && (isCurrent || isIncoming)
+      const rhythm = isCurrent
+        ? spreadRhythm
+        : {
+            leftRhythmActive: false,
+            rightRhythmActive: false,
+            rightRhythmLocked: false,
+            rightInhale: false,
+            crossRightActive: false,
+            reflectActive: false,
+            handleLeftComplete: undefined,
+            handleRightComplete: undefined,
+          }
+
       return {
         left: (
           <GuidePageContent
-            blocks={spread.left}
+            blocks={spreadAt.left}
             spreadIndex={index}
+            autoReading={useAutoReading}
+            rhythmActive={rhythm.leftRhythmActive}
+            pageInhale={false}
+            restVisual={
+              isCurrent && awaitingRestHold ? spreadRest.visual : 'none'
+            }
+            pageLeftComplete={
+              isCurrent &&
+              (spreadRhythm.phase === 'crossRight' ||
+                spreadRhythm.phase === 'viewRight' ||
+                spreadRhythm.phase === 'readRight' ||
+                spreadRhythm.phase === 'inhaleRight' ||
+                spreadRhythm.phase === 'reflect' ||
+                spreadRhythm.phase === 'done')
+            }
+            pageReflecting={isCurrent && spreadRhythm.reflectActive}
+            onRhythmComplete={rhythm.handleLeftComplete}
             {...pageContentProps}
           />
         ),
         right: (
           <GuidePageContent
-            blocks={spread.right}
+            blocks={spreadAt.right}
             spreadIndex={index}
+            autoReading={useAutoReading}
+            rhythmActive={rhythm.rightRhythmActive}
+            rhythmLocked={rhythm.rightRhythmLocked}
+            pageAwaitingCue={isCurrent && rhythm.crossRightActive}
+            pageReflecting={isCurrent && rhythm.reflectActive}
+            pageInhale={isCurrent && rhythm.rightInhale}
+            restVisual={
+              isCurrent && awaitingRestHold ? spreadRest.visual : 'none'
+            }
+            onRhythmComplete={rhythm.handleRightComplete}
             {...pageContentProps}
           />
         ),
       }
     },
-    [guide.spreads, pageContentProps],
+    [autoTurn, awaitingRestHold, guide.spreads, pageContentProps, pageIndex, pendingIndex, spreadRest.visual, spreadRhythm],
   )
 
   const current = buildSpread(pageIndex)
@@ -380,10 +406,11 @@ export function GuideReader({
 
   const chapterLabel = useMemo(() => {
     for (let i = pageIndex; i >= 0; i -= 1) {
-      const partBlock = [...guide.spreads[i].left, ...guide.spreads[i].right].find(
-        (block) => block.kind === 'part',
-      )
-      if (partBlock?.text) return partBlock.text
+      const blocks = [...guide.spreads[i].left, ...guide.spreads[i].right]
+      const opening = blocks.find((block) => block.kind === 'storyOpening')
+      if (opening?.kind === 'storyOpening') return opening.title
+      const partBlock = blocks.find((block) => block.kind === 'part')
+      if (partBlock?.kind === 'part') return partBlock.text
     }
     return ui.guideChapterLabel
   }, [guide.spreads, pageIndex, ui.guideChapterLabel])
@@ -444,6 +471,24 @@ export function GuideReader({
       </div>
     )
 
+  const crossRightCue =
+    spreadRhythm.crossRightActive && spreadReady && contentVisible && !flipping
+
+  const bookAnchorClass = [
+    'guide-book-anchor',
+    'guide-book-anchor--open',
+    awaitingRestHold && spreadRest.visual !== 'none'
+      ? `guide-book-anchor--rest guide-book-anchor--rest-${spreadRest.visual}`
+      : '',
+    awaitingRestHold && spreadRest.visual === 'chapter'
+      ? 'guide-book-anchor--rest-chapter-active'
+      : '',
+    crossRightCue ? 'guide-book-anchor--cross-right' : '',
+    spreadReflecting ? 'guide-book-anchor--reflect' : '',
+  ]
+    .filter(Boolean)
+    .join(' ')
+
   const bookShell = (
     <BookShell
       left={current.left}
@@ -480,6 +525,19 @@ export function GuideReader({
         totalPages={totalSpreads}
         contentVisible={contentVisible}
         left={current.left}
+        eyeCue={
+          <>
+            <GuideSpreadEyeCue
+              visible={crossRightCue}
+              orientation="vertical"
+            />
+            {spreadReflecting && (
+              <div className="guide-spread-reflect-cue guide-spread-reflect-cue--mobile" aria-hidden>
+                <span className="guide-spread-reflect-glyph">息</span>
+              </div>
+            )}
+          </>
+        }
         right={current.right}
         footer={footerBlock}
         onPrev={handleBack}
@@ -514,7 +572,23 @@ export function GuideReader({
 
       <div className="guide-book-eyebrow-spacer" aria-hidden />
 
-      <div className="guide-book-anchor guide-book-anchor--open">{bookShell}</div>
+      <div className={`${bookAnchorClass} relative`}>
+        {bookShell}
+        <GuideSpreadEyeCue visible={crossRightCue} orientation="horizontal" />
+        {spreadReflecting && (
+          <div className="guide-spread-reflect-cue" aria-hidden>
+            <span className="guide-spread-reflect-glyph">息</span>
+          </div>
+        )}
+        {awaitingRestHold && spreadRest.visual === 'chapter' && (
+          <div className="guide-chapter-rest" aria-hidden>
+            <span className="guide-chapter-rest-mist" />
+            <span className="guide-chapter-rest-rule" />
+            <span className="guide-chapter-rest-glyph">息</span>
+            <span className="guide-chapter-rest-rule" />
+          </div>
+        )}
+      </div>
 
       <div className="guide-book-controls">{footerBlock}</div>
     </div>

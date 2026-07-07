@@ -5,9 +5,34 @@ export const GUIDE_ILLUSTRATION_IDS = new Set([
   '03-still-pause',
   '04-name-in-flow',
   '05-enter-mist',
+  'v-tongguan',
+  'v-liubai',
+  'v-changye',
+  'v-menpai',
+  'v-huisheng',
+  'v-qingchen',
+  'v-yuanxing',
+  'v-liujuan',
+  'v-enter',
 ])
 
-const GUIDE_ILLUST_VERSION = 6
+export const GUIDE_VIGNETTE_ILLUSTRATION_IDS = [
+  'v-tongguan',
+  'v-liubai',
+  'v-changye',
+  'v-menpai',
+  'v-huisheng',
+  'v-qingchen',
+  'v-yuanxing',
+  'v-liujuan',
+  'v-enter',
+] as const
+
+const GUIDE_ILLUST_VERSION = 19
+
+export function guideIllustrationVersion(): number {
+  return GUIDE_ILLUST_VERSION
+}
 
 export function guideIllustrationBase(id: string): string {
   return `/guide/${id}`
@@ -31,15 +56,9 @@ export function prefetchGuideIllustrations(ids?: Iterable<string>): void {
     const id = queue[index]
     const img = new Image()
     img.decoding = 'async'
-    img.src = `${guideIllustrationBase(id)}.webp${query}`
+    img.src = `${guideIllustrationBase(id)}.png${query}`
     img.onload = () => load(index + 1)
-    img.onerror = () => {
-      const fallback = new Image()
-      fallback.decoding = 'async'
-      fallback.src = `${guideIllustrationBase(id)}.png${query}`
-      fallback.onload = () => load(index + 1)
-      fallback.onerror = () => load(index + 1)
-    }
+    img.onerror = () => load(index + 1)
   }
 
   load(0)

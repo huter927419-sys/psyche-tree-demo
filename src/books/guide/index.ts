@@ -3,7 +3,7 @@ import { convertStringsDeep, resolveContentLocale } from '../../i18n/traditional
 import { getGuideContent } from './content'
 import type { GuideContent } from './types'
 
-export type { GuideContent, GuidePageBlock, GuideSpread } from './types'
+export type { GuideContent, GuidePageBlock, GuideSectionDef, GuideSpread } from './types'
 export {
   clearGuideProgress,
   clearGuideVolumeHandoff,

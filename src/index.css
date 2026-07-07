@@ -1731,25 +1731,53 @@ html[lang="ja"] {
 /* ── Guide reader — unified spread panels (zen / metaphysical tone) ── */
 
 .book-page-inner:has(.guide-page-stack) {
-  padding: 1.25rem 1.05rem 1.15rem;
+  flex: 1 1 0%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem 0.65rem 0.7rem;
   background:
     radial-gradient(
-      ellipse 72% 58% at 50% 38%,
-      rgba(255, 255, 255, 0.035) 0%,
-      transparent 68%
+      ellipse 80% 55% at 50% 38%,
+      rgba(255, 255, 255, 0.04) 0%,
+      transparent 70%
     ),
     radial-gradient(
       ellipse 90% 70% at 50% 100%,
-      rgba(255, 255, 255, 0.015) 0%,
+      rgba(255, 255, 255, 0.02) 0%,
       transparent 55%
     );
+}
+
+.book-page-inner:has(.guide-page-stack) > .guide-page-stack {
+  flex: 1 1 0%;
+  min-height: 100%;
+  align-self: stretch;
+}
+
+.book-page-inner:has(.guide-page-stack--hero-art) {
+  justify-content: flex-start;
+  padding: 0.18rem 0.28rem 0.22rem;
+}
+
+.book-page-inner:has(.guide-page-stack--cover-page) {
+  justify-content: center;
+  overflow-y: auto;
+  padding: 0.28rem 0.38rem 0.4rem;
+}
+
+.book-page-inner:has(.guide-page-stack--ritual-page),
+.book-page-inner:has(.guide-page-stack--breath-page) {
+  overflow-y: auto;
+  padding-bottom: 1.1rem;
 }
 
 .guide-page-stack {
   display: flex;
   flex-direction: column;
-  flex: 1;
-  min-height: 100%;
+  flex: 1 1 0%;
+  min-height: 0;
+  width: 100%;
   justify-content: center;
   gap: 0.5rem;
   opacity: 1;
@@ -1785,7 +1813,38 @@ html[lang="ja"] {
   min-height: 0;
   gap: 0;
   padding: 0.15rem 0.55rem 0.55rem;
-  transform: translateY(-3%);
+}
+
+/* 单块内容页：grid 三等分，正文落在中行（避免 pending 行占位 + flex 贴顶） */
+.guide-page-stack:not(.guide-page-stack--hero-art):not(.guide-page-stack--has-figure):has(> :only-child) {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-content: stretch;
+  gap: 0;
+  justify-items: stretch;
+  min-height: 100%;
+  height: 100%;
+}
+
+.guide-page-stack:not(.guide-page-stack--hero-art):not(.guide-page-stack--has-figure):has(> :only-child) > :only-child {
+  grid-row: 2;
+  align-self: start;
+  min-height: 0;
+}
+
+.book-page-left .guide-page-stack:not(.guide-page-stack--hero-art):has(> :only-child) {
+  justify-items: start;
+}
+
+.book-page-right .guide-page-stack:not(.guide-page-stack--hero-art):has(> :only-child) {
+  justify-items: end;
+}
+
+.guide-page-stack:not(.guide-page-stack--hero-art):has(> .guide-spread-panel:only-child) > .guide-spread-panel {
+  flex: none;
+  width: 100%;
+  transform: none;
+  justify-self: center;
 }
 
 .guide-spread-panel::before,
@@ -1996,6 +2055,1945 @@ html[lang="ja"] {
   gap: 0.7rem;
 }
 
+/* ── 片羽体 · story vignette design system ── */
+
+.guide-page-stack--story {
+  justify-content: center;
+  gap: 0;
+}
+
+/* 页级排版角色 — prose 细部见「正文 · 版式系统」 */
+.guide-page-stack--story.guide-page-stack--ritual-page {
+  justify-content: center;
+  padding-top: 0;
+}
+
+.guide-page-stack--story.guide-page-stack--breath-page,
+.guide-page-stack--story.guide-page-stack--slot-page {
+  justify-content: center;
+  padding-top: 0;
+}
+
+.guide-page-stack--hero-art.guide-page-stack--story {
+  justify-content: stretch;
+  padding-top: 0.15rem;
+}
+
+.guide-page-stack--cover-page {
+  justify-content: center;
+  align-items: stretch;
+  min-height: 0;
+  max-height: 100%;
+  padding: 0.1rem 0.08rem 0.25rem;
+  overflow: hidden;
+}
+
+.guide-page-stack--cover-page:has(> :only-child) {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 0;
+  height: 100%;
+  max-height: 100%;
+  gap: 0;
+}
+
+.guide-page-stack--cover-page:has(> :only-child) > :only-child {
+  grid-row: unset;
+  align-self: center;
+  width: 100%;
+  max-width: none;
+  flex: 0 1 auto;
+}
+
+.book-page-right .guide-page-stack--cover-page:has(> :only-child) {
+  justify-items: center;
+}
+
+.guide-page-stack--has-figure.guide-page-stack--story:not(.guide-page-stack--hero-art) {
+  justify-content: center;
+  padding-top: 0;
+}
+
+/* Hero 入画 — 左页满幅封面感 */
+.guide-page-stack--hero-art > .guide-spread-illustration-wrap {
+  width: 100%;
+  flex: 1 1 0%;
+  min-height: calc(var(--book-page-min-h, 420px) * 0.9);
+  margin: 0 auto;
+  padding: 0.06rem 0.1rem 0.12rem;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.guide-page-stack--hero-art > .guide-spread-illustration-wrap .guide-spread-illustration,
+.guide-page-stack--hero-art > .guide-spread-illustration-wrap .guide-spread-illustration--photo {
+  width: 100%;
+  max-width: none;
+  min-height: calc(var(--book-page-min-h, 420px) * 0.94);
+  height: 100%;
+  max-height: calc(var(--book-page-min-h, 420px) * 0.98);
+  aspect-ratio: unset;
+  flex: 1 1 auto;
+  border-radius: 2px;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.11),
+    inset 0 0 0 5px rgba(0, 0, 0, 0.2),
+    0 22px 56px rgba(0, 0, 0, 0.55),
+    0 0 84px rgba(255, 245, 220, 0.07);
+}
+
+.guide-page-stack--hero-art > .guide-spread-illustration-wrap .guide-spread-illustration-img {
+  object-position: var(--guide-illustration-object-position, center 58%);
+}
+
+/* ── 序页 ── */
+
+.guide-preface-plate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  min-height: 12rem;
+  padding: 0.75rem 0.85rem 1rem;
+  position: relative;
+}
+
+.guide-preface-plate::before,
+.guide-preface-plate::after {
+  content: '';
+  position: absolute;
+  left: 14%;
+  right: 14%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.12),
+    transparent
+  );
+}
+
+.guide-preface-plate::before {
+  top: 0.4rem;
+}
+
+.guide-preface-plate::after {
+  bottom: 0.35rem;
+  opacity: 0.55;
+}
+
+.guide-preface-kicker {
+  font-family: var(--font-mystic-zh);
+  font-size: 0.68rem;
+  letter-spacing: 0.55em;
+  text-indent: 0.55em;
+  color: rgba(210, 198, 175, 0.5);
+  margin: 0 0 1.1rem;
+}
+
+.guide-preface-title {
+  font-family: var(--font-mystic-zh);
+  font-size: clamp(2.15rem, 6.2vw, 2.95rem);
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+  color: rgba(252, 248, 240, 0.97);
+  margin: 0;
+  text-shadow: 0 0 40px rgba(255, 235, 200, 0.08);
+}
+
+.guide-preface-subtitle {
+  font-family: var(--font-mystic-zh);
+  font-size: clamp(1.08rem, 3.2vw, 1.32rem);
+  letter-spacing: 0.22em;
+  text-indent: 0.22em;
+  color: rgba(228, 220, 204, 0.86);
+  margin: 0.65rem 0 0;
+}
+
+.guide-preface-whisper {
+  margin-top: 1.35rem;
+  padding-top: 1rem;
+  position: relative;
+  width: 100%;
+}
+
+.guide-preface-whisper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 2rem;
+  height: 1px;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+}
+
+.guide-preface-whisper-line {
+  font-family: var(--font-prose-zh);
+  font-size: 0.92rem;
+  letter-spacing: 0.2em;
+  line-height: 1.9;
+  color: rgba(200, 192, 178, 0.62);
+  margin: 0;
+}
+
+.guide-preface-note {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.75rem 0.95rem;
+  align-items: center;
+  align-content: center;
+  width: min(100%, 16.5rem);
+  min-height: 10rem;
+  margin: 0 auto;
+  padding: 0.85rem 0.75rem 0.8rem;
+  position: relative;
+}
+
+.book-page-left .guide-preface-note {
+  margin-inline: 0.15rem auto;
+}
+
+.book-page-right .guide-preface-note {
+  margin-inline: auto 0.15rem;
+}
+
+.guide-preface-note::before {
+  content: '';
+  position: absolute;
+  inset: 0.35rem 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 1px;
+  pointer-events: none;
+}
+
+.guide-preface-note-mark {
+  font-family: var(--font-mystic-zh);
+  font-size: 1.35rem;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  color: rgba(210, 198, 170, 0.32);
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  padding-top: 0.1rem;
+  align-self: center;
+}
+
+.guide-preface-note-line {
+  font-family: var(--font-prose-zh);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  line-height: 1.9;
+  color: rgba(224, 216, 200, 0.82);
+  margin: 0;
+  text-align: left;
+}
+
+/* ── 篇首封面 ── */
+
+.guide-story-cover,
+.guide-story-opening {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 0;
+  max-height: 100%;
+  flex: 0 1 auto;
+  margin: 0 auto;
+  padding: 1.2rem 0.55rem 1.15rem;
+  text-align: center;
+  position: relative;
+  gap: 0.28rem;
+}
+
+.guide-story-cover-frame {
+  position: absolute;
+  inset: 0.1rem 0.18rem;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 85% 70% at 50% 42%,
+    rgba(255, 245, 225, 0.03),
+    transparent 68%
+  );
+}
+
+.guide-story-cover-frame::before {
+  content: '';
+  position: absolute;
+  inset: 0.42rem;
+  border: 1px solid rgba(255, 255, 255, 0.035);
+  pointer-events: none;
+}
+
+.guide-story-cover-corner {
+  position: absolute;
+  width: 0.9rem;
+  height: 0.9rem;
+  border-color: rgba(255, 240, 210, 0.24);
+  border-style: solid;
+  pointer-events: none;
+}
+
+.guide-story-cover-corner--tl {
+  top: -1px;
+  left: -1px;
+  border-width: 1px 0 0 1px;
+}
+
+.guide-story-cover-corner--tr {
+  top: -1px;
+  right: -1px;
+  border-width: 1px 1px 0 0;
+}
+
+.guide-story-cover-corner--bl {
+  bottom: -1px;
+  left: -1px;
+  border-width: 0 0 1px 1px;
+}
+
+.guide-story-cover-corner--br {
+  bottom: -1px;
+  right: -1px;
+  border-width: 0 1px 1px 0;
+}
+
+.guide-story-cover-glyph {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.55rem;
+  font-family: var(--font-mystic-zh);
+  font-size: clamp(2.6rem, 9vw, 3.8rem);
+  font-weight: 400;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.05);
+  pointer-events: none;
+  user-select: none;
+}
+
+.guide-story-index {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.22rem;
+  margin: 0 0 1.1rem;
+  font-family: var(--font-mystic-zh);
+  color: rgba(200, 190, 170, 0.52);
+}
+
+.guide-story-index-n {
+  font-size: 1.55rem;
+  letter-spacing: 0.14em;
+  color: rgba(236, 228, 210, 0.88);
+}
+
+.guide-story-index-sep {
+  font-size: 0.78rem;
+  opacity: 0.45;
+  margin: 0 0.14rem;
+}
+
+.guide-story-index-total {
+  font-size: 0.78rem;
+  letter-spacing: 0.32em;
+}
+
+.guide-story-lead {
+  margin: 0.55rem 0 0;
+  max-width: min(100%, 18rem);
+}
+
+.guide-story-lead-line {
+  font-family: var(--font-prose-zh);
+  font-size: clamp(1.02rem, 2.8vw, 1.18rem);
+  letter-spacing: 0.1em;
+  line-height: 1.92;
+  color: rgba(228, 222, 208, 0.9);
+  margin: 0;
+}
+
+.guide-story-title-plate,
+.guide-story-cover-plate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.guide-story-ornament {
+  display: block;
+  width: 6.5rem;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.32),
+    transparent
+  );
+}
+
+.guide-story-ornament--after {
+  opacity: 0.55;
+}
+
+.guide-story-title {
+  font-family: var(--font-mystic-zh);
+  font-size: clamp(2.45rem, 7.8vw, 3.45rem);
+  font-weight: 400;
+  letter-spacing: 0.24em;
+  text-indent: 0.24em;
+  color: rgba(252, 248, 240, 0.98);
+  margin: 0;
+  line-height: 1.22;
+  text-shadow:
+    0 0 56px rgba(255, 240, 210, 0.14),
+    0 2px 32px rgba(0, 0, 0, 0.4);
+}
+
+.guide-story-opening-theme {
+  margin: 0.85rem 0 0;
+  font-family: var(--font-mystic-zh);
+  font-size: 0.82rem;
+  letter-spacing: 0.32em;
+  text-indent: 0.32em;
+  color: rgba(186, 178, 162, 0.58);
+}
+
+.guide-story-opening-theme-sep {
+  opacity: 0.45;
+  letter-spacing: 0;
+}
+
+.guide-story-prose-wrap {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.guide-story-prose-section {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0 0 0.55rem;
+  padding-left: 0.15rem;
+  opacity: 0.72;
+}
+
+.guide-story-prose-section-glyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  font-family: var(--font-mystic-zh);
+  font-size: 0.72rem;
+  color: rgba(214, 206, 190, 0.62);
+  flex-shrink: 0;
+}
+
+.guide-story-prose-section-title {
+  font-family: var(--font-mystic-zh);
+  font-size: 0.78rem;
+  letter-spacing: 0.22em;
+  color: rgba(220, 212, 196, 0.58);
+}
+
+.book-page-right .guide-story-prose-wrap {
+  align-items: flex-end;
+}
+
+.book-page-right .guide-story-prose-section {
+  flex-direction: row-reverse;
+  padding-left: 0;
+  padding-right: 0.15rem;
+}
+
+/* ── 正文 · 版式系统 ── */
+
+.guide-page-stack--story.guide-page-stack--prose-page {
+  padding: 0 0.25rem 0.75rem;
+}
+
+/* 静态全文（未进入韵律） */
+.guide-page-stack--story.guide-page-stack--prose-page:not(:has(.guide-story-prose--rhythm)) {
+  padding: 0.65rem 0.25rem 0.75rem;
+}
+
+.book-page-inner:has(.guide-page-stack--prose-page) {
+  padding: 0.85rem 0.7rem 0.95rem;
+}
+
+.book-page-left .guide-page-stack--prose-page {
+  align-items: flex-start;
+}
+
+.book-page-right .guide-page-stack--prose-page {
+  align-items: flex-end;
+}
+
+.guide-story-prose {
+  display: flex;
+  flex-direction: column;
+  gap: 0.58rem;
+  width: min(100%, 14rem);
+  margin: 0;
+  padding: 0.45rem 0.65rem 0.55rem 1.05rem;
+  position: relative;
+}
+
+.book-page-left .guide-story-prose {
+  margin-inline: 0.2rem 0.95rem;
+}
+
+.book-page-right .guide-story-prose {
+  margin-inline: 0.95rem 0.2rem;
+  padding-inline: 1.05rem 0.65rem;
+}
+
+.guide-story-prose::before {
+  content: '';
+  position: absolute;
+  left: 0.35rem;
+  top: 0.25rem;
+  bottom: 0.25rem;
+  width: 1px;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(255, 255, 255, 0.09) 14%,
+    rgba(255, 255, 255, 0.09) 86%,
+    transparent
+  );
+  opacity: 0.8;
+}
+
+.book-page-right .guide-story-prose::before {
+  left: auto;
+  right: 0.35rem;
+}
+
+.guide-story-line {
+  font-family: var(--font-prose-zh);
+  font-size: 0.98rem;
+  font-weight: 500;
+  letter-spacing: 0.045em;
+  line-height: 1.88;
+  color: rgba(242, 236, 222, 0.94);
+  margin: 0;
+  padding-left: 0;
+  text-align: left;
+}
+
+.guide-story-line--time {
+  font-family: var(--font-mystic-zh);
+  font-size: 0.82rem;
+  font-weight: 400;
+  letter-spacing: 0.24em;
+  text-indent: 0.24em;
+  color: rgba(196, 188, 172, 0.58);
+  margin-top: 0.15rem;
+  margin-bottom: 0.35rem;
+}
+
+.guide-story-line--time:first-child {
+  margin-top: 0;
+}
+
+.guide-story-line--dialogue {
+  padding-left: 0.35rem;
+  color: rgba(244, 238, 226, 0.86);
+}
+
+.guide-story-line--beat {
+  font-family: var(--font-mystic-zh);
+  font-size: 0.94rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-indent: 0.14em;
+  color: rgba(234, 226, 210, 0.9);
+  padding-left: 0.15rem;
+}
+
+/* ── 韵律阅读（聚光灯逐句 + 短语推进） ── */
+
+.guide-rhythm-line {
+  margin: 0;
+  transition:
+    opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.38s ease,
+    color 0.32s ease;
+}
+
+.guide-rhythm-line--pending {
+  opacity: 0;
+  visibility: hidden;
+  max-height: 0;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  line-height: 0;
+  pointer-events: none;
+}
+
+.guide-rhythm-line--spoken,
+.guide-rhythm-line--speaking,
+.guide-rhythm-line--hold {
+  max-height: 6em;
+  overflow: visible;
+  visibility: visible;
+}
+
+.guide-rhythm-line--speaking {
+  opacity: 1;
+  filter: none;
+  color: rgba(242, 236, 222, 0.98);
+  text-shadow: 0 0 16px rgba(255, 242, 220, 0.08);
+  border-left: none;
+  margin-left: 0;
+  padding-left: inherit;
+  box-shadow: inset 3px 0 0 rgba(255, 236, 210, 0.38);
+}
+
+.book-page-right .guide-story-prose .guide-rhythm-line--speaking,
+.book-page-right .guide-story-prose .guide-rhythm-line--hold {
+  box-shadow: inset -3px 0 0 rgba(255, 236, 210, 0.38);
+}
+
+.guide-rhythm-line--hold {
+  opacity: 0.96;
+  text-shadow: 0 0 8px rgba(255, 242, 220, 0.05);
+  box-shadow: inset 3px 0 0 rgba(255, 236, 210, 0.16);
+  transition:
+    opacity 0.45s ease-out,
+    box-shadow 0.45s ease-out,
+    text-shadow 0.45s ease-out;
+}
+
+.book-page-right .guide-story-prose .guide-rhythm-line--hold {
+  box-shadow: inset -3px 0 0 rgba(255, 236, 210, 0.16);
+}
+
+.guide-rhythm-line--spoken {
+  opacity: 0.56;
+  filter: brightness(0.88);
+  text-shadow: none;
+}
+
+.guide-rhythm-line--settled {
+  opacity: 0.94;
+  filter: none;
+  max-height: none;
+  color: rgba(242, 236, 222, 0.96);
+  text-shadow: 0 0 10px rgba(255, 242, 220, 0.05);
+  box-shadow: none;
+}
+
+.guide-rhythm-line--sweep {
+  clip-path: inset(0 100% 0 0);
+  animation: guide-rhythm-speak-sweep var(--guide-speak-duration, 340ms)
+    cubic-bezier(0.16, 0.84, 0.28, 1) forwards;
+}
+
+@keyframes guide-rhythm-speak-sweep {
+  0% {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0.76;
+  }
+  72% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+.guide-rhythm-phrase {
+  opacity: 0.34;
+  transition:
+    opacity var(--phrase-step-ms, 280ms) cubic-bezier(0.22, 1, 0.36, 1),
+    filter var(--phrase-step-ms, 280ms) ease;
+  filter: brightness(0.9);
+}
+
+.guide-rhythm-phrase--lit {
+  opacity: 1;
+  filter: brightness(1.04);
+}
+
+.guide-rhythm-line--locked {
+  opacity: 0.08;
+  filter: blur(0.6px);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* legacy delay-driven reveal — kept for reference, superseded by phase cursor */
+.guide-rhythm-line--active {
+  animation-duration: var(--guide-rhythm-duration, 400ms);
+  animation-delay: var(--guide-rhythm-delay, 0ms);
+  animation-fill-mode: forwards;
+  animation-timing-function: cubic-bezier(0.34, 0, 0.18, 1);
+}
+
+.guide-rhythm-line--active.guide-rhythm-line--body:not([class*='guide-rhythm-line--accent-']) {
+  animation-name: guide-rhythm-line-body;
+}
+
+.guide-rhythm-line--active.guide-rhythm-line--preface:not([class*='guide-rhythm-line--accent-']) {
+  animation-name: guide-rhythm-line-preface;
+}
+
+.guide-rhythm-line--active.guide-rhythm-line--ritual:not([class*='guide-rhythm-line--accent-']) {
+  animation-name: guide-rhythm-line-ritual;
+}
+
+.guide-rhythm-line--active.guide-rhythm-line--close:not([class*='guide-rhythm-line--accent-']) {
+  animation-name: guide-rhythm-line-close;
+}
+
+@keyframes guide-rhythm-line-body {
+  0% {
+    opacity: 0.42;
+    transform: translateY(4px);
+  }
+  100% {
+    opacity: 0.96;
+    transform: translateY(0);
+  }
+}
+
+@keyframes guide-rhythm-line-preface {
+  0% {
+    opacity: 0.35;
+    filter: blur(1px);
+    transform: translateY(5px);
+  }
+  100% {
+    opacity: 0.92;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+@keyframes guide-rhythm-line-ritual {
+  0% {
+    opacity: 0.38;
+    letter-spacing: 0.02em;
+  }
+  100% {
+    opacity: 0.94;
+    letter-spacing: inherit;
+  }
+}
+
+@keyframes guide-rhythm-line-close {
+  0% {
+    opacity: 0.36;
+    filter: brightness(0.88);
+  }
+  100% {
+    opacity: 0.9;
+    filter: brightness(1);
+  }
+}
+
+/* ── 叙事重音（整句） ── */
+
+.guide-rhythm-line--speaking.guide-rhythm-line--accent-flow {
+  animation: guide-rhythm-accent-line-flow var(--guide-speak-duration, 280ms)
+    cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.guide-rhythm-line--speaking.guide-rhythm-line--accent-staccato {
+  animation: guide-rhythm-accent-line-staccato var(--guide-speak-duration, 240ms)
+    ease-out forwards;
+}
+
+.guide-rhythm-line--speaking.guide-rhythm-line--accent-linger {
+  animation: guide-rhythm-accent-line-linger var(--guide-speak-duration, 420ms)
+    ease-out forwards;
+}
+
+.guide-rhythm-line--speaking.guide-rhythm-line--accent-swell {
+  animation: guide-rhythm-accent-line-swell var(--guide-speak-duration, 360ms)
+    ease-out forwards;
+}
+
+.guide-rhythm-line--speaking.guide-rhythm-line--accent-dissolve {
+  animation: guide-rhythm-accent-line-dissolve var(--guide-speak-duration, 400ms)
+    ease-out forwards;
+}
+
+.guide-rhythm-line--speaking.guide-rhythm-line--accent-whisper {
+  animation: guide-rhythm-accent-line-whisper var(--guide-speak-duration, 380ms)
+    ease-out forwards;
+}
+
+.guide-rhythm-line--speaking.guide-rhythm-line--accent-hollow {
+  animation: guide-rhythm-accent-line-hollow var(--guide-speak-duration, 320ms)
+    ease-out forwards;
+}
+
+.guide-rhythm-line--accent-dissolve-spoken {
+  opacity: 0.42;
+  filter: brightness(0.78);
+}
+
+.guide-rhythm-line--active.guide-rhythm-line--accent-flow {
+  animation-name: guide-rhythm-accent-line-flow;
+}
+
+.guide-rhythm-line--active.guide-rhythm-line--accent-staccato {
+  animation-name: guide-rhythm-accent-line-staccato;
+}
+
+.guide-rhythm-line--active.guide-rhythm-line--accent-linger {
+  animation-name: guide-rhythm-accent-line-linger;
+}
+
+.guide-rhythm-line--active.guide-rhythm-line--accent-swell {
+  animation-name: guide-rhythm-accent-line-swell;
+}
+
+.guide-rhythm-line--active.guide-rhythm-line--accent-dissolve {
+  animation-name: guide-rhythm-accent-line-dissolve;
+}
+
+.guide-rhythm-line--active.guide-rhythm-line--accent-whisper {
+  animation-name: guide-rhythm-accent-line-whisper;
+}
+
+.guide-rhythm-line--active.guide-rhythm-line--accent-hollow {
+  animation-name: guide-rhythm-accent-line-hollow;
+}
+
+@keyframes guide-rhythm-accent-line-flow {
+  0% {
+    opacity: 0.48;
+    transform: translateY(2px);
+  }
+  100% {
+    opacity: 0.94;
+    transform: translateY(0);
+  }
+}
+
+@keyframes guide-rhythm-accent-line-staccato {
+  0% {
+    opacity: 0.42;
+    transform: translateY(3px);
+  }
+  100% {
+    opacity: 0.92;
+    transform: translateY(0);
+  }
+}
+
+@keyframes guide-rhythm-accent-line-linger {
+  0% {
+    opacity: 0.4;
+    letter-spacing: 0.04em;
+  }
+  55% {
+    opacity: 0.98;
+    letter-spacing: 0.1em;
+  }
+  100% {
+    opacity: 0.92;
+    letter-spacing: 0.07em;
+  }
+}
+
+@keyframes guide-rhythm-accent-line-swell {
+  0% {
+    opacity: 0.42;
+    transform: scale(0.98);
+  }
+  45% {
+    opacity: 1;
+    transform: scale(1.03);
+    text-shadow: 0 0 14px rgba(255, 240, 210, 0.12);
+  }
+  100% {
+    opacity: 0.94;
+    transform: scale(1);
+    text-shadow: none;
+  }
+}
+
+@keyframes guide-rhythm-accent-line-dissolve {
+  0% {
+    opacity: 0.42;
+  }
+  40% {
+    opacity: 0.98;
+  }
+  100% {
+    opacity: 0.72;
+  }
+}
+
+@keyframes guide-rhythm-accent-line-whisper {
+  0% {
+    opacity: 0.28;
+    filter: blur(0.8px);
+  }
+  100% {
+    opacity: 0.68;
+    filter: blur(0.2px);
+  }
+}
+
+@keyframes guide-rhythm-accent-line-hollow {
+  0% {
+    opacity: 0.42;
+  }
+  40% {
+    opacity: 1;
+    text-shadow: 0 0 12px rgba(255, 240, 210, 0.14);
+  }
+  100% {
+    opacity: 0.62;
+    text-shadow: none;
+  }
+}
+
+.guide-rhythm-char {
+  opacity: 0.28;
+  display: inline;
+}
+
+.guide-rhythm-line.guide-story-line,
+.guide-rhythm-line.guide-story-lead-line,
+.guide-rhythm-line.guide-story-bridge-line,
+.guide-rhythm-line.guide-story-afterglow-line,
+.guide-rhythm-line.guide-preface-note-line,
+.guide-rhythm-line.guide-spread-body {
+  color: inherit;
+}
+
+.guide-preface-plate .guide-rhythm-line.guide-preface-title,
+.guide-preface-plate .guide-rhythm-line.guide-preface-subtitle,
+.guide-preface-whisper .guide-rhythm-line,
+.guide-story-lead .guide-rhythm-line,
+.guide-story-title-plate .guide-rhythm-line,
+.guide-story-bridge-core .guide-rhythm-line,
+.guide-story-afterglow .guide-rhythm-line,
+.guide-story-portal-copy .guide-rhythm-line {
+  width: 100%;
+  text-align: center;
+}
+
+.guide-preface-note-body .guide-rhythm-line {
+  width: 100%;
+  text-align: left;
+}
+
+.guide-story-prose--rhythm {
+  flex: 0 0 auto;
+  gap: 0.52rem;
+  margin-block: auto;
+}
+
+.guide-story-prose--rhythm .guide-rhythm-line {
+  padding-left: 0;
+  width: 100%;
+  font-family: inherit;
+  font-size: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+}
+
+.guide-story-opening--rhythm,
+.guide-preface-plate--rhythm,
+.guide-preface-note:has(.guide-rhythm-line) {
+  flex: 0 0 auto;
+  margin-block: auto;
+}
+
+.guide-rhythm-char--active.guide-rhythm-char--body:not([class*='guide-rhythm-char--accent-']) {
+  animation: guide-rhythm-char-body var(--guide-rhythm-duration, 420ms)
+    cubic-bezier(0.38, 0, 0.22, 1) var(--guide-rhythm-delay, 0ms) forwards;
+}
+
+.guide-rhythm-char--active.guide-rhythm-char--preface:not([class*='guide-rhythm-char--accent-']) {
+  animation: guide-rhythm-char-preface var(--guide-rhythm-duration, 540ms)
+    cubic-bezier(0.34, 0, 0.18, 1) var(--guide-rhythm-delay, 0ms) forwards;
+}
+
+.guide-rhythm-char--active.guide-rhythm-char--ritual:not([class*='guide-rhythm-char--accent-']) {
+  animation: guide-rhythm-char-ritual var(--guide-rhythm-duration, 480ms)
+    cubic-bezier(0.38, 0, 0.2, 1) var(--guide-rhythm-delay, 0ms) forwards;
+}
+
+.guide-rhythm-char--active.guide-rhythm-char--close:not([class*='guide-rhythm-char--accent-']) {
+  animation: guide-rhythm-char-close var(--guide-rhythm-duration, 560ms)
+    cubic-bezier(0.36, 0, 0.18, 1) var(--guide-rhythm-delay, 0ms) forwards;
+}
+
+/* ── 叙事重音：放大 / 渐出 / 放慢 / 点拍 ── */
+
+.guide-rhythm-char--active[class*='guide-rhythm-char--accent-'] {
+  animation-duration: var(--guide-rhythm-duration, 520ms);
+  animation-delay: var(--guide-rhythm-delay, 0ms);
+  animation-fill-mode: forwards;
+  animation-timing-function: cubic-bezier(0.34, 0, 0.18, 1);
+}
+
+.guide-rhythm-char--active.guide-rhythm-char--accent-staccato {
+  animation-name: guide-rhythm-accent-staccato;
+}
+
+.guide-rhythm-char--active.guide-rhythm-char--accent-linger {
+  animation-name: guide-rhythm-accent-linger;
+}
+
+.guide-rhythm-char--active.guide-rhythm-char--accent-swell {
+  animation-name: guide-rhythm-accent-swell;
+}
+
+.guide-rhythm-char--active.guide-rhythm-char--accent-dissolve {
+  animation-name: guide-rhythm-accent-dissolve;
+}
+
+.guide-rhythm-char--active.guide-rhythm-char--accent-whisper {
+  animation-name: guide-rhythm-accent-whisper;
+}
+
+.guide-rhythm-char--active.guide-rhythm-char--accent-hollow {
+  animation-name: guide-rhythm-accent-hollow;
+}
+
+@keyframes guide-rhythm-accent-staccato {
+  0% {
+    opacity: 0.28;
+    transform: translateY(2px);
+  }
+  40% {
+    opacity: 0.98;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0.9;
+    transform: translateY(0);
+  }
+}
+
+@keyframes guide-rhythm-accent-linger {
+  0% {
+    opacity: 0.28;
+    letter-spacing: 0.02em;
+  }
+  35% {
+    opacity: 0.92;
+    letter-spacing: 0.06em;
+  }
+  70% {
+    opacity: 1;
+    letter-spacing: 0.1em;
+  }
+  100% {
+    opacity: 0.94;
+    letter-spacing: 0.08em;
+  }
+}
+
+@keyframes guide-rhythm-accent-swell {
+  0% {
+    opacity: 0.28;
+    transform: scale(1);
+    filter: brightness(0.88);
+  }
+  42% {
+    opacity: 1;
+    transform: scale(1.14);
+    filter: brightness(1.08);
+    text-shadow: 0 0 18px rgba(255, 240, 210, 0.14);
+  }
+  100% {
+    opacity: 0.95;
+    transform: scale(1.02);
+    filter: brightness(1);
+    text-shadow: 0 0 8px rgba(255, 240, 210, 0.05);
+  }
+}
+
+@keyframes guide-rhythm-accent-dissolve {
+  0% {
+    opacity: 0.28;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+  38% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+  72% {
+    opacity: 0.72;
+    filter: blur(0.2px);
+    transform: translateY(-1px);
+  }
+  100% {
+    opacity: 0.38;
+    filter: blur(0.8px);
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes guide-rhythm-accent-whisper {
+  0% {
+    opacity: 0.18;
+    filter: blur(1px);
+  }
+  45% {
+    opacity: 0.78;
+    filter: blur(0);
+  }
+  100% {
+    opacity: 0.52;
+    filter: blur(0.4px);
+  }
+}
+
+@keyframes guide-rhythm-accent-hollow {
+  0% {
+    opacity: 0.28;
+    transform: scale(1);
+  }
+  35% {
+    opacity: 1;
+    transform: scale(1.1);
+    text-shadow: 0 0 14px rgba(255, 240, 210, 0.16);
+  }
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+    text-shadow: none;
+  }
+}
+
+.guide-story-bridge-core .guide-rhythm-line {
+  font-size: 1.18rem;
+  letter-spacing: 0.28em;
+  text-indent: 0.28em;
+}
+
+.guide-preface-whisper .guide-rhythm-char--active.guide-rhythm-char--accent-dissolve,
+.guide-preface-whisper .guide-rhythm-char--active.guide-rhythm-char--accent-whisper {
+  animation-name: guide-rhythm-accent-whisper;
+}
+
+.guide-story-afterglow .guide-rhythm-char--active.guide-rhythm-char--accent-dissolve {
+  animation-name: guide-rhythm-accent-dissolve;
+}
+
+.guide-story-line--beat.guide-rhythm-line .guide-rhythm-char--active {
+  animation-name: guide-rhythm-accent-staccato;
+}
+
+@keyframes guide-rhythm-char-body {
+  0% {
+    opacity: 0.1;
+    filter: brightness(0.84);
+  }
+  45% {
+    opacity: 1;
+    filter: brightness(1.04);
+    text-shadow: 0 0 10px rgba(255, 240, 210, 0.09);
+  }
+  100% {
+    opacity: 0.96;
+    filter: brightness(1);
+    text-shadow: none;
+  }
+}
+
+@keyframes guide-rhythm-char-preface {
+  0% {
+    opacity: 0;
+    filter: blur(1.5px);
+    transform: translateY(3px);
+  }
+  55% {
+    opacity: 0.96;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0.9;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+@keyframes guide-rhythm-char-ritual {
+  0% {
+    opacity: 0.08;
+    text-shadow: none;
+  }
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 16px rgba(255, 240, 210, 0.1);
+  }
+  100% {
+    opacity: 0.92;
+    text-shadow: 0 0 6px rgba(255, 240, 210, 0.04);
+  }
+}
+
+@keyframes guide-rhythm-char-close {
+  0% {
+    opacity: 0.06;
+    filter: brightness(0.8);
+  }
+  48% {
+    opacity: 0.98;
+    filter: brightness(1.05);
+    text-shadow: 0 0 14px rgba(255, 240, 210, 0.12);
+  }
+  100% {
+    opacity: 0.88;
+    filter: brightness(1);
+    text-shadow: none;
+  }
+}
+
+/* legacy line-level hooks — keep for reduced-motion fallback */
+.guide-rhythm-line--active.guide-rhythm-line--body,
+.guide-rhythm-line--active.guide-rhythm-line--preface,
+.guide-rhythm-line--active.guide-rhythm-line--ritual,
+.guide-rhythm-line--active.guide-rhythm-line--close {
+  animation: none;
+  opacity: 1;
+}
+
+.guide-story-opening--rhythm .guide-rhythm-index--ritual,
+.guide-preface-plate--rhythm .guide-rhythm-index--preface,
+.guide-preface-note .guide-rhythm-index--preface {
+  animation: guide-rhythm-index-fade 2.2s ease-out forwards;
+}
+
+@keyframes guide-rhythm-index-fade {
+  0% {
+    opacity: 0.08;
+  }
+  100% {
+    opacity: 0.72;
+  }
+}
+
+.guide-story-portal-copy .guide-rhythm-line {
+  width: 100%;
+  text-align: center;
+}
+
+.guide-story-portal-copy .guide-rhythm-line .guide-story-portal-kicker,
+.guide-story-portal-copy .guide-rhythm-line .guide-story-portal-index,
+.guide-story-portal-copy .guide-rhythm-line .guide-story-portal-title {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.guide-story-close {
+  width: 100%;
+}
+
+.guide-story-close-verse {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+  max-width: 14rem;
+}
+
+.guide-story-close .guide-rhythm-line,
+.guide-story-close .guide-spread-body {
+  text-align: center;
+  width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .guide-page-stack--breath-page:has(> .guide-story-motif) .guide-story-motif {
+    animation: none;
+    opacity: 0.72;
+    transform: none;
+  }
+
+  .guide-rhythm-line--pending,
+  .guide-rhythm-line--speaking,
+  .guide-rhythm-line--spoken,
+  .guide-rhythm-line--sweep,
+  .guide-rhythm-line--active {
+    animation: none !important;
+    opacity: 0.94 !important;
+    filter: none !important;
+    transform: none !important;
+    letter-spacing: inherit !important;
+  }
+
+  .guide-rhythm-char--active {
+    animation: none !important;
+    opacity: 0.94 !important;
+    filter: none !important;
+    transform: none !important;
+    text-shadow: none !important;
+  }
+
+  .guide-rhythm-line--active {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+
+  .guide-rhythm-index--ritual,
+  .guide-rhythm-index--preface {
+    animation: none !important;
+    opacity: 0.72 !important;
+  }
+
+  .guide-book-anchor--rest-chapter-active .book-flip-stage,
+  .guide-chapter-rest,
+  .guide-chapter-rest-mist,
+  .guide-chapter-rest-glyph,
+  .guide-page-stack--rest-bridge .guide-spread-illustration-wrap--ghost {
+    animation: none !important;
+  }
+
+  .guide-chapter-rest-glyph {
+    opacity: 0.7;
+  }
+
+  .guide-spread-eye-cue-travel,
+  .guide-page-stack--await-right {
+    animation: none !important;
+  }
+
+  .guide-spread-eye-cue-travel {
+    left: 72% !important;
+    top: 72% !important;
+    opacity: 0.75 !important;
+  }
+
+  .guide-page-stack--reflect,
+  .guide-spread-reflect-glyph {
+    animation: none !important;
+  }
+
+  .guide-spread-reflect-glyph {
+    opacity: 0.72;
+  }
+}
+
+/* ── 时间桥 ── */
+
+.guide-story-bridge {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 0;
+  max-height: 100%;
+  flex: 1 1 auto;
+  padding: 0.75rem 0.65rem 1rem;
+  overflow: hidden;
+}
+
+.guide-story-bridge--with-motif {
+  flex-direction: column;
+  justify-content: center;
+  gap: 0;
+}
+
+.guide-story-bridge-core {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 0;
+  max-height: 100%;
+  flex: 1 1 auto;
+  text-align: center;
+  padding: 0.85rem 0.55rem 0.95rem;
+  gap: 0.5rem;
+}
+
+.guide-story-bridge-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 0.35rem 0.15rem 0.55rem;
+}
+
+.guide-story-bridge-foot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: auto;
+  padding-top: 1.05rem;
+  padding-bottom: 0.15rem;
+  flex-shrink: 0;
+}
+
+.guide-story-bridge-line {
+  font-family: var(--font-mystic-zh);
+  font-size: 1.32rem;
+  letter-spacing: 0.42em;
+  text-indent: 0.42em;
+  color: rgba(238, 230, 214, 0.82);
+  margin: 0;
+  text-shadow: 0 0 36px rgba(255, 240, 210, 0.06);
+}
+
+/* ── 篇末余韵 & 引页 ── */
+
+.guide-story-bridge-head,
+.guide-story-afterglow-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.65rem;
+  flex-shrink: 0;
+}
+
+.guide-story-afterglow-foot {
+  margin: 0;
+  margin-top: auto;
+  padding-top: 0.85rem;
+  padding-bottom: 0.15rem;
+  flex-shrink: 0;
+  font-family: var(--font-mystic-zh);
+  font-size: 0.62rem;
+  letter-spacing: 0.55em;
+  text-indent: 0.55em;
+  color: rgba(168, 160, 146, 0.38);
+}
+
+.guide-story-bridge-seal,
+.guide-story-afterglow-seal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.65rem;
+  height: 1.65rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+  font-family: var(--font-mystic-zh);
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  color: rgba(210, 202, 186, 0.55);
+  box-shadow: 0 0 24px rgba(255, 255, 255, 0.03);
+}
+
+.guide-story-bridge-kicker,
+.guide-story-afterglow-kicker {
+  font-family: var(--font-mystic-zh);
+  font-size: 0.68rem;
+  letter-spacing: 0.48em;
+  text-indent: 0.48em;
+  color: rgba(186, 178, 162, 0.5);
+  margin: 0;
+}
+
+.guide-story-portal-done {
+  font-family: var(--font-mystic-zh);
+  font-size: 0.64rem;
+  letter-spacing: 0.5em;
+  text-indent: 0.5em;
+  color: rgba(178, 170, 156, 0.46);
+  margin: 0 0 0.5rem;
+}
+
+.guide-story-afterglow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.4rem;
+  width: 100%;
+  min-height: 0;
+  max-height: 100%;
+  flex: 1 1 auto;
+  padding: 0.65rem 0.6rem 0.75rem;
+  text-align: center;
+  overflow: hidden;
+}
+
+.guide-story-afterglow-body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  width: 100%;
+  flex: 0 1 auto;
+  min-height: 0;
+  max-height: 100%;
+  overflow-y: auto;
+  padding: 0 0.15rem;
+  scrollbar-width: none;
+}
+
+.guide-story-afterglow-body::-webkit-scrollbar {
+  display: none;
+}
+
+.guide-story-afterglow-line {
+  font-family: var(--font-prose-zh);
+  font-size: 0.94rem;
+  letter-spacing: 0.12em;
+  line-height: 1.82;
+  color: rgba(196, 188, 174, 0.68);
+  margin: 0;
+  max-width: 12.5rem;
+}
+
+.guide-story-portal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  width: 100%;
+  min-height: 12rem;
+  padding: 1rem 0.75rem;
+  position: relative;
+}
+
+.guide-story-portal::before {
+  content: '';
+  position: absolute;
+  inset: 12% 16%;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 1px;
+  pointer-events: none;
+}
+
+.guide-story-portal-kicker {
+  font-family: var(--font-mystic-zh);
+  font-size: 0.66rem;
+  letter-spacing: 0.42em;
+  text-indent: 0.42em;
+  color: rgba(190, 182, 168, 0.48);
+  margin: 0 0 0.45rem;
+}
+
+.guide-story-portal-index {
+  font-family: var(--font-mystic-zh);
+  font-size: 1.18rem;
+  letter-spacing: 0.15em;
+  color: rgba(228, 220, 204, 0.7);
+  margin: 0;
+}
+
+.guide-story-portal-title {
+  font-family: var(--font-mystic-zh);
+  font-size: clamp(1.35rem, 4vw, 1.72rem);
+  letter-spacing: 0.22em;
+  text-indent: 0.22em;
+  color: rgba(244, 238, 226, 0.9);
+  margin: 0.15rem 0 0.55rem;
+}
+
+.guide-story-portal-arrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: rgba(180, 172, 158, 0.38);
+  animation: guide-portal-breathe 3.6s ease-in-out infinite;
+}
+
+.guide-story-portal--with-preview {
+  position: relative;
+  min-height: 14rem;
+  overflow: hidden;
+  padding: 0.75rem 0.5rem;
+}
+
+.guide-story-portal--with-preview::before {
+  inset: 10% 12%;
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+.guide-story-portal-preview {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem;
+}
+
+.guide-story-portal-preview .guide-spread-illustration {
+  width: min(100%, calc(var(--guide-closed-w, 500px) * 0.72));
+  max-width: none;
+  min-height: calc(var(--book-page-min-h, 420px) * 0.42);
+  aspect-ratio: 3 / 4;
+  box-shadow: none;
+}
+
+.guide-story-portal-copy {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 1.25rem 0.85rem;
+  border-radius: 2px;
+  background: radial-gradient(
+    ellipse 85% 72% at 50% 50%,
+    rgba(12, 11, 10, 0.82) 0%,
+    rgba(12, 11, 10, 0.48) 55%,
+    rgba(12, 11, 10, 0.08) 100%
+  );
+}
+
+.guide-story-portal--with-preview .guide-story-motif {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.55;
+}
+
+@keyframes guide-portal-breathe {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 0.75;
+    transform: translateY(3px);
+  }
+}
+
+/* ── 意境 SVG 点缀 ── */
+
+.guide-story-motif {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  width: 100%;
+  pointer-events: none;
+  user-select: none;
+}
+
+.guide-story-motif-caption {
+  text-align: center;
+  max-width: 12rem;
+  padding: 0 0.5rem;
+}
+
+.guide-story-motif-caption-title {
+  margin: 0;
+  font-family: var(--font-mystic-zh);
+  font-size: 1.22rem;
+  letter-spacing: 0.32em;
+  text-indent: 0.32em;
+  color: rgba(236, 228, 210, 0.84);
+}
+
+.guide-story-motif-caption-theme {
+  margin: 0.3rem 0 0;
+  font-family: var(--font-mystic-zh);
+  font-size: 0.72rem;
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+  color: rgba(190, 182, 168, 0.58);
+}
+
+.guide-story-motif-caption-whisper {
+  margin: 0.28rem 0 0;
+  font-family: var(--font-prose-zh);
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  color: rgba(164, 156, 142, 0.44);
+}
+
+.guide-story-motif-svg {
+  display: block;
+  width: min(100%, 220px);
+  height: auto;
+  margin: 0 auto;
+}
+
+.guide-story-motif--ambient .guide-story-motif-svg {
+  width: min(100%, calc(var(--guide-closed-w, 500px) * 0.78));
+  opacity: 0.92;
+}
+
+.guide-page-stack--breath-page:has(> .guide-story-motif:not(:has(.guide-story-motif-caption)))
+  .guide-story-motif-svg {
+  width: min(100%, calc(var(--guide-closed-w, 500px) * 0.82));
+}
+
+.guide-page-stack--breath-page:has(> .guide-story-motif:not(:has(.guide-story-motif-caption)))
+  .guide-story-motif {
+  gap: 0;
+  min-height: 0;
+  padding-bottom: 0.25rem;
+}
+
+.guide-story-motif--echo .guide-story-motif-svg {
+  width: min(100%, 200px);
+  opacity: 0.42;
+}
+
+.guide-story-motif--preface .guide-story-motif-svg {
+  width: min(100%, 260px);
+  opacity: 0.72;
+}
+
+.guide-story-prose-wrap,
+.guide-story-bridge--with-motif,
+.guide-story-afterglow--with-motif,
+.guide-story-portal--with-motif,
+.guide-story-portal--with-preview {
+  position: relative;
+  width: 100%;
+  min-height: 0;
+  max-height: 100%;
+  flex: 1 1 auto;
+}
+
+.guide-story-prose-wrap .guide-story-motif,
+.guide-story-bridge--with-motif .guide-story-motif,
+.guide-story-afterglow--with-motif .guide-story-motif,
+.guide-story-portal--with-motif .guide-story-motif {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.guide-story-prose-wrap .guide-story-prose,
+.guide-story-bridge--with-motif .guide-story-bridge-core,
+.guide-story-afterglow--with-motif .guide-story-afterglow-head,
+.guide-story-afterglow--with-motif .guide-story-afterglow-body,
+.guide-story-afterglow--with-motif .guide-story-afterglow-line,
+.guide-story-afterglow--with-motif .guide-story-afterglow-foot,
+.guide-story-bridge--with-motif .guide-story-bridge-body,
+.guide-story-bridge--with-motif .guide-story-bridge-line,
+.guide-story-bridge--with-motif .guide-story-bridge-foot,
+.guide-story-portal--with-motif .guide-story-portal-kicker,
+.guide-story-portal--with-motif .guide-story-portal-index,
+.guide-story-portal--with-motif .guide-story-portal-title,
+.guide-story-portal--with-motif .guide-story-portal-arrow,
+.guide-story-portal--with-preview .guide-story-portal-copy {
+  position: relative;
+  z-index: 1;
+}
+
+.guide-story-prose-wrap .guide-story-prose,
+.guide-story-prose-wrap .guide-rhythm-line {
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.42);
+}
+
+.guide-page-stack:has(> .guide-story-motif) {
+  justify-content: center;
+  min-height: 12rem;
+}
+
+.guide-page-stack--breath-page:has(> .guide-story-motif) {
+  justify-content: center;
+  min-height: 0;
+  max-height: 100%;
+  padding-bottom: 0.45rem;
+}
+
+.guide-page-stack--breath-page:has(> .guide-story-motif) .guide-story-motif {
+  flex: 0 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  max-height: calc(var(--book-page-min-h, 420px) * 0.88);
+  animation: guide-motif-breathe 4.8s ease-in-out infinite;
+}
+
+.guide-story-bridge--with-motif .guide-story-motif {
+  opacity: 0.32;
+}
+
+.guide-story-afterglow--with-motif .guide-story-motif {
+  opacity: 0.38;
+}
+
+.guide-story-portal--with-preview .guide-story-motif {
+  opacity: 0.28;
+}
+
+@keyframes guide-motif-breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 0.88;
+    transform: scale(1);
+  }
+}
+
+.guide-page-stack:has(> .guide-visual-panel) {
+  justify-content: center;
+}
+
+/* ── 伴读 / 收篇 配图位 ── */
+
+.guide-visual-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  padding: 0.65rem 0.45rem 0.75rem;
+}
+
+.guide-visual-panel-art {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.guide-visual-panel--companion .guide-visual-panel-art::before {
+  content: '';
+  position: absolute;
+  inset: -6% -4%;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+.guide-visual-panel--companion .guide-visual-panel-art .guide-spread-illustration {
+  width: min(100%, calc(var(--guide-closed-w, 500px) * 0.94));
+  max-width: none;
+  min-height: calc(var(--book-page-min-h, 420px) * 0.62);
+  aspect-ratio: 3 / 4;
+}
+
+.guide-visual-panel--echo .guide-visual-panel-art .guide-spread-illustration {
+  width: min(100%, 220px);
+  max-width: 220px;
+}
+
+.guide-visual-panel--echo .guide-story-motif {
+  opacity: 0.72;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .guide-story-portal-arrow {
+    animation: none;
+    opacity: 0.5;
+  }
+}
+
+/* Legacy vignette panel alias (en/ja chapters) */
+.guide-spread-panel--vignette,
+.guide-spread-panel--enter {
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: left;
+  transform: none;
+  padding: 0.35rem 0.65rem 0.5rem;
+}
+
+.guide-spread-panel--vignette::before,
+.guide-spread-panel--vignette::after,
+.guide-spread-panel--enter::before,
+.guide-spread-panel--enter::after {
+  display: none;
+}
+
+.guide-spread-prose {
+  display: flex;
+  flex-direction: column;
+  gap: 0.22rem;
+  width: 100%;
+}
+
+.guide-spread-panel--enter .guide-spread-body {
+  font-family: var(--font-mystic-zh);
+  font-size: 0.92rem;
+  letter-spacing: 0.14em;
+  line-height: 2;
+  color: rgba(252, 248, 240, 0.88);
+  text-align: center;
+}
+
+.guide-spread-panel--interval {
+  justify-content: center;
+  transform: none;
+  min-height: 8rem;
+}
+
+.guide-spread-interval {
+  font-family: var(--font-mystic-zh);
+  font-size: 1rem;
+  letter-spacing: 0.65em;
+  text-indent: 0.65em;
+  color: rgba(210, 200, 185, 0.5);
+  margin: 0;
+}
+
+.guide-spread-panel--enter {
+  justify-content: center;
+  padding-top: 0.5rem;
+}
+
+.guide-spread-panel--enter .guide-spread-body {
+  font-size: 0.92rem;
+  letter-spacing: 0.14em;
+  line-height: 2;
+  color: rgba(252, 248, 240, 0.88);
+  text-align: center;
+}
+
 .guide-spread-panel--quote .guide-spread-body--emphasis {
   margin-top: 0.15rem;
 }
@@ -2045,10 +4043,468 @@ html[lang="ja"] {
   text-shadow: 0 0 24px rgba(255, 255, 255, 0.05);
 }
 
+/* —— 展页收息：读毕停驻时的书卷与页面积淀 —— */
+
+.guide-book-anchor--rest .book-open {
+  transition: filter 1.4s ease, opacity 1.4s ease;
+}
+
+.guide-book-anchor--rest-soft .book-open {
+  filter: brightness(0.94);
+}
+
+.guide-book-anchor--rest-bridge .book-open {
+  filter: brightness(0.9) contrast(0.98);
+}
+
+.guide-book-anchor--rest-chapter .book-open {
+  filter: brightness(0.86) contrast(0.96);
+}
+
+.guide-book-anchor--rest-chapter-active .book-flip-stage {
+  animation: guide-chapter-rest-breathe 2.8s ease-in-out infinite;
+}
+
+@keyframes guide-chapter-rest-breathe {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.94;
+    transform: scale(0.998);
+  }
+}
+
+.guide-chapter-rest {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  pointer-events: none;
+  z-index: 4;
+  animation: guide-chapter-rest-in 1.1s ease-out forwards;
+}
+
+@keyframes guide-chapter-rest-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.guide-chapter-rest-mist {
+  position: absolute;
+  inset: 8% 14%;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse 58% 48% at 50% 50%,
+    rgba(255, 255, 255, 0.055) 0%,
+    transparent 72%
+  );
+  animation: guide-chapter-rest-mist 3.2s ease-in-out infinite;
+}
+
+@keyframes guide-chapter-rest-mist {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+
+.guide-chapter-rest-rule {
+  width: 1px;
+  height: 2.4rem;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.16),
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+}
+
+.guide-chapter-rest-glyph {
+  font-family: var(--font-mystic-zh);
+  font-size: 0.95rem;
+  letter-spacing: 0.22em;
+  color: rgba(255, 255, 255, 0.14);
+  text-shadow: 0 0 28px rgba(255, 255, 255, 0.06);
+  animation: guide-chapter-rest-glyph 2.6s ease-in-out infinite;
+}
+
+@keyframes guide-chapter-rest-glyph {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+.guide-page-stack--inhale .guide-story-motif-svg {
+  animation-duration: 4.8s;
+  opacity: 0.92;
+}
+
+.guide-page-stack--rest-bridge .guide-spread-illustration-wrap--ghost {
+  animation: guide-bridge-rest-ghost 2.4s ease-in-out infinite;
+}
+
+@keyframes guide-bridge-rest-ghost {
+  0%,
+  100% {
+    opacity: 0.72;
+    filter: brightness(0.88);
+  }
+  50% {
+    opacity: 0.92;
+    filter: brightness(1);
+  }
+}
+
+.guide-page-stack--rest-chapter .guide-story-afterglow-line,
+.guide-page-stack--rest-chapter .guide-rhythm-line--spoken {
+  opacity: 0.62;
+  transition: opacity 1.2s ease;
+}
+
+.guide-page-stack--rest-soft .guide-rhythm-line--spoken {
+  opacity: 0.78;
+  transition: opacity 0.9s ease;
+}
+
+/* —— 左页 → 右页：移目引导 —— */
+
+.guide-book-anchor--cross-right .book-page-right .book-page-inner {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.guide-page-stack--left-complete {
+  opacity: 0.86;
+  transition: opacity 0.55s ease;
+  filter: saturate(0.92);
+}
+
+.guide-page-stack--await-right {
+  animation: guide-page-await-right 1.08s ease-in-out infinite;
+}
+
+@keyframes guide-page-await-right {
+  0%,
+  100% {
+    opacity: 0.72;
+    filter: brightness(0.92);
+  }
+  50% {
+    opacity: 1;
+    filter: brightness(1.04);
+  }
+}
+
+.guide-spread-eye-cue {
+  pointer-events: none;
+  z-index: 6;
+  animation: guide-eye-cue-in 0.45s ease-out forwards;
+}
+
+@keyframes guide-eye-cue-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.guide-spread-eye-cue--horizontal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.55rem 0.85rem;
+  border-radius: 999px;
+  background: radial-gradient(
+    ellipse 120% 180% at 50% 50%,
+    rgba(12, 12, 14, 0.72) 0%,
+    rgba(12, 12, 14, 0.35) 55%,
+    transparent 100%
+  );
+}
+
+.guide-spread-eye-cue--vertical {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0;
+  animation: guide-eye-cue-in-v 0.45s ease-out forwards;
+}
+
+@keyframes guide-eye-cue-in-v {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.guide-spread-eye-cue-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.guide-spread-eye-cue-track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.guide-spread-eye-cue--horizontal .guide-spread-eye-cue-track {
+  width: 5.8rem;
+  height: 0.65rem;
+}
+
+.guide-spread-eye-cue--vertical .guide-spread-eye-cue-track {
+  flex-direction: column;
+  width: 0.65rem;
+  height: 3.4rem;
+}
+
+.guide-spread-eye-cue-beam {
+  position: absolute;
+  pointer-events: none;
+}
+
+.guide-spread-eye-cue--horizontal .guide-spread-eye-cue-beam {
+  left: 0.35rem;
+  right: 0.35rem;
+  top: 50%;
+  height: 1px;
+  transform: translateY(-50%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0.02)
+  );
+}
+
+.guide-spread-eye-cue--vertical .guide-spread-eye-cue-beam {
+  top: 0.35rem;
+  bottom: 0.35rem;
+  left: 50%;
+  width: 1px;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0.02)
+  );
+}
+
+.guide-spread-eye-cue-node {
+  position: relative;
+  z-index: 1;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(210, 202, 186, 0.35);
+  flex-shrink: 0;
+}
+
+.guide-spread-eye-cue-node--to {
+  background: rgba(252, 248, 240, 0.78);
+  box-shadow: 0 0 14px rgba(255, 240, 210, 0.28);
+}
+
+.guide-spread-eye-cue-travel {
+  position: absolute;
+  z-index: 2;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(252, 248, 240, 0.92);
+  box-shadow: 0 0 18px rgba(255, 240, 210, 0.38);
+}
+
+.guide-spread-eye-cue--horizontal .guide-spread-eye-cue-travel {
+  top: 50%;
+  left: 0;
+  transform: translate(-50%, -50%);
+  animation: guide-eye-cue-travel-h 1.05s ease-in-out infinite;
+}
+
+.guide-spread-eye-cue--vertical .guide-spread-eye-cue-travel {
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, -50%);
+  animation: guide-eye-cue-travel-v 1.05s ease-in-out infinite;
+}
+
+@keyframes guide-eye-cue-travel-h {
+  0% {
+    left: 8%;
+    opacity: 0.35;
+  }
+  55% {
+    opacity: 1;
+  }
+  100% {
+    left: 92%;
+    opacity: 0.55;
+  }
+}
+
+@keyframes guide-eye-cue-travel-v {
+  0% {
+    top: 8%;
+    opacity: 0.35;
+  }
+  55% {
+    opacity: 1;
+  }
+  100% {
+    top: 92%;
+    opacity: 0.55;
+  }
+}
+
+.guide-spread-eye-cue-copy {
+  margin: 0;
+  font-family: var(--font-mystic-zh);
+  font-size: 0.68rem;
+  letter-spacing: 0.42em;
+  text-indent: 0.42em;
+  color: rgba(220, 212, 196, 0.72);
+  white-space: nowrap;
+}
+
+.guide-spread-eye-cue-main {
+  color: rgba(236, 228, 210, 0.88);
+}
+
+.guide-spread-eye-cue-sep {
+  opacity: 0.45;
+  letter-spacing: 0;
+}
+
+/* —— 顿悟：读毕留一息 —— */
+
+.guide-book-anchor--reflect .book-open {
+  filter: brightness(0.9) contrast(0.97);
+  transition: filter 1.6s ease;
+}
+
+.guide-page-stack--reflect {
+  animation: guide-page-reflect 2.4s ease-in-out infinite;
+}
+
+@keyframes guide-page-reflect {
+  0%,
+  100% {
+    opacity: 0.88;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.guide-spread-reflect-cue {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  pointer-events: none;
+  animation: guide-spread-reflect-in 0.8s ease-out forwards;
+}
+
+.guide-spread-reflect-cue--mobile {
+  position: relative;
+  top: auto;
+  left: auto;
+  transform: none;
+  display: flex;
+  justify-content: center;
+  padding: 0.35rem 0 0.15rem;
+}
+
+@keyframes guide-spread-reflect-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.guide-spread-reflect-glyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  font-family: var(--font-mystic-zh);
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  color: rgba(220, 212, 196, 0.62);
+  box-shadow: 0 0 28px rgba(255, 255, 255, 0.04);
+  animation: guide-spread-reflect-glyph 2.2s ease-in-out infinite;
+}
+
+@keyframes guide-spread-reflect-glyph {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.92;
+    transform: scale(1.04);
+  }
+}
+
 .guide-spread-illustration-wrap {
   display: flex;
-  flex: 1;
-  min-height: 0;
+  flex: 1 1 auto;
+  min-height: 12rem;
   width: 100%;
   align-items: center;
   justify-content: center;
@@ -2058,7 +4514,7 @@ html[lang="ja"] {
 .guide-spread-illustration {
   position: relative;
   width: 100%;
-  max-width: 220px;
+  max-width: 260px;
   aspect-ratio: 3 / 4;
   margin: 0;
   overflow: hidden;
@@ -2091,7 +4547,7 @@ picture:has(> .book-page-cover-watermark) {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 58%;
+  object-position: var(--guide-illustration-object-position, center 58%);
   opacity: 0;
   filter: grayscale(1) contrast(0.72) blur(5px);
   transform: scale(0.94) translate3d(0, 4.5%, 0);
@@ -2122,6 +4578,152 @@ picture:has(> .book-page-cover-watermark) {
   transform: scale(0.95) translate3d(0, 1.5%, 0);
   opacity: 0.02;
   filter: grayscale(1) contrast(0.66) blur(7px);
+}
+
+.guide-spread-illustration--photo-fade .guide-spread-illustration-img {
+  transform: scale(1.02);
+  opacity: 0;
+  filter: grayscale(1) contrast(0.88) blur(2px);
+}
+
+.guide-spread-illustration--photo {
+  max-width: min(100%, 380px);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 14px 36px rgba(0, 0, 0, 0.42);
+}
+
+/* Loaded fallback — never leave hero images invisible */
+.guide-spread-illustration--loaded:not(.guide-spread-illustration--ghost):not(
+    .guide-spread-illustration--companion
+  ):not(.guide-spread-illustration--echo)
+  .guide-spread-illustration-img {
+  opacity: 1;
+  filter: grayscale(1) contrast(1.02);
+  transform: scale(1);
+}
+
+.guide-spread-illustration--ghost {
+  max-width: 228px;
+  width: 100%;
+  opacity: 0.94;
+  box-shadow: none;
+  background: transparent;
+}
+
+.guide-spread-illustration-wrap--ghost {
+  min-height: 0;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 0.65rem 0.45rem;
+}
+
+.guide-spread-illustration-wrap--ghost .guide-spread-illustration {
+  width: min(100%, 228px);
+  max-width: 228px;
+  min-height: 0;
+}
+
+.guide-spread-illustration--ghost .guide-spread-illustration-img {
+  opacity: 0.48 !important;
+  filter: grayscale(1) contrast(0.94) blur(0.25px);
+  transform: scale(1);
+  animation: none !important;
+}
+
+.guide-spread-illustration--companion {
+  max-width: none;
+  width: min(100%, calc(var(--guide-closed-w, 500px) * 0.94));
+  min-height: calc(var(--book-page-min-h, 420px) * 0.58);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.09),
+    0 14px 34px rgba(0, 0, 0, 0.36);
+}
+
+.guide-spread-illustration-wrap--companion {
+  min-height: 0;
+  flex: 1 1 auto;
+  padding: 0.2rem 0.15rem;
+  align-items: stretch;
+}
+
+.guide-spread-illustration--companion .guide-spread-illustration-img {
+  opacity: 0.82 !important;
+  filter: grayscale(1) contrast(0.98) blur(0.15px);
+  transform: scale(1);
+  animation: none !important;
+}
+
+.guide-spread-illustration--companion .guide-spread-illustration-veil,
+.guide-spread-illustration--companion .guide-spread-illustration-mist {
+  opacity: 0.35;
+}
+
+.guide-spread-illustration--echo {
+  max-width: min(100%, 240px);
+  opacity: 0.9;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 8px 22px rgba(0, 0, 0, 0.28);
+  background: rgba(8, 8, 8, 0.55);
+}
+
+.guide-spread-illustration-wrap--echo {
+  min-height: 11rem;
+  padding: 0.35rem;
+}
+
+.guide-spread-illustration--echo .guide-spread-illustration-img {
+  opacity: 0.62 !important;
+  filter: grayscale(1) contrast(0.9) blur(0.35px);
+  transform: scale(1);
+  animation: none !important;
+}
+
+.guide-spread-illustration--echo .guide-spread-illustration-veil,
+.guide-spread-illustration--echo .guide-spread-illustration-mist {
+  display: none;
+}
+
+.guide-spread-illustration--ghost .guide-spread-illustration-veil,
+.guide-spread-illustration--ghost .guide-spread-illustration-mist {
+  display: none;
+}
+
+.guide-spread-illustration--failed {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.guide-spread-illustration--failed::after {
+  content: '图';
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mystic-zh);
+  font-size: 1.2rem;
+  letter-spacing: 0.4em;
+  color: rgba(255, 255, 255, 0.14);
+}
+
+.guide-spread-illustration--photo-fade.guide-spread-illustration--revealing
+  .guide-spread-illustration-img {
+  animation: guide-illustration-photo-fade var(--guide-illustration-duration, 2.6s)
+    cubic-bezier(0.22, 0.84, 0.26, 1) forwards;
+}
+
+@keyframes guide-illustration-photo-fade {
+  0% {
+    opacity: 0;
+    filter: grayscale(1) contrast(0.88) blur(2px);
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    filter: grayscale(1) contrast(1.04);
+    transform: scale(1);
+  }
 }
 
 /* ── Image reveals (one per illustration theme) ── */
@@ -2513,7 +5115,15 @@ picture:has(> .book-page-cover-watermark) {
 
 @media (min-width: 768px) {
   .guide-spread-illustration {
-    max-width: 260px;
+    max-width: 300px;
+  }
+
+  .guide-spread-illustration--photo {
+    max-width: min(100%, 400px);
+  }
+
+  .guide-spread-illustration--ghost {
+    max-width: min(100%, 260px);
   }
 }
 
@@ -2747,13 +5357,120 @@ picture:has(> .book-page-cover-watermark) {
 
   .guide-mobile-flow .guide-spread-body,
   .guide-mobile-flow .guide-spread-body--emphasis,
+  .guide-spread-prose,
+  .guide-mobile-flow .guide-spread-prose,
   .guide-mobile-flow .guide-spread-verse,
   .guide-mobile-flow .guide-spread-footer {
     max-width: 100%;
   }
 
+  .guide-mobile-flow .guide-spread-panel--vignette,
+  .guide-mobile-flow .guide-spread-panel--enter {
+    align-items: flex-start;
+    text-align: left;
+    padding-left: 0.35rem;
+    padding-right: 0.35rem;
+  }
+
+  .guide-mobile-flow .guide-spread-panel--vignette .guide-spread-body,
+  .guide-mobile-flow .guide-spread-panel--enter .guide-spread-body {
+    font-size: 0.92rem;
+    line-height: 1.88;
+  }
+
+  .guide-mobile-flow .guide-story-prose,
+  .guide-mobile-flow .guide-story-cover,
+  .guide-mobile-flow .guide-story-opening,
+  .guide-mobile-flow .guide-preface-plate,
+  .guide-mobile-flow .guide-preface-note,
+  .guide-mobile-flow .guide-story-bridge,
+  .guide-mobile-flow .guide-story-afterglow,
+  .guide-mobile-flow .guide-story-portal {
+    max-width: 100%;
+  }
+
+  .guide-mobile-flow .guide-visual-panel {
+    min-height: 0;
+    padding: 0.35rem 0 0.55rem;
+  }
+
+  .guide-mobile-flow .guide-visual-panel .guide-spread-illustration--companion {
+    width: min(380px, 94vw);
+    max-width: none;
+    min-height: min(56vh, 24rem);
+  }
+
+  .guide-mobile-flow .guide-page-stack--hero-art > .guide-spread-illustration-wrap {
+    min-height: min(62vh, 26rem);
+  }
+
+  .guide-mobile-flow .guide-page-stack--hero-art > .guide-spread-illustration-wrap .guide-spread-illustration,
+  .guide-mobile-flow
+    .guide-page-stack--hero-art
+    > .guide-spread-illustration-wrap
+    .guide-spread-illustration--photo {
+    width: min(400px, 96vw);
+    max-width: none;
+    min-height: min(66vh, 28rem);
+    max-height: none;
+  }
+
+  .guide-mobile-flow .guide-story-cover,
+  .guide-mobile-flow .guide-story-opening {
+    width: 100%;
+    min-height: 0;
+    padding: 1.25rem 0.75rem 1.35rem;
+  }
+
+  .guide-mobile-flow .guide-story-title {
+    font-size: clamp(2rem, 9vw, 2.65rem);
+    letter-spacing: 0.22em;
+    text-indent: 0.22em;
+  }
+
+  .guide-mobile-flow .guide-story-index-n {
+    font-size: 1.42rem;
+  }
+
+  .guide-mobile-flow .guide-preface-title {
+    font-size: clamp(1.95rem, 8vw, 2.45rem);
+  }
+
+  .guide-mobile-flow .guide-visual-panel .guide-spread-illustration--echo,
+  .guide-mobile-flow .guide-story-portal-preview .guide-spread-illustration {
+    width: min(240px, 78vw);
+    max-width: 240px;
+  }
+
+  .guide-mobile-flow .guide-story-portal--with-preview {
+    min-height: 0;
+    padding: 0.5rem 0.35rem;
+  }
+
+  .guide-mobile-flow .guide-story-line {
+    font-size: 1.02rem;
+    line-height: 1.88;
+    letter-spacing: 0.045em;
+  }
+
+  .guide-mobile-flow .guide-page-stack--prose-page {
+    padding-top: 0;
+    justify-content: center;
+  }
+
+  .guide-mobile-flow .guide-story-prose {
+    max-width: min(100%, 18rem);
+    margin-inline: auto;
+    padding: 0.5rem 0.55rem 0.55rem 0.95rem;
+  }
+
+  .guide-mobile-flow .guide-preface-note-line,
+  .guide-mobile-flow .guide-story-lead-line {
+    font-size: 1rem;
+  }
+
   .guide-mobile-flow .guide-spread-body {
-    font-size: 0.9rem;
+    font-size: 0.98rem;
     letter-spacing: 0.06em;
     text-indent: 0;
     line-height: 1.72;
@@ -2764,17 +5481,21 @@ picture:has(> .book-page-cover-watermark) {
     min-height: 0;
     display: block;
     width: 100%;
-    padding: 0.15rem 0 0.35rem;
+    padding: 0.35rem 0 0.5rem;
   }
 
-  /* 手机端插图统一占位，避免翻页时上下块忽大忽小 */
-  .guide-mobile-flow .guide-spread-illustration {
-    width: min(200px, 68vw);
-    max-width: 200px;
-    height: min(150px, 51vw);
-    max-height: 150px;
-    aspect-ratio: auto;
+  .guide-mobile-flow .guide-spread-illustration,
+  .guide-mobile-flow .guide-spread-illustration--photo {
+    width: min(320px, 88vw);
+    max-width: 320px;
+    height: auto;
+    aspect-ratio: 3 / 4;
     margin-inline: auto;
+  }
+
+  .guide-mobile-flow .guide-spread-illustration--ghost {
+    width: min(240px, 72vw);
+    max-width: 240px;
   }
 
   .guide-mobile-flow .guide-spread-illustration-img {
@@ -4724,15 +7445,21 @@ html[lang="ja"] .mystic-title-glyph {
 }
 
 .book-journey-scaler--guide {
-  --guide-closed-w: min(420px, calc(100vw - 2.5rem));
+  --guide-closed-w: min(500px, calc((100vw - 2rem) / 2));
   --guide-closed-h: calc(var(--guide-closed-w) * 42 / 32);
-  --guide-open-w: min(calc(var(--guide-closed-w) * 2), calc(100vw - 1.5rem));
+  --guide-open-w: min(calc(var(--guide-closed-w) * 2), calc(100vw - 1.25rem));
   --book-open-max: var(--guide-open-w);
   --book-open-min-h: var(--guide-closed-h);
   --book-page-min-h: calc(var(--guide-closed-h) * 0.94);
   width: 100%;
   max-width: var(--guide-open-w);
   min-height: min(88vh, 920px);
+}
+
+@media (min-width: 1100px) {
+  .book-journey-scaler--guide {
+    --guide-closed-w: min(540px, calc((100vw - 3rem) / 2));
+  }
 }
 
 .book-journey-scaler--guide .guide-book-scene {

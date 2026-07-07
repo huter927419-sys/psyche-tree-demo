@@ -22,12 +22,19 @@ export function saveGuideAutoTurnEnabled(enabled: boolean): void {
 }
 
 export function spreadHasIllustration(spread: GuideSpread): boolean {
-  return [...spread.left, ...spread.right].some((block) => block.kind === 'illustration')
+  return [...spread.left, ...spread.right].some(
+    (block) =>
+      block.kind === 'illustration' ||
+      block.kind === 'visualPanel' ||
+      block.kind === 'storyPortal',
+  )
 }
 
 export function getSpreadIllustrationId(spread: GuideSpread): string | undefined {
   for (const block of [...spread.left, ...spread.right]) {
     if (block.kind === 'illustration') return block.id
+    if (block.kind === 'visualPanel') return block.illustrationId
+    if (block.kind === 'storyPortal') return block.previewIllustrationId
   }
   return undefined
 }
@@ -38,6 +45,24 @@ function blockText(block: GuidePageBlock): string {
     case 'shoreQuestion':
     case 'pause':
       return block.text
+    case 'storyOpening':
+      return block.title
+    case 'storyBridge':
+    case 'storyAfterglow':
+    case 'prefaceNote':
+      return block.lines.join('')
+    case 'visualPanel':
+      return block.sectionId
+    case 'storyMotif':
+      return block.sectionId
+    case 'prefacePlate':
+      return block.frame.join('')
+    case 'storyPortal':
+      return block.title
+    case 'sectionTitle':
+      return block.title
+    case 'interval':
+      return '……'
     case 'hook':
     case 'phenomenon':
     case 'turn':
@@ -93,10 +118,10 @@ export function estimateGuideSpreadDwellMs(
     return 4200
   }
 
-  const perCharMs = options.reducedMotion ? 220 : 340
-  const baseMs = options.reducedMotion ? 3600 : 4800
+  const perCharMs = options.reducedMotion ? 200 : 300
+  const baseMs = options.reducedMotion ? 4200 : 5600
   const estimated = baseMs + text.length * perCharMs
-  return Math.min(options.reducedMotion ? 9000 : 18000, Math.max(5200, estimated))
+  return Math.min(options.reducedMotion ? 12000 : 22000, Math.max(5600, estimated))
 }
 
 export { GUIDE_ILLUSTRATION_HOLD_MS }
