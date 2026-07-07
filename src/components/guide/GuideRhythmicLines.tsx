@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import type { GuideAccentBlockKind } from '../../books/guide/guideTextAccents'
+import type { GuideAccentBlockKind, GuideContentLocale } from '../../books/guide/guideTextAccents'
 import {
   buildRhythmLinePlan,
   countRhythmLines,
@@ -20,6 +20,7 @@ interface GuideRhythmicLinesProps {
   active: boolean
   getLineClass?: (line: string, index: number) => string
   accentBlockKind?: GuideAccentBlockKind
+  contentLocale?: GuideContentLocale
   rhythmLocked?: boolean
   onComplete?: () => void
 }
@@ -97,6 +98,7 @@ export function GuideRhythmicLines({
   active,
   getLineClass,
   accentBlockKind,
+  contentLocale = 'zh',
   rhythmLocked = false,
   onComplete,
 }: GuideRhythmicLinesProps) {
@@ -116,8 +118,9 @@ export function GuideRhythmicLines({
         resolveLineClass,
         accentBlockKind,
         reducedMotion,
+        contentLocale,
       ),
-    [accentBlockKind, lines, mode, reducedMotion, resolveLineClass],
+    [accentBlockKind, contentLocale, lines, mode, reducedMotion, resolveLineClass],
   )
 
   const [activeLine, setActiveLine] = useState(-1)
@@ -149,6 +152,7 @@ export function GuideRhythmicLines({
         resolveLineClass,
         accentBlockKind,
         true,
+        contentLocale,
       ))
       return () => window.clearTimeout(timer)
     }

@@ -54,6 +54,37 @@ html {
 html[lang="en"] {
   --font-serif: var(--font-serif-en);
   --font-body: var(--font-serif-en);
+  --guide-font-display: var(--font-mystic-en);
+  --guide-font-body: var(--font-serif-en);
+  --guide-title-size: clamp(1.95rem, 6vw, 2.7rem);
+  --guide-title-tracking: 0.12em;
+  --guide-title-indent: 0;
+  --guide-preface-title-size: clamp(1.72rem, 5.2vw, 2.28rem);
+  --guide-preface-subtitle-size: clamp(0.98rem, 2.8vw, 1.14rem);
+  --guide-preface-kicker-tracking: 0.28em;
+  --guide-lead-size: clamp(0.96rem, 2.6vw, 1.1rem);
+  --guide-lead-tracking: 0.04em;
+  --guide-body-size: 1.04rem;
+  --guide-body-weight: 400;
+  --guide-body-leading: 1.82;
+  --guide-body-tracking: 0.02em;
+  --guide-prose-max: 16.75rem;
+  --guide-time-size: 0.78rem;
+  --guide-time-tracking: 0.14em;
+  --guide-beat-size: 0.98rem;
+  --guide-beat-tracking: 0.06em;
+  --guide-bridge-size: clamp(1.02rem, 3.2vw, 1.22rem);
+  --guide-bridge-tracking: 0.12em;
+  --guide-kicker-size: 0.62rem;
+  --guide-kicker-tracking: 0.22em;
+  --guide-index-n-size: 1.28rem;
+  --guide-index-total-size: 0.58rem;
+  --guide-index-total-tracking: 0.14em;
+  --guide-portal-title-size: clamp(1.18rem, 3.6vw, 1.48rem);
+  --guide-afterglow-size: 0.98rem;
+  --guide-preface-note-mark-mode: horizontal-tb;
+  --guide-preface-note-size: 0.94rem;
+  --guide-eye-cue-tracking: 0.18em;
 }
 
 html[lang="zh-CN"] {
@@ -61,6 +92,37 @@ html[lang="zh-CN"] {
   --font-body: var(--font-serif-zh);
   --font-mystic-zh: "Zhi Mang Xing", "Ma Shan Zheng", "Long Cang", cursive;
   --font-prose-zh: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
+  --guide-font-display: var(--font-mystic-zh);
+  --guide-font-body: var(--font-prose-zh);
+  --guide-title-size: clamp(2.45rem, 7.8vw, 3.45rem);
+  --guide-title-tracking: 0.24em;
+  --guide-title-indent: 0.24em;
+  --guide-preface-title-size: clamp(2.15rem, 6.2vw, 2.95rem);
+  --guide-preface-subtitle-size: clamp(1.08rem, 3.2vw, 1.32rem);
+  --guide-preface-kicker-tracking: 0.55em;
+  --guide-lead-size: clamp(1.02rem, 2.8vw, 1.18rem);
+  --guide-lead-tracking: 0.1em;
+  --guide-body-size: 0.98rem;
+  --guide-body-weight: 500;
+  --guide-body-leading: 1.88;
+  --guide-body-tracking: 0.045em;
+  --guide-prose-max: 14rem;
+  --guide-time-size: 0.82rem;
+  --guide-time-tracking: 0.24em;
+  --guide-beat-size: 0.94rem;
+  --guide-beat-tracking: 0.14em;
+  --guide-bridge-size: 1.32rem;
+  --guide-bridge-tracking: 0.42em;
+  --guide-kicker-size: 0.68rem;
+  --guide-kicker-tracking: 0.48em;
+  --guide-index-n-size: 1.55rem;
+  --guide-index-total-size: 0.78rem;
+  --guide-index-total-tracking: 0.32em;
+  --guide-portal-title-size: clamp(1.35rem, 4vw, 1.72rem);
+  --guide-afterglow-size: 0.94rem;
+  --guide-preface-note-mark-mode: vertical-rl;
+  --guide-preface-note-size: 1rem;
+  --guide-eye-cue-tracking: 0.42em;
   font-weight: 500;
   letter-spacing: 0.04em;
 }
@@ -70,6 +132,37 @@ html[lang="zh-Hant"] {
   --font-body: var(--font-prose-zh-tw);
   --font-mystic-zh: var(--font-mystic-zh-tw);
   --font-prose-zh: var(--font-prose-zh-tw);
+  --guide-font-display: var(--font-mystic-zh-tw);
+  --guide-font-body: var(--font-prose-zh-tw);
+  --guide-title-size: clamp(2.45rem, 7.8vw, 3.45rem);
+  --guide-title-tracking: 0.24em;
+  --guide-title-indent: 0.24em;
+  --guide-preface-title-size: clamp(2.15rem, 6.2vw, 2.95rem);
+  --guide-preface-subtitle-size: clamp(1.08rem, 3.2vw, 1.32rem);
+  --guide-preface-kicker-tracking: 0.55em;
+  --guide-lead-size: clamp(1.02rem, 2.8vw, 1.18rem);
+  --guide-lead-tracking: 0.1em;
+  --guide-body-size: 0.98rem;
+  --guide-body-weight: 500;
+  --guide-body-leading: 1.88;
+  --guide-body-tracking: 0.045em;
+  --guide-prose-max: 14rem;
+  --guide-time-size: 0.82rem;
+  --guide-time-tracking: 0.24em;
+  --guide-beat-size: 0.94rem;
+  --guide-beat-tracking: 0.14em;
+  --guide-bridge-size: 1.32rem;
+  --guide-bridge-tracking: 0.42em;
+  --guide-kicker-size: 0.68rem;
+  --guide-kicker-tracking: 0.48em;
+  --guide-index-n-size: 1.55rem;
+  --guide-index-total-size: 0.78rem;
+  --guide-index-total-tracking: 0.32em;
+  --guide-portal-title-size: clamp(1.35rem, 4vw, 1.72rem);
+  --guide-afterglow-size: 0.94rem;
+  --guide-preface-note-mark-mode: vertical-rl;
+  --guide-preface-note-size: 1rem;
+  --guide-eye-cue-tracking: 0.42em;
   font-weight: 500;
   letter-spacing: 0.045em;
 }
@@ -77,6 +170,37 @@ html[lang="zh-Hant"] {
 html[lang="ja"] {
   --font-serif: var(--font-serif-ja);
   --font-body: var(--font-serif-ja);
+  --guide-font-display: var(--font-mystic-ja);
+  --guide-font-body: var(--font-prose-ja);
+  --guide-title-size: clamp(2.15rem, 6.8vw, 3.05rem);
+  --guide-title-tracking: 0.2em;
+  --guide-title-indent: 0.2em;
+  --guide-preface-title-size: clamp(1.95rem, 5.8vw, 2.65rem);
+  --guide-preface-subtitle-size: clamp(1.02rem, 3vw, 1.22rem);
+  --guide-preface-kicker-tracking: 0.48em;
+  --guide-lead-size: clamp(0.98rem, 2.7vw, 1.12rem);
+  --guide-lead-tracking: 0.08em;
+  --guide-body-size: 0.96rem;
+  --guide-body-weight: 500;
+  --guide-body-leading: 1.92;
+  --guide-body-tracking: 0.06em;
+  --guide-prose-max: 15rem;
+  --guide-time-size: 0.8rem;
+  --guide-time-tracking: 0.2em;
+  --guide-beat-size: 0.92rem;
+  --guide-beat-tracking: 0.12em;
+  --guide-bridge-size: 1.18rem;
+  --guide-bridge-tracking: 0.34em;
+  --guide-kicker-size: 0.66rem;
+  --guide-kicker-tracking: 0.4em;
+  --guide-index-n-size: 1.42rem;
+  --guide-index-total-size: 0.72rem;
+  --guide-index-total-tracking: 0.28em;
+  --guide-portal-title-size: clamp(1.28rem, 3.8vw, 1.62rem);
+  --guide-afterglow-size: 0.92rem;
+  --guide-preface-note-mark-mode: vertical-rl;
+  --guide-preface-note-size: 0.96rem;
+  --guide-eye-cue-tracking: 0.34em;
   font-weight: 500;
   letter-spacing: 0.05em;
 }
@@ -2187,29 +2311,29 @@ html[lang="ja"] {
 }
 
 .guide-preface-kicker {
-  font-family: var(--font-mystic-zh);
+  font-family: var(--guide-font-display, var(--font-mystic-zh));
   font-size: 0.68rem;
-  letter-spacing: 0.55em;
-  text-indent: 0.55em;
+  letter-spacing: var(--guide-preface-kicker-tracking, 0.55em);
+  text-indent: var(--guide-preface-kicker-tracking, 0.55em);
   color: rgba(210, 198, 175, 0.5);
   margin: 0 0 1.1rem;
 }
 
 .guide-preface-title {
-  font-family: var(--font-mystic-zh);
-  font-size: clamp(2.15rem, 6.2vw, 2.95rem);
-  letter-spacing: 0.3em;
-  text-indent: 0.3em;
+  font-family: var(--guide-font-display, var(--font-mystic-zh));
+  font-size: var(--guide-preface-title-size, clamp(2.15rem, 6.2vw, 2.95rem));
+  letter-spacing: var(--guide-title-tracking, 0.3em);
+  text-indent: var(--guide-title-indent, 0.3em);
   color: rgba(252, 248, 240, 0.97);
   margin: 0;
   text-shadow: 0 0 40px rgba(255, 235, 200, 0.08);
 }
 
 .guide-preface-subtitle {
-  font-family: var(--font-mystic-zh);
-  font-size: clamp(1.08rem, 3.2vw, 1.32rem);
-  letter-spacing: 0.22em;
-  text-indent: 0.22em;
+  font-family: var(--guide-font-display, var(--font-mystic-zh));
+  font-size: var(--guide-preface-subtitle-size, clamp(1.08rem, 3.2vw, 1.32rem));
+  letter-spacing: var(--guide-title-tracking, 0.22em);
+  text-indent: var(--guide-title-indent, 0.22em);
   color: rgba(228, 220, 204, 0.86);
   margin: 0.65rem 0 0;
 }
@@ -2238,9 +2362,9 @@ html[lang="ja"] {
 }
 
 .guide-preface-whisper-line {
-  font-family: var(--font-prose-zh);
-  font-size: 0.92rem;
-  letter-spacing: 0.2em;
+  font-family: var(--guide-font-body, var(--font-prose-zh));
+  font-size: var(--guide-lead-size, 0.92rem);
+  letter-spacing: var(--guide-lead-tracking, 0.2em);
   line-height: 1.9;
   color: rgba(200, 192, 178, 0.62);
   margin: 0;
@@ -2277,22 +2401,22 @@ html[lang="ja"] {
 }
 
 .guide-preface-note-mark {
-  font-family: var(--font-mystic-zh);
+  font-family: var(--guide-font-display, var(--font-mystic-zh));
   font-size: 1.35rem;
   line-height: 1;
   letter-spacing: 0.08em;
   color: rgba(210, 198, 170, 0.32);
-  writing-mode: vertical-rl;
+  writing-mode: var(--guide-preface-note-mark-mode, vertical-rl);
   text-orientation: mixed;
   padding-top: 0.1rem;
   align-self: center;
 }
 
 .guide-preface-note-line {
-  font-family: var(--font-prose-zh);
-  font-size: 1rem;
-  font-weight: 500;
-  letter-spacing: 0.05em;
+  font-family: var(--guide-font-body, var(--font-prose-zh));
+  font-size: var(--guide-preface-note-size, 1rem);
+  font-weight: var(--guide-body-weight, 500);
+  letter-spacing: var(--guide-body-tracking, 0.05em);
   line-height: 1.9;
   color: rgba(224, 216, 200, 0.82);
   margin: 0;
@@ -2375,7 +2499,7 @@ html[lang="ja"] {
   position: absolute;
   top: 0.75rem;
   right: 0.55rem;
-  font-family: var(--font-mystic-zh);
+  font-family: var(--guide-font-display, var(--font-mystic-zh));
   font-size: clamp(2.6rem, 9vw, 3.8rem);
   font-weight: 400;
   line-height: 1;
@@ -2390,12 +2514,12 @@ html[lang="ja"] {
   justify-content: center;
   gap: 0.22rem;
   margin: 0 0 1.1rem;
-  font-family: var(--font-mystic-zh);
+  font-family: var(--guide-font-display, var(--font-mystic-zh));
   color: rgba(200, 190, 170, 0.52);
 }
 
 .guide-story-index-n {
-  font-size: 1.55rem;
+  font-size: var(--guide-index-n-size, 1.55rem);
   letter-spacing: 0.14em;
   color: rgba(236, 228, 210, 0.88);
 }
@@ -2407,8 +2531,8 @@ html[lang="ja"] {
 }
 
 .guide-story-index-total {
-  font-size: 0.78rem;
-  letter-spacing: 0.32em;
+  font-size: var(--guide-index-total-size, 0.78rem);
+  letter-spacing: var(--guide-index-total-tracking, 0.32em);
 }
 
 .guide-story-lead {
@@ -2417,9 +2541,9 @@ html[lang="ja"] {
 }
 
 .guide-story-lead-line {
-  font-family: var(--font-prose-zh);
-  font-size: clamp(1.02rem, 2.8vw, 1.18rem);
-  letter-spacing: 0.1em;
+  font-family: var(--guide-font-body, var(--font-prose-zh));
+  font-size: var(--guide-lead-size, clamp(1.02rem, 2.8vw, 1.18rem));
+  letter-spacing: var(--guide-lead-tracking, 0.1em);
   line-height: 1.92;
   color: rgba(228, 222, 208, 0.9);
   margin: 0;
@@ -2451,11 +2575,11 @@ html[lang="ja"] {
 }
 
 .guide-story-title {
-  font-family: var(--font-mystic-zh);
-  font-size: clamp(2.45rem, 7.8vw, 3.45rem);
+  font-family: var(--guide-font-display, var(--font-mystic-zh));
+  font-size: var(--guide-title-size, clamp(2.45rem, 7.8vw, 3.45rem));
   font-weight: 400;
-  letter-spacing: 0.24em;
-  text-indent: 0.24em;
+  letter-spacing: var(--guide-title-tracking, 0.24em);
+  text-indent: var(--guide-title-indent, 0.24em);
   color: rgba(252, 248, 240, 0.98);
   margin: 0;
   line-height: 1.22;
@@ -2466,7 +2590,7 @@ html[lang="ja"] {
 
 .guide-story-opening-theme {
   margin: 0.85rem 0 0;
-  font-family: var(--font-mystic-zh);
+  font-family: var(--guide-font-display, var(--font-mystic-zh));
   font-size: 0.82rem;
   letter-spacing: 0.32em;
   text-indent: 0.32em;
@@ -2503,14 +2627,14 @@ html[lang="ja"] {
   height: 1.35rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 2px;
-  font-family: var(--font-mystic-zh);
+  font-family: var(--guide-font-display, var(--font-mystic-zh));
   font-size: 0.72rem;
   color: rgba(214, 206, 190, 0.62);
   flex-shrink: 0;
 }
 
 .guide-story-prose-section-title {
-  font-family: var(--font-mystic-zh);
+  font-family: var(--guide-font-display, var(--font-mystic-zh));
   font-size: 0.78rem;
   letter-spacing: 0.22em;
   color: rgba(220, 212, 196, 0.58);
@@ -2553,7 +2677,7 @@ html[lang="ja"] {
   display: flex;
   flex-direction: column;
   gap: 0.58rem;
-  width: min(100%, 14rem);
+  width: min(100%, var(--guide-prose-max, 14rem));
   margin: 0;
   padding: 0.45rem 0.65rem 0.55rem 1.05rem;
   position: relative;
@@ -2591,11 +2715,11 @@ html[lang="ja"] {
 }
 
 .guide-story-line {
-  font-family: var(--font-prose-zh);
-  font-size: 0.98rem;
-  font-weight: 500;
-  letter-spacing: 0.045em;
-  line-height: 1.88;
+  font-family: var(--guide-font-body, var(--font-prose-zh));
+  font-size: var(--guide-body-size, 0.98rem);
+  font-weight: var(--guide-body-weight, 500);
+  letter-spacing: var(--guide-body-tracking, 0.045em);
+  line-height: var(--guide-body-leading, 1.88);
   color: rgba(242, 236, 222, 0.94);
   margin: 0;
   padding-left: 0;
@@ -2603,11 +2727,11 @@ html[lang="ja"] {
 }
 
 .guide-story-line--time {
-  font-family: var(--font-mystic-zh);
-  font-size: 0.82rem;
+  font-family: var(--guide-font-display, var(--font-mystic-zh));
+  font-size: var(--guide-time-size, 0.82rem);
   font-weight: 400;
-  letter-spacing: 0.24em;
-  text-indent: 0.24em;
+  letter-spacing: var(--guide-time-tracking, 0.24em);
+  text-indent: var(--guide-time-tracking, 0.24em);
   color: rgba(196, 188, 172, 0.58);
   margin-top: 0.15rem;
   margin-bottom: 0.35rem;
@@ -2623,11 +2747,11 @@ html[lang="ja"] {
 }
 
 .guide-story-line--beat {
-  font-family: var(--font-mystic-zh);
-  font-size: 0.94rem;
+  font-family: var(--guide-font-display, var(--font-mystic-zh));
+  font-size: var(--guide-beat-size, 0.94rem);
   font-weight: 400;
-  letter-spacing: 0.14em;
-  text-indent: 0.14em;
+  letter-spacing: var(--guide-beat-tracking, 0.14em);
+  text-indent: var(--guide-beat-tracking, 0.14em);
   color: rgba(234, 226, 210, 0.9);
   padding-left: 0.15rem;
 }
@@ -3327,7 +3451,7 @@ html[lang="ja"] {
   align-items: center;
   gap: 0.55rem;
   width: 100%;
-  max-width: 14rem;
+  max-width: var(--guide-prose-max, 14rem);
 }
 
 .guide-story-close .guide-rhythm-line,
@@ -3468,10 +3592,10 @@ html[lang="ja"] {
 }
 
 .guide-story-bridge-line {
-  font-family: var(--font-mystic-zh);
-  font-size: 1.32rem;
-  letter-spacing: 0.42em;
-  text-indent: 0.42em;
+  font-family: var(--guide-font-display, var(--font-mystic-zh));
+  font-size: var(--guide-bridge-size, 1.32rem);
+  letter-spacing: var(--guide-bridge-tracking, 0.42em);
+  text-indent: var(--guide-bridge-tracking, 0.42em);
   color: rgba(238, 230, 214, 0.82);
   margin: 0;
   text-shadow: 0 0 36px rgba(255, 240, 210, 0.06);
@@ -3495,10 +3619,10 @@ html[lang="ja"] {
   padding-top: 0.85rem;
   padding-bottom: 0.15rem;
   flex-shrink: 0;
-  font-family: var(--font-mystic-zh);
-  font-size: 0.62rem;
-  letter-spacing: 0.55em;
-  text-indent: 0.55em;
+  font-family: var(--guide-font-display, var(--font-mystic-zh));
+  font-size: var(--guide-kicker-size, 0.62rem);
+  letter-spacing: var(--guide-kicker-tracking, 0.55em);
+  text-indent: var(--guide-kicker-tracking, 0.55em);
   color: rgba(168, 160, 146, 0.38);
 }
 
@@ -3511,7 +3635,7 @@ html[lang="ja"] {
   height: 1.65rem;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 50%;
-  font-family: var(--font-mystic-zh);
+  font-family: var(--guide-font-display, var(--font-mystic-zh));
   font-size: 0.78rem;
   letter-spacing: 0.05em;
   color: rgba(210, 202, 186, 0.55);
@@ -3520,19 +3644,19 @@ html[lang="ja"] {
 
 .guide-story-bridge-kicker,
 .guide-story-afterglow-kicker {
-  font-family: var(--font-mystic-zh);
-  font-size: 0.68rem;
-  letter-spacing: 0.48em;
-  text-indent: 0.48em;
+  font-family: var(--guide-font-display, var(--font-mystic-zh));
+  font-size: var(--guide-kicker-size, 0.68rem);
+  letter-spacing: var(--guide-kicker-tracking, 0.48em);
+  text-indent: var(--guide-kicker-tracking, 0.48em);
   color: rgba(186, 178, 162, 0.5);
   margin: 0;
 }
 
 .guide-story-portal-done {
-  font-family: var(--font-mystic-zh);
-  font-size: 0.64rem;
-  letter-spacing: 0.5em;
-  text-indent: 0.5em;
+  font-family: var(--guide-font-display, var(--font-mystic-zh));
+  font-size: var(--guide-kicker-size, 0.64rem);
+  letter-spacing: var(--guide-kicker-tracking, 0.5em);
+  text-indent: var(--guide-kicker-tracking, 0.5em);
   color: rgba(178, 170, 156, 0.46);
   margin: 0 0 0.5rem;
 }
@@ -3573,13 +3697,13 @@ html[lang="ja"] {
 }
 
 .guide-story-afterglow-line {
-  font-family: var(--font-prose-zh);
-  font-size: 0.94rem;
-  letter-spacing: 0.12em;
+  font-family: var(--guide-font-body, var(--font-prose-zh));
+  font-size: var(--guide-afterglow-size, 0.94rem);
+  letter-spacing: var(--guide-body-tracking, 0.12em);
   line-height: 1.82;
   color: rgba(196, 188, 174, 0.68);
   margin: 0;
-  max-width: 12.5rem;
+  max-width: var(--guide-prose-max, 12.5rem);
 }
 
 .guide-story-portal {
@@ -3604,27 +3728,27 @@ html[lang="ja"] {
 }
 
 .guide-story-portal-kicker {
-  font-family: var(--font-mystic-zh);
-  font-size: 0.66rem;
-  letter-spacing: 0.42em;
-  text-indent: 0.42em;
+  font-family: var(--guide-font-display, var(--font-mystic-zh));
+  font-size: var(--guide-kicker-size, 0.66rem);
+  letter-spacing: var(--guide-kicker-tracking, 0.42em);
+  text-indent: var(--guide-kicker-tracking, 0.42em);
   color: rgba(190, 182, 168, 0.48);
   margin: 0 0 0.45rem;
 }
 
 .guide-story-portal-index {
-  font-family: var(--font-mystic-zh);
-  font-size: 1.18rem;
+  font-family: var(--guide-font-display, var(--font-mystic-zh));
+  font-size: var(--guide-index-n-size, 1.18rem);
   letter-spacing: 0.15em;
   color: rgba(228, 220, 204, 0.7);
   margin: 0;
 }
 
 .guide-story-portal-title {
-  font-family: var(--font-mystic-zh);
-  font-size: clamp(1.35rem, 4vw, 1.72rem);
-  letter-spacing: 0.22em;
-  text-indent: 0.22em;
+  font-family: var(--guide-font-display, var(--font-mystic-zh));
+  font-size: var(--guide-portal-title-size, clamp(1.35rem, 4vw, 1.72rem));
+  letter-spacing: var(--guide-title-tracking, 0.22em);
+  text-indent: var(--guide-title-indent, 0.22em);
   color: rgba(244, 238, 226, 0.9);
   margin: 0.15rem 0 0.55rem;
 }
@@ -3724,28 +3848,81 @@ html[lang="ja"] {
 
 .guide-story-motif-caption-title {
   margin: 0;
-  font-family: var(--font-mystic-zh);
-  font-size: 1.22rem;
-  letter-spacing: 0.32em;
-  text-indent: 0.32em;
+  font-family: var(--guide-font-display, var(--font-mystic-zh));
+  font-size: var(--guide-bridge-size, 1.22rem);
+  letter-spacing: var(--guide-bridge-tracking, 0.32em);
+  text-indent: var(--guide-bridge-tracking, 0.32em);
   color: rgba(236, 228, 210, 0.84);
 }
 
 .guide-story-motif-caption-theme {
   margin: 0.3rem 0 0;
-  font-family: var(--font-mystic-zh);
-  font-size: 0.72rem;
-  letter-spacing: 0.3em;
-  text-indent: 0.3em;
+  font-family: var(--guide-font-display, var(--font-mystic-zh));
+  font-size: var(--guide-kicker-size, 0.72rem);
+  letter-spacing: var(--guide-kicker-tracking, 0.3em);
+  text-indent: var(--guide-kicker-tracking, 0.3em);
   color: rgba(190, 182, 168, 0.58);
 }
 
 .guide-story-motif-caption-whisper {
   margin: 0.28rem 0 0;
-  font-family: var(--font-prose-zh);
-  font-size: 0.68rem;
-  letter-spacing: 0.18em;
+  font-family: var(--guide-font-body, var(--font-prose-zh));
+  font-size: var(--guide-kicker-size, 0.68rem);
+  letter-spacing: var(--guide-body-tracking, 0.18em);
   color: rgba(164, 156, 142, 0.44);
+}
+
+/* ── 序卷多语言排版补充 ── */
+
+html[lang="en"] .guide-preface-note {
+  width: min(100%, 18.5rem);
+  gap: 0.65rem 0.75rem;
+}
+
+html[lang="en"] .guide-preface-note-mark {
+  font-size: 1.05rem;
+  padding-top: 0;
+  align-self: start;
+}
+
+html[lang="en"] .guide-story-index {
+  flex-wrap: wrap;
+  row-gap: 0.12rem;
+  max-width: 14.5rem;
+}
+
+html[lang="en"] .guide-story-lead {
+  max-width: min(100%, 19rem);
+}
+
+html[lang="en"] .guide-story-motif-caption {
+  max-width: 14.5rem;
+}
+
+html[lang="en"] .guide-story-bridge-line {
+  max-width: 15rem;
+  line-height: 1.45;
+}
+
+html[lang="ja"] .guide-story-lead {
+  max-width: min(100%, 17.5rem);
+}
+
+html[lang="ja"] .guide-preface-whisper-line {
+  line-height: 2;
+}
+
+html[lang="ja"] .guide-story-motif-caption {
+  max-width: 13.5rem;
+}
+
+html[lang="zh-Hant"] .guide-story-motif-caption-title,
+html[lang="zh-Hant"] .guide-story-motif-caption-theme {
+  font-family: var(--font-mystic-zh-tw);
+}
+
+html[lang="zh-Hant"] .guide-story-motif-caption-whisper {
+  font-family: var(--font-prose-zh-tw);
 }
 
 .guide-story-motif-svg {
@@ -4404,10 +4581,10 @@ html[lang="ja"] {
 
 .guide-spread-eye-cue-copy {
   margin: 0;
-  font-family: var(--font-mystic-zh);
-  font-size: 0.68rem;
-  letter-spacing: 0.42em;
-  text-indent: 0.42em;
+  font-family: var(--guide-font-display, var(--font-mystic-zh));
+  font-size: var(--guide-kicker-size, 0.68rem);
+  letter-spacing: var(--guide-eye-cue-tracking, 0.42em);
+  text-indent: var(--guide-eye-cue-tracking, 0.42em);
   color: rgba(220, 212, 196, 0.72);
   white-space: nowrap;
 }

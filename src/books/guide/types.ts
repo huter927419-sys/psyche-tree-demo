@@ -37,7 +37,7 @@ export type GuidePageBlock =
   | { kind: 'volumeMeaning'; label: string; lines: readonly string[] }
   | { kind: 'close'; lines: readonly string[]; variant?: 'enter' }
   | { kind: 'lines'; lines: readonly string[]; variant?: 'vignette' | 'preface' | 'enter'; sectionId?: string }
-  | { kind: 'storyOpening'; index: number; into?: readonly string[]; title: string }
+  | { kind: 'storyOpening'; index: number; into?: readonly string[]; title: string; sectionId: string }
   | { kind: 'storyBridge'; lines: readonly string[]; sectionId: string }
   | { kind: 'storyAfterglow'; lines: readonly string[]; sectionId: string }
   | { kind: 'storyPortal'; index: number; title: string; sectionId: string; previewIllustrationId: string }
@@ -84,7 +84,7 @@ export interface GuideChapterDef {
 
 export interface GuidePrefaceDef {
   illustrationId: string
-  /** 开篇定调 — 如「人生八片刻」 */
+  /** 开篇定调 — 如「各停一处」 */
   frame: readonly string[]
   /** 极淡的岸语，无栏目标 */
   whisper?: readonly string[]

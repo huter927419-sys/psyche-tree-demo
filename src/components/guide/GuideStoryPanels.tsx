@@ -1,38 +1,14 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import type { GuideContentLocale } from '../../books/guide/guideTextAccents'
+import { storyLineClassForTiming } from '../../books/guide/guideTextAccents'
 import { getGuideMotifMeta } from '../../books/guide/guideMotifMeta'
+import type { GuideRitualCopy } from '../../books/guide/guideRitualCopy'
+import { portalRitualLines } from '../../books/guide/guideRitualCopy'
+import type { Locale } from '../../i18n/locale'
 import { GuideRhythmicLines } from './GuideRhythmicLines'
 import { GuideStoryMotif } from './GuideStoryMotif'
 import { GuideIllustration } from './GuideIllustration'
 import { useGuideRhythmSession } from './useGuideRhythmSession'
-
-const INDEX_LABELS = [
-  '零',
-  '壹',
-  '贰',
-  '叁',
-  '肆',
-  '伍',
-  '陆',
-  '柒',
-  '捌',
-] as const
-
-export function storyIndexLabel(index: number): string {
-  return INDEX_LABELS[index] ?? String(index)
-}
-
-function storyLineClass(line: string): string {
-  if (/^(那一年|很多年以后|五年以后|几年以后|三年以后|后来|有一天|那天)/.test(line)) {
-    return 'guide-story-line guide-story-line--time'
-  }
-  if (/^「/.test(line)) {
-    return 'guide-story-line guide-story-line--dialogue'
-  }
-  if (line.length <= 4 && !/[，。！？」]/.test(line)) {
-    return 'guide-story-line guide-story-line--beat'
-  }
-  return 'guide-story-line'
-}
 
 type RhythmProps = {
   autoReading?: boolean
@@ -41,21 +17,19 @@ type RhythmProps = {
   onRhythmComplete?: () => void
 }
 
-const OPENING_SECTION_BY_TITLE: Record<string, string> = {
-  同观: 'tongguan',
-  留白: 'liubai',
-  长夜: 'changye',
-  门牌: 'menpai',
-  回声: 'huisheng',
-  清晨: 'qingchen',
-  远行: 'yuanxing',
-  六卷: 'liujuan',
+type StoryLocaleProps = {
+  ritual: GuideRitualCopy
+  contentLocale: GuideContentLocale
+  locale: Locale
 }
 
 export function GuideStoryOpening({
   index,
   into,
   title,
+  sectionId,
+  contentLocale,
+  locale,
   autoReading = false,
   rhythmActive = false,
   rhythmLocked = false,
@@ -64,6 +38,9 @@ export function GuideStoryOpening({
   index: number
   into?: readonly string[]
   title: string
+  sectionId: string
+  contentLocale: GuideContentLocale
+  locale: Locale
 } & RhythmProps) {
   const [intoPhase, setIntoPhase] = useState(false)
 
@@ -86,7 +63,7 @@ export function GuideStoryOpening({
   }, [onRhythmComplete])
 
   const sessionKey = `${index}-${title}-${into?.join('\n') ?? ''}`
-  const openingMeta = getGuideMotifMeta(OPENING_SECTION_BY_TITLE[title] ?? '')
+  const openingMeta = getGuideMotifMeta(sectionId, locale)
   const rhythmSession = useGuideRhythmSession(
     autoReading,
     rhythmActive,
@@ -114,17 +91,6 @@ export function GuideStoryOpening({
       </span>
     ) : null
 
-  const coverIndex = (
-    <p
-      className={`guide-story-index${rhythmActive ? ' guide-rhythm-index guide-rhythm-index--ritual' : ''}`}
-      aria-hidden
-    >
-      <span className="guide-story-index-n">{storyIndexLabel(index)}</span>
-      <span className="guide-story-index-sep">／</span>
-      <span className="guide-story-index-total">八片刻</span>
-    </p>
-  )
-
   const coverTitlePlate = (
     <div className="guide-story-title-plate guide-story-cover-plate">
       <span className="guide-story-ornament" aria-hidden />
@@ -138,6 +104,7 @@ export function GuideStoryOpening({
           rhythmLocked={rhythmLocked}
           getLineClass={() => 'guide-story-title'}
           accentBlockKind="openingTitle"
+          contentLocale={contentLocale}
           onComplete={handleTitleComplete}
         />
       )}
@@ -157,6 +124,7 @@ export function GuideStoryOpening({
           rhythmLocked={rhythmLocked}
           getLineClass={() => 'guide-story-lead-line'}
           accentBlockKind="openingInto"
+          contentLocale={contentLocale}
           onComplete={handleIntoComplete}
         />
       </div>
@@ -174,7 +142,6 @@ export function GuideStoryOpening({
     <div className={coverClass}>
       {coverFrame}
       {coverGlyph}
-      {coverIndex}
       {coverTitlePlate}
       {coverLead}
     </div>
@@ -184,6 +151,8 @@ export function GuideStoryOpening({
 export function GuideStoryProse({
   lines,
   sectionId,
+  contentLocale,
+  locale,
   autoReading = false,
   rhythmActive = false,
   rhythmLocked = false,
@@ -191,8 +160,14 @@ export function GuideStoryProse({
 }: {
   lines: readonly string[]
   sectionId?: string
+  contentLocale: GuideContentLocale
+  locale: Locale
 } & RhythmProps) {
-  const sectionMeta = sectionId ? getGuideMotifMeta(sectionId) : undefined
+  const sectionMeta = sectionId ? getGuideMotifMeta(sectionId, locale) : undefined
+  const storyLineClass = useMemo(
+    () => (line: string) => storyLineClassForTiming(line, contentLocale),
+    [contentLocale],
+  )
   const rhythmSession = useGuideRhythmSession(
     autoReading,
     rhythmActive,
@@ -236,6 +211,7 @@ export function GuideStoryProse({
         rhythmLocked={rhythmLocked}
         getLineClass={storyLineClass}
         accentBlockKind="vignette"
+        contentLocale={contentLocale}
         onComplete={onRhythmComplete}
       />
       </div>
@@ -246,6 +222,9 @@ export function GuideStoryProse({
 export function GuideStoryBridge({
   lines,
   sectionId,
+  ritual,
+  contentLocale,
+  locale,
   autoReading = false,
   rhythmActive = false,
   rhythmLocked = false,
@@ -253,7 +232,8 @@ export function GuideStoryBridge({
 }: {
   lines: readonly string[]
   sectionId: string
-} & RhythmProps) {
+} & StoryLocaleProps &
+  RhythmProps) {
   const rhythmSession = useGuideRhythmSession(
     autoReading,
     rhythmActive,
@@ -263,7 +243,7 @@ export function GuideStoryBridge({
 
   return (
     <div className="guide-story-bridge guide-story-bridge--with-motif">
-      <GuideStoryMotif sectionId={sectionId} variant="ambient" showCaption={false} />
+      <GuideStoryMotif sectionId={sectionId} variant="ambient" showCaption={false} locale={locale} />
       <div className="guide-story-bridge-core">
         <div className="guide-story-bridge-body">
           {rhythmSession ? (
@@ -274,6 +254,7 @@ export function GuideStoryBridge({
               rhythmLocked={rhythmLocked}
               getLineClass={() => 'guide-story-bridge-line'}
               accentBlockKind="bridge"
+              contentLocale={contentLocale}
               onComplete={onRhythmComplete}
             />
           ) : (
@@ -285,8 +266,8 @@ export function GuideStoryBridge({
           )}
         </div>
         <div className="guide-story-bridge-foot" aria-hidden>
-          <span className="guide-story-bridge-seal">移</span>
-          <p className="guide-story-bridge-kicker">时移</p>
+          <span className="guide-story-bridge-seal">{ritual.bridgeSeal}</span>
+          <p className="guide-story-bridge-kicker">{ritual.bridgeKicker}</p>
         </div>
       </div>
     </div>
@@ -296,6 +277,9 @@ export function GuideStoryBridge({
 export function GuideStoryAfterglow({
   lines,
   sectionId,
+  ritual,
+  contentLocale,
+  locale,
   autoReading = false,
   rhythmActive = false,
   rhythmLocked = false,
@@ -303,7 +287,8 @@ export function GuideStoryAfterglow({
 }: {
   lines: readonly string[]
   sectionId: string
-} & RhythmProps) {
+} & StoryLocaleProps &
+  RhythmProps) {
   const rhythmSession = useGuideRhythmSession(
     autoReading,
     rhythmActive,
@@ -313,10 +298,10 @@ export function GuideStoryAfterglow({
 
   return (
     <div className="guide-story-afterglow guide-story-afterglow--with-motif">
-      <GuideStoryMotif sectionId={sectionId} variant="echo" />
+      <GuideStoryMotif sectionId={sectionId} variant="echo" locale={locale} />
       <div className="guide-story-afterglow-head" aria-hidden>
-        <span className="guide-story-afterglow-seal">尽</span>
-        <p className="guide-story-afterglow-kicker">片刻已尽</p>
+        <span className="guide-story-afterglow-seal">{ritual.afterglowSeal}</span>
+        <p className="guide-story-afterglow-kicker">{ritual.afterglowKicker}</p>
       </div>
       {rhythmSession ? (
         <div className="guide-story-afterglow-body">
@@ -327,6 +312,7 @@ export function GuideStoryAfterglow({
             rhythmLocked={rhythmLocked}
             getLineClass={() => 'guide-story-afterglow-line'}
             accentBlockKind="afterglow"
+            contentLocale={contentLocale}
             onComplete={onRhythmComplete}
           />
         </div>
@@ -340,7 +326,7 @@ export function GuideStoryAfterglow({
         </div>
       )}
       <p className="guide-story-afterglow-foot" aria-hidden>
-        余韵
+        {ritual.afterglowFoot}
       </p>
     </div>
   )
@@ -353,6 +339,9 @@ export function GuideStoryPortal({
   previewIllustrationId,
   spreadIndex,
   illustrationReady,
+  ritual,
+  contentLocale,
+  locale,
   autoReading = false,
   rhythmActive = false,
   rhythmLocked = false,
@@ -366,8 +355,9 @@ export function GuideStoryPortal({
   illustrationReady?: boolean
   rhythmActive?: boolean
   onRhythmComplete?: () => void
-} & RhythmProps) {
-  const portalLines = ['篇章已毕', '下一片刻', storyIndexLabel(index), `《${title}》`]
+} & StoryLocaleProps &
+  RhythmProps) {
+  const portalLines = portalRitualLines(index, title, ritual)
   const rhythmSession = useGuideRhythmSession(
     autoReading,
     rhythmActive,
@@ -377,7 +367,7 @@ export function GuideStoryPortal({
 
   return (
     <div className="guide-story-portal guide-story-portal--with-preview">
-      <GuideStoryMotif sectionId={sectionId} variant="echo" />
+      <GuideStoryMotif sectionId={sectionId} variant="echo" locale={locale} />
       <div className="guide-story-portal-preview" aria-hidden>
         <GuideIllustration
           id={previewIllustrationId}
@@ -396,17 +386,16 @@ export function GuideStoryPortal({
             getLineClass={(_, lineIndex) => {
               if (lineIndex === 0) return 'guide-story-portal-done'
               if (lineIndex === 1) return 'guide-story-portal-kicker'
-              if (lineIndex === 2) return 'guide-story-portal-index'
               return 'guide-story-portal-title'
             }}
             accentBlockKind="portal"
+            contentLocale={contentLocale}
             onComplete={onRhythmComplete}
           />
         ) : (
           <>
-            <p className="guide-story-portal-done">篇章已毕</p>
-            <p className="guide-story-portal-kicker">下一片刻</p>
-            <p className="guide-story-portal-index">{storyIndexLabel(index)}</p>
+            <p className="guide-story-portal-done">{ritual.portalDone}</p>
+            <p className="guide-story-portal-kicker">{ritual.portalKicker}</p>
             <p className="guide-story-portal-title">《{title}》</p>
           </>
         )}
@@ -421,6 +410,8 @@ export function GuideStoryPortal({
 export function GuidePrefacePlate({
   frame,
   whisper,
+  ritual,
+  contentLocale,
   autoReading = false,
   rhythmActive = false,
   rhythmLocked = false,
@@ -428,6 +419,8 @@ export function GuidePrefacePlate({
 }: {
   frame: readonly string[]
   whisper?: readonly string[]
+  ritual: GuideRitualCopy
+  contentLocale: GuideContentLocale
 } & RhythmProps) {
   const [whisperReady, setWhisperReady] = useState(false)
 
@@ -457,7 +450,7 @@ export function GuidePrefacePlate({
       <p
         className={`guide-preface-kicker${rhythmActive ? ' guide-rhythm-index guide-rhythm-index--preface' : ''}`}
       >
-        序
+        {ritual.prefaceKicker}
       </p>
       {rhythmSession ? (
         <>
@@ -470,6 +463,7 @@ export function GuidePrefacePlate({
               lineIndex === 0 ? 'guide-preface-title' : 'guide-preface-subtitle'
             }
             accentBlockKind="prefaceFrame"
+            contentLocale={contentLocale}
             onComplete={handleFrameComplete}
           />
           {whisper && whisper.length > 0 && (
@@ -481,6 +475,7 @@ export function GuidePrefacePlate({
                 rhythmLocked={rhythmLocked}
                 getLineClass={() => 'guide-preface-whisper-line'}
                 accentBlockKind="prefaceWhisper"
+                contentLocale={contentLocale}
                 onComplete={onRhythmComplete}
               />
             </div>
@@ -515,12 +510,16 @@ export function GuidePrefacePlate({
 
 export function GuidePrefaceNote({
   lines,
+  ritual,
+  contentLocale,
   autoReading = false,
   rhythmActive = false,
   rhythmLocked = false,
   onRhythmComplete,
 }: {
   lines: readonly string[]
+  ritual: GuideRitualCopy
+  contentLocale: GuideContentLocale
 } & RhythmProps) {
   const rhythmSession = useGuideRhythmSession(
     autoReading,
@@ -535,7 +534,7 @@ export function GuidePrefaceNote({
         className={`guide-preface-note-mark${rhythmActive ? ' guide-rhythm-index guide-rhythm-index--preface' : ''}`}
         aria-hidden
       >
-        片
+        {ritual.prefaceNoteMark}
       </span>
       <div className="guide-preface-note-body">
         {rhythmSession ? (
@@ -546,6 +545,7 @@ export function GuidePrefaceNote({
             rhythmLocked={rhythmLocked}
             getLineClass={() => 'guide-preface-note-line'}
             accentBlockKind="prefaceNote"
+            contentLocale={contentLocale}
             onComplete={onRhythmComplete}
           />
         ) : (
@@ -562,12 +562,14 @@ export function GuidePrefaceNote({
 
 export function GuideStoryClose({
   lines,
+  contentLocale,
   autoReading = false,
   rhythmActive = false,
   rhythmLocked = false,
   onRhythmComplete,
 }: {
   lines: readonly string[]
+  contentLocale: GuideContentLocale
 } & RhythmProps) {
   const rhythmSession = useGuideRhythmSession(
     autoReading,
@@ -587,6 +589,7 @@ export function GuideStoryClose({
             rhythmLocked={rhythmLocked}
             getLineClass={() => 'guide-spread-body'}
             accentBlockKind="close"
+            contentLocale={contentLocale}
             onComplete={onRhythmComplete}
           />
         ) : (

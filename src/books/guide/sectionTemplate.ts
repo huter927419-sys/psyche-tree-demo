@@ -138,6 +138,7 @@ export function sectionToSpreads(
           index: options.sectionIndex,
           into: section.into,
           title: section.title,
+          sectionId: section.id,
         },
       ],
     },

@@ -50,7 +50,7 @@ function collectReadableLines(blocks: readonly GuidePageBlock[]): string[] {
         if (block.whisper) lines.push(...block.whisper)
         break
       case 'storyPortal':
-        lines.push('篇章已毕', '下一片刻', `《${block.title}》`)
+        lines.push('篇章已毕', '下一篇', `《${block.title}》`)
         break
       case 'close':
         if (block.variant === 'enter') lines.push(...block.lines)

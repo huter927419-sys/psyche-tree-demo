@@ -2,7 +2,12 @@ import type { GuidePageBlock, GuideSpread } from './types'
 import {
   segmentAccentRhythmDurationMs,
   storyLineClassForTiming,
+  type GuideContentLocale,
 } from './guideTextAccents'
+import {
+  getRitualForContentLocale,
+  portalRitualLines,
+} from './guideRitualCopy'
 
 export type GuideRhythmMode = 'body' | 'preface' | 'ritual' | 'close'
 
@@ -45,11 +50,6 @@ export const LINE_PAUSE_MS: Record<GuideRhythmMode, number> = {
   close: 260,
 }
 
-const INDEX_LABELS = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌'] as const
-
-function storyIndexLabel(index: number): string {
-  return INDEX_LABELS[index] ?? String(index)
-}
 
 export const TAIL_HOLD_MS: Record<GuideRhythmMode, number> = {
   body: 280,
@@ -172,16 +172,20 @@ export function estimateSpreadRhythmFallbackMs(
 export function blockRhythmDurationMs(
   block: GuidePageBlock,
   reducedMotion: boolean,
+  contentLocale: GuideContentLocale = 'zh',
 ): number {
+  const vignetteLineClass = (line: string) => storyLineClassForTiming(line, contentLocale)
+
   switch (block.kind) {
     case 'lines':
       if (block.variant !== 'vignette') return 0
       return segmentAccentRhythmDurationMs(
         block.lines,
         'body',
-        storyLineClassForTiming,
+        vignetteLineClass,
         'vignette',
         reducedMotion,
+        contentLocale,
       )
     case 'prefacePlate': {
       const frameMs = segmentAccentRhythmDurationMs(
@@ -190,6 +194,7 @@ export function blockRhythmDurationMs(
         (_, i) => (i === 0 ? 'guide-preface-title' : 'guide-preface-subtitle'),
         'prefaceFrame',
         reducedMotion,
+        contentLocale,
       )
       const whisperMs = block.whisper?.length
         ? segmentAccentRhythmDurationMs(
@@ -198,6 +203,7 @@ export function blockRhythmDurationMs(
             () => 'guide-preface-whisper-line',
             'prefaceWhisper',
             reducedMotion,
+            contentLocale,
           ) + 180
         : 0
       return frameMs + whisperMs
@@ -209,6 +215,7 @@ export function blockRhythmDurationMs(
         () => 'guide-preface-note-line',
         'prefaceNote',
         reducedMotion,
+        contentLocale,
       )
     case 'storyOpening': {
       const titleMs =
@@ -218,6 +225,7 @@ export function blockRhythmDurationMs(
           () => 'guide-story-title',
           'openingTitle',
           reducedMotion,
+          contentLocale,
         ) + (block.into?.length ? 160 : 0)
       const intoMs = block.into?.length
         ? segmentAccentRhythmDurationMs(
@@ -226,6 +234,7 @@ export function blockRhythmDurationMs(
             () => 'guide-story-lead-line',
             'openingInto',
             reducedMotion,
+            contentLocale,
           )
         : 0
       return titleMs + intoMs
@@ -237,6 +246,7 @@ export function blockRhythmDurationMs(
         () => 'guide-story-bridge-line',
         'bridge',
         reducedMotion,
+        contentLocale,
       )
     case 'storyAfterglow':
       return segmentAccentRhythmDurationMs(
@@ -245,19 +255,24 @@ export function blockRhythmDurationMs(
         () => 'guide-story-afterglow-line',
         'afterglow',
         reducedMotion,
+        contentLocale,
       )
     case 'storyPortal':
       return segmentAccentRhythmDurationMs(
-        ['篇章已毕', '下一片刻', storyIndexLabel(block.index), `《${block.title}》`],
+        portalRitualLines(
+          block.index,
+          block.title,
+          getRitualForContentLocale(contentLocale),
+        ),
         'ritual',
         (_, i) => {
           if (i === 0) return 'guide-story-portal-done'
           if (i === 1) return 'guide-story-portal-kicker'
-          if (i === 2) return 'guide-story-portal-index'
           return 'guide-story-portal-title'
         },
         'portal',
         reducedMotion,
+        contentLocale,
       )
     case 'close':
       if (block.variant !== 'enter') return 0
@@ -267,6 +282,7 @@ export function blockRhythmDurationMs(
         () => 'guide-spread-body',
         'close',
         reducedMotion,
+        contentLocale,
       )
     default:
       return 0

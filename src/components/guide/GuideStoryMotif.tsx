@@ -1,5 +1,6 @@
 import { useId, type ReactElement } from 'react'
 import { getGuideMotifMeta } from '../../books/guide/guideMotifMeta'
+import type { Locale } from '../../i18n/locale'
 
 export type GuideMotifVariant = 'ambient' | 'echo' | 'preface'
 
@@ -25,7 +26,7 @@ function MotifGlyph({
       fontSize={size}
       fill={PAPER}
       fillOpacity={opacity}
-      fontFamily="var(--font-mystic-zh), 'Songti SC', serif"
+      fontFamily="var(--guide-font-display, var(--font-mystic-zh)), 'Songti SC', serif"
       fontWeight="400"
     >
       {char}
@@ -38,20 +39,23 @@ function MotifShell({
   variant,
   sectionId,
   showCaption = false,
+  locale,
 }: {
   children: React.ReactNode
   variant: GuideMotifVariant
   sectionId: string
   showCaption?: boolean
+  locale: Locale
 }) {
-  const meta = getGuideMotifMeta(sectionId)
+  const meta = getGuideMotifMeta(sectionId, locale)
+  const ritualFallback = locale === 'en' ? 'Chapter mood' : locale === 'ja' ? '篇章の意境' : '篇章意境'
 
   return (
     <div
       className={`guide-story-motif guide-story-motif--${variant}`}
       role="img"
       aria-label={
-        meta ? `${meta.title} · ${meta.caption} · ${meta.theme}` : '篇章意境'
+        meta ? `${meta.title} · ${meta.caption} · ${meta.theme}` : ritualFallback
       }
     >
       {children}
@@ -70,13 +74,15 @@ function PrefaceMotif({
   uid,
   sectionId,
   showCaption,
+  locale,
 }: {
   uid: string
   sectionId: string
   showCaption?: boolean
+  locale: Locale
 }) {
   return (
-    <MotifShell variant="preface" sectionId={sectionId} showCaption={showCaption}>
+    <MotifShell variant="preface" sectionId={sectionId} showCaption={showCaption} locale={locale}>
       <svg viewBox="0 0 360 480" className="guide-story-motif-svg">
         <defs>
           <radialGradient id={`${uid}-mist`} cx="50%" cy="68%" r="62%">
@@ -119,11 +125,13 @@ function TongguanMotif({
   variant,
   sectionId,
   showCaption,
+  locale,
 }: {
   uid: string
   variant: GuideMotifVariant
   sectionId: string
   showCaption?: boolean
+  locale: Locale
 }) {
   const fade = variant === 'echo' ? 0.55 : 1
   return (
@@ -131,6 +139,7 @@ function TongguanMotif({
       variant={variant}
       sectionId={sectionId}
       showCaption={showCaption}
+      locale={locale}
     >
       <svg
         viewBox="0 0 360 480"
@@ -185,16 +194,19 @@ function LiubaiMotif({
   variant,
   sectionId,
   showCaption,
+  locale,
 }: {
   variant: GuideMotifVariant
   sectionId: string
   showCaption?: boolean
+  locale: Locale
 }) {
   return (
     <MotifShell
       variant={variant}
       sectionId={sectionId}
       showCaption={showCaption}
+      locale={locale}
     >
       <svg viewBox="0 0 360 480" className="guide-story-motif-svg">
         <MotifGlyph char="白" opacity={variant === 'echo' ? 0.05 : 0.09} />
@@ -240,16 +252,19 @@ function ChangyeMotif({
   variant,
   sectionId,
   showCaption,
+  locale,
 }: {
   variant: GuideMotifVariant
   sectionId: string
   showCaption?: boolean
+  locale: Locale
 }) {
   return (
     <MotifShell
       variant={variant}
       sectionId={sectionId}
       showCaption={showCaption}
+      locale={locale}
     >
       <svg viewBox="0 0 360 480" className="guide-story-motif-svg">
         <MotifGlyph char="夜" opacity={variant === 'echo' ? 0.05 : 0.09} />
@@ -283,16 +298,19 @@ function MenpaiMotif({
   variant,
   sectionId,
   showCaption,
+  locale,
 }: {
   variant: GuideMotifVariant
   sectionId: string
   showCaption?: boolean
+  locale: Locale
 }) {
   return (
     <MotifShell
       variant={variant}
       sectionId={sectionId}
       showCaption={showCaption}
+      locale={locale}
     >
       <svg viewBox="0 0 360 480" className="guide-story-motif-svg">
         <MotifGlyph char="牌" opacity={variant === 'echo' ? 0.05 : 0.09} />
@@ -326,16 +344,19 @@ function HuishengMotif({
   variant,
   sectionId,
   showCaption,
+  locale,
 }: {
   variant: GuideMotifVariant
   sectionId: string
   showCaption?: boolean
+  locale: Locale
 }) {
   return (
     <MotifShell
       variant={variant}
       sectionId={sectionId}
       showCaption={showCaption}
+      locale={locale}
     >
       <svg viewBox="0 0 360 480" className="guide-story-motif-svg">
         <MotifGlyph char="声" opacity={variant === 'echo' ? 0.05 : 0.09} />
@@ -371,16 +392,19 @@ function QingchenMotif({
   variant,
   sectionId,
   showCaption,
+  locale,
 }: {
   variant: GuideMotifVariant
   sectionId: string
   showCaption?: boolean
+  locale: Locale
 }) {
   return (
     <MotifShell
       variant={variant}
       sectionId={sectionId}
       showCaption={showCaption}
+      locale={locale}
     >
       <svg viewBox="0 0 360 480" className="guide-story-motif-svg">
         <MotifGlyph char="晨" opacity={variant === 'echo' ? 0.05 : 0.09} />
@@ -408,16 +432,19 @@ function YuanxingMotif({
   variant,
   sectionId,
   showCaption,
+  locale,
 }: {
   variant: GuideMotifVariant
   sectionId: string
   showCaption?: boolean
+  locale: Locale
 }) {
   return (
     <MotifShell
       variant={variant}
       sectionId={sectionId}
       showCaption={showCaption}
+      locale={locale}
     >
       <svg viewBox="0 0 360 480" className="guide-story-motif-svg">
         <MotifGlyph char="行" opacity={variant === 'echo' ? 0.05 : 0.09} />
@@ -455,10 +482,12 @@ function LiujuanMotif({
   variant,
   sectionId,
   showCaption,
+  locale,
 }: {
   variant: GuideMotifVariant
   sectionId: string
   showCaption?: boolean
+  locale: Locale
 }) {
   const points = [
     [120, 200],
@@ -473,6 +502,7 @@ function LiujuanMotif({
       variant={variant}
       sectionId={sectionId}
       showCaption={showCaption}
+      locale={locale}
     >
       <svg viewBox="0 0 360 480" className="guide-story-motif-svg">
         <MotifGlyph char="卷" opacity={variant === 'echo' ? 0.05 : 0.09} size={96} />
@@ -502,6 +532,7 @@ const MOTIF_BY_SECTION: Record<
     variant: GuideMotifVariant
     sectionId: string
     showCaption?: boolean
+    locale: Locale
   }) => ReactElement
 > = {
   preface: PrefaceMotif,
@@ -519,11 +550,13 @@ export function GuideStoryMotif({
   sectionId,
   variant = 'ambient',
   showCaption,
+  locale,
 }: {
   sectionId: string
   variant?: GuideMotifVariant
   /** 独立意境页显示篇名标注；背景 echo 默认不显示 */
   showCaption?: boolean
+  locale: Locale
 }) {
   const uid = useId().replace(/:/g, '')
   const Motif = MOTIF_BY_SECTION[sectionId]
@@ -536,6 +569,7 @@ export function GuideStoryMotif({
       variant={variant}
       sectionId={sectionId}
       showCaption={captionVisible}
+      locale={locale}
     />
   )
 }

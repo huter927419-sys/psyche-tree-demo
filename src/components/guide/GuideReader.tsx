@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 // Auto turn (展息) is scoped to 序卷《同观》 only — BookReader is manual + card-select flip.
+import { getGuideRitualCopy } from '../../books/guide/guideRitualCopy'
 import {
   getGuideSpreadIndex,
   getLocalizedGuideContent,
@@ -48,6 +49,7 @@ export function GuideReader({
   onCompleted,
 }: GuideReaderProps) {
   const ui = getUi(locale)
+  const ritual = getGuideRitualCopy(locale)
   const guide = useMemo(() => getLocalizedGuideContent(locale), [locale])
   const totalSpreads = guide.spreads.length
   const [pageIndex, setPageIndex] = useState(() =>
@@ -530,6 +532,7 @@ export function GuideReader({
             <GuideSpreadEyeCue
               visible={crossRightCue}
               orientation="vertical"
+              ritual={ritual}
             />
             {spreadReflecting && (
               <div className="guide-spread-reflect-cue guide-spread-reflect-cue--mobile" aria-hidden>
@@ -574,7 +577,7 @@ export function GuideReader({
 
       <div className={`${bookAnchorClass} relative`}>
         {bookShell}
-        <GuideSpreadEyeCue visible={crossRightCue} orientation="horizontal" />
+        <GuideSpreadEyeCue visible={crossRightCue} orientation="horizontal" ritual={ritual} />
         {spreadReflecting && (
           <div className="guide-spread-reflect-cue" aria-hidden>
             <span className="guide-spread-reflect-glyph">息</span>

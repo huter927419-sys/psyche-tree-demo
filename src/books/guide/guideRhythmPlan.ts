@@ -3,6 +3,7 @@ import {
   resolveLineAccentTag,
   segmentAccentRhythmDurationMs,
   type GuideAccentBlockKind,
+  type GuideContentLocale,
   type LineAccentTag,
 } from './guideTextAccents'
 import { collectLineEntries, computeLineReadingTiming, pageEndBreathMs } from './guideReadingTiming'
@@ -35,6 +36,7 @@ export function buildRhythmLinePlan(
   getLineClass: (line: string, index: number) => string,
   blockKind: GuideAccentBlockKind | undefined,
   reducedMotion: boolean,
+  contentLocale: GuideContentLocale = 'zh',
 ): GuideRhythmLinePlan[] {
   const plan: GuideRhythmLinePlan[] = []
   let delayCursor = 0
@@ -45,8 +47,22 @@ export function buildRhythmLinePlan(
     const { line, lineIndex } = entries[entryIndex]!
     const next = entries[entryIndex + 1]
     const lineClass = getLineClass(line, lineIndex)
-    const tag = resolveLineAccentTag(line, lineClass, blockKind, lineIndex, priorTag)
-    const accent = resolveLineAccent(line, lineClass, blockKind, tag, priorTag)
+    const tag = resolveLineAccentTag(
+      line,
+      lineClass,
+      blockKind,
+      lineIndex,
+      priorTag,
+      contentLocale,
+    )
+    const accent = resolveLineAccent(
+      line,
+      lineClass,
+      blockKind,
+      tag,
+      priorTag,
+      contentLocale,
+    )
     const nextTag =
       next !== undefined
         ? resolveLineAccentTag(
@@ -55,6 +71,7 @@ export function buildRhythmLinePlan(
             blockKind,
             next.lineIndex,
             tag,
+            contentLocale,
           )
         : undefined
 

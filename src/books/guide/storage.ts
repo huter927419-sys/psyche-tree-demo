@@ -7,7 +7,7 @@ const KEY_HANDOFF = 'volume-handoff'
 const KEY_CONTENT_VERSION = 'content-version'
 
 /** Bump when 序卷 spread structure changes so resume index resets. */
-export const GUIDE_CONTENT_VERSION = 30
+export const GUIDE_CONTENT_VERSION = 33
 
 /** Legacy unscoped keys (pre-login guide storage). */
 const LEGACY_KEYS = [

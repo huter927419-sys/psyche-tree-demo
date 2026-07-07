@@ -1,9 +1,13 @@
+import type { GuideRitualCopy } from '../../books/guide/guideRitualCopy'
+
 export function GuideSpreadEyeCue({
   visible,
   orientation = 'horizontal',
+  ritual,
 }: {
   visible: boolean
   orientation?: 'horizontal' | 'vertical'
+  ritual: GuideRitualCopy
 }) {
   if (!visible) return null
 
@@ -15,7 +19,7 @@ export function GuideSpreadEyeCue({
       aria-live="polite"
     >
       <span className="guide-spread-eye-cue-sr">
-        {isVertical ? '左页已读，移目下页' : '左页已读，移目右页'}
+        {isVertical ? ritual.eyeCueSrVertical : ritual.eyeCueSrHorizontal}
       </span>
       <div className="guide-spread-eye-cue-track" aria-hidden>
         <span className="guide-spread-eye-cue-node guide-spread-eye-cue-node--from" />
@@ -24,10 +28,10 @@ export function GuideSpreadEyeCue({
         <span className="guide-spread-eye-cue-node guide-spread-eye-cue-node--to" />
       </div>
       <p className="guide-spread-eye-cue-copy" aria-hidden>
-        <span className="guide-spread-eye-cue-main">移目</span>
+        <span className="guide-spread-eye-cue-main">{ritual.eyeCueMain}</span>
         <span className="guide-spread-eye-cue-sep"> · </span>
         <span className="guide-spread-eye-cue-sub">
-          {isVertical ? '下页' : '右页'}
+          {isVertical ? ritual.eyeCueSubBelow : ritual.eyeCueSubRight}
         </span>
       </p>
     </div>

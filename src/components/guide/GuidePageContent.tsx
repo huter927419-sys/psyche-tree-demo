@@ -1,6 +1,8 @@
 import type { GuideSpreadRestVisual } from '../../books/guide/guideSpreadRest'
+import { getGuideRitualCopy } from '../../books/guide/guideRitualCopy'
 import type { GuidePageBlock } from '../../books/guide/types'
 import type { Locale } from '../../i18n/locale'
+import { resolveContentLocale } from '../../i18n/traditionalChinese'
 import { getUi } from '../../i18n/ui'
 import { GuideIllustration } from './GuideIllustration'
 import {
@@ -182,6 +184,9 @@ export function GuidePageContent({
   onIllustrationMotionComplete?: () => void
 }) {
   const ui = getUi(locale)
+  const contentLocale = resolveContentLocale(locale)
+  const ritual = getGuideRitualCopy(locale)
+  const storyLocaleProps = { ritual, contentLocale, locale }
   const reportRhythmSegment = useGuidePageRhythm(
     blocks,
     rhythmActive,
@@ -259,13 +264,23 @@ export function GuidePageContent({
               key={key}
               frame={block.frame}
               whisper={block.whisper}
+              ritual={ritual}
+              contentLocale={contentLocale}
               {...rhythmProps}
             />
           )
         }
 
         if (block.kind === 'prefaceNote') {
-          return <GuidePrefaceNote key={key} lines={block.lines} {...rhythmProps} />
+          return (
+            <GuidePrefaceNote
+              key={key}
+              lines={block.lines}
+              ritual={ritual}
+              contentLocale={contentLocale}
+              {...rhythmProps}
+            />
+          )
         }
 
         if (block.kind === 'storyOpening') {
@@ -275,6 +290,9 @@ export function GuidePageContent({
               index={block.index}
               into={block.into}
               title={block.title}
+              sectionId={block.sectionId}
+              contentLocale={contentLocale}
+              locale={locale}
               {...rhythmProps}
             />
           )
@@ -286,6 +304,7 @@ export function GuidePageContent({
               key={key}
               lines={block.lines}
               sectionId={block.sectionId}
+              {...storyLocaleProps}
               {...rhythmProps}
             />
           )
@@ -297,6 +316,7 @@ export function GuidePageContent({
               key={key}
               lines={block.lines}
               sectionId={block.sectionId}
+              {...storyLocaleProps}
               {...rhythmProps}
             />
           )
@@ -312,6 +332,7 @@ export function GuidePageContent({
               previewIllustrationId={block.previewIllustrationId}
               spreadIndex={spreadIndex}
               illustrationReady={illustrationReady}
+              {...storyLocaleProps}
               {...rhythmProps}
             />
           )
@@ -337,6 +358,7 @@ export function GuidePageContent({
               sectionId={block.sectionId}
               variant={block.variant ?? 'ambient'}
               showCaption={block.showCaption ?? true}
+              locale={locale}
             />
           )
         }
@@ -458,6 +480,7 @@ export function GuidePageContent({
               <GuideStoryClose
                 key={key}
                 lines={block.lines}
+                contentLocale={contentLocale}
                 {...rhythmProps}
               />
             )
@@ -523,6 +546,7 @@ export function GuidePageContent({
                 key={key}
                 lines={block.lines}
                 sectionId={block.sectionId}
+                {...storyLocaleProps}
                 {...rhythmProps}
               />
             )
