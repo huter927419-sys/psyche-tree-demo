@@ -1939,10 +1939,8 @@ html[lang="ja"] {
   padding: 0.15rem 0.55rem 0.55rem;
 }
 
-/* 单块内容页：grid 三等分，正文落在中行（避免 pending 行占位 + flex 贴顶） */
-.guide-page-stack:not(.guide-page-stack--hero-art):not(.guide-page-stack--has-figure):not(
-    .guide-page-stack--cover-page
-  ):has(> :only-child) {
+/* 单块正文页：grid 三等分，正文落在中行（避免 pending 行占位 + flex 贴顶） */
+.guide-page-stack--prose-page:has(> :only-child) {
   display: grid;
   grid-template-rows: minmax(0, 1fr) auto minmax(0, 1fr);
   align-content: stretch;
@@ -1952,20 +1950,17 @@ html[lang="ja"] {
   height: 100%;
 }
 
-.guide-page-stack:not(.guide-page-stack--hero-art):not(.guide-page-stack--has-figure):not(
-    .guide-page-stack--cover-page
-  ):has(> :only-child)
-  > :only-child {
+.guide-page-stack--prose-page:has(> :only-child) > :only-child {
   grid-row: 2;
   align-self: start;
   min-height: 0;
 }
 
-.book-page-left .guide-page-stack:not(.guide-page-stack--hero-art):has(> :only-child) {
+.book-page-left .guide-page-stack--prose-page:has(> :only-child) {
   justify-items: start;
 }
 
-.book-page-right .guide-page-stack:not(.guide-page-stack--hero-art):has(> :only-child) {
+.book-page-right .guide-page-stack--prose-page:has(> :only-child) {
   justify-items: end;
 }
 
@@ -5660,8 +5655,43 @@ picture:has(> .book-page-cover-watermark) {
 
   .guide-mobile-flow .guide-story-title {
     font-size: clamp(2rem, 9vw, 2.65rem);
-    letter-spacing: 0.22em;
-    text-indent: 0.22em;
+    letter-spacing: 0.1em;
+    text-indent: 0;
+  }
+
+  .guide-mobile-flow .guide-story-title-plate .guide-rhythm-line.guide-story-title,
+  .guide-mobile-flow .guide-preface-plate .guide-rhythm-line.guide-preface-title {
+    letter-spacing: 0.1em;
+    text-indent: 0;
+  }
+
+  .guide-mobile-flow .guide-preface-title {
+    letter-spacing: 0.12em;
+    text-indent: 0;
+  }
+
+  .guide-mobile-flow .guide-preface-plate,
+  .guide-mobile-flow .guide-preface-note {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .guide-mobile-flow .guide-page-stack:has(.guide-preface-plate),
+  .guide-mobile-flow .guide-page-stack:has(.guide-story-opening) {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .guide-mobile-flow .guide-story-opening .guide-rhythm-line--pending,
+  .guide-mobile-flow .guide-preface-plate .guide-rhythm-line--pending,
+  .guide-mobile-flow .guide-story-lead .guide-rhythm-line--pending {
+    max-height: none;
+    line-height: inherit;
+    overflow: hidden;
   }
 
   .guide-mobile-flow .guide-story-index-n {

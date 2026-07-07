@@ -241,7 +241,9 @@ export function GuideRhythmicLines({
               key={`${line}-${lineIndex}`}
               className={`guide-rhythm-line guide-rhythm-line--pending ${lineClassName}`.trim()}
               aria-hidden
-            />
+            >
+              {line}
+            </p>
           )
         })}
       </>
