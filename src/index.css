@@ -1940,7 +1940,9 @@ html[lang="ja"] {
 }
 
 /* 单块内容页：grid 三等分，正文落在中行（避免 pending 行占位 + flex 贴顶） */
-.guide-page-stack:not(.guide-page-stack--hero-art):not(.guide-page-stack--has-figure):has(> :only-child) {
+.guide-page-stack:not(.guide-page-stack--hero-art):not(.guide-page-stack--has-figure):not(
+    .guide-page-stack--cover-page
+  ):has(> :only-child) {
   display: grid;
   grid-template-rows: minmax(0, 1fr) auto minmax(0, 1fr);
   align-content: stretch;
@@ -1950,7 +1952,10 @@ html[lang="ja"] {
   height: 100%;
 }
 
-.guide-page-stack:not(.guide-page-stack--hero-art):not(.guide-page-stack--has-figure):has(> :only-child) > :only-child {
+.guide-page-stack:not(.guide-page-stack--hero-art):not(.guide-page-stack--has-figure):not(
+    .guide-page-stack--cover-page
+  ):has(> :only-child)
+  > :only-child {
   grid-row: 2;
   align-self: start;
   min-height: 0;
@@ -5612,8 +5617,45 @@ picture:has(> .book-page-cover-watermark) {
   .guide-mobile-flow .guide-story-cover,
   .guide-mobile-flow .guide-story-opening {
     width: 100%;
+    max-width: 100%;
     min-height: 0;
+    flex: 0 0 auto;
+    align-self: stretch;
     padding: 1.25rem 0.75rem 1.35rem;
+  }
+
+  .guide-mobile-flow .guide-page-stack--cover-page {
+    overflow: visible;
+    max-height: none;
+    height: auto;
+    align-items: stretch;
+    width: 100%;
+    padding: 0.35rem 0 0.55rem;
+  }
+
+  .guide-mobile-flow .guide-page-stack--cover-page:has(> :only-child) {
+    height: auto;
+    max-height: none;
+    align-items: stretch;
+  }
+
+  .guide-mobile-flow .guide-page-stack--cover-page:has(> :only-child) > :only-child {
+    width: 100%;
+    max-width: 100%;
+    flex: 0 0 auto;
+    align-self: stretch;
+  }
+
+  .guide-mobile-flow .guide-story-lead {
+    width: 100%;
+    max-width: 100%;
+    margin-inline: 0;
+  }
+
+  .guide-mobile-flow .guide-story-cover-glyph {
+    top: 0.55rem;
+    right: 0.85rem;
+    font-size: clamp(2.8rem, 16vw, 4rem);
   }
 
   .guide-mobile-flow .guide-story-title {
