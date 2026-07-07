@@ -35,7 +35,7 @@ function guidePageLayoutClass(blocks: readonly GuidePageBlock[]): string {
   if (blocks.some((b) => b.kind === 'lines' && b.variant === 'vignette')) {
     roles.push('guide-page-stack--prose-page')
   }
-  if (blocks.some((b) => b.kind === 'storyOpening')) {
+  if (blocks.some((b) => b.kind === 'storyOpening' || b.kind === 'prefacePlate')) {
     roles.push('guide-page-stack--cover-page')
   }
   if (

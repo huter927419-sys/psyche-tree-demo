@@ -1,6 +1,8 @@
 import { useSyncExternalStore } from 'react'
 
-export const GUIDE_MOBILE_QUERY = '(max-width: 767px)'
+/** Phones + foldables (cover landscape is often 900+ CSS px). */
+export const GUIDE_MOBILE_QUERY =
+  '(max-width: 767px), ((max-width: 960px) and (hover: none) and (pointer: coarse))'
 
 export function isGuideMobileViewport(): boolean {
   if (typeof window === 'undefined') return false

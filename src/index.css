@@ -5349,7 +5349,61 @@ picture:has(> .book-page-cover-watermark) {
 
 /* ── 同观 · 手机专用布局（与桌面双页书壳分离） ── */
 
-@media (max-width: 767px) {
+/* GuideMobileReader 由 JS 挂载；折叠屏横屏常 >767px，须 class 级兜底 */
+.guide-mobile-flow {
+  --guide-title-tracking: 0.1em;
+  --guide-title-indent: 0;
+}
+
+.guide-mobile-flow .guide-page-stack--cover-page:has(> :only-child) {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  height: auto;
+  max-height: none;
+  overflow: visible;
+}
+
+.guide-mobile-flow .guide-page-stack--cover-page:has(> :only-child) > :only-child,
+.guide-mobile-flow .guide-story-opening,
+.guide-mobile-flow .guide-preface-plate {
+  width: 100%;
+  max-width: 100%;
+  align-self: stretch;
+  flex: 0 0 auto;
+}
+
+.guide-mobile-flow .guide-page-stack:has(.guide-preface-plate),
+.guide-mobile-flow .guide-page-stack:has(.guide-story-opening) {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  height: auto;
+  max-height: none;
+  overflow: visible;
+  width: 100%;
+}
+
+.guide-mobile-flow .guide-story-opening .guide-rhythm-line--pending,
+.guide-mobile-flow .guide-preface-plate .guide-rhythm-line--pending,
+.guide-mobile-flow .guide-story-lead .guide-rhythm-line--pending {
+  max-height: none !important;
+  line-height: inherit !important;
+  overflow: hidden;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.guide-mobile-flow .guide-story-title,
+.guide-mobile-flow .guide-story-title-plate .guide-rhythm-line.guide-story-title,
+.guide-mobile-flow .guide-preface-plate .guide-rhythm-line.guide-preface-title,
+.guide-mobile-flow .guide-preface-title {
+  letter-spacing: 0.1em;
+  text-indent: 0;
+}
+
+@media (max-width: 767px), ((max-width: 960px) and (hover: none) and (pointer: coarse)) {
   .app-in-guide .book-journey-viewport {
     padding: 0;
     overflow: visible;
@@ -7809,7 +7863,7 @@ html[lang="ja"] .mystic-title-glyph {
   margin-top: 0.25rem;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767px), ((max-width: 960px) and (hover: none) and (pointer: coarse)) {
   .book-journey-scaler--guide {
     --guide-closed-w: min(340px, calc(100vw - 2rem));
     --guide-open-w: min(340px, calc(100vw - 2rem));
@@ -8418,7 +8472,7 @@ html[lang="ja"] .mystic-title-glyph {
   z-index: 1;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767px), ((max-width: 960px) and (hover: none) and (pointer: coarse)) {
   .book-open,
   .book-spread-layer {
     flex-direction: column;
@@ -8426,7 +8480,7 @@ html[lang="ja"] .mystic-title-glyph {
   }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767px), ((max-width: 960px) and (hover: none) and (pointer: coarse)) {
   .book-page {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
@@ -8473,7 +8527,7 @@ html[lang="ja"] .mystic-title-glyph {
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767px), ((max-width: 960px) and (hover: none) and (pointer: coarse)) {
   .book-page {
     min-height: 200px;
   }
@@ -8692,7 +8746,7 @@ html[lang="ja"] .mystic-title-glyph {
     0 0 12px rgba(255, 255, 255, 0.08);
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767px), ((max-width: 960px) and (hover: none) and (pointer: coarse)) {
   .book-spine {
     width: 100%;
     height: 10px;
@@ -9262,7 +9316,7 @@ html[lang="ja"] .mystic-title-glyph {
   pointer-events: none;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767px), ((max-width: 960px) and (hover: none) and (pointer: coarse)) {
   .book-cover-book-wrap {
     width: min(380px, calc(100vw - 2rem));
   }
@@ -9538,7 +9592,7 @@ html[lang="ja"] .mystic-title-glyph {
 }
 
 /* Mobile: keep 3D page turn during active flip */
-@media (max-width: 767px) {
+@media (max-width: 767px), ((max-width: 960px) and (hover: none) and (pointer: coarse)) {
   .book-flip-stage--active .book-open,
   .book-flip-stage--active .book-spread-layer {
     flex-direction: row !important;
@@ -10120,7 +10174,7 @@ html[lang="ja"] .ambient-phrase-text {
   }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767px), ((max-width: 960px) and (hover: none) and (pointer: coarse)) {
   .book-opening-guide-panel {
     padding: 1.5rem 1.35rem 1.35rem;
   }
@@ -10131,7 +10185,7 @@ html[lang="ja"] .ambient-phrase-text {
   }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767px), ((max-width: 960px) and (hover: none) and (pointer: coarse)) {
   .book-reader-header {
     top: 0.75rem;
     left: 0.75rem;
@@ -11394,7 +11448,7 @@ html[lang="ja"] .app-user-email-value {
   }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767px), ((max-width: 960px) and (hover: none) and (pointer: coarse)) {
   .volume-rite-overlay {
     align-items: stretch;
     justify-content: flex-start;
